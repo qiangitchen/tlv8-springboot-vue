@@ -3,10 +3,10 @@ package com.tlv8.system.pojo;
 /**
  * 组织机构
  * 
- * @author chenqian_17817450957
+ * @author chenqian
  *
  */
-public class SaOporg {
+public class SaOpOrg {
 	private String sid;// 主键
 	private String sname;// 名称
 	private String scode;// 编号
