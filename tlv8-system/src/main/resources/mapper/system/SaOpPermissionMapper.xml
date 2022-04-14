@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.dao.SaOpPermissionDao">
+	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpPermission">
+		<id column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="spermissionroleid" property="spermissionroleid" jdbcType="VARCHAR" />
+		<result column="sprocess" property="sprocess" jdbcType="VARCHAR" />
+		<result column="sactivityfname" property="sactivityfname" jdbcType="VARCHAR" />
+		<result column="sactivity" property="sactivity" jdbcType="VARCHAR" />
+		<result column="sactionsnames" property="sactionsnames" jdbcType="VARCHAR" />
+		<result column="sactions" property="sactions" jdbcType="VARCHAR" />
+		<result column="ssemanticdp" property="ssemanticdp" jdbcType="VARCHAR" />
+		<result column="spermissionkind" property="spermissionkind" jdbcType="VARCHAR" />
+		<result column="sdescription" property="sdescription" jdbcType="VARCHAR" />
+		<result column="ssequence" property="ssequence" jdbcType="INTEGER" />
+		<result column="svalidstate" property="svalidstate" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,spermissionroleid,sprocess,sactivityfname,sactivity,sactionsnames,sactions,ssemanticdp,spermissionkind,sdescription,ssequence,svalidstate,version
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_OpPermission
+		where sid = #{sid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpPermission">
+		insert into  
+		 SA_OpPermission(<include refid="Base_Column_List" />) 
+			values( #{sid,jdbcType=VARCHAR},
+			 #{spermissionroleid,jdbcType=VARCHAR},
+			 #{sprocess,jdbcType=VARCHAR},
+			 #{sactivityfname,jdbcType=VARCHAR},
+			 #{sactivity,jdbcType=VARCHAR},
+			 #{sactionsnames,jdbcType=VARCHAR},
+			 #{sactions,jdbcType=VARCHAR},
+			 #{ssemanticdp,jdbcType=VARCHAR},
+			 #{spermissionkind,jdbcType=VARCHAR},
+			 #{sdescription,jdbcType=VARCHAR},
+			 #{ssequence,jdbcType=INTEGER},
+			 #{svalidstate,jdbcType=INTEGER},
+			 #{version,jdbcType=INTEGER}
+			 )
+	</insert>
+	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOpPermission">
+		update 
+		SA_OpPermission 
+			set spermissionroleid = #{spermissionroleid,jdbcType=VARCHAR},
+			sprocess = #{sprocess,jdbcType=VARCHAR},
+			sactivityfname = #{sactivityfname,jdbcType=VARCHAR},
+			sactivity = #{sactivity,jdbcType=VARCHAR},
+			sactionsnames = #{sactionsnames,jdbcType=VARCHAR},
+			sactions = #{sactions,jdbcType=VARCHAR},
+			ssemanticdp = #{ssemanticdp,jdbcType=VARCHAR},
+			spermissionkind = #{spermissionkind,jdbcType=VARCHAR},
+			sdescription = #{sdescription,jdbcType=VARCHAR},
+			ssequence = #{ssequence,jdbcType=INTEGER},
+			svalidstate = #{svalidstate,jdbcType=INTEGER},
+			version = #{version,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpPermission">
+		delete from SA_OpPermission where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+		delete from SA_OpPermission where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<update id="logicDeleteDataByPrimaryKey" parameterType="java.lang.String">
+		update SA_OpPermission set svalidstate=-1 where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<update id="logicRecoveryByPrimaryKey" parameterType="java.lang.String">
+		update SA_OpPermission set svalidstate=1 where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+</mapper>

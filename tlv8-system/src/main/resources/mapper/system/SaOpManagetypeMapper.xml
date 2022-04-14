@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.dao.SaOpManagetypeDao">
+	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpManagetype">
+		<id column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="sname" property="sname" jdbcType="VARCHAR" />
+		<result column="scode" property="scode" jdbcType="VARCHAR" />
+		<result column="smanageorgkind" property="smanageorgkind" jdbcType="VARCHAR" />
+		<result column="smanageorgkindname" property="smanageorgkindname" jdbcType="VARCHAR" />
+		<result column="sleadernumber" property="sleadernumber" jdbcType="INTEGER" />
+		<result column="sissystem" property="sissystem" jdbcType="INTEGER" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,sname,scode,smanageorgkind,smanageorgkindname,sleadernumber,sissystem,version
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_OpManagetype
+		where sid = #{sid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpManagetype">
+		insert into  
+		 SA_OpManagetype(<include refid="Base_Column_List" />) 
+			values( #{sid,jdbcType=VARCHAR},
+			 #{sname,jdbcType=VARCHAR},
+			 #{scode,jdbcType=VARCHAR},
+			 #{scatalog,jdbcType=VARCHAR},
+			 #{srolekind,jdbcType=VARCHAR},
+			 #{sparentrolesnames,jdbcType=VARCHAR},
+			 #{sdescription,jdbcType=VARCHAR},
+			 #{ssequence,jdbcType=INTEGER},
+			 #{svalidstate,jdbcType=INTEGER},
+			 #{version,jdbcType=INTEGER}
+			 )
+	</insert>
+	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOpManagetype">
+		update 
+		SA_OpManagetype 
+			set sname = #{sname,jdbcType=VARCHAR},
+			scode = #{scode,jdbcType=VARCHAR},
+			scatalog = #{scatalog,jdbcType=VARCHAR},
+			srolekind = #{srolekind,jdbcType=VARCHAR},
+			sparentrolesnames = #{sparentrolesnames,jdbcType=VARCHAR},
+			sdescription = #{sdescription,jdbcType=VARCHAR},
+			ssequence = #{ssequence,jdbcType=INTEGER},
+			svalidstate = #{svalidstate,jdbcType=INTEGER},
+			version = #{version,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpManagetype">
+		delete from SA_OpManagetype where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+		delete from SA_OpManagetype where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+</mapper>

@@ -18,8 +18,8 @@ public class SaOpPerson {
 	private String spassword;// 密码（MD5）
 	private int spasswordtimelimit;// 密码超时天数
 	private Date spasswordmodifytime;// 密码修改时间
-	private Date smainorgid;// 组织id
-	private Date ssafelevelid;// 安全级别id
+	private String smainorgid;// 组织id
+	private String ssafelevelid;// 安全级别id
 	private int ssequence;// 排序
 	private int svalidstate;// 使用状态{1,0,-1}
 	private String sdescription;// 描述
@@ -44,7 +44,6 @@ public class SaOpPerson {
 	private String sfamilyphone;// 家庭电话
 	private String sofficephone;// 办公电话
 	private int version;// 版本号
-	private byte[] sphoto;// 照片
 	private String scountry;// 国籍
 	private String sprovince;// 省
 	private String scity;// 市
@@ -52,8 +51,8 @@ public class SaOpPerson {
 	private String sschool;// 中学
 	private String sstudy;// 学习
 	private String senglishname;// 英文名
-	private String fcasn;// 签名
-	private String fsignm;// 签名编号
+	private String fcasn;// 签名序号（ukey编号）
+	private String fsignm;// 签名编号（签名MD5）
 
 	public String getSid() {
 		return sid;
@@ -127,19 +126,19 @@ public class SaOpPerson {
 		this.spasswordmodifytime = spasswordmodifytime;
 	}
 
-	public Date getSmainorgid() {
+	public String getSmainorgid() {
 		return smainorgid;
 	}
 
-	public void setSmainorgid(Date smainorgid) {
+	public void setSmainorgid(String smainorgid) {
 		this.smainorgid = smainorgid;
 	}
 
-	public Date getSsafelevelid() {
+	public String getSsafelevelid() {
 		return ssafelevelid;
 	}
 
-	public void setSsafelevelid(Date ssafelevelid) {
+	public void setSsafelevelid(String ssafelevelid) {
 		this.ssafelevelid = ssafelevelid;
 	}
 
@@ -333,14 +332,6 @@ public class SaOpPerson {
 
 	public void setVersion(int version) {
 		this.version = version;
-	}
-
-	public byte[] getSphoto() {
-		return sphoto;
-	}
-
-	public void setSphoto(byte[] sphoto) {
-		this.sphoto = sphoto;
 	}
 
 	public String getScountry() {

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.dao.SaOnlineinfoDao">
+	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOnlineinfo">
+		<id column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="suserid" property="suserid" jdbcType="VARCHAR" />
+		<result column="susername" property="susername" jdbcType="VARCHAR" />
+		<result column="suserfid" property="suserfid" jdbcType="VARCHAR" />
+		<result column="suserfname" property="suserfname" jdbcType="VARCHAR" />
+		<result column="sloginip" property="sloginip" jdbcType="VARCHAR" />
+		<result column="slogindate" property="slogindate" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+		<result column="ssessionid" property="ssessionid" jdbcType="VARCHAR" />
+		<result column="sserviceip" property="sserviceip" jdbcType="VARCHAR" />
+		<result column="smachinecode" property="smachinecode" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,suserid,susername,suserfid,suserfname,sloginip,slogindate,ssessionid,sserviceip,smachinecode,version
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_Onlineinfo
+		where sid = #{sid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOnlineinfo">
+		insert into  
+		 SA_Onlineinfo(<include refid="Base_Column_List" />) 
+			values( #{sid,jdbcType=VARCHAR},
+			 #{suserid,jdbcType=VARCHAR},
+			 #{susername,jdbcType=VARCHAR},
+			 #{suserfid,jdbcType=VARCHAR},
+			 #{suserfname,jdbcType=VARCHAR},
+			 #{sloginip,jdbcType=VARCHAR},
+			 #{slogindate,jdbcType=TIMESTAMP},
+			 #{ssessionid,jdbcType=VARCHAR},
+			 #{sserviceip,jdbcType=VARCHAR},
+			 #{smachinecode,jdbcType=VARCHAR},
+			 #{version,jdbcType=INTEGER}
+			 )
+	</insert>
+	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOnlineinfo">
+		update 
+		SA_Onlineinfo 
+			set suserid = #{suserid,jdbcType=VARCHAR},
+			susername = #{susername,jdbcType=VARCHAR},
+			suserfid = #{suserfid,jdbcType=VARCHAR},
+			suserfname = #{suserfname,jdbcType=VARCHAR},
+			sloginip = #{sloginip,jdbcType=VARCHAR},
+			slogindate = #{slogindate,jdbcType=TIMESTAMP},
+			ssessionid = #{ssessionid,jdbcType=VARCHAR},
+			sserviceip = #{sserviceip,jdbcType=VARCHAR},
+			smachinecode = #{smachinecode,jdbcType=VARCHAR},
+			version = #{version,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOnlineinfo">
+		delete from SA_Onlineinfo where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+		delete from SA_Onlineinfo where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+</mapper>
