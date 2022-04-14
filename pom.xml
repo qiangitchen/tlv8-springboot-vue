@@ -337,6 +337,7 @@
 		<module>tlv8-workflow</module>
 		<module>tlv8-monitor</module>
 		<module>tlv8-api</module>
+		<module>tlv8-main</module>
 	</modules>
 	<packaging>pom</packaging>
 
