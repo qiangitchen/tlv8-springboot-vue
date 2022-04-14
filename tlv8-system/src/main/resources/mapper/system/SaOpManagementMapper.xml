@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.dao.SaOpManagementDao">
+	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpManagement">
+		<id column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="sorgid" property="sorgid" jdbcType="VARCHAR" />
+		<result column="sorgname" property="sorgname" jdbcType="VARCHAR" />
+		<result column="sorgfid" property="sorgfid" jdbcType="VARCHAR" />
+		<result column="sorgfname" property="sorgfname" jdbcType="VARCHAR" />
+		<result column="smanageorgid" property="smanageorgid" jdbcType="VARCHAR" />
+		<result column="smanageorgname" property="smanageorgname" jdbcType="VARCHAR" />
+		<result column="smanageorgfid" property="smanageorgfid" jdbcType="VARCHAR" />
+		<result column="smanageorgfname" property="smanageorgfname" jdbcType="VARCHAR" />
+		<result column="smanagetypeid" property="smanagetypeid" jdbcType="VARCHAR" />
+		<result column="screatorfid" property="screatorfid" jdbcType="VARCHAR" />
+		<result column="screatorfname" property="screatorfname" jdbcType="VARCHAR" />
+		<result column="screatetime" property="screatetime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,sorgid,sorgname,sorgfid,sorgfname,smanageorgid,smanageorgname,smanageorgfid,smanageorgfname,smanagetypeid,screatorfid,screatorfname,screatetime,version
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_OpManagement
+		where sid = #{sid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpManagement">
+		insert into  
+		 SA_OpManagement(<include refid="Base_Column_List" />) 
+			values( #{sid,jdbcType=VARCHAR},
+			 #{sorgid,jdbcType=VARCHAR},
+			 #{sorgname,jdbcType=VARCHAR},
+			 #{sorgfid,jdbcType=VARCHAR},
+			 #{sorgfname,jdbcType=VARCHAR},
+			 #{smanageorgid,jdbcType=VARCHAR},
+			 #{smanageorgname,jdbcType=VARCHAR},
+			 #{smanageorgfid,jdbcType=VARCHAR},
+			 #{smanageorgfname,jdbcType=VARCHAR},
+			 #{smanagetypeid,jdbcType=VARCHAR},
+			 #{screatorfid,jdbcType=VARCHAR},
+			 #{screatorfname,jdbcType=VARCHAR},
+			 #{screatetime,jdbcType=TIMESTAMP},
+			 #{version,jdbcType=INTEGER}
+			 )
+	</insert>
+	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOpManagement">
+		update 
+		SA_OpManagement 
+			set sorgid = #{sorgid,jdbcType=VARCHAR},
+			sorgname = #{sorgname,jdbcType=VARCHAR},
+			sorgfid = #{sorgfid,jdbcType=VARCHAR},
+			sorgfname = #{sorgfname,jdbcType=VARCHAR},
+			smanageorgid = #{smanageorgid,jdbcType=VARCHAR},
+			smanageorgname = #{smanageorgname,jdbcType=VARCHAR},
+			smanageorgfid = #{smanageorgfid,jdbcType=VARCHAR},
+			smanageorgfname = #{smanageorgfname,jdbcType=VARCHAR},
+			smanagetypeid = #{smanagetypeid,jdbcType=VARCHAR},
+			screatorfid = #{screatorfid,jdbcType=VARCHAR},
+			screatorfname = #{screatorfname,jdbcType=VARCHAR},
+			screatetime = #{screatetime,jdbcType=TIMESTAMP},
+			version = #{version,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpManagement">
+		delete from SA_OpManagement where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+		delete from SA_OpManagement where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+</mapper>

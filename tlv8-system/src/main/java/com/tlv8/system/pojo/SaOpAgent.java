@@ -19,7 +19,7 @@ public class SaOpAgent {
 	private String sprocess;// 代理模块
 	private String screatorid;// 创建人id
 	private String screatorname;// 创建人名称
-	private Date SCREATETIME;// 创建时间
+	private Date screatetime;// 创建时间
 	private String scantranagent;//
 	private int version; // 版本号
 
@@ -103,12 +103,12 @@ public class SaOpAgent {
 		this.screatorname = screatorname;
 	}
 
-	public Date getSCREATETIME() {
-		return SCREATETIME;
+	public Date getScreatetime() {
+		return screatetime;
 	}
 
-	public void setSCREATETIME(Date sCREATETIME) {
-		SCREATETIME = sCREATETIME;
+	public void setScreatetime(Date screatetime) {
+		this.screatetime = screatetime;
 	}
 
 	public String getScantranagent() {

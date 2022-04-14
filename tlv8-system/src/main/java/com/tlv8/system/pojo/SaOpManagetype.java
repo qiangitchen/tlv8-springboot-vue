@@ -10,7 +10,7 @@ public class SaOpManagetype {
 	private String sid;// 主键
 	private String sname;// 名称
 	private String scode;// 编号
-	private String smanageorgkind;// 管理的机构类型id(ogn,dept,post,psm)
+	private String smanageorgkind;// 管理的机构类型id(ogn,dpt,pos,psm)
 	private String smanageorgkindname;// 管理的机构类型名称id(机构,部门,岗位,人员)
 	private int sleadernumber;// 领导数量
 	private int sissystem;// 是否系统类型

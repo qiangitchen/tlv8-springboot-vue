@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.dao.SaOpAgentDao">
+	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpAgent">
+		<id column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="sorgfid" property="sorgfid" jdbcType="VARCHAR" />
+		<result column="sorgfname" property="sorgfname" jdbcType="VARCHAR" />
+		<result column="sagentid" property="sagentid" jdbcType="VARCHAR" />
+		<result column="svalidstate" property="svalidstate" jdbcType="INTEGER" />
+		<result column="sstarttime" property="sstarttime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+		<result column="sfinishtime" property="sfinishtime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+		<result column="sprocess" property="sprocess" jdbcType="VARCHAR" />
+		<result column="screatorid" property="screatorid" jdbcType="VARCHAR" />
+		<result column="screatorname" property="screatorname" jdbcType="VARCHAR" />
+		<result column="screatetime" property="screatetime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+		<result column="scantranagent" property="scantranagent" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,sorgfid,sorgfname,sagentid,svalidstate,sstarttime,sfinishtime,sprocess,screatorid,screatorname,screatetime,scantranagent,version
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_OpAgent
+		where sid = #{sid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpAgent">
+		insert into  
+		 SA_OpAgent(<include refid="Base_Column_List" />) 
+			values( #{sid,jdbcType=VARCHAR},
+			 #{sorgfid,jdbcType=VARCHAR},
+			 #{sorgfname,jdbcType=VARCHAR},
+			 #{sagentid,jdbcType=VARCHAR},
+			 #{svalidstate,jdbcType=INTEGER},
+			 #{sstarttime,jdbcType=TIMESTAMP},
+			 #{sfinishtime,jdbcType=TIMESTAMP},
+			 #{sprocess,jdbcType=VARCHAR},
+			 #{screatorid,jdbcType=VARCHAR},
+			 #{screatorname,jdbcType=VARCHAR},
+			 #{screatetime,jdbcType=TIMESTAMP},
+			 #{scantranagent,jdbcType=VARCHAR},
+			 #{version,jdbcType=INTEGER}
+			 )
+	</insert>
+	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOpAgent">
+		update 
+		SA_OpAgent 
+			set sorgfid = #{sorgfid,jdbcType=VARCHAR},
+			sorgfname = #{sorgfname,jdbcType=VARCHAR},
+			sagentid = #{sagentid,jdbcType=VARCHAR},
+			svalidstate = #{svalidstate,jdbcType=INTEGER},
+			sstarttime = #{sstarttime,jdbcType=TIMESTAMP},
+			sfinishtime = #{sfinishtime,jdbcType=TIMESTAMP},
+			sprocess = #{sprocess,jdbcType=VARCHAR},
+			screatorid = #{screatorid,jdbcType=VARCHAR},
+			screatorname = #{screatorname,jdbcType=VARCHAR},
+			screatetime = #{screatetime,jdbcType=TIMESTAMP},
+			scantranagent = #{scantranagent,jdbcType=VARCHAR},
+			version = #{version,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpAgent">
+		delete from SA_OpAgent where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+		delete from SA_OpAgent where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<update id="logicDeleteDataByPrimaryKey" parameterType="java.lang.String">
+		update SA_OpAgent set svalidstate=-1 where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<update id="logicRecoveryByPrimaryKey" parameterType="java.lang.String">
+		update SA_OpAgent set svalidstate=1 where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+</mapper>

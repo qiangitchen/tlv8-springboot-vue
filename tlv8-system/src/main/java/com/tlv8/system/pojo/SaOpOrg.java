@@ -14,7 +14,7 @@ public class SaOpOrg {
 	private String sfname;// 名称路径“1/2/3”
 	private String sfcode;// 编号路径
 	private String sfid;// 主键路径
-	private String sorgkindid; // 组织类型{ogn,dept,post,psm}
+	private String sorgkindid; // 组织类型{ogn,dpt,pos,psm}
 	private int svalidstate;// 使用状态{1,0,-1}
 	private String sparent;// 父id
 	private int slevel;// 层级

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.dao.SaLogDao">
+	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaLog">
+		<id column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="stypename" property="stypename" jdbcType="VARCHAR" />
+		<result column="sdescription" property="sdescription" jdbcType="VARCHAR" />
+		<result column="sprocess" property="sprocess" jdbcType="VARCHAR" />
+		<result column="sprocessname" property="sprocessname" jdbcType="VARCHAR" />
+		<result column="sactivity" property="sactivity" jdbcType="VARCHAR" />
+		<result column="sactivityname" property="sactivityname" jdbcType="VARCHAR" />
+		<result column="saction" property="saction" jdbcType="VARCHAR" />
+		<result column="sactionname" property="sactionname" jdbcType="VARCHAR" />
+		<result column="sstatusname" property="sstatusname" jdbcType="VARCHAR" />
+		<result column="screatetime" property="screatetime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+		<result column="screatorfid" property="screatorfid" jdbcType="VARCHAR" />
+		<result column="screatorfname" property="screatorfname" jdbcType="VARCHAR" />
+		<result column="screatorpersonid" property="screatorpersonid" jdbcType="VARCHAR" />
+		<result column="screatorpersonname" property="screatorpersonname" jdbcType="VARCHAR" />
+		<result column="screatorposid" property="screatorposid" jdbcType="VARCHAR" />
+		<result column="screatorposname" property="screatorposname" jdbcType="VARCHAR" />
+		<result column="screatordeptid" property="screatordeptid" jdbcType="VARCHAR" />
+		<result column="screatordeptname" property="screatordeptname" jdbcType="VARCHAR" />
+		<result column="screatorognid" property="screatorognid" jdbcType="VARCHAR" />
+		<result column="screatorognname" property="screatorognname" jdbcType="VARCHAR" />
+		<result column="sip" property="sip" jdbcType="VARCHAR" />
+		<result column="sdevicetype" property="sdevicetype" jdbcType="VARCHAR" />
+		<result column="soperatingsystem" property="soperatingsystem" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,stypename,sdescription,sprocess,sprocessname,sactivity,sactivityname,saction,sactionname,sstatusname,
+		screatetime,screatorfid,screatorfname,screatorpersonid,screatorpersonname,screatorposid,screatorposname,
+		screatordeptid,screatordeptname,screatorognid,screatorognname,sip,sdevicetype,soperatingsystem,version
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_Log
+		where sid = #{sid,jdbcType=VARCHAR}
+	</select>
+	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaLog">
+		insert into  
+		 SA_Log(<include refid="Base_Column_List" />) 
+			values( #{sid,jdbcType=VARCHAR},
+			 #{stypename,jdbcType=VARCHAR},
+			 #{sdescription,jdbcType=VARCHAR},
+			 #{sprocess,jdbcType=VARCHAR},
+			 #{sprocessname,jdbcType=VARCHAR},
+			 #{sactivity,jdbcType=VARCHAR},
+			 #{sactivityname,jdbcType=VARCHAR},
+			 #{saction,jdbcType=VARCHAR},
+			 #{sactionname,jdbcType=VARCHAR},
+			 #{sstatusname,jdbcType=VARCHAR},
+			 #{screatetime,jdbcType=TIMESTAMP},
+			 #{screatorfid,jdbcType=VARCHAR},
+			 #{screatorfname,jdbcType=VARCHAR},
+			 #{screatorpersonid,jdbcType=VARCHAR},
+			 #{screatorpersonname,jdbcType=VARCHAR},
+			 #{screatorposid,jdbcType=VARCHAR},
+			 #{screatorposname,jdbcType=VARCHAR},
+			 #{screatordeptid,jdbcType=VARCHAR},
+			 #{screatordeptname,jdbcType=VARCHAR},
+			 #{screatorognid,jdbcType=VARCHAR},
+			 #{screatorognname,jdbcType=VARCHAR},
+			 #{sip,jdbcType=VARCHAR},
+			 #{sdevicetype,jdbcType=VARCHAR},
+			 #{soperatingsystem,jdbcType=VARCHAR},
+			 #{version,jdbcType=INTEGER}
+			 )
+	</insert>
+	<update id="updateData" parameterType="com.tlv8.system.pojo.SaLog">
+		update 
+		SA_Log 
+			set stypename = #{stypename,jdbcType=VARCHAR},
+			sdescription = #{sdescription,jdbcType=VARCHAR},
+			sprocess = #{sprocess,jdbcType=VARCHAR},
+			sprocessname = #{sprocessname,jdbcType=VARCHAR},
+			sactivity = #{sactivity,jdbcType=VARCHAR},
+			sactivityname = #{sactivityname,jdbcType=VARCHAR},
+			saction = #{saction,jdbcType=VARCHAR},
+			sactionname = #{sactionname,jdbcType=VARCHAR},
+			sstatusname = #{sstatusname,jdbcType=VARCHAR},
+			screatetime = #{screatetime,jdbcType=TIMESTAMP},
+			screatorfid = #{screatorfid,jdbcType=VARCHAR},
+			screatorfname = #{screatorfname,jdbcType=VARCHAR},
+			screatorpersonid = #{screatorpersonid,jdbcType=VARCHAR},
+			screatorpersonname = #{screatorpersonname,jdbcType=VARCHAR},
+			screatorposid = #{screatorposid,jdbcType=VARCHAR},
+			screatorposname = #{screatorposname,jdbcType=VARCHAR},
+			screatordeptid = #{screatordeptid,jdbcType=VARCHAR},
+			screatordeptname = #{screatordeptname,jdbcType=VARCHAR},
+			screatorognid = #{screatorognid,jdbcType=VARCHAR},
+			screatorognname = #{screatorognname,jdbcType=VARCHAR},
+			sip = #{sip,jdbcType=VARCHAR},
+			sdevicetype = #{sdevicetype,jdbcType=VARCHAR},
+			soperatingsystem = #{soperatingsystem,jdbcType=VARCHAR},
+			version = #{version,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaLog">
+		delete from SA_Log where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+		delete from SA_Log where sid = #{sid,jdbcType=VARCHAR}
+	</delete>
+</mapper>

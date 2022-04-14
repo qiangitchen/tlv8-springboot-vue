@@ -3,7 +3,7 @@ package com.tlv8.system.pojo;
 import java.util.Date;
 
 /**
- * 组织管理权限
+ * 组织-角色分配
  * 
  * @author chenqian
  *
