@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.ibatis.session.SqlSession;
+
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.doc.generator.utils.Sys;
 
@@ -35,18 +37,16 @@ public class DataSourceLoaderListener implements ServletContextListener {
 				@Override
 				public void run() {
 					while (started) {
+						SqlSession session = DBUtils.getSession("doc");
 						Connection conn = null;
 						Statement stm = null;
 						try {
-							conn = DBUtils.getAppConn("doc");
+							conn = session.getConnection();
 							stm = conn.createStatement();
 							stm.executeQuery("select * from Doc_Admin");
 						} catch (Exception e) {
 						} finally {
-							try {
-								DBUtils.CloseConn(conn, stm, null);
-							} catch (Exception e) {
-							}
+							DBUtils.CloseConn(session, conn, stm, null);
 						}
 						try {
 							Thread.sleep(5 * 60 * 1000);// 5分钟检测一次
@@ -62,6 +62,7 @@ public class DataSourceLoaderListener implements ServletContextListener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void printWellcome(ServletContextEvent event) {
 		try {
 			String context = new BufferedReader(

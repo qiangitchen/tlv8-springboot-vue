@@ -6,14 +6,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tlv8.doc.controller.docs.Converter;
-import com.tlv8.doc.controller.docs.DocFmtConvert;
-import com.tlv8.doc.controller.docs.DocToPDFConverter;
-import com.tlv8.doc.controller.docs.DocxToPDFConverter;
-import com.tlv8.doc.controller.docs.PptToPDFConverter;
-import com.tlv8.doc.controller.docs.PptxToPDFConverter;
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
+import com.tlv8.doc.controller.utils.ExcelToPDFUtils;
 import com.tlv8.doc.controller.utils.MimeUtils;
+import com.tlv8.doc.controller.utils.PdfConverUtil;
+import com.tlv8.doc.controller.utils.Word2PdfAsposeUtil;
 import com.tlv8.doc.core.io.FileDownloader;
 import com.tlv8.doc.generator.beans.DocDocPath;
 import com.tlv8.doc.generator.beans.DocDocument;
@@ -92,39 +89,17 @@ public class FileViewPDFHandler extends AbstractRequestHandler {
 			// 3.通过response获取ServletOutputStream对象(out)
 			ServletOutputStream out = paramHttpServletResponse.getOutputStream();
 			if (istr) {
-				Converter converter = null;
-				boolean isw = isWin();
 				if (".xls".equals(extnm) || ".xlsx".equals(extnm)) {
-					DocFmtConvert.excelConvertPDF(inputStream, out, extnm);
-				} else if (".doc".equals(extnm)) {
-					if (isw) {
-						DocFmtConvert.wordConvertPDF(inputStream, out);
-					} else {
-						converter = new DocToPDFConverter(inputStream, out, false, false);
-					}
-				} else if (".docx".equals(extnm)) {
-					if (isw) {
-						DocFmtConvert.wordConvertPDF(inputStream, out);
-					} else {
-						converter = new DocxToPDFConverter(inputStream, out, false, false);
-					}
+					ExcelToPDFUtils.excel2pdf(inputStream, out);
+				} else if (".doc".equals(extnm) || ".docx".equals(extnm)) {
+					Word2PdfAsposeUtil.doc2pdf(inputStream, out);
 				} else if (".ppt".equals(extnm)) {
-					if (isw) {
-						DocFmtConvert.pptConvertPDF(inputStream, out, extnm);
-					} else {
-						converter = new PptToPDFConverter(inputStream, out, false, false);
-					}
+					PdfConverUtil.ppt2pdf(inputStream, out);
 				} else if (".pptx".equals(extnm)) {
-					if (isw) {
-						DocFmtConvert.pptConvertPDF(inputStream, out, extnm);
-					} else {
-						converter = new PptxToPDFConverter(inputStream, out, false, false);
-					}
+					PdfConverUtil.pptx2pdf(inputStream, out);
 				} else if (".wps".equals(extnm)) {
-					DocFmtConvert.wpsConvertPDF(inputStream, out);
-				}
-				if (converter != null) {
-					converter.convert();
+					// DocFmtConvert.wpsConvertPDF(inputStream, out);
+					Word2PdfAsposeUtil.doc2pdf(inputStream, out);
 				}
 				try {
 					out.close();
