@@ -256,10 +256,10 @@
                 <version>${tlv8.version}</version>
             </dependency>
             
-            <!-- 文档服务模块-->
+            <!-- 文档模块（文件上传的存取管理）-->
             <dependency>
                 <groupId>com.tlv8</groupId>
-                <artifactId>tlv8-docserver</artifactId>
+                <artifactId>tlv8-doc</artifactId>
                 <version>${tlv8.version}</version>
             </dependency>
             
@@ -290,7 +290,7 @@
     <modules>
         <module>tlv8-common</module>
         <module>tlv8-system</module>
-        <module>tlv8-docserver</module>
+        <module>tlv8-doc</module>
         <module>tlv8-workflow</module>
         <module>tlv8-monitor</module>
         <module>tlv8-api</module>
