@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.tlv8</groupId>
+		<artifactId>tlv8</artifactId>
+		<version>3.0.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>tlv8-workflow</artifactId>
+
+	<description>
+        	工作流引擎
+    </description>
+
+	<dependencies>
+
+		<!-- 通用工具 -->
+		<dependency>
+			<groupId>com.tlv8</groupId>
+			<artifactId>tlv8-common</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>
