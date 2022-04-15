@@ -1,11 +1,16 @@
 package com.tlv8.system.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.tlv8.system.pojo.SaLoginlog;
 
 @Mapper
 public interface SaLoginlogMapper {
+	
+	List<SaLoginlog> selectList();
+	
 	/**
 	 * 根据主键获取数据对象
 	 * 

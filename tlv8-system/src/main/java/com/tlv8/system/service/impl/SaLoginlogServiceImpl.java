@@ -1,5 +1,7 @@
 package com.tlv8.system.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +11,15 @@ import com.tlv8.system.service.ISaLoginlogService;
 
 @Service
 public class SaLoginlogServiceImpl implements ISaLoginlogService {
-
+	
 	@Autowired
 	SaLoginlogMapper saloginlogMapper;
+	
+	@Override
+	public List<SaLoginlog> selectList(){
+		return saloginlogMapper.selectList();
+	}
+
 
 	@Override
 	public SaLoginlog selectByPrimaryKey(String sid) {

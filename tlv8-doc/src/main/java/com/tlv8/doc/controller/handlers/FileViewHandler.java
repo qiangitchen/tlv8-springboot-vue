@@ -31,6 +31,7 @@ public class FileViewHandler extends AbstractRequestHandler {
 			throws Exception {
 		String fileID = getFileID(paramHttpServletRequest);
 		String fVersion = getVersion(paramHttpServletRequest);
+		System.out.println(fileID);
 		DocDocPath dpath = null;
 		if ("last".equals(fVersion)) {
 			dpath = DocDocPathService.getDocDocPathByFileID(fileID);

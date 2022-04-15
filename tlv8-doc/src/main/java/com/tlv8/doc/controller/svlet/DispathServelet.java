@@ -3,7 +3,9 @@ package com.tlv8.doc.controller.svlet;
 import java.io.IOException;
 import java.io.Writer;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -11,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.doc.controller.connector.HttpConnector;
 import com.tlv8.doc.controller.connector.ShttpServletRequest;
@@ -21,20 +20,11 @@ import com.tlv8.doc.controller.inter.RequestHandler;
 import com.tlv8.doc.core.config.ServerConfigInit;
 import com.tlv8.doc.lucene.LuceneService;
 
-@Controller
-@RequestMapping("/DocServer")
-public class DispathServelet {
+public class DispathServelet implements Filter {
 	protected final Logger infolog = Logger.getLogger(getClass());
 
-	static boolean started = false;
-
-	@ResponseBody
-	@RequestMapping("/**")
 	public void doFilter(ServletRequest paramHttpServletRequest, ServletResponse paramHttpServletResponse,
 			FilterChain chain) throws IOException, ServletException {
-		if (!started) {
-			init();
-		}
 		try {
 			HttpServletRequest request = (HttpServletRequest) paramHttpServletRequest;
 			ShttpServletRequest srequest = new ShttpServletRequest(request);
@@ -68,14 +58,19 @@ public class DispathServelet {
 		}
 	}
 
-	public void init() throws ServletException {
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
 		try {
 			ServerConfigInit.init();
 			LuceneService.start();// 启动索引服务
-			started = true;
 		} catch (Throwable e) {
 			infolog.error("启动文档服务异常!" + e);
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void destroy() {
+
 	}
 }

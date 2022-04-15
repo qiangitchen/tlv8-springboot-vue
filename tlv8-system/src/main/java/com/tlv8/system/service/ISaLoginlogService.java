@@ -1,8 +1,13 @@
 package com.tlv8.system.service;
 
+import java.util.List;
+
 import com.tlv8.system.pojo.SaLoginlog;
 
 public interface ISaLoginlogService {
+
+	List<SaLoginlog> selectList();
+
 	/**
 	 * 根据主键获取数据对象
 	 * 

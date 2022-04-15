@@ -38,7 +38,6 @@
 		<log4j.version>1.2.17</log4j.version>
 		<dom4j.version>1.6.1</dom4j.version>
 		<lucene.version>3.6.0</lucene.version>
-		<jaxen.version>1.1.1</jaxen.version>
 		<weixin.version>3.8.0</weixin.version>
 		<orika.version>1.5.4</orika.version>
 		<alipay.version>4.8.103.ALL</alipay.version>
@@ -59,6 +58,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
+			<!-- 阿里数据库连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
 
 			<!-- 解析客户端操作系统、浏览器等 -->
 			<dependency>
@@ -176,16 +182,11 @@
 				<version>${log4j.version}</version>
 			</dependency>
 
-			<!-- Dom4j -->
+			<!-- Dom4j xml解析-->
 			<dependency>
 				<groupId>dom4j</groupId>
 				<artifactId>dom4j</artifactId>
 				<version>${dom4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>jaxen</groupId>
-				<artifactId>jaxen</artifactId>
-				<version>${jaxen.version}</version>
 			</dependency>
 
 			<!--Lucene 核心包 -->

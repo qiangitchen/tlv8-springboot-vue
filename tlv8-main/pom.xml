@@ -42,22 +42,24 @@
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 		</dependency>
+		
+		<!-- 阿里数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
 
 		<!-- 系统模块 -->
-		<!-- 
 		<dependency>
 			<groupId>com.tlv8</groupId>
 			<artifactId>tlv8-system</artifactId>
 		</dependency>
-		 -->
 
 		<!-- 文件存储模块 -->
-		<!-- 
 		<dependency>
 			<groupId>com.tlv8</groupId>
 			<artifactId>tlv8-doc</artifactId>
 		</dependency>
-		 -->
 
 		<!-- 服务器监控 -->
 		<dependency>

@@ -33,6 +33,11 @@
 		screatetime,screatorfid,screatorfname,screatorpersonid,screatorpersonname,screatorposid,screatorposname,
 		screatordeptid,screatordeptname,screatorognid,screatorognname,sip,sdevicetype,soperatingsystem,version
 	</sql>
+	<select id="selectList" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_Log
+	</select>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select 
 		<include refid="Base_Column_List" />

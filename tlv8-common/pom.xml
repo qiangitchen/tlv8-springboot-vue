@@ -113,14 +113,11 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 		
+		<!-- Dom4j xml解析-->
 		<dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
        </dependency>
-       <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-        </dependency>
 
         <!-- 解析客户端操作系统、浏览器等 -->
         <dependency>
