@@ -3,7 +3,7 @@ package com.tlv8.system.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tlv8.system.dao.SaOpOrgDao;
+import com.tlv8.system.mapper.SaOpOrgMapper;
 import com.tlv8.system.pojo.SaOpOrg;
 import com.tlv8.system.service.ISaOpOrgService;
 
@@ -11,41 +11,41 @@ import com.tlv8.system.service.ISaOpOrgService;
 public class SaOpOrgServiceImpl implements ISaOpOrgService{
 	
 	@Autowired
-	SaOpOrgDao saoporgdao;
+	SaOpOrgMapper sSaOpOrgMapper;
 
 	@Override
 	public SaOpOrg selectByPrimaryKey(String sid) {
-		return saoporgdao.selectByPrimaryKey(sid);
+		return sSaOpOrgMapper.selectByPrimaryKey(sid);
 	}
 
 	@Override
 	public int insertData(SaOpOrg obj) {
-		return saoporgdao.insertData(obj);
+		return sSaOpOrgMapper.insertData(obj);
 	}
 
 	@Override
 	public int updateData(SaOpOrg obj) {
-		return saoporgdao.updateData(obj);
+		return sSaOpOrgMapper.updateData(obj);
 	}
 
 	@Override
 	public int deleteData(SaOpOrg obj) {
-		return saoporgdao.deleteData(obj);
+		return sSaOpOrgMapper.deleteData(obj);
 	}
 
 	@Override
 	public int deleteDataByPrimaryKey(String sid) {
-		return saoporgdao.deleteDataByPrimaryKey(sid);
+		return sSaOpOrgMapper.deleteDataByPrimaryKey(sid);
 	}
 
 	@Override
 	public int logicDeleteDataByPrimaryKey(String sid) {
-		return saoporgdao.logicDeleteDataByPrimaryKey(sid);
+		return sSaOpOrgMapper.logicDeleteDataByPrimaryKey(sid);
 	}
 
 	@Override
 	public int logicRecoveryByPrimaryKey(String sid) {
-		return saoporgdao.logicRecoveryByPrimaryKey(sid);
+		return sSaOpOrgMapper.logicRecoveryByPrimaryKey(sid);
 	}
 	
 }

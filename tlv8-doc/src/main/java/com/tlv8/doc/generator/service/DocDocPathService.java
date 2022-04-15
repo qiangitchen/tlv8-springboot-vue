@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.beans.DocDocPath;
-import com.tlv8.doc.generator.dao.IDocDocPathDao;
+import com.tlv8.doc.generator.mapper.IDocDocPathDao;
+import com.tlv8.doc.generator.pojo.DocDocPath;
 
 public class DocDocPathService {
 	private static IDocDocPathDao docdocpathdao;

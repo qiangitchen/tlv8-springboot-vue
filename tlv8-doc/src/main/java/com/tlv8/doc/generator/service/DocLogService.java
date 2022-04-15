@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.beans.DocLog;
-import com.tlv8.doc.generator.beans.SqlParams;
-import com.tlv8.doc.generator.dao.IConnectionDao;
-import com.tlv8.doc.generator.dao.IDocLogDao;
+import com.tlv8.doc.generator.mapper.IConnectionDao;
+import com.tlv8.doc.generator.mapper.IDocLogDao;
+import com.tlv8.doc.generator.pojo.DocLog;
+import com.tlv8.doc.generator.pojo.SqlParams;
 
 public class DocLogService {
 	private static IConnectionDao connectiondao;

@@ -29,7 +29,7 @@ public class DispathServelet {
 	static boolean started = false;
 
 	@ResponseBody
-	@RequestMapping("/*")
+	@RequestMapping("/**")
 	public void doFilter(ServletRequest paramHttpServletRequest, ServletResponse paramHttpServletResponse,
 			FilterChain chain) throws IOException, ServletException {
 		if (!started) {

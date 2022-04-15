@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tlv8.doc.generator.dao.IDocDocPathDao" >
-  <resultMap id="resultDocPath" type="com.tlv8.doc.generator.beans.DocDocPath" >
+<mapper namespace="com.tlv8.doc.generator.mapper.IDocDocPathDao" >
+  <resultMap id="resultDocPath" type="com.tlv8.doc.generator.pojo.DocDocPath" >
   </resultMap>
   <select id="getByPrimaryKey" resultMap="resultDocPath" parameterType="java.lang.String" >
     select * from Doc_DocPath where fID = #{fID,jdbcType=VARCHAR}
@@ -22,7 +22,7 @@
   <delete id="deleteByFileID" parameterType="java.lang.String" >
     delete from Doc_DocPath where fFileID = #{fFileID,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.tlv8.doc.generator.beans.DocDocPath" >
+  <insert id="insert" parameterType="com.tlv8.doc.generator.pojo.DocDocPath" >
     insert into Doc_DocPath (fID, fFileID, fFilePath, fFileSize, fVersion, fAddTime, version) 
     values (#{fID,jdbcType=VARCHAR}, 
       #{fFileID,jdbcType=VARCHAR}, 
@@ -32,7 +32,7 @@
       #{fAddTime,jdbcType=TIMESTAMP},
       #{version,jdbcType=INTEGER}) 
   </insert>
-  <update id="update" parameterType="com.tlv8.doc.generator.beans.DocDocPath" >
+  <update id="update" parameterType="com.tlv8.doc.generator.pojo.DocDocPath" >
     update Doc_DocPath 
     set fFileID = #{fFileID,jdbcType=VARCHAR},
       fFilePath = #{fFilePath,jdbcType=VARCHAR},

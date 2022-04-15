@@ -10,7 +10,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
-import com.tlv8.doc.generator.beans.DocDocument;
+import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
 public class FileInfoHandler extends AbstractRequestHandler {

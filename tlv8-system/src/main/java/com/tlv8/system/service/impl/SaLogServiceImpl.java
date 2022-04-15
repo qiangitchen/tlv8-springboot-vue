@@ -3,7 +3,7 @@ package com.tlv8.system.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tlv8.system.dao.SaLogDao;
+import com.tlv8.system.mapper.SaLogMapper;
 import com.tlv8.system.pojo.SaLog;
 import com.tlv8.system.service.ISaLogService;
 
@@ -11,31 +11,31 @@ import com.tlv8.system.service.ISaLogService;
 public class SaLogServiceImpl implements ISaLogService {
 
 	@Autowired
-	SaLogDao dao;
+	SaLogMapper saLogMapper;
 
 	@Override
 	public SaLog selectByPrimaryKey(String sid) {
-		return dao.selectByPrimaryKey(sid);
+		return saLogMapper.selectByPrimaryKey(sid);
 	}
 
 	@Override
 	public int insertData(SaLog obj) {
-		return dao.insertData(obj);
+		return saLogMapper.insertData(obj);
 	}
 
 	@Override
 	public int updateData(SaLog obj) {
-		return dao.updateData(obj);
+		return saLogMapper.updateData(obj);
 	}
 
 	@Override
 	public int deleteData(SaLog obj) {
-		return dao.deleteData(obj);
+		return saLogMapper.deleteData(obj);
 	}
 
 	@Override
 	public int deleteDataByPrimaryKey(String sid) {
-		return dao.deleteDataByPrimaryKey(sid);
+		return saLogMapper.deleteDataByPrimaryKey(sid);
 	}
 
 }

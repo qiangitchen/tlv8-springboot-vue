@@ -3,8 +3,8 @@ package com.tlv8.doc.generator.service;
 import java.util.List;
 
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.beans.DocUser;
-import com.tlv8.doc.generator.dao.IDocUserDao;
+import com.tlv8.doc.generator.mapper.IDocUserDao;
+import com.tlv8.doc.generator.pojo.DocUser;
 
 public class DocUserService {
 	private static IDocUserDao docuserdao;

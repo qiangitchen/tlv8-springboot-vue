@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import com.tlv8.doc.generator.dao.IConnectionDao;
+import com.tlv8.doc.generator.mapper.IConnectionDao;
 
 public class DocService {
 	private static long docIndex = 1;

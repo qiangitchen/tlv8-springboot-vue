@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tlv8.doc.generator.dao.IDocLogDao">
-	<resultMap id="resultDocLog" type="com.tlv8.doc.generator.beans.DocLog">
+<mapper namespace="com.tlv8.doc.generator.mapper.IDocLogDao">
+	<resultMap id="resultDocLog" type="com.tlv8.doc.generator.pojo.DocLog">
 	</resultMap>
 	<select id="getByPrimaryKey" resultMap="resultDocLog"
 		parameterType="java.lang.String">
@@ -13,7 +13,7 @@
 	<select id="getList" resultMap="resultDocLog">
 		select * from Doc_Log
 	</select>
-	<insert id="insert" parameterType="com.tlv8.doc.generator.beans.DocLog">
+	<insert id="insert" parameterType="com.tlv8.doc.generator.pojo.DocLog">
 		insert into Doc_Log (fID, fUserID, fAddTime, fAction, fMessage, version)
 		values (#{fID,jdbcType=VARCHAR},
 		#{fUserID,jdbcType=VARCHAR},
@@ -22,7 +22,7 @@
 		#{fMessage,jdbcType=VARCHAR},
 		#{version,jdbcType=INTEGER})
 	</insert>
-	<update id="update" parameterType="com.tlv8.doc.generator.beans.DocLog">
+	<update id="update" parameterType="com.tlv8.doc.generator.pojo.DocLog">
 		update Doc_Log
 		set fUserID = #{fUserID,jdbcType=VARCHAR},
 		fAddTime = #{fAddTime,jdbcType=TIMESTAMP},

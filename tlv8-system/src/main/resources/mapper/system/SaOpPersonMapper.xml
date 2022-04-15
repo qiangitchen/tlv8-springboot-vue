@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tlv8.system.dao.SaOpPersonDao">
+<mapper namespace="com.tlv8.system.mapper.SaOpPersonMapper">
 	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpPerson">
 		<id column="sid" property="sid" jdbcType="VARCHAR" />
 		<result column="sname" property="sname" jdbcType="VARCHAR" />

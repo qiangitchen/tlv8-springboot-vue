@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.tlv8.doc.core.io.AbstractFileDeleter;
-import com.tlv8.doc.generator.beans.DocDocPath;
+import com.tlv8.doc.generator.pojo.DocDocPath;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 

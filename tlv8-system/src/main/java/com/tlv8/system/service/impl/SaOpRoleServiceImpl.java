@@ -3,7 +3,7 @@ package com.tlv8.system.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tlv8.system.dao.SaOpRoleDao;
+import com.tlv8.system.mapper.SaOpRoleMapper;
 import com.tlv8.system.pojo.SaOpRole;
 import com.tlv8.system.service.ISaOpRoleService;
 
@@ -11,41 +11,41 @@ import com.tlv8.system.service.ISaOpRoleService;
 public class SaOpRoleServiceImpl implements ISaOpRoleService {
 
 	@Autowired
-	SaOpRoleDao dao;
+	SaOpRoleMapper saOpRoleMapper;
 
 	@Override
 	public SaOpRole selectByPrimaryKey(String sid) {
-		return dao.selectByPrimaryKey(sid);
+		return saOpRoleMapper.selectByPrimaryKey(sid);
 	}
 
 	@Override
 	public int insertData(SaOpRole obj) {
-		return dao.insertData(obj);
+		return saOpRoleMapper.insertData(obj);
 	}
 
 	@Override
 	public int updateData(SaOpRole obj) {
-		return dao.updateData(obj);
+		return saOpRoleMapper.updateData(obj);
 	}
 
 	@Override
 	public int deleteData(SaOpRole obj) {
-		return dao.deleteData(obj);
+		return saOpRoleMapper.deleteData(obj);
 	}
 
 	@Override
 	public int deleteDataByPrimaryKey(String sid) {
-		return dao.deleteDataByPrimaryKey(sid);
+		return saOpRoleMapper.deleteDataByPrimaryKey(sid);
 	}
 
 	@Override
 	public int logicDeleteDataByPrimaryKey(String sid) {
-		return dao.logicDeleteDataByPrimaryKey(sid);
+		return saOpRoleMapper.logicDeleteDataByPrimaryKey(sid);
 	}
 
 	@Override
 	public int logicRecoveryByPrimaryKey(String sid) {
-		return dao.logicRecoveryByPrimaryKey(sid);
+		return saOpRoleMapper.logicRecoveryByPrimaryKey(sid);
 	}
 
 }

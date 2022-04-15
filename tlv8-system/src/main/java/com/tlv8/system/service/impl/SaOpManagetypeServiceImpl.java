@@ -3,7 +3,7 @@ package com.tlv8.system.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tlv8.system.dao.SaOpManagetypeDao;
+import com.tlv8.system.mapper.SaOpManagetypeMapper;
 import com.tlv8.system.pojo.SaOpManagetype;
 import com.tlv8.system.service.ISaOpManagetypeService;
 
@@ -11,31 +11,31 @@ import com.tlv8.system.service.ISaOpManagetypeService;
 public class SaOpManagetypeServiceImpl implements ISaOpManagetypeService {
 
 	@Autowired
-	SaOpManagetypeDao dao;
+	SaOpManagetypeMapper saOpManagetypeMapper;
 
 	@Override
 	public SaOpManagetype selectByPrimaryKey(String sid) {
-		return dao.selectByPrimaryKey(sid);
+		return saOpManagetypeMapper.selectByPrimaryKey(sid);
 	}
 
 	@Override
 	public int insertData(SaOpManagetype obj) {
-		return dao.insertData(obj);
+		return saOpManagetypeMapper.insertData(obj);
 	}
 
 	@Override
 	public int updateData(SaOpManagetype obj) {
-		return dao.updateData(obj);
+		return saOpManagetypeMapper.updateData(obj);
 	}
 
 	@Override
 	public int deleteData(SaOpManagetype obj) {
-		return dao.deleteData(obj);
+		return saOpManagetypeMapper.deleteData(obj);
 	}
 
 	@Override
 	public int deleteDataByPrimaryKey(String sid) {
-		return dao.deleteDataByPrimaryKey(sid);
+		return saOpManagetypeMapper.deleteDataByPrimaryKey(sid);
 	}
 
 }

@@ -12,8 +12,8 @@ import com.tlv8.doc.controller.utils.MimeUtils;
 import com.tlv8.doc.controller.utils.PdfConverUtil;
 import com.tlv8.doc.controller.utils.Word2PdfAsposeUtil;
 import com.tlv8.doc.core.io.FileDownloader;
-import com.tlv8.doc.generator.beans.DocDocPath;
-import com.tlv8.doc.generator.beans.DocDocument;
+import com.tlv8.doc.generator.pojo.DocDocPath;
+import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 

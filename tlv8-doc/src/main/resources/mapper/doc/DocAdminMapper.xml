@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tlv8.doc.generator.dao.IDocAdminDao">
+<mapper namespace="com.tlv8.doc.generator.mapper.IDocAdminDao">
 	<resultMap id="resultDocAdmin"
-		type="com.tlv8.doc.generator.beans.DocAdmin">
+		type="com.tlv8.doc.generator.pojo.DocAdmin">
 	</resultMap>
 	<select id="getByPrimaryKey" resultMap="resultDocAdmin"
 		parameterType="java.lang.String">
@@ -15,7 +15,7 @@
 		delete from 
 		Doc_Admin where fID = #{fID,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insert" parameterType="com.tlv8.doc.generator.beans.DocAdmin">
+	<insert id="insert" parameterType="com.tlv8.doc.generator.pojo.DocAdmin">
 		insert into Doc_Admin(fID, fLeve, fName, version) 
 		values
 		(#{fID,jdbcType=VARCHAR},
@@ -23,7 +23,7 @@
 		#{fName,jdbcType=VARCHAR},
 		#{version,jdbcType=INTEGER})
 	</insert>
-	<update id="update" parameterType="com.tlv8.doc.generator.beans.DocAdmin">
+	<update id="update" parameterType="com.tlv8.doc.generator.pojo.DocAdmin">
 		update Doc_Admin 
 		set fLeve = #{fLeve,jdbcType=INTEGER},
 		fName = #{fName,jdbcType=VARCHAR},

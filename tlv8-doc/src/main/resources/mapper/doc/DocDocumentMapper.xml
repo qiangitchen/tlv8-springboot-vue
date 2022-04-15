@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.tlv8.doc.generator.dao.IDocDocumentDao" >
-  <resultMap id="resultDocument" type="com.tlv8.doc.generator.beans.DocDocument" >
+<mapper namespace="com.tlv8.doc.generator.mapper.IDocDocumentDao" >
+  <resultMap id="resultDocument" type="com.tlv8.doc.generator.pojo.DocDocument" >
   </resultMap>
   <select id="getByPrimaryKey" resultMap="resultDocument" parameterType="java.lang.String" >
     select * from Doc_Document where fID = #{fID,jdbcType=VARCHAR}
@@ -18,7 +18,7 @@
   <delete id="deleteByDocID" parameterType="java.lang.String" >
     delete from Doc_Document where fDocID = #{fDocID,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.tlv8.doc.generator.beans.DocDocument" >
+  <insert id="insert" parameterType="com.tlv8.doc.generator.pojo.DocDocument" >
     insert into Doc_Document (fID, fDocID, fDocName, fExtName, fDocSize, fDocType, fAddTime, fUpdateTime, version) 
     values (#{fID,jdbcType=VARCHAR}, 
       #{fDocID,jdbcType=VARCHAR}, 
@@ -30,7 +30,7 @@
       #{fUpdateTime,jdbcType=TIMESTAMP},
       #{version,jdbcType=INTEGER}) 
   </insert>
-  <update id="update" parameterType="com.tlv8.doc.generator.beans.DocDocument" >
+  <update id="update" parameterType="com.tlv8.doc.generator.pojo.DocDocument" >
     update Doc_Document 
     set fDocID = #{fDocID,jdbcType=VARCHAR},
       fDocName = #{fDocName,jdbcType=VARCHAR},

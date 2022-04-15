@@ -5,8 +5,8 @@ import java.util.Date;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.doc.core.io.FileUploader;
 import com.tlv8.doc.core.io.centent.FileIOContent;
-import com.tlv8.doc.generator.beans.DocDocPath;
-import com.tlv8.doc.generator.beans.DocDocument;
+import com.tlv8.doc.generator.pojo.DocDocPath;
+import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
