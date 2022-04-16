@@ -3,6 +3,9 @@ package com.tlv8.system.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
 public interface SysParamsMapper {
 	/**
 	 * 获取组织信息

@@ -7,6 +7,12 @@ import com.tlv8.doc.lucene.art.IndexDeleter;
 import com.tlv8.doc.lucene.art.IndexWrite;
 import com.tlv8.doc.core.io.atr.FileAttribute;
 
+/**
+ * Lucene 全文检索服务
+ * 
+ * @author chenqian
+ *
+ */
 public class LuceneService {
 	private static boolean svIsStarted = false;
 	private static Map<String, FileAttribute> handMap = new HashMap<String, FileAttribute>();
@@ -71,7 +77,7 @@ public class LuceneService {
 						}
 						try {
 							Thread.sleep(100);// 写与删间隔一下
-						} catch (InterruptedException e) {
+						} catch (Exception e) {
 						}
 						for (String mindexk : moveMap.keySet()) {
 							String mindexv = moveMap.get(mindexk);

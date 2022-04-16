@@ -17,7 +17,7 @@ import com.tlv8.common.base.SecurityImage;
  * 验证码
  */
 @Controller
-@RequestMapping("/system")
+@RequestMapping("/system/common")
 public class CaptchaImage {
 
 	@ResponseBody

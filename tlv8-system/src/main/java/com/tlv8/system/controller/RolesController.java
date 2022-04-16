@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.tlv8.common.base.Data;
 import com.tlv8.system.bean.ContextBean;
-import com.tlv8.system.service.SysParamsService;
+import com.tlv8.system.service.ISysParamsService;
 
 /**
  * 角色
@@ -24,7 +24,7 @@ import com.tlv8.system.service.SysParamsService;
 public class RolesController {
 
 	@Autowired
-	SysParamsService sysParamsService;
+	private ISysParamsService sysParamsService;
 
 	@ResponseBody
 	@RequestMapping("/getAllRolesAction")

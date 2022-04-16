@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tlv8.system.pojo.SaOpPerson;
 import com.tlv8.system.service.ISaOpPersonService;
-import com.tlv8.system.service.SysLoginService;
+import com.tlv8.system.service.ISysLoginService;
 
 /**
  * 用户同步签名
@@ -20,7 +20,7 @@ public class SAPerson {
 	ISaOpPersonService personservice;
 
 	@Autowired
-	SysLoginService sysLoginService;
+	ISysLoginService iSysLoginService;
 
 	/**
 	 * 更新签名
@@ -45,7 +45,7 @@ public class SAPerson {
 	 * @throws Exception
 	 */
 	public void changePassword(String username, String password, String new_password) throws Exception {
-		Map<String, String> rs = sysLoginService.getInfoByCode(username);
+		Map<String, String> rs = iSysLoginService.getInfoByCode(username);
 		if (!rs.isEmpty()) {
 			if (rs.get("SPASSWORD").equals(password)) {
 				SaOpPerson person = personservice.selectByPrimaryKey(rs.get("PERSONID"));

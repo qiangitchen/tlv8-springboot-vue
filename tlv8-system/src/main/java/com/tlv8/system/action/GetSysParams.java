@@ -7,12 +7,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tlv8.system.service.SysParamsService;
+import com.tlv8.system.service.ISysParamsService;
 
 public class GetSysParams {
 
 	@Autowired
-	SysParamsService sysParamsService;
+	ISysParamsService iSysParamsService;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public HashMap<String, String> getSysParamsFunc(HashMap<String, String> params) throws Exception {
@@ -34,7 +34,7 @@ public class GetSysParams {
 
 	private void getOrgInfo(HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> orgmap = sysParamsService.getOrgInfo(params.get("orgID"));
+			Map<String, String> orgmap = iSysParamsService.getOrgInfo(params.get("orgID"));
 			if (!orgmap.isEmpty()) {
 				params.put("currentOrgID", orgmap.get("SID"));
 				params.put("currentOrgName", orgmap.get("SNAME"));
@@ -57,7 +57,7 @@ public class GetSysParams {
 
 	private void getOgnInfo(HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = sysParamsService.getOgnInfo(params.get("currentOrgFullID"));
+			Map<String, String> map = iSysParamsService.getOgnInfo(params.get("currentOrgFullID"));
 			if (!map.isEmpty()) {
 				params.put("currentOgnID", map.get("SID"));
 				params.put("currentOgnName", map.get("SNAME"));
@@ -80,7 +80,7 @@ public class GetSysParams {
 
 	private void getUserInfo(HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = sysParamsService.getUserInfo(params.get("orgID"), params.get("personID"));
+			Map<String, String> map = iSysParamsService.getUserInfo(params.get("orgID"), params.get("personID"));
 			if (!map.isEmpty()) {
 				params.put("currentUserID", map.get("SID"));
 				params.put("currentUserName", map.get("SNAME"));
@@ -103,7 +103,7 @@ public class GetSysParams {
 
 	private void getPersonInfo(HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = sysParamsService.getPersonInfo(params.get("personID"));
+			Map<String, String> map = iSysParamsService.getPersonInfo(params.get("personID"));
 			if (!map.isEmpty()) {
 				params.put("currentPersonID", map.get("SID"));
 				params.put("currentPersonName", map.get("SNAME"));
@@ -132,7 +132,7 @@ public class GetSysParams {
 
 	private void getDeptInfo(HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = sysParamsService.getDeptInfo(params.get("currentOrgFullID"));
+			Map<String, String> map = iSysParamsService.getDeptInfo(params.get("currentOrgFullID"));
 			if (!map.isEmpty()) {
 				params.put("currentDeptID", map.get("SID"));
 				params.put("currentDeptName", map.get("SNAME"));
@@ -155,7 +155,7 @@ public class GetSysParams {
 
 	private void getPositionInfo(HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = sysParamsService.getPositionInfo(params.get("currentOrgFullID"));
+			Map<String, String> map = iSysParamsService.getPositionInfo(params.get("currentOrgFullID"));
 			if (!map.isEmpty()) {
 				params.put("currentPositionID", map.get("SID"));
 				params.put("currentPositionName", map.get("SNAME"));

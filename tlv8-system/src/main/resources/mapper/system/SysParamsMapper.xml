@@ -6,7 +6,7 @@
 		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o where o.sid = #{orgid,jdbcType=VARCHAR} and o.SVALIDSTATE =1
 	</select>
 	
-	<select id="getOrgInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getOgnInfo" resultType="java.util.Map" parameterType="java.lang.String">
 		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
 		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
 		 and (o.sorgkindid = 'ogn' or o.sorgkindid = 'org')

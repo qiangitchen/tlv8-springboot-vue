@@ -2,6 +2,9 @@ package com.tlv8.system.mapper;
 
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
 public interface SysLoginMapper {
 
 	/**

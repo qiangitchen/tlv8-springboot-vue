@@ -3,7 +3,7 @@ package com.tlv8.system.service;
 import java.util.List;
 import java.util.Map;
 
-public interface SysParamsService {
+public interface ISysParamsService {
 	/**
 	 * 获取组织信息
 	 * 

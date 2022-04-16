@@ -49,16 +49,16 @@ import com.tlv8.system.service.ISaOnlineinfoService;
 public class UserController extends BaseController {
 
 	@Autowired
-	ISaOnlineinfoService onlineinfosvr;
+	private ISaOnlineinfoService onlineinfosvr;
 
 	@Autowired
-	Login login;
+	private Login login;
 
 	@Autowired
-	WriteLoginLog writeLoginLog;
+	private WriteLoginLog writeLoginLog;
 
 	@Autowired
-	SAPerson saPerson;
+	private SAPerson saPerson;
 
 	@ResponseBody
 	@RequestMapping("/login")

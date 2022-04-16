@@ -1,7 +1,6 @@
 package com.tlv8.doc.controller.svlet;
 
 import java.io.IOException;
-import java.io.Writer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -40,15 +39,6 @@ public class DispathServelet implements Filter {
 				} catch (Exception e) {
 					chain.doFilter(request, response);
 				}
-			} else if ((baseContextPath != null) && (baseContextPath.startsWith("/"))
-					&& (baseContextPath.length() == 1)) {
-				paramHttpServletResponse.setContentType("text/html");
-				paramHttpServletResponse.setCharacterEncoding("utf-8");
-				Writer writer = paramHttpServletResponse.getWriter();
-				writer.write(
-						"<HTML>\n<HEAD>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><TITLE>连接成功!");
-				writer.write("</TITLE></HEAD>\n<BODY>\n<H2>文档服务已经成功启动.</H2>\n</BODY>\n</HTML>");
-				writer.close();
 			} else {
 				chain.doFilter(request, response);
 			}

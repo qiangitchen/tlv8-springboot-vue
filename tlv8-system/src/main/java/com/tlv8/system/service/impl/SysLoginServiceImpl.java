@@ -3,11 +3,13 @@ package com.tlv8.system.service.impl;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tlv8.system.mapper.SysLoginMapper;
-import com.tlv8.system.service.SysLoginService;
+import com.tlv8.system.service.ISysLoginService;
 
-public class SysLoginServiceImpl implements SysLoginService {
+@Service
+public class SysLoginServiceImpl implements ISysLoginService {
 
 	@Autowired
 	SysLoginMapper sysLoginMapper;

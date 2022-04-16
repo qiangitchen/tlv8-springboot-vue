@@ -5,13 +5,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tlv8.system.service.SysLoginService;
+import com.tlv8.system.service.ISysLoginService;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Login {
 
 	@Autowired
-	SysLoginService sysLoginService;
+	ISysLoginService iSysLoginService;
 
 	private String message;
 
@@ -27,7 +27,7 @@ public class Login {
 			throws Exception {
 		HashMap<String, String> m = new HashMap<String, String>();
 		try {
-			Map<String, String> rs = sysLoginService.getInfoByCode(username);
+			Map<String, String> rs = iSysLoginService.getInfoByCode(username);
 			if (!rs.isEmpty()) {
 				m.put("username", rs.get("USERNAME"));
 				m.put("personID", rs.get("PERSONID"));
@@ -63,7 +63,7 @@ public class Login {
 	public HashMap<String, String> MD5doLogin(String username, String password) throws Exception {
 		HashMap m = new HashMap();
 		try {
-			Map<String, String> rs = sysLoginService.getInfoByCode(username);
+			Map<String, String> rs = iSysLoginService.getInfoByCode(username);
 			if (!rs.isEmpty()) {
 				m.put("username", rs.get("USERNAME"));
 				m.put("personID", rs.get("PERSONID"));
@@ -99,7 +99,7 @@ public class Login {
 	public HashMap<String, String> CAdoLogin(String sn) throws Exception {
 		HashMap m = new HashMap();
 		try {
-			Map<String, String> rs = sysLoginService.getInfoByCASN(sn);
+			Map<String, String> rs = iSysLoginService.getInfoByCASN(sn);
 			if (!rs.isEmpty()) {
 				m.put("username", rs.get("USERNAME"));
 				m.put("personID", rs.get("PERSONID"));
@@ -132,7 +132,7 @@ public class Login {
 	public HashMap<String, String> sCAdoLogin(String signm) throws Exception {
 		HashMap m = new HashMap();
 		try {
-			Map<String, String> rs = sysLoginService.getInfoBySignm(signm);
+			Map<String, String> rs = iSysLoginService.getInfoBySignm(signm);
 			if (!rs.isEmpty()) {
 				m.put("username", rs.get("USERNAME"));
 				m.put("personID", rs.get("PERSONID"));

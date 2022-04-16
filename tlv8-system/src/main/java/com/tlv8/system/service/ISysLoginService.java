@@ -2,7 +2,7 @@ package com.tlv8.system.service;
 
 import java.util.Map;
 
-public interface SysLoginService {
+public interface ISysLoginService {
 	/**
 	 * 根据账号获取用户信息（账号：用户编号、登录名、手机号）
 	 * 

@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tlv8.system.mapper.SysParamsMapper;
-import com.tlv8.system.service.SysParamsService;
+import com.tlv8.system.service.ISysParamsService;
 
-public class SysParamsServiceImpl implements SysParamsService {
+@Service
+public class SysParamsServiceImpl implements ISysParamsService {
 
 	@Autowired
 	SysParamsMapper sysParamsMapper;
