@@ -1,5 +1,7 @@
 package com.tlv8.system.service;
 
+import java.util.List;
+
 import com.tlv8.system.pojo.SaOnlineinfo;
 
 public interface ISaOnlineinfoService {
@@ -10,6 +12,14 @@ public interface ISaOnlineinfoService {
 	 * @return
 	 */
 	SaOnlineinfo selectByPrimaryKey(String sid);
+
+	/**
+	 * 根据sessionid获取在线用户信息
+	 * 
+	 * @param sessionid
+	 * @return
+	 */
+	List<SaOnlineinfo> selectBySessionID(String sessionid);
 
 	/**
 	 * 插入数据到数据库
@@ -42,5 +52,20 @@ public interface ISaOnlineinfoService {
 	 * @return
 	 */
 	int deleteDataByPrimaryKey(String sid);
+
+	/**
+	 * 删除指定sessionid的在线用户信息
+	 * 
+	 * @param sessionID
+	 * @return
+	 */
+	int deleteDataBySessionID(String sessionid);
+
+	/**
+	 * 统计在线用户数
+	 * 
+	 * @return
+	 */
+	long getCount();
 
 }

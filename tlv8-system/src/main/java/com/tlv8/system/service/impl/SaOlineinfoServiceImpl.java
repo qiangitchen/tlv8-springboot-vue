@@ -1,5 +1,7 @@
 package com.tlv8.system.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,11 @@ public class SaOlineinfoServiceImpl implements ISaOnlineinfoService {
 	@Override
 	public SaOnlineinfo selectByPrimaryKey(String sid) {
 		return saOnlineinfoMapper.selectByPrimaryKey(sid);
+	}
+
+	@Override
+	public List<SaOnlineinfo> selectBySessionID(String sessionid) {
+		return saOnlineinfoMapper.selectBySessionID(sessionid);
 	}
 
 	@Override
@@ -36,6 +43,16 @@ public class SaOlineinfoServiceImpl implements ISaOnlineinfoService {
 	@Override
 	public int deleteDataByPrimaryKey(String sid) {
 		return saOnlineinfoMapper.deleteDataByPrimaryKey(sid);
+	}
+
+	@Override
+	public int deleteDataBySessionID(String sessionid) {
+		return saOnlineinfoMapper.deleteDataBySessionID(sessionid);
+	}
+
+	@Override
+	public long getCount() {
+		return saOnlineinfoMapper.getCount();
 	}
 
 }

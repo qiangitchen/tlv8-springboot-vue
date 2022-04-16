@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.mapper.SysParamsMapper">
+
+	<select id="getOrgInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o where o.sid = #{orgid,jdbcType=VARCHAR} and o.SVALIDSTATE =1
+	</select>
+	
+	<select id="getOrgInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
+		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
+		 and (o.sorgkindid = 'ogn' or o.sorgkindid = 'org')
+		 and o.SVALIDSTATE =1 
+		 order by SFID desc
+	</select>
+	
+	<select id="getDeptInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
+		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
+		 and (o.sorgkindid = 'dept' or o.sorgkindid = 'dpt')
+		 and o.SVALIDSTATE =1 
+		 order by SFID desc
+	</select>
+	
+	<select id="getPositionInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
+		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
+		 and o.sorgkindid = 'pos' 
+		 and o.SVALIDSTATE =1 
+		 order by SFID desc
+	</select>
+	
+	<select id="getPersonInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		select p.SID,p.SNAME,p.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPPERSON p 
+		inner join SA_OPORG o on o.SPERSONID=p.SID and p.SMAINORGID=o.SPARENT 
+		where p.SID = #{personid,jdbcType=VARCHAR} and o.SVALIDSTATE =1 and p.SVALIDSTATE =1
+	</select>
+	
+	<select id="getUserInfo" resultType="java.util.Map" parameterType="java.lang.String">
+		select p.SID,p.SNAME,p.SCODE,concat(o.sFID,'/',p.sid) SFID,concat(o.sFName,'/',p.sName) SFNAME,concat(o.sFCode,'/',p.sCode) SFCODE from SA_OPPERSON p , SA_OPOrg o 
+		where o.sid = #{orgid,jdbcType=VARCHAR} 
+		 and p.sid = #{personid,jdbcType=VARCHAR} 
+		 and o.SVALIDSTATE =1 and p.SVALIDSTATE =1
+	</select>
+	
+	<select id="getRoles" resultType="java.util.Map" parameterType="java.lang.String">
+		select r.SID,r.SCODE,r.SNAME,t.SORGID,t.SORGNAME from sa_opauthorize t left join sa_oprole r on r.sid = t.sauthorizeroleid 
+		 where #{personfid,jdbcType=VARCHAR} like CONCAT(t.SORGFID,'%')
+	</select>
+
+</mapper>

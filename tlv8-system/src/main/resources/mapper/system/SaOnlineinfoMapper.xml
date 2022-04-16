@@ -23,6 +23,12 @@
 		from SA_Onlineinfo
 		where sid = #{sid,jdbcType=VARCHAR}
 	</select>
+	<select id="selectBySessionID" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_Onlineinfo
+		where ssessionid = #{sessionid,jdbcType=VARCHAR}
+	</select>
 	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOnlineinfo">
 		insert into  
 		 SA_Onlineinfo(<include refid="Base_Column_List" />) 
@@ -60,4 +66,10 @@
 	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
 		delete from SA_Onlineinfo where sid = #{sid,jdbcType=VARCHAR}
 	</delete>
+	<delete id="deleteDataBySessionID" parameterType="java.lang.String">
+		delete from SA_Onlineinfo where ssessionid = #{sessionid,jdbcType=VARCHAR}
+	</delete>
+	<select id="getCount" resultType="java.lang.Long">
+		select count(*) CON from SA_ONLINEINFO
+	</select>
 </mapper>
