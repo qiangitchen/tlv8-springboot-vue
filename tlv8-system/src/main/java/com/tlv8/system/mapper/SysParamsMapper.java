@@ -54,7 +54,7 @@ public interface SysParamsMapper {
 	 * @param personid
 	 * @return
 	 */
-	Map<String, String> getUserInfo(String orgid, String personid);
+	Map<String, String> getUserInfo(Map<String, String> map);
 
 	/**
 	 * 获取用户的角色列表

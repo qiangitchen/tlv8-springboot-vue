@@ -1,5 +1,6 @@
 package com.tlv8.system.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +43,14 @@ public class SysParamsServiceImpl implements ISysParamsService {
 
 	@Override
 	public Map<String, String> getUserInfo(String orgid, String personid) {
-		return sysParamsMapper.getUserInfo(orgid, personid);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("orgid", orgid);
+		map.put("personid", personid);
+		return sysParamsMapper.getUserInfo(map);
 	}
-	
+
 	@Override
-	public List<Map<String, String>> getRoles(String personfid){
+	public List<Map<String, String>> getRoles(String personfid) {
 		return sysParamsMapper.getRoles(personfid);
 	}
 

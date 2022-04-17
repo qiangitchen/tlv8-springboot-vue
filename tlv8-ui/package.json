@@ -1,6 +1,6 @@
 {
-  "name": "vue-antd-pro",
-  "version": "3.0.2",
+  "name": "tlv8",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",

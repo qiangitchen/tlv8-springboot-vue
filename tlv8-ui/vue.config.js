@@ -103,12 +103,15 @@ const vueConfig = {
   devServer: {
     // development server port 8000
     port: 80,
+    open: true,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
-       '/tlv8': {
-         target: 'http://localhost:8080',
-         ws: false,
-         changeOrigin: true
+       '/api': {
+         target: 'http://localhost:8080/',
+         changeOrigin: true,
+         pathRewrite: {
+          '^/api': '/'
+         }
        }
     }
   },

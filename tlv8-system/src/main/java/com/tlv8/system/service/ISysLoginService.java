@@ -9,7 +9,7 @@ public interface ISysLoginService {
 	 * @param code
 	 * @return
 	 */
-	Map<String, String> getInfoByCode(String code);
+	Map<String, Object> getInfoByCode(String code, String loginname, String mphone);
 
 	/**
 	 * 根据ca编号获取用户信息
@@ -17,7 +17,7 @@ public interface ISysLoginService {
 	 * @param casn
 	 * @return
 	 */
-	Map<String, String> getInfoByCASN(String casn);
+	Map<String, Object> getInfoByCASN(String casn);
 
 	/**
 	 * 根据ca签名获取用户信息
@@ -25,5 +25,5 @@ public interface ISysLoginService {
 	 * @param casn
 	 * @return
 	 */
-	Map<String, String> getInfoBySignm(String signm);
+	Map<String, Object> getInfoBySignm(String signm);
 }

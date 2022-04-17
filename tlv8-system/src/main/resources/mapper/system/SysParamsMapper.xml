@@ -36,7 +36,7 @@
 		where p.SID = #{personid,jdbcType=VARCHAR} and o.SVALIDSTATE =1 and p.SVALIDSTATE =1
 	</select>
 	
-	<select id="getUserInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getUserInfo" resultType="java.util.Map" parameterType="java.util.Map">
 		select p.SID,p.SNAME,p.SCODE,concat(o.sFID,'/',p.sid) SFID,concat(o.sFName,'/',p.sName) SFNAME,concat(o.sFCode,'/',p.sCode) SFCODE from SA_OPPERSON p , SA_OPOrg o 
 		where o.sid = #{orgid,jdbcType=VARCHAR} 
 		 and p.sid = #{personid,jdbcType=VARCHAR} 

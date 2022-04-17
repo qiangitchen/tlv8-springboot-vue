@@ -44,7 +44,8 @@ public class JurisdictionFilter implements Filter {
 	private boolean isLoginPage(String patex) {
 		boolean isre = false;
 		if (patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
-				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")) {
+				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
+				|| patex.contains("/logout") || patex.contains("/MD5logout")) {
 			isre = true;
 		}
 		return isre;

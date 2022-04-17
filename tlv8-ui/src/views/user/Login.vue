@@ -89,6 +89,7 @@
         >{{ $t('user.login.login') }}</a-button>
       </a-form-item>
 
+      <!--
       <div class="user-login-other">
         <span>{{ $t('user.login.sign-in-with') }}</span>
         <a>
@@ -102,6 +103,7 @@
         </a>
         <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>
       </div>
+      -->
     </a-form>
 
     <two-step-captcha
@@ -129,7 +131,7 @@ export default {
       customActiveKey: 'tab1',
       loginBtn: false,
       // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
+      loginType: 1,
       isLoginError: false,
       requiredTwoStepCaptcha: false,
       stepCaptchaVisible: false,
@@ -138,7 +140,7 @@ export default {
         time: 60,
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
+        loginType: 1,
         smsSendBtn: false
       }
     }
@@ -185,7 +187,6 @@ export default {
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username

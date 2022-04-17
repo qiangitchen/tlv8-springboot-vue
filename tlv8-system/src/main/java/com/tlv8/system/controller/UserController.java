@@ -22,10 +22,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Sys;
+import com.tlv8.common.constant.HttpStatus;
 import com.tlv8.system.action.Login;
 import com.tlv8.system.action.SAPerson;
 import com.tlv8.system.action.WriteLoginLog;
@@ -61,19 +64,19 @@ public class UserController extends BaseController {
 	private SAPerson saPerson;
 
 	@ResponseBody
-	@RequestMapping("/login")
-	public void login() throws DocumentException, HttpException, IOException {
-		String username = p("username");
-		String password = p("password");
-		String loginDate = p("loginDate");
-		String language = p("language");
-		String logintype = (p("logintype") != null ? p("logintype") : "mobile");
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public void login(@RequestBody Map<String, String> rqparams) throws DocumentException, HttpException, IOException {
+		String username = rqparams.get("username");
+		String password = rqparams.get("password");
+		String loginDate = rqparams.get("loginDate");
+		String language = rqparams.get("language");
+		String logintype = (rqparams.get("logintype") != null ? rqparams.get("logintype") : "mobile");
 
-		String captcha = p("captcha");
-		String agent = p("agent");
-		String onceFunc = p("onceFunc");
-		String mode = p("mode");
-		String ip = p("ip");
+		String captcha = rqparams.get("captcha");
+		String agent = rqparams.get("agent");
+		String onceFunc = rqparams.get("onceFunc");
+		String mode = rqparams.get("mode");
+		String ip = rqparams.get("ip");
 
 		String msg = "";
 
@@ -149,18 +152,20 @@ public class UserController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/MD5login")
-	public void MD5login() throws DocumentException, HttpException, IOException {
-		String username = p("username");
-		String password = p("password");
-		String loginDate = p("loginDate");
-		String language = p("language");
+	@RequestMapping(value = "/MD5login", method = RequestMethod.POST)
+	public Object MD5login(@RequestBody Map<String, String> rqparams)
+			throws DocumentException, HttpException, IOException {
+		Map<String, Object> res = new HashMap<String, Object>();
+		String username = rqparams.get("username");
+		String password = rqparams.get("password");
+		String loginDate = rqparams.get("loginDate");
+		String language = rqparams.get("language");
 
-		String captcha = p("captcha");
-		String agent = p("agent");
-		String onceFunc = p("onceFunc");
-		String mode = p("mode");
-		String ip = p("ip");
+		String captcha = rqparams.get("captcha");
+		String agent = rqparams.get("agent");
+		String onceFunc = rqparams.get("onceFunc");
+		String mode = rqparams.get("mode");
+		String ip = rqparams.get("ip");
 		String mobilestatus = "0";
 		// String title = "jpolite.res.system.UserController.login.0";
 		String msg = "";
@@ -175,16 +180,18 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (!"no_captcha".equals(captcha)) {
+		if (!"no_captcha".equals(captcha) && captcha != null) {
 			if (captcha == "") {
 				msg = "请输入验证码!";
-				renderData(Boolean.valueOf(false), "{\"msg\":\"" + r(msg) + "\"}");
-				return;
+				res.put("state", false);
+				res.put("msg", r(msg));
+				return res;
 			}
 			if (!captcha.equals(SessionHelper.getAttrString(this.request, "SESSION_SECURITY_CODE"))) {
 				msg = "验证码错误！";
-				renderData(Boolean.valueOf(false), "{\"msg\":\"" + r(msg) + "\"}");
-				return;
+				res.put("state", false);
+				res.put("msg", r(msg));
+				return res;
 			}
 		}
 		if ((isNTLogin) && ((ip == null) || (ip.equals("")))) {
@@ -228,9 +235,15 @@ public class UserController extends BaseController {
 			getContext().initLogoutContext(this.request);
 		}
 		System.out.println("sessionid:" + getContext().getSessionID());
-		renderData(Boolean.valueOf(success),
-				"{\"msg\":\"" + r(msg) + "\",\"bsessionID\":\"" + getContext().getSessionID() + "\",\"mobilestatus\":\""
-						+ mobilestatus + "\",\"hxname\":\"" + hxname + "\"}");
+		res.put("code", HttpStatus.SUCCESS);
+		res.put("message", r(msg));
+		res.put("bsessionID", getContext().getSessionID());
+		res.put("mobilestatus", mobilestatus);
+		res.put("hxname", hxname);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("token", getContext().getSessionID());
+		res.put("result", result);
+		return res;
 	}
 
 	@ResponseBody
@@ -650,5 +663,26 @@ public class UserController extends BaseController {
 				post.releaseConnection();
 			}
 		}
+	}
+
+	@ResponseBody
+	@RequestMapping("/userInfo")
+	public Object info() {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("code", HttpStatus.SUCCESS);
+		res.put("message", "");
+		Map<String,Object> userInfo = new HashMap<String, Object>();
+		userInfo.put("id", getContext().getPersonID());
+		userInfo.put("name", getContext().getPersonName());
+		userInfo.put("username", getContext().getPersonCode());
+		userInfo.put("avatar", "");
+		userInfo.put("status", 1);
+		userInfo.put("lastLoginIp", getContext().getIp());
+		userInfo.put("lastLoginTime", getContext().getLoginDate());
+		userInfo.put("deleted", 0);
+		userInfo.put("roleId", "admin");
+		userInfo.put("role", "{}");
+		res.put("result", userInfo);
+		return res;
 	}
 }

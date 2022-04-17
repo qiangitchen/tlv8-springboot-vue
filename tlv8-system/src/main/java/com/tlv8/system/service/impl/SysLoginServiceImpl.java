@@ -1,5 +1,6 @@
 package com.tlv8.system.service.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,21 @@ public class SysLoginServiceImpl implements ISysLoginService {
 	SysLoginMapper sysLoginMapper;
 
 	@Override
-	public Map<String, String> getInfoByCode(String code) {
-		return sysLoginMapper.getInfoByCode(code);
+	public Map<String, Object> getInfoByCode(String code, String loginname, String mphone) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("code", code);
+		map.put("loginname", loginname);
+		map.put("mphone", mphone);
+		return sysLoginMapper.getInfoByCode(map);
 	}
 
 	@Override
-	public Map<String, String> getInfoByCASN(String casn) {
+	public Map<String, Object> getInfoByCASN(String casn) {
 		return sysLoginMapper.getInfoByCASN(casn);
 	}
 
 	@Override
-	public Map<String, String> getInfoBySignm(String signm) {
+	public Map<String, Object> getInfoBySignm(String signm) {
 		return sysLoginMapper.getInfoBySignm(signm);
 	}
 

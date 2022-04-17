@@ -45,10 +45,10 @@ public class SAPerson {
 	 * @throws Exception
 	 */
 	public void changePassword(String username, String password, String new_password) throws Exception {
-		Map<String, String> rs = iSysLoginService.getInfoByCode(username);
-		if (!rs.isEmpty()) {
+		Map<String, Object> rs = iSysLoginService.getInfoByCode(username, username, username);
+		if (rs != null && !rs.isEmpty()) {
 			if (rs.get("SPASSWORD").equals(password)) {
-				SaOpPerson person = personservice.selectByPrimaryKey(rs.get("PERSONID"));
+				SaOpPerson person = personservice.selectByPrimaryKey((String) rs.get("PERSONID"));
 				if (person != null) {
 					person.setSpassword(new_password);
 					personservice.updateData(person);

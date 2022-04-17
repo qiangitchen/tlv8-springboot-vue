@@ -1,7 +1,5 @@
 package com.tlv8.system.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,7 @@ public class SaOlineinfoServiceImpl implements ISaOnlineinfoService {
 	}
 
 	@Override
-	public List<SaOnlineinfo> selectBySessionID(String sessionid) {
+	public SaOnlineinfo selectBySessionID(String sessionid) {
 		return saOnlineinfoMapper.selectBySessionID(sessionid);
 	}
 

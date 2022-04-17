@@ -8,7 +8,7 @@ public final class ResponseProcessor {
 
 	public static void renderText(HttpServletResponse res, String text) {
 		try {
-			res.setHeader("Content-Type", "text/html;charset=UTF-8");
+			res.setHeader("Content-Type", "application/json;charset=utf-8");
 			res.getWriter().print(text);
 			res.getWriter().close();
 		} catch (Exception e) {

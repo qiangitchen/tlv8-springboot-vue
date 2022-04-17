@@ -1,7 +1,5 @@
 package com.tlv8.system.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import com.tlv8.system.pojo.SaOnlineinfo;
@@ -22,7 +20,7 @@ public interface SaOnlineinfoMapper {
 	 * @param sessionid
 	 * @return
 	 */
-	List<SaOnlineinfo> selectBySessionID(String sessionid);
+	SaOnlineinfo selectBySessionID(String sessionid);
 
 	/**
 	 * 插入数据到数据库

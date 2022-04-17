@@ -1,7 +1,5 @@
 package com.tlv8.system.service;
 
-import java.util.List;
-
 import com.tlv8.system.pojo.SaOnlineinfo;
 
 public interface ISaOnlineinfoService {
@@ -19,7 +17,7 @@ public interface ISaOnlineinfoService {
 	 * @param sessionid
 	 * @return
 	 */
-	List<SaOnlineinfo> selectBySessionID(String sessionid);
+	SaOnlineinfo selectBySessionID(String sessionid);
 
 	/**
 	 * 插入数据到数据库

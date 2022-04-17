@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tlv8.system.mapper.SysLoginMapper">
 
-	<select id="getInfoByCode" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getInfoByCode" resultType="java.util.Map" parameterType="java.util.Map">
 		select p.sName USERNAME,p.sID PERSONID,p.sName PERSONNAME,p.sCode PERSONCODE,o.sID ORGID,o.sName ORGNAME,o.sFID ORGPATH,p.sID AGENTPERSONID,p.sName AGENTPERSONNAME,p.sCode AGENTPERSONCODE,o.sID AGENTORGID,o.sName AGENTORGNAME,o.sFID AGENTORGPATH , p.SPASSWORD,p.SMOBILEPHONE,
 		  case when (p.SVALIDSTATE=1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE 
 		 from SA_OPPerson p left join SA_OPOrg o on p.SMAINORGID = o.SID
-		   where (upper(p.sCode) = upper(#{code,jdbcType=VARCHAR}) or upper(p.sloginname) = upper(#{code,jdbcType=VARCHAR}) or p.SMOBILEPHONE=#{code,jdbcType=VARCHAR})
+		   where (upper(p.sCode) = upper(#{code,jdbcType=VARCHAR}) or upper(p.sloginname) = upper(#{loginname,jdbcType=VARCHAR}) or p.SMOBILEPHONE=#{mphone,jdbcType=VARCHAR})
 	</select>
 	
 	<select id="getInfoByCASN" resultType="java.util.Map" parameterType="java.lang.String">
