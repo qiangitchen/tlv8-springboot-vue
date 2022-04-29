@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Excels
 {
-    public Excel[] value();
+    Excel[] value();
 }

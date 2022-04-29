@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 public class ShttpServletRequest extends HttpServletRequestWrapper {
-	private HttpServletRequest request = null;;
+	private HttpServletRequest request = null;
 
-	public ShttpServletRequest(HttpServletRequest request) {
+    public ShttpServletRequest(HttpServletRequest request) {
 		super(request);
 		this.request = request;
 	}

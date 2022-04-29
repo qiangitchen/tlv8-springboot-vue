@@ -6,7 +6,7 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 public interface IFileDeleter {
 
-	public Map deleteVersion(String docID, long version);
+	Map deleteVersion(String docID, long version);
 
-	public List<Map> delete(String docID);
+	List<Map> delete(String docID);
 }

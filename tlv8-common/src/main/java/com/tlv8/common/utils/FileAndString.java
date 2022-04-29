@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 文件和字符串互转
@@ -21,7 +22,7 @@ public class FileAndString {
 		String fileStr = "";
 		try {
 			FileInputStream fileiptstream = new FileInputStream(file);
-			BufferedReader Strreader = new BufferedReader(new InputStreamReader(fileiptstream, "UTF-8"));
+			BufferedReader Strreader = new BufferedReader(new InputStreamReader(fileiptstream, StandardCharsets.UTF_8));
 			StringBuffer fileText = new StringBuffer();
 			while ((fileStr = Strreader.readLine()) != null) {
 				fileText.append(fileStr + "\n");
@@ -38,7 +39,7 @@ public class FileAndString {
 		StringBuffer fileText = new StringBuffer();
 		try {
 			FileInputStream fileiptstream = new FileInputStream(file);
-			BufferedReader Strreader = new BufferedReader(new InputStreamReader(fileiptstream, "UTF-8"));
+			BufferedReader Strreader = new BufferedReader(new InputStreamReader(fileiptstream, StandardCharsets.UTF_8));
 			String fileStr = "";
 			while ((fileStr = Strreader.readLine()) != null) {
 				fileText.append(fileStr + "\n");
@@ -55,7 +56,7 @@ public class FileAndString {
 		try {
 			File file = new File(filepath);
 			FileInputStream fileiptstream = new FileInputStream(file);
-			BufferedReader Strreader = new BufferedReader(new InputStreamReader(fileiptstream, "UTF-8"));
+			BufferedReader Strreader = new BufferedReader(new InputStreamReader(fileiptstream, StandardCharsets.UTF_8));
 			StringBuffer fileText = new StringBuffer();
 			while ((fileStr = Strreader.readLine()) != null) {
 				fileText.append(fileStr + "\n");
@@ -130,7 +131,7 @@ public class FileAndString {
 				distFile.getParentFile().mkdirs();
 			bufferedReader = new BufferedReader(new StringReader(res));
 			bufferedWriter = new BufferedWriter(new FileWriter(distFile));
-			char buf[] = new char[1024]; // 字符缓冲区
+			char[] buf = new char[1024]; // 字符缓冲区
 			int len;
 			while ((len = bufferedReader.read(buf)) != -1) {
 				bufferedWriter.write(buf, 0, len);
@@ -171,7 +172,7 @@ public class FileAndString {
 				distFile.getParentFile().mkdirs();
 			bufferedReader = new BufferedReader(new StringReader(res));
 			bufferedWriter = new BufferedWriter(new FileWriter(distFile));
-			char buf[] = new char[1024]; // 字符缓冲区
+			char[] buf = new char[1024]; // 字符缓冲区
 			int len;
 			while ((len = bufferedReader.read(buf)) != -1) {
 				bufferedWriter.write(buf, 0, len);

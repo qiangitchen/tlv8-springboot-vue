@@ -130,13 +130,10 @@ public class FileUtils {
 		}
 
 		// 检查允许下载的文件规则
-		if (ArrayUtils.contains(MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, FileTypeUtils.getFileType(resource))) {
-			return true;
-		}
+        return ArrayUtils.contains(MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, FileTypeUtils.getFileType(resource));
 
 		// 不在允许下载的文件规则
-		return false;
-	}
+    }
 
 	/**
 	 * 下载文件名重新编码

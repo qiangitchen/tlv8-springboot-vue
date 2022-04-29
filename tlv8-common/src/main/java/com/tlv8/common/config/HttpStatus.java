@@ -492,7 +492,7 @@ public enum HttpStatus {
 
 	private final String reasonPhrase;
 
-	private HttpStatus(int value, String reasonPhrase) {
+	HttpStatus(int value, String reasonPhrase) {
 		this.value = value;
 		this.reasonPhrase = reasonPhrase;
 	}

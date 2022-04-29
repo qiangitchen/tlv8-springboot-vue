@@ -28,7 +28,7 @@ public class RequestHandlerSupport {
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		try {
 			// 可以上传多个文件
-			List<FileItem> list = (List<FileItem>) upload
+			List<FileItem> list = upload
 					.parseRequest(paramHttpServletRequest);
 			for (FileItem item : list) {
 				// 获取表单的属性名字

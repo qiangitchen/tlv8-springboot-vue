@@ -17,7 +17,7 @@ public class InvokeHelper {
 			s = String.format("%s,%s(%s)", s, args[i].toString(), args[i].getClass().toString());
 		}
 		if (s.length() > 0)
-			s = s.substring(1, s.length());
+			s = s.substring(1);
 		Sys.printMsg(String.format("Sys.invoke(fullMethodName: %s(%s))", fullMethodName, s));
 
 		String cName = Sys.extractClassName(fullMethodName);

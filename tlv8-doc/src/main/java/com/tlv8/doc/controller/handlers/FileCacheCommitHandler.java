@@ -92,8 +92,8 @@ public class FileCacheCommitHandler extends AbstractRequestHandler {
 						localStringBuilder
 								.append(String
 										.format("<item><doc-id>%s</doc-id><file-id>%s</file-id><doc-version-id>%s</doc-version-id></item>",
-												new Object[] { docID,
-														cachename, 1 }));
+												docID,
+												cachename, 1));
 					} else {
 						if ("edit".equals(operation)) {
 							if (!"".equals(cachename)) {

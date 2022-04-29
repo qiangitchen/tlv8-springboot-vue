@@ -61,9 +61,8 @@ public class FileDeleteHandler extends AbstractRequestHandler {
 					localStringBuilder
 							.append(String
 									.format("<item><doc-version-id>%s</doc-version-id><doc-live-version-id>%s</doc-live-version-id></item>",
-											new Object[] {
-													localMap.get("lastVersionId"),
-													localMap.get("liveVersionId") }));
+											localMap.get("lastVersionId"),
+											localMap.get("liveVersionId")));
 				}
 			} catch (Exception localException) {
 				localStringBuilder.append("<flag>false</flag>");

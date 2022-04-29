@@ -65,7 +65,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public void login(@RequestBody Map<String, String> rqparams) throws DocumentException, HttpException, IOException {
+	public void login(@RequestBody Map<String, String> rqparams) throws DocumentException, IOException {
 		String username = rqparams.get("username");
 		String password = rqparams.get("password");
 		String loginDate = rqparams.get("loginDate");
@@ -154,7 +154,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/MD5login", method = RequestMethod.POST)
 	public Object MD5login(@RequestBody Map<String, String> rqparams)
-			throws DocumentException, HttpException, IOException {
+			throws DocumentException, IOException {
 		Map<String, Object> res = new HashMap<String, Object>();
 		String username = rqparams.get("username");
 		String password = rqparams.get("password");
@@ -286,7 +286,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/Sessionlogin")
-	public void Sessionlogin() throws DocumentException, HttpException, IOException {
+	public void Sessionlogin() throws DocumentException, IOException {
 		String session = p("sessionid");
 		SessionHelper.setContext(this.request, getContext(session));
 		renderData(Boolean.valueOf(true),
@@ -319,7 +319,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/logout")
-	public void logout() throws HttpException, IOException, DocumentException {
+	public void logout() throws IOException, DocumentException {
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date()) + " 用户："
 				+ getContext().getPersonName() + " 退出系统,sessionid:" + getContext().getSessionID() + ".");
 		if ((getContext().getSessionID() != null) && (!getContext().getSessionID().equals(""))) {
@@ -339,7 +339,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/MD5logout")
-	public void MD5logout() throws HttpException, IOException, DocumentException {
+	public void MD5logout() throws IOException, DocumentException {
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date()) + " 用户："
 				+ getContext().getPersonName() + " 退出系统,sessionid:" + getContext().getSessionID() + ".");
 		if ((getContext().getSessionID() != null) && (!getContext().getSessionID().equals(""))) {
@@ -372,7 +372,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/changePassword")
-	public void changePassword() throws HttpException, IOException, DocumentException {
+	public void changePassword() throws IOException, DocumentException {
 		String username = p("username");
 		String password = p("password");
 		String new_password = p("new_password");
@@ -476,7 +476,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/getOnlineCount")
 	public void getOnlineCount() {
-		renderData(Boolean.valueOf(true), "{\"count\":" + String.valueOf(onlineinfosvr.getCount()) + "}");
+		renderData(Boolean.valueOf(true), "{\"count\":" + onlineinfosvr.getCount() + "}");
 	}
 
 	@ResponseBody
@@ -546,7 +546,7 @@ public class UserController extends BaseController {
 	}
 
 	public void getBusinessServerSession(String username, String agent, String password, boolean isAgent,
-			boolean isNTLogin, String loginDate, String ip) throws HttpException, IOException, DocumentException {
+			boolean isNTLogin, String loginDate, String ip) throws IOException, DocumentException {
 		if (getContext().hasBusinessSession().booleanValue()) {
 			unregisterBusinessSession();
 		}
@@ -627,9 +627,9 @@ public class UserController extends BaseController {
 												: node_client_personCode != null
 														? node_client_personCode.getText().trim()
 														: "";
-						String orgID = node_orgID != null ? node_orgID.getText().trim() : isAgent ? "" : "";
-						String orgName = node_orgName != null ? node_orgName.getText().trim() : isAgent ? "" : "";
-						String orgPath = node_orgPath != null ? node_orgPath.getText().trim() : isAgent ? "" : "";
+						String orgID = node_orgID != null ? node_orgID.getText().trim() : "";
+						String orgName = node_orgName != null ? node_orgName.getText().trim() : "";
+						String orgPath = node_orgPath != null ? node_orgPath.getText().trim() : "";
 
 						String agentPersonID = isAgent ? ""
 								: node_personID != null ? node_personID.getText().trim() : "";

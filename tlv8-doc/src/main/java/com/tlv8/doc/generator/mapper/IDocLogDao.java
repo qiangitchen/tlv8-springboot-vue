@@ -5,12 +5,12 @@ import java.util.List;
 import com.tlv8.doc.generator.pojo.DocLog;
 
 public interface IDocLogDao {
-	public DocLog getByPrimaryKey(String fID);
-	public DocLog getByUserID(String fUserID);
-	public List<DocLog> getList();
-	public int insert(DocLog doclog);
-	public int update(DocLog doclog);
-	public int deleteByPrimaryKey(String fID);
-	public int deleteByUserID(String fUserID);
-	public void clearData();
+	DocLog getByPrimaryKey(String fID);
+	DocLog getByUserID(String fUserID);
+	List<DocLog> getList();
+	int insert(DocLog doclog);
+	int update(DocLog doclog);
+	int deleteByPrimaryKey(String fID);
+	int deleteByUserID(String fUserID);
+	void clearData();
 }

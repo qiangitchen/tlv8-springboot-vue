@@ -29,9 +29,9 @@ import com.tlv8.system.service.ISaOnlineinfoService;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class OnlineHelper implements HttpSessionListener {
-	private static Hashtable<String, Date> userList = new Hashtable();
-	private static Map<String, ContextBean> onlienusemap = new HashMap();
-	private static List<SessionListener> sslistener = new ArrayList<SessionListener>();
+	private static final Hashtable<String, Date> userList = new Hashtable();
+	private static final Map<String, ContextBean> onlienusemap = new HashMap();
+	private static final List<SessionListener> sslistener = new ArrayList<SessionListener>();
 
 	@Autowired
 	ISaOnlineinfoService onlineinfosvr;

@@ -56,9 +56,6 @@ public class FileReader {
 			return true;
 		} else if (FileExtArray.checkFileExt(extName, FileExtArray.pdfArray)) {
 			return true;
-		} else if (FileExtArray.checkFileExt(extName, FileExtArray.textArray)) {
-			return true;
-		}
-		return false;
-	}
+		} else return FileExtArray.checkFileExt(extName, FileExtArray.textArray);
+    }
 }

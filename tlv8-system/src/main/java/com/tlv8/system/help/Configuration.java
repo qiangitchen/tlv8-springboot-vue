@@ -12,7 +12,7 @@ import org.springframework.core.io.Resource;
 @SuppressWarnings({ "rawtypes" })
 public final class Configuration {
 	private static final String propertyxml = "tlv8.xml";
-	private static Properties ctxProp = new Properties();
+	private static final Properties ctxProp = new Properties();
 
 	private static boolean no_cache = false;
 	private static boolean captcha_enabled = false;// 需要验证码

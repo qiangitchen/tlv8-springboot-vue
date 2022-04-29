@@ -17,7 +17,7 @@ public class ConvertPdf {
 	}
 
 	private static int checkContentType() {
-		String type = INPUT_PATH.substring(INPUT_PATH.lastIndexOf(".") + 1, INPUT_PATH.length()).toLowerCase();
+		String type = INPUT_PATH.substring(INPUT_PATH.lastIndexOf(".") + 1).toLowerCase();
 		if (type.equals("pdf"))
 			return 0;
 		else

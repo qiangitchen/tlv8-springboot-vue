@@ -117,7 +117,7 @@ public class DataTypeHelper {
 
 	public static String dataValuePase(String dataType, String inval) {
 		String resval = null;
-		if (("DATE".equals(dataType.toUpperCase()) || "DATETIME".equals(dataType.toUpperCase())) && !"".equals(inval)) {
+		if (("DATE".equalsIgnoreCase(dataType) || "DATETIME".equalsIgnoreCase(dataType)) && !"".equals(inval)) {
 			try {
 				DateFormat dataTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date vl1 = dataTimeFormat.parse(inval);
@@ -131,13 +131,13 @@ public class DataTypeHelper {
 
 				}
 			}
-		} else if ("INT".equals(dataType.toUpperCase()) || "INTEGER".equals(dataType.toUpperCase())) {
+		} else if ("INT".equalsIgnoreCase(dataType) || "INTEGER".equalsIgnoreCase(dataType)) {
 			try {
 				int inum = Integer.parseInt(inval);
 				resval = String.valueOf(inum);
 			} catch (Exception e) {
 			}
-		} else if ("FLOAT".equals(dataType.toUpperCase()) || "NUMBER".equals(dataType.toUpperCase())) {
+		} else if ("FLOAT".equalsIgnoreCase(dataType) || "NUMBER".equalsIgnoreCase(dataType)) {
 			try {
 				double inum = Double.parseDouble(inval);
 				resval = String.valueOf(inum);

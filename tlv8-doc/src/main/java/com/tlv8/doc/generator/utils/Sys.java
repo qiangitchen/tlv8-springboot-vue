@@ -58,7 +58,7 @@ public class Sys {
 
 	public static void printResult(String aMethodName, Object aResult) {
 		if (aResult != null)
-			printMsg(String.format("%s: %s", aMethodName, aResult.toString()));
+			printMsg(String.format("%s: %s", aMethodName, aResult));
 		else
 			printMsg(String.format("%s: null", aMethodName));
 	}
@@ -90,7 +90,7 @@ public class Sys {
 					.getClass().toString());
 		}
 		if (s.length() > 0)
-			s = s.substring(1, s.length());
+			s = s.substring(1);
 		// printMsg(String.format("Sys.invoke(fullMethodName: %s(%s)",
 		// fullMethodName, s));
 		String cName = extractClassName(fullMethodName);
@@ -107,7 +107,7 @@ public class Sys {
 			Class[] partype = new Class[1];
 			Object[] params = new Object[1];
 			Method m;
-			if ("concat".equals(mName.toLowerCase())) {
+			if ("concat".equalsIgnoreCase(mName)) {
 				partype[0] = Object[].class;
 				String[] pas = new String[args.length];
 				int n = 0;
@@ -139,7 +139,7 @@ public class Sys {
 	public static String extractMethodName(String value) {
 		String result = "";
 		int i = value.lastIndexOf('.');
-		result = value.substring(i + 1, value.length());
+		result = value.substring(i + 1);
 		return result;
 	}
 

@@ -193,7 +193,7 @@ public class SystemInfoTest {
         for (PowerSource pSource : powerSources) {
             sb.append(String.format("%n %s @ %.1f%%", pSource.getName(), pSource.getTimeRemainingInstant() * 100d));
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     private static void printDisks(List<HWDiskStore> diskStores) {

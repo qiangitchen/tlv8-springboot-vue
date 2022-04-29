@@ -5,7 +5,7 @@ import java.util.Locale;
 import com.tlv8.system.resource.MessageResourceReader;
 
 public final class MessageResource {
-	private static MessageResourceReader reader = MessageResourceReader
+	private static final MessageResourceReader reader = MessageResourceReader
 			.getResourceReader();
 
 	public static String getMessage(String locale, String key, Object[] params) {

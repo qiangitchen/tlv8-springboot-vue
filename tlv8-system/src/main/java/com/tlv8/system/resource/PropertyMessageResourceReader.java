@@ -14,7 +14,7 @@ public class PropertyMessageResourceReader extends MessageResourceReader {
 	protected static final Logger logger = Logger
 			.getLogger(PropertyMessageResourceReader.class);
 
-	private Map<String, Properties> messages = new HashMap();
+	private final Map<String, Properties> messages = new HashMap();
 
 	public synchronized void load(String locale) {
 		if (locale == null) {
@@ -41,7 +41,7 @@ public class PropertyMessageResourceReader extends MessageResourceReader {
 		try {
 			if (classLoader != null) {
 				properties.load(classLoader.getResourceAsStream(name));
-				this.messages.put(locale.toString(), properties);
+				this.messages.put(locale, properties);
 			} else {
 				logger.info("DEBUG:: PropertyMessageResourceReader.load -- 无法加载资源"
 						+ name);
@@ -58,11 +58,11 @@ public class PropertyMessageResourceReader extends MessageResourceReader {
 		}
 		load(localeKey);
 
-		Properties props = (Properties) this.messages.get(localeKey);
+		Properties props = this.messages.get(localeKey);
 
 		if (props == null) {
 			load("");
-			props = (Properties) this.messages.get("");
+			props = this.messages.get("");
 		}
 
 		if (props == null) {

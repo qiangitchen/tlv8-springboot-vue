@@ -33,9 +33,9 @@ public class FileCacheUploadHandler extends AbstractRequestHandler {
 				localStringBuilder
 						.append(String
 								.format("<file mediatype=\"%s\" file-name=\"%s\" fileSize=\"%s\"></file>",
-										new Object[] { rdoc.getFileType(),
-												rdoc.getFileID(),
-												rdoc.getFileSize() + "" }));
+										rdoc.getFileType(),
+										rdoc.getFileID(),
+										rdoc.getFileSize() + ""));
 			} catch (Exception localException) {
 				this.requestErrorLogger.error(localException);
 				localStringBuilder.append("<flag>false</flag>");

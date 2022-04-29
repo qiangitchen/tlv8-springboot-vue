@@ -8,7 +8,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class HttpBean {
-	private Map<String, HttpClient> map = Collections
+	private final Map<String, HttpClient> map = Collections
 			.synchronizedMap(new HashMap());
 
 	public HttpBean() {
@@ -22,7 +22,7 @@ public class HttpBean {
 						new MultiThreadedHttpConnectionManager());
 				this.map.put(key, httpClient);
 			}
-			return (HttpClient) this.map.get(key);
+			return this.map.get(key);
 		}
 	}
 

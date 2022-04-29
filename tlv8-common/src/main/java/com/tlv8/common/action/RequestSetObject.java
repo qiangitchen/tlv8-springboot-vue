@@ -52,7 +52,7 @@ public class RequestSetObject {
 				String setterName = "set" + firstChar + fieldName.substring(1);
 				// Method getter = classType.getMethod(getterName);
 				Class paramclass = field.getType();
-				Method setter = classType.getMethod(setterName, new Class[] { paramclass });
+				Method setter = classType.getMethod(setterName, paramclass);
 				// 执行getter方法获取当前域的值
 				// Object result = getter.invoke(object);
 				// 执行setter给object赋值
@@ -116,7 +116,7 @@ public class RequestSetObject {
 					istext = true;
 				}
 				if (istext) {
-					setter.invoke(object, new Object[] { fieldValueObj });
+					setter.invoke(object, fieldValueObj);
 				}
 			} catch (Exception e) {
 			}

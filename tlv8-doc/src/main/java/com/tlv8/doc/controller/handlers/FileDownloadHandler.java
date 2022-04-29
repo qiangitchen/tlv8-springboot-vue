@@ -1,6 +1,7 @@
 package com.tlv8.doc.controller.handlers;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +59,7 @@ public class FileDownloadHandler extends AbstractRequestHandler {
 				formFileName = java.net.URLEncoder.encode(formFileName, "UTF-8");
 			} else {
 				// 非IE浏览器的处理：
-				formFileName = new String(formFileName.getBytes("UTF-8"), "ISO-8859-1");
+				formFileName = new String(formFileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 			}
 			// 2.设置文件头：最后一个参数是设置下载文件名
 			paramHttpServletResponse.setHeader("Content-Disposition", "attachment; filename=" + formFileName);

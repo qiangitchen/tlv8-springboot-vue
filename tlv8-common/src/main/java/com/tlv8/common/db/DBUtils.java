@@ -48,13 +48,13 @@ import com.tlv8.common.utils.NumberUtils;
 public class DBUtils {
 	public static String cfgext = ".mybatis.xml";
 
-	private static Map<String, SqlSessionFactory> dbsource = new HashMap<String, SqlSessionFactory>();
+	private static final Map<String, SqlSessionFactory> dbsource = new HashMap<String, SqlSessionFactory>();
 
-	private static Map<String, Map<String, String>> dbconfig = new HashMap<String, Map<String, String>>();
+	private static final Map<String, Map<String, String>> dbconfig = new HashMap<String, Map<String, String>>();
 
-	private static Map<Connection, SqlSession> openedconn = new HashMap<Connection, SqlSession>();
+	private static final Map<Connection, SqlSession> openedconn = new HashMap<Connection, SqlSession>();
 
-	private static Logger logger = Logger.getLogger(DBUtils.class);
+	private static final Logger logger = Logger.getLogger(DBUtils.class);
 
 	static {
 		String path = DBUtils.class.getClassLoader().getResource("").getFile();
@@ -113,8 +113,8 @@ public class DBUtils {
 	 */
 	public static boolean IsPostgreSQL(String key) {
 		Map<String, String> m = dbconfig.get(key);
-		String url = (String) m.get("url");
-		return url.toUpperCase().indexOf((":postgresql:").toUpperCase()) > 0 ? true : false;
+		String url = m.get("url");
+		return url.toUpperCase().indexOf((":postgresql:").toUpperCase()) > 0;
 	}
 
 	/**
@@ -125,8 +125,8 @@ public class DBUtils {
 	 */
 	public static boolean IsDMDB(String key) {
 		Map<String, String> m = dbconfig.get(key);
-		String url = (String) m.get("url");
-		return url.toUpperCase().indexOf((":dm:").toUpperCase()) > 0 ? true : false;
+		String url = m.get("url");
+		return url.toUpperCase().indexOf((":dm:").toUpperCase()) > 0;
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class DBUtils {
 	 */
 	public static boolean IsKingDB(String key) {
 		Map<String, String> m = dbconfig.get(key);
-		String url = (String) m.get("url");
-		return url.toUpperCase().indexOf(("kingbase").toUpperCase()) > 0 ? true : false;
+		String url = m.get("url");
+		return url.toUpperCase().indexOf(("kingbase").toUpperCase()) > 0;
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class DBUtils {
 	public static boolean IsOracleDB(String key) {
 		Map<String, String> m = dbconfig.get(key);
 		String url = m.get("url");
-		return url.toUpperCase().indexOf(("oracle").toUpperCase()) > 0 ? true : false;
+		return url.toUpperCase().indexOf(("oracle").toUpperCase()) > 0;
 	}
 
 	/**
@@ -161,8 +161,8 @@ public class DBUtils {
 	 */
 	public static boolean IsMySQLDB(String key) {
 		Map<String, String> m = dbconfig.get(key);
-		String url = (String) m.get("url");
-		return url.toUpperCase().indexOf(("mysql").toUpperCase()) > 0 ? true : false;
+		String url = m.get("url");
+		return url.toUpperCase().indexOf(("mysql").toUpperCase()) > 0;
 	}
 
 	/**
@@ -173,8 +173,8 @@ public class DBUtils {
 	 */
 	public static boolean IsMSSQLDB(String key) {
 		Map<String, String> m = dbconfig.get(key);
-		String url = (String) m.get("url");
-		return url.toUpperCase().indexOf(("jtds").toUpperCase()) > 0 ? true : false;
+		String url = m.get("url");
+		return url.toUpperCase().indexOf(("jtds").toUpperCase()) > 0;
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class DBUtils {
 		} catch (SQLException e) {
 			Sys.printMsg(e.toString());
 			session.close();
-			throw new SQLException(e.toString() + ">>\n sql:" + sql);
+			throw new SQLException(e + ">>\n sql:" + sql);
 		} finally {
 			CloseConn(session, aConn, qry, rs);
 		}
@@ -379,7 +379,7 @@ public class DBUtils {
 				while (rs.next()) {
 					Map msp = new HashMap();
 					for (int i = 0; i < listStr.size(); i++) {
-						String key = listStr.get(i).toString();
+						String key = listStr.get(i);
 						msp.put(key, rs.getString(key));
 					}
 

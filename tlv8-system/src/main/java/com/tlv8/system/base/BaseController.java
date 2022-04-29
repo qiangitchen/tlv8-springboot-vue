@@ -3,6 +3,7 @@ package com.tlv8.system.base;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -164,7 +165,7 @@ public class BaseController {
 		this.http = http;
 	}
 
-	public int executeMethod(String key, HttpMethod method) throws HttpException, IOException {
+	public int executeMethod(String key, HttpMethod method) throws IOException {
 		HttpClient client = this.http.getClient(key);
 		return client.executeMethod(method);
 	}
@@ -174,21 +175,21 @@ public class BaseController {
 	}
 
 	public Document executeMethodAsDocument(String key, HttpMethod method)
-			throws HttpException, IOException, DocumentException {
+			throws IOException, DocumentException {
 		int r = this.executeMethod(key, method);
 		if (r == HttpStatus.SC_OK) {
 			SAXReader reader = new SAXReader();
-			return reader.read(new InputStreamReader(method.getResponseBodyAsStream(), "UTF-8"));
+			return reader.read(new InputStreamReader(method.getResponseBodyAsStream(), StandardCharsets.UTF_8));
 		} else {
 			return null;
 		}
 	}
 
-	public Document executeMethodAsDocument(HttpMethod method) throws HttpException, IOException, DocumentException {
+	public Document executeMethodAsDocument(HttpMethod method) throws IOException, DocumentException {
 		return executeMethodAsDocument("BusinessServer", method);
 	}
 
-	public void registerBusinessSession() throws HttpException, IOException, DocumentException {
+	public void registerBusinessSession() throws IOException, DocumentException {
 		String msg = "";
 		String title = "jpolite.res.system.BaseHttpController.registerBusinessSession.0";
 
@@ -218,7 +219,7 @@ public class BaseController {
 		}
 	}
 
-	public void unregisterBusinessSession() throws HttpException, IOException, DocumentException {
+	public void unregisterBusinessSession() throws IOException, DocumentException {
 		PostMethod post = new PostMethod(
 				this.getContext().getBusinessServerURL(this.request, "unregister", "/clean-session"));
 		if (post != null) {
@@ -240,7 +241,7 @@ public class BaseController {
 		str.append("	xmlns:xslt=\"http://www.orbeon.com/oxf/processors\"\r\n");
 		Iterator<String> attrs = attributes.keySet().iterator();
 		while (attrs.hasNext()) {
-			String key = attrs.next().toString();
+			String key = attrs.next();
 			String value = attributes.get(key);
 			str.append("	" + key + "=\"" + value + "\"\r\n");
 		}
@@ -251,7 +252,7 @@ public class BaseController {
 		str.append("<parameter>\r\n");
 		Iterator<String> params = parameters.keySet().iterator();
 		while (params.hasNext()) {
-			String key = params.next().toString();
+			String key = params.next();
 			String value = parameters.get(key);
 			String type = "string";
 			if (key.lastIndexOf("#") >= 0) {
@@ -292,7 +293,7 @@ public class BaseController {
 	}
 
 	protected void getSysParams(HttpServletRequest req, HashMap<String, String> params)
-			throws HttpException, IOException, DocumentException {
+			throws IOException, DocumentException {
 		try {
 			sysParams.getSysParamsFunc(params);
 		} catch (Exception e) {

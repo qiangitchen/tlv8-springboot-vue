@@ -9,7 +9,7 @@ import javax.crypto.Cipher;
  */
 public class DesUtils {
 	/** 字符串默认键值 */
-	private static String strDefaultKey = "justep";
+	private static final String strDefaultKey = "justep";
 
 	/** 加密工具 */
 	private Cipher encryptCipher = null;

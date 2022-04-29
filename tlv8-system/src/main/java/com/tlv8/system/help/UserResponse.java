@@ -13,10 +13,10 @@ import com.tlv8.system.help.enums.RenderStatus;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UserResponse {
-	private static Logger logger = Logger.getLogger(UserResponse.class);
+	private static final Logger logger = Logger.getLogger(UserResponse.class);
 
-	private HttpServletRequest request;
-	private ArrayList<JSONObject> jsonList = new ArrayList();
+	private final HttpServletRequest request;
+	private final ArrayList<JSONObject> jsonList = new ArrayList();
 
 	private static JSONObject genRenderJSON(String status, String code, String title, String text, String data) {
 		JSONObject json = new JSONObject();

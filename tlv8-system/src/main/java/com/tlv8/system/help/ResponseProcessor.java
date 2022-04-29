@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 public final class ResponseProcessor {
-	private static Logger logger = Logger.getLogger(ResponseProcessor.class);
+	private static final Logger logger = Logger.getLogger(ResponseProcessor.class);
 
 	public static void renderText(HttpServletResponse res, String text) {
 		try {

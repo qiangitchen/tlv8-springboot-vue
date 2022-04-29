@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletResponse;
@@ -24,7 +25,7 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 
-		body = HttpHelper.getBodyString(request).getBytes("UTF-8");
+		body = HttpHelper.getBodyString(request).getBytes(StandardCharsets.UTF_8);
 	}
 
 	@Override

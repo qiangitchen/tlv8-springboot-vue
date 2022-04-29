@@ -42,12 +42,9 @@ public class JurisdictionFilter implements Filter {
 	 * 判断是否为登录-检查登录
 	 */
 	private boolean isLoginPage(String patex) {
-		boolean isre = false;
-		if (patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
+		boolean isre = patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
 				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
-				|| patex.contains("/logout") || patex.contains("/MD5logout")) {
-			isre = true;
-		}
+				|| patex.contains("/logout") || patex.contains("/MD5logout");
 		return isre;
 	}
 

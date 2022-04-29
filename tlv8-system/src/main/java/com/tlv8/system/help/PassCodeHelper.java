@@ -1,7 +1,7 @@
 package com.tlv8.system.help;
 
 public class PassCodeHelper {
-	private static String key = "tlv8pass";// 可以自定义密码
+	private static final String key = "tlv8pass";// 可以自定义密码
 
 	// 加密
 	public static String enCode(String s) {

@@ -88,7 +88,7 @@ public class FileUploader {
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		try {
 			// 可以上传多个文件
-			List<FileItem> list = (List<FileItem>) upload.parseRequest(request);
+			List<FileItem> list = upload.parseRequest(request);
 			for (FileItem item : list) {
 				// 只对单个文件相应
 				// 获取表单的属性名字

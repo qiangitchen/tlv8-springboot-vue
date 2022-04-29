@@ -2,6 +2,7 @@ package com.tlv8.common.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,11 +29,11 @@ public class Xml {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = factory.newDocumentBuilder();
-			Document doc = db.parse(new ByteArrayInputStream(xmlstr.getBytes("UTF-8")));
+			Document doc = db.parse(new ByteArrayInputStream(xmlstr.getBytes(StandardCharsets.UTF_8)));
 			Element cmd = doc.getDocumentElement();
 			if (xmlstr.split("/").length < 3) {
-				String newXML = "<root>" + xmlstr.toString() + "</root>";
-				doc = db.parse(new ByteArrayInputStream(newXML.getBytes("UTF-8")));
+				String newXML = "<root>" + xmlstr + "</root>";
+				doc = db.parse(new ByteArrayInputStream(newXML.getBytes(StandardCharsets.UTF_8)));
 				cmd = doc.getDocumentElement();
 			}
 			NodeList NLC = cmd.getChildNodes();
@@ -61,11 +62,11 @@ public class Xml {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = factory.newDocumentBuilder();
-			Document doc = db.parse(new ByteArrayInputStream(xmlstr.getBytes("UTF-8")));
+			Document doc = db.parse(new ByteArrayInputStream(xmlstr.getBytes(StandardCharsets.UTF_8)));
 			Element cmd = doc.getDocumentElement();
 			if (xmlstr.split("/").length < 3) {
-				String newXML = "<root>" + xmlstr.toString() + "</root>";
-				doc = db.parse(new ByteArrayInputStream(newXML.getBytes("UTF-8")));
+				String newXML = "<root>" + xmlstr + "</root>";
+				doc = db.parse(new ByteArrayInputStream(newXML.getBytes(StandardCharsets.UTF_8)));
 				cmd = doc.getDocumentElement();
 			}
 			NLC = cmd.getChildNodes();

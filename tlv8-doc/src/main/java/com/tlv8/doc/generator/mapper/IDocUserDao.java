@@ -5,11 +5,11 @@ import java.util.List;
 import com.tlv8.doc.generator.pojo.DocUser;
 
 public interface IDocUserDao {
-	public DocUser getByPrimaryKey(String fID);
-	public DocUser getByLoginID(String fLoginID);
-	public List<DocUser> getList();
-	public int insert(DocUser docuser);
-	public int update(DocUser docuser);
-	public int deleteByPrimaryKey(String fID);
-	public int deleteByLoginID(String fLoginID);
+	DocUser getByPrimaryKey(String fID);
+	DocUser getByLoginID(String fLoginID);
+	List<DocUser> getList();
+	int insert(DocUser docuser);
+	int update(DocUser docuser);
+	int deleteByPrimaryKey(String fID);
+	int deleteByLoginID(String fLoginID);
 }

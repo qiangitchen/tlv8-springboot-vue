@@ -332,6 +332,7 @@
 		<module>tlv8-system</module>
 		<module>tlv8-doc</module>
 		<module>tlv8-monitor</module>
+		<module>tlv8-api</module>
 	</modules>
 
 	<build>

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 public class FileAndString {
 	public static String FileToString(File file) {
@@ -16,7 +17,7 @@ public class FileAndString {
 		try {
 			FileInputStream fileiptstream = new FileInputStream(file);
 			BufferedReader Strreader = new BufferedReader(
-					new InputStreamReader(fileiptstream, "UTF-8"));
+					new InputStreamReader(fileiptstream, StandardCharsets.UTF_8));
 			StringBuffer fileText = new StringBuffer();
 			while ((fileStr = Strreader.readLine()) != null) {
 				fileText.append(fileStr + "\n");
@@ -34,7 +35,7 @@ public class FileAndString {
 		try {
 			FileInputStream fileiptstream = new FileInputStream(file);
 			BufferedReader Strreader = new BufferedReader(
-					new InputStreamReader(fileiptstream, "UTF-8"));
+					new InputStreamReader(fileiptstream, StandardCharsets.UTF_8));
 			String fileStr = "";
 			while ((fileStr = Strreader.readLine()) != null) {
 				fileText.append(fileStr + "\n");
@@ -52,7 +53,7 @@ public class FileAndString {
 			File file = new File(filepath);
 			FileInputStream fileiptstream = new FileInputStream(file);
 			BufferedReader Strreader = new BufferedReader(
-					new InputStreamReader(fileiptstream, "UTF-8"));
+					new InputStreamReader(fileiptstream, StandardCharsets.UTF_8));
 			StringBuffer fileText = new StringBuffer();
 			while ((fileStr = Strreader.readLine()) != null) {
 				fileText.append(fileStr + "\n");
@@ -117,8 +118,8 @@ public class FileAndString {
 			throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				new FileInputStream(FileName), charset));
-		String line = new String();
-		String temp = new String();
+		String line = "";
+		String temp = "";
 		while ((line = reader.readLine()) != null) {
 			temp += line;
 		}
@@ -133,8 +134,8 @@ public class FileAndString {
 			throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				new FileInputStream(file), charset));
-		String line = new String();
-		String temp = new String();
+		String line = "";
+		String temp = "";
 		while ((line = reader.readLine()) != null) {
 			temp += line;
 		}
@@ -161,7 +162,7 @@ public class FileAndString {
 				distFile.getParentFile().mkdirs();
 			bufferedReader = new BufferedReader(new StringReader(res));
 			bufferedWriter = new BufferedWriter(new FileWriter(distFile));
-			char buf[] = new char[1024]; // 字符缓冲区
+			char[] buf = new char[1024]; // 字符缓冲区
 			int len;
 			while ((len = bufferedReader.read(buf)) != -1) {
 				bufferedWriter.write(buf, 0, len);
@@ -204,7 +205,7 @@ public class FileAndString {
 				distFile.getParentFile().mkdirs();
 			bufferedReader = new BufferedReader(new StringReader(res));
 			bufferedWriter = new BufferedWriter(new FileWriter(distFile));
-			char buf[] = new char[1024]; // 字符缓冲区
+			char[] buf = new char[1024]; // 字符缓冲区
 			int len;
 			while ((len = bufferedReader.read(buf)) != -1) {
 				bufferedWriter.write(buf, 0, len);

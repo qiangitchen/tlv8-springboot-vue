@@ -15,8 +15,8 @@ import com.tlv8.doc.core.io.atr.FileAttribute;
  */
 public class LuceneService {
 	private static boolean svIsStarted = false;
-	private static Map<String, FileAttribute> handMap = new HashMap<String, FileAttribute>();
-	private static Map<String, String> moveMap = new HashMap<String, String>();
+	private static final Map<String, FileAttribute> handMap = new HashMap<String, FileAttribute>();
+	private static final Map<String, String> moveMap = new HashMap<String, String>();
 
 	/*
 	 * 加入要处理的索引数据

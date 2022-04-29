@@ -120,7 +120,7 @@ public class ContextBean {
 		if (s.length >= 3) {
 			return s[0] + "/" + s[1] + "/" + s[2] + "/" + path;
 		}
-		return "http://" + request.getLocalAddr() + ":" + String.valueOf(request.getLocalPort()) + "/" + path;
+		return "http://" + request.getLocalAddr() + ":" + request.getLocalPort() + "/" + path;
 	}
 
 	private String getUIURLPath(String pathKey, String pathDefault) {
@@ -138,66 +138,66 @@ public class ContextBean {
 	}
 
 	public void initLoginContext(HttpServletRequest request, HashMap<String, String> params) {
-		SessionHelper.setUsername(request, (String) params.get("personID"));
+		SessionHelper.setUsername(request, params.get("personID"));
 		this.sessionID = request.getSession().getId();
 		SessionHelper.setSessionID(request, this.sessionID);
 		this.isLogin = Boolean.valueOf(true);
-		this.username = ((String) params.get("username"));
-		this.personID = ((String) params.get("personID"));
-		this.personName = ((String) params.get("personName"));
-		this.personCode = ((String) params.get("personCode"));
-		this.orgID = ((String) params.get("orgID"));
-		this.orgName = ((String) params.get("orgName"));
-		this.orgPath = ((String) params.get("orgPath"));
-		this.agentPersonID = ((String) params.get("agentPersonID"));
-		this.agentPersonName = ((String) params.get("agentPersonName"));
-		this.agentPersonCode = ((String) params.get("agentPersonCode"));
-		this.agentOrgID = ((String) params.get("agentOrgID"));
-		this.agentOrgName = ((String) params.get("agentOrgName"));
-		this.agentOrgPath = ((String) params.get("agentOrgPath"));
+		this.username = params.get("username");
+		this.personID = params.get("personID");
+		this.personName = params.get("personName");
+		this.personCode = params.get("personCode");
+		this.orgID = params.get("orgID");
+		this.orgName = params.get("orgName");
+		this.orgPath = params.get("orgPath");
+		this.agentPersonID = params.get("agentPersonID");
+		this.agentPersonName = params.get("agentPersonName");
+		this.agentPersonCode = params.get("agentPersonCode");
+		this.agentOrgID = params.get("agentOrgID");
+		this.agentOrgName = params.get("agentOrgName");
+		this.agentOrgPath = params.get("agentOrgPath");
 
-		this.allMemberOfOrgFullID = ((String) params.get("allMemberOfOrgFullID"));
-		this.currentActivityLabel = ((String) params.get("currentActivityLabel"));
-		this.currentProcessLabel = ((String) params.get("currentProcessLabel"));
-		this.currentAgentFullName = ((String) params.get("currentAgentFullName"));
-		this.currentAgentName = ((String) params.get("currentAgentName"));
-		this.currentPositionFullCode = ((String) params.get("currentPositionFullCode"));
-		this.currentPositionCode = ((String) params.get("currentPositionCode"));
-		this.currentPositionName = ((String) params.get("currentPositionName"));
-		this.currentPositionFullName = ((String) params.get("currentPositionFullName"));
-		this.currentPositionFullID = ((String) params.get("currentPositionFullID"));
-		this.currentPositionID = ((String) params.get("currentPositionID"));
-		this.currentDeptFullCode = ((String) params.get("currentDeptFullCode"));
-		this.currentDeptCode = ((String) params.get("currentDeptCode"));
-		this.currentDeptName = ((String) params.get("currentDeptName"));
-		this.currentDeptFullName = ((String) params.get("currentDeptFullName"));
-		this.currentDeptFullID = ((String) params.get("currentDeptFullID"));
-		this.currentDeptID = ((String) params.get("currentDeptID"));
-		this.currentPersonFullCode = ((String) params.get("currentPersonFullCode"));
-		this.currentPersonFullName = ((String) params.get("currentPersonFullName"));
-		this.currentPersonFullID = ((String) params.get("currentPersonFullID"));
-		this.currentPersonName = ((String) params.get("currentPersonName"));
-		this.currentPersonCode = ((String) params.get("currentPersonCode"));
-		this.currentPersonID = ((String) params.get("currentPersonID"));
-		this.currentUserFullCode = ((String) params.get("currentUserFullCode"));
-		this.currentUserFullName = ((String) params.get("currentUserFullName"));
-		this.currentUserFullID = ((String) params.get("currentUserFullID"));
-		this.currentUserCode = ((String) params.get("currentUserCode"));
-		this.currentUserName = ((String) params.get("currentUserName"));
-		this.currentUserID = ((String) params.get("currentUserID"));
-		this.currentOgnFullCode = ((String) params.get("currentOgnFullCode"));
-		this.currentOgnFullID = ((String) params.get("currentOgnFullID"));
-		this.currentOgnFullName = ((String) params.get("currentOgnFullName"));
-		this.currentOgnCode = ((String) params.get("currentOgnCode"));
-		this.currentOgnName = ((String) params.get("currentOgnName"));
-		this.currentOgnID = ((String) params.get("currentOgnID"));
-		this.currentOrgFullCode = ((String) params.get("currentOrgFullCode"));
-		this.currentOrgFullName = ((String) params.get("currentOrgFullName"));
-		this.currentOrgFullID = ((String) params.get("currentOrgFullID"));
-		this.currentOrgCode = ((String) params.get("currentOrgCode"));
-		this.currentOrgName = ((String) params.get("currentOrgName"));
-		this.currentOrgID = ((String) params.get("currentOrgID"));
-		this.loginDate = ((String) params.get("loginDate"));
+		this.allMemberOfOrgFullID = params.get("allMemberOfOrgFullID");
+		this.currentActivityLabel = params.get("currentActivityLabel");
+		this.currentProcessLabel = params.get("currentProcessLabel");
+		this.currentAgentFullName = params.get("currentAgentFullName");
+		this.currentAgentName = params.get("currentAgentName");
+		this.currentPositionFullCode = params.get("currentPositionFullCode");
+		this.currentPositionCode = params.get("currentPositionCode");
+		this.currentPositionName = params.get("currentPositionName");
+		this.currentPositionFullName = params.get("currentPositionFullName");
+		this.currentPositionFullID = params.get("currentPositionFullID");
+		this.currentPositionID = params.get("currentPositionID");
+		this.currentDeptFullCode = params.get("currentDeptFullCode");
+		this.currentDeptCode = params.get("currentDeptCode");
+		this.currentDeptName = params.get("currentDeptName");
+		this.currentDeptFullName = params.get("currentDeptFullName");
+		this.currentDeptFullID = params.get("currentDeptFullID");
+		this.currentDeptID = params.get("currentDeptID");
+		this.currentPersonFullCode = params.get("currentPersonFullCode");
+		this.currentPersonFullName = params.get("currentPersonFullName");
+		this.currentPersonFullID = params.get("currentPersonFullID");
+		this.currentPersonName = params.get("currentPersonName");
+		this.currentPersonCode = params.get("currentPersonCode");
+		this.currentPersonID = params.get("currentPersonID");
+		this.currentUserFullCode = params.get("currentUserFullCode");
+		this.currentUserFullName = params.get("currentUserFullName");
+		this.currentUserFullID = params.get("currentUserFullID");
+		this.currentUserCode = params.get("currentUserCode");
+		this.currentUserName = params.get("currentUserName");
+		this.currentUserID = params.get("currentUserID");
+		this.currentOgnFullCode = params.get("currentOgnFullCode");
+		this.currentOgnFullID = params.get("currentOgnFullID");
+		this.currentOgnFullName = params.get("currentOgnFullName");
+		this.currentOgnCode = params.get("currentOgnCode");
+		this.currentOgnName = params.get("currentOgnName");
+		this.currentOgnID = params.get("currentOgnID");
+		this.currentOrgFullCode = params.get("currentOrgFullCode");
+		this.currentOrgFullName = params.get("currentOrgFullName");
+		this.currentOrgFullID = params.get("currentOrgFullID");
+		this.currentOrgCode = params.get("currentOrgCode");
+		this.currentOrgName = params.get("currentOrgName");
+		this.currentOrgID = params.get("currentOrgID");
+		this.loginDate = params.get("loginDate");
 
 		if (this.currentPersonFullID != null) {
 			String[] keys = this.currentPersonFullID.split("/");

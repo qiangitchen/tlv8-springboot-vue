@@ -17,9 +17,9 @@ public class DocChangePdfForJco {
 		return newConverter("pdfcreator").convert(word, pdf);
 	}
 
-	public abstract static interface Converter {
+	public interface Converter {
 
-		public boolean convert(String word, String pdf);
+		boolean convert(String word, String pdf);
 	}
 
 	public static class WConverter implements Converter {
