@@ -67,6 +67,12 @@
 			<artifactId>tlv8-monitor</artifactId>
 		</dependency>
 
+		<!-- 前端接口-微信/小程序/支付宝等 -->
+		<dependency>
+			<groupId>com.tlv8</groupId>
+			<artifactId>tlv8-api</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

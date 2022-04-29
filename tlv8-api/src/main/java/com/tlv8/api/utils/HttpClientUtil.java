@@ -18,8 +18,8 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-@SuppressWarnings("rawtypes")
 public class HttpClientUtil {
+
     public static final Log logger = LogFactory.getLog("httpclient");
 
     public static String httpReader(String url, String code) {
@@ -166,4 +166,5 @@ public class HttpClientUtil {
         // 编码：GB2312
         return HttpClientUtil.httpPost(url, paramMap, "GB2312");
     }
+
 }

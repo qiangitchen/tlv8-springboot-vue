@@ -45,6 +45,7 @@
 		<aliyun.version>2.0.5</aliyun.version>
 		<ojson.version>20150729</ojson.version>
 		<tencentcloud.version>3.1.270</tencentcloud.version>
+		<zxing.version>3.0.0</zxing.version>
 	</properties>
 
 	<!-- 依赖声明 -->
@@ -287,6 +288,18 @@
 				<version>${ojson.version}</version>
 			</dependency>
 
+			<!-- 谷歌zxing二维码工具包 -->
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>core</artifactId>
+				<version>${zxing.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>javase</artifactId>
+				<version>${zxing.version}</version>
+			</dependency>
+
 			<!-- 通用工具 -->
 			<dependency>
 				<groupId>com.tlv8</groupId>
@@ -315,6 +328,13 @@
 				<version>${tlv8.version}</version>
 			</dependency>
 
+			<!-- 接口模块 -->
+			<dependency>
+				<groupId>com.tlv8</groupId>
+				<artifactId>tlv8-api</artifactId>
+				<version>${tlv8.version}</version>
+			</dependency>
+
 			<!-- 主模块-启动模块 -->
 			<dependency>
 				<groupId>com.tlv8</groupId>
@@ -333,7 +353,7 @@
 		<module>tlv8-doc</module>
 		<module>tlv8-monitor</module>
 		<module>tlv8-api</module>
-	</modules>
+    </modules>
 
 	<build>
 		<plugins>

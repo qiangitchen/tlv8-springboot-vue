@@ -23,9 +23,7 @@ public class JurisdictionFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		String patex = req.getRequestURI();
 		if (!isLoginPage(patex)) {
-			/*
-			 * 页面访问登录控制
-			 */
+			// 页面访问登录控制
 			ContextBean context = SessionHelper.getContext(req);
 			// 判断是否已登录
 			if (context.isLogin()) {

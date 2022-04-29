@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tlv8.common.utils.spring.SpringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -93,7 +94,7 @@ public class DBUtils {
 	/**
 	 * 获取数据库连接 Session
 	 * 
-	 * @param dbname
+	 * @param dbkey
 	 * @return SqlSession
 	 * @see org.apache.ibatis.session.SqlSession
 	 */
@@ -102,7 +103,11 @@ public class DBUtils {
 		if (dbsource.containsKey(dbkey)) {
 			return dbsource.get(dbkey).openSession();
 		}
-		return null;
+		return SpringUtils.getBean(SqlSessionFactory.class).openSession();
+	}
+
+	public static SqlSession getSqlSession() {
+		return SpringUtils.getBean(SqlSessionFactory.class).openSession();
 	}
 
 	/**
@@ -489,7 +494,7 @@ public class DBUtils {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			session.close();
+			CloseConn(session,null,null,null);
 		}
 		return result;
 	}
@@ -519,7 +524,7 @@ public class DBUtils {
 
 	/**
 	 * 关闭数据库连接
-	 * 
+	 *
 	 * @param conn
 	 * @param stm
 	 * @param rs
@@ -535,20 +540,12 @@ public class DBUtils {
 				conn.close();
 		} catch (SQLException e) {
 			throw new SQLException(e.toString());
-		} finally {
-			try {
-				if (openedconn.containsKey(conn)) {
-					openedconn.get(conn).close();
-					openedconn.remove(conn);
-				}
-			} catch (Exception e) {
-			}
 		}
 	}
 
 	/**
 	 * 关闭数据库连接
-	 * 
+	 *
 	 * @param session
 	 * @param conn
 	 * @param stm
@@ -645,7 +642,7 @@ public class DBUtils {
 	/**
 	 * 查询数据
 	 * 
-	 * @param dbname
+	 * @param session
 	 * @param sql
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
 	 */
@@ -657,7 +654,7 @@ public class DBUtils {
 	/**
 	 * 查询数据 -带参数
 	 * 
-	 * @param dbname
+	 * @param session
 	 * @param sql
 	 * @param params
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
@@ -719,7 +716,6 @@ public class DBUtils {
 	 * 
 	 * @param dbname
 	 * @param sql
-	 * @param params
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
 	 * @throws Exception
 	 */
@@ -759,7 +755,7 @@ public class DBUtils {
 			logger.error(e);
 			throw e;
 		} finally {
-			session.close();
+			CloseConn(session,null,null,null);
 		}
 		return rlist;
 	}
@@ -803,7 +799,7 @@ public class DBUtils {
 			logger.error(e);
 			throw e;
 		} finally {
-			CloseConn(null, ps, rs);
+			CloseConn(session, null, ps, rs);
 		}
 		return rlist;
 	}
@@ -868,7 +864,7 @@ public class DBUtils {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			session.close();
+			CloseConn(session,null,null,null);
 		}
 		return r;
 	}
@@ -876,7 +872,7 @@ public class DBUtils {
 	/**
 	 * 插入数据
 	 * 
-	 * @param dbname
+	 * @param session
 	 * @param sql
 	 * @return int
 	 */
@@ -919,7 +915,7 @@ public class DBUtils {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			session.close();
+			CloseConn(session,null,null,null);
 		}
 		return r;
 	}
@@ -927,7 +923,7 @@ public class DBUtils {
 	/**
 	 * 删除数据
 	 * 
-	 * @param dbname
+	 * @param session
 	 * @param sql
 	 * @return int
 	 */
@@ -966,7 +962,7 @@ public class DBUtils {
 	/**
 	 * 更新数据
 	 * 
-	 * @param dbname
+	 * @param session
 	 * @param sql
 	 * @return int
 	 */
@@ -1045,8 +1041,7 @@ public class DBUtils {
 	 * 调用存储过程; aParams为分号分割的字符串参数值列表, 所有参数只能是字符串类型, 且只能是in类型
 	 * 
 	 * @param dbkey
-	 * @param aProcName
-	 * @param aParamValues
+	 * @param sql
 	 * @return String
 	 */
 	public static String executeCommand(String dbkey, String sql) throws Exception {
