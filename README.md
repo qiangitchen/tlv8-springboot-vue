@@ -21,7 +21,7 @@ SpringBoot+Vue
 
 npm install
 
-npm run dev
+npm run serve
 
 
 #### 使用说明
