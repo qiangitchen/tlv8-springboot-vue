@@ -39,7 +39,7 @@ public class CodeUtils {
 
 	public static String getSquare(String key) {
 		long square = 1L;
-		SqlSession session = DBUtils.getSession("system");
+		SqlSession session = DBUtils.getSqlSession();
 		Connection connection = null;
 		String sql = "select V+1 as V from SA_KVSEQUENCE where K='" + key + "'";
 		// 构建树的json
