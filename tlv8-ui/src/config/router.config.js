@@ -267,6 +267,41 @@ export const asyncRouterMap = [
             ]
           }
         ]
+      },
+
+      // system
+      {
+        path: '/system',
+        component: RouteView,
+        redirect: '/system/opm',
+        name: 'system',
+        meta: { title: '系统管理', icon: 'setting', keepAlive: true, permission: ['system'] },
+        children: [
+          {
+            path: '/system/opm/organization',
+            name: 'Organizational',
+            component: () => import('@/views/system/opm/Organizational'),
+            meta: { title: '机构管理', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/opm/role',
+            name: 'RoleList',
+            component: () => import('@/views/system/opm/RoleList'),
+            meta: { title: '角色管理', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/doc/docCenter',
+            name: 'DocCenter',
+            component: () => import('@/views/system/doc/DocCenter'),
+            meta: { title: '授权管理', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/doc/docsearch',
+            name: 'DocSearch',
+            component: () => import('@/views/system/doc/DocSearch'),
+            meta: { title: '文档检索', keepAlive: true, permission: ['system'] }
+          }
+        ]
       }
 
       // other

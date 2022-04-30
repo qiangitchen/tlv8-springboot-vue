@@ -403,7 +403,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/initPortalInfo")
-	public void initPortalInfo() {
+	public Object initPortalInfo() {
 		ContextBean context = getContext();
 		String sessionid = p("seesionid");
 		if ((sessionid != null) && (!sessionid.equals("")) && (!sessionid.equals("undefined"))) {
@@ -447,7 +447,7 @@ public class UserController extends BaseController {
 			json.put("uiserverremoteurl", context.getUIServerURL(this.request, null, null));
 		} catch (Exception e) {
 		}
-		renderData(json.toString());
+		return json;
 	}
 
 	@ResponseBody
@@ -481,7 +481,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/getOnlineUserInfo")
-	public void getOnlineUserInfo() throws JSONException {
+	public Object getOnlineUserInfo() throws JSONException {
 		Map m = OnlineHelper.getOnlineUserMap();
 		Iterator it = m.keySet().iterator();
 		List jsonList = new ArrayList();
@@ -505,9 +505,9 @@ public class UserController extends BaseController {
 			jsonList.add(jsonMap);
 		}
 		JSONObject json = new JSONObject();
+		json.put("state",true);
 		json.put("data", jsonList);
-
-		renderData(Boolean.valueOf(true), json.toString());
+		return json;
 	}
 
 	@ResponseBody
@@ -674,11 +674,15 @@ public class UserController extends BaseController {
 		Map<String,Object> userInfo = new HashMap<String, Object>();
 		userInfo.put("id", getContext().getPersonID());
 		userInfo.put("name", getContext().getPersonName());
+		userInfo.put("fullName", getContext().getCurrentPersonFullName());
 		userInfo.put("username", getContext().getPersonCode());
-		userInfo.put("avatar", "");
+		userInfo.put("avatar", "/avatar2.jpg");
 		userInfo.put("status", 1);
+		userInfo.put("telephone","");
 		userInfo.put("lastLoginIp", getContext().getIp());
 		userInfo.put("lastLoginTime", getContext().getLoginDate());
+		userInfo.put("creatorId", "PSM01");
+		userInfo.put("createTime", new Date().getTime());
 		userInfo.put("deleted", 0);
 		userInfo.put("roleId", "admin");
 		userInfo.put("role", "{}");

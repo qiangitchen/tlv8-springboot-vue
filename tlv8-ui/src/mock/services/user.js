@@ -6,6 +6,7 @@ const info = options => {
   const userInfo = {
     id: '4291d7da9005377ec9aec4a71ea837f',
     name: '天野远子',
+    fullName: '',
     username: 'admin',
     password: '',
     avatar: '/avatar2.jpg',
@@ -851,6 +852,99 @@ const userNav = options => {
         show: false
       },
       component: 'NotificationSettings'
+    },
+
+    // system
+    {
+      name: 'system',
+      parentId: 0,
+      id: 90000,
+      meta: {
+        title: '系统管理',
+        icon: 'setting',
+        show: true
+      },
+      redirect: '/system',
+      component: 'RouteView'
+    },
+    {
+      name: 'opm',
+      parentId: 90000,
+      id: 90001,
+      meta: {
+        title: '组织机构',
+        icon: 'apartment',
+        show: true
+      },
+      redirect: '/system/opm',
+      component: 'RouteView'
+    },
+    {
+      name: 'Organizational',
+      parentId: 90001,
+      id: 90011,
+      meta: {
+        title: '机构管理',
+        icon: 'user',
+        show: true
+      },
+      component: 'Organizational'
+    },
+    {
+      name: 'RoleList',
+      parentId: 90001,
+      id: 90012,
+      meta: {
+        title: '角色管理',
+        icon: 'team',
+        show: true
+      },
+      component: 'RoleList'
+    },
+    {
+      name: 'Authorization',
+      parentId: 90001,
+      id: 90013,
+      meta: {
+        title: '授权管理',
+        icon: 'solution',
+        show: true
+      },
+      component: 'Authorization'
+    },
+    {
+      name: 'doc',
+      parentId: 90000,
+      id: 90002,
+      meta: {
+        title: '文档管理',
+        icon: 'hdd',
+        show: true
+      },
+      redirect: '/system/doc',
+      component: 'RouteView'
+    },
+    {
+      name: 'DocCenter',
+      parentId: 90002,
+      id: 90021,
+      meta: {
+        title: '文档中心',
+        icon: 'file-zip',
+        show: true
+      },
+      component: 'DocCenter'
+    },
+    {
+      name: 'DocSearch',
+      parentId: 90002,
+      id: 90022,
+      meta: {
+        title: '文档检索',
+        icon: 'file-search',
+        show: true
+      },
+      component: 'DocSearch'
     }
   ]
   const json = builder(nav)

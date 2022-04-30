@@ -50,7 +50,14 @@ const constantRouterComponents = {
   SecuritySettings: () => import('@/views/account/settings/Security'),
   CustomSettings: () => import('@/views/account/settings/Custom'),
   BindingSettings: () => import('@/views/account/settings/Binding'),
-  NotificationSettings: () => import('@/views/account/settings/Notification')
+  NotificationSettings: () => import('@/views/account/settings/Notification'),
+
+  // system
+  Organizational: () => import('@/views/system/opm/Organizational'),
+  RoleList: () => import('@/views/system/opm/RoleList'),
+  Authorization: () => import('@/views/system/opm/Authorization'),
+  DocCenter: () => import('@/views/system/doc/DocCenter'),
+  DocSearch: () => import('@/views/system/doc/DocSearch')
 
   // 'TestWork': () => import(/* webpackChunkName: "TestWork" */ '@/views/dashboard/TestWork')
 }
