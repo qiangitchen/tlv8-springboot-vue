@@ -29,7 +29,7 @@ public class PaymentInfo {
     }
 
     public PaymentInfo(String fOrderCode) throws Exception {
-        SqlSession session = DBUtils.getSession("oa");
+        SqlSession session = DBUtils.getSqlSession();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -62,7 +62,7 @@ public class PaymentInfo {
     }
 
     public void Insert() {
-        SqlSession session = DBUtils.getSession("oa");
+        SqlSession session = DBUtils.getSqlSession();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -91,7 +91,7 @@ public class PaymentInfo {
     }
 
     public void Update() {
-        SqlSession session = DBUtils.getSession("oa");
+        SqlSession session = DBUtils.getSqlSession();
         Connection conn = null;
         PreparedStatement ps = null;
         try {

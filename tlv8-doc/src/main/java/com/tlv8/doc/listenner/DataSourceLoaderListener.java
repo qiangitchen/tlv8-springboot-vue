@@ -37,7 +37,7 @@ public class DataSourceLoaderListener implements ServletContextListener {
 				@Override
 				public void run() {
 					while (started) {
-						SqlSession session = DBUtils.getSession("doc");
+						SqlSession session = DBUtils.getSqlSession();
 						Connection conn = null;
 						Statement stm = null;
 						try {
