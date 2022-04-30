@@ -13,7 +13,7 @@ SpringBoot+Vue
 
 #### 安装教程
 
-1. 主目录运行：mvn instll
+1. 主目录运行：mvn install
 2. tlv8-main: 运行TLv8Application
 3. 运行前端：
 
