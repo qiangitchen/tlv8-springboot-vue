@@ -22,7 +22,7 @@ public class ZxingBarCode {
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);// 容错级别
             BitMatrix bitMatrix = new MultiFormatWriter().encode(content,
                     BarcodeFormat.QR_CODE, width, height, hints);// 生成矩阵
-            MatrixToImageWriter.writeToFile(bitMatrix, "png", file);// 输出图像
+            MatrixToImageWriter.writeToPath(bitMatrix, "png", file.toPath());// 输出图像
         } catch (Exception e) {
             e.printStackTrace();
         }
