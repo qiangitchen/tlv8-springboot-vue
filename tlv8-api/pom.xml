@@ -27,6 +27,11 @@
             <artifactId>javase</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
         <!-- 微信支付开源包 -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
@@ -43,6 +48,12 @@
         <dependency>
             <groupId>ma.glasnost.orika</groupId>
             <artifactId>orika-core</artifactId>
+        </dependency>
+
+        <!-- 支付宝支付接口 -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
         </dependency>
 
         <!-- 通用工具 -->
