@@ -6,7 +6,7 @@ const api = {
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/system/org/orgTree'
 }
 
 export default api

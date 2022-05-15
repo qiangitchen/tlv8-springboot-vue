@@ -7,45 +7,59 @@ import com.tlv8.system.mapper.SaOpOrgMapper;
 import com.tlv8.system.pojo.SaOpOrg;
 import com.tlv8.system.service.ISaOpOrgService;
 
+import java.util.List;
+
 @Service
-public class SaOpOrgServiceImpl implements ISaOpOrgService{
-	
-	@Autowired
-	SaOpOrgMapper sSaOpOrgMapper;
+public class SaOpOrgServiceImpl implements ISaOpOrgService {
 
-	@Override
-	public SaOpOrg selectByPrimaryKey(String sid) {
-		return sSaOpOrgMapper.selectByPrimaryKey(sid);
-	}
+    @Autowired
+    SaOpOrgMapper sSaOpOrgMapper;
 
-	@Override
-	public int insertData(SaOpOrg obj) {
-		return sSaOpOrgMapper.insertData(obj);
-	}
+    public List<SaOpOrg> selectList() {
+        return sSaOpOrgMapper.selectList();
+    }
 
-	@Override
-	public int updateData(SaOpOrg obj) {
-		return sSaOpOrgMapper.updateData(obj);
-	}
+    public List<SaOpOrg> selectRootList() {
+        return sSaOpOrgMapper.selectRootList();
+    }
 
-	@Override
-	public int deleteData(SaOpOrg obj) {
-		return sSaOpOrgMapper.deleteData(obj);
-	}
+    public List<SaOpOrg> selectListByParentID(String parent) {
+        return sSaOpOrgMapper.selectListByParentID(parent);
+    }
 
-	@Override
-	public int deleteDataByPrimaryKey(String sid) {
-		return sSaOpOrgMapper.deleteDataByPrimaryKey(sid);
-	}
+    @Override
+    public SaOpOrg selectByPrimaryKey(String sid) {
+        return sSaOpOrgMapper.selectByPrimaryKey(sid);
+    }
 
-	@Override
-	public int logicDeleteDataByPrimaryKey(String sid) {
-		return sSaOpOrgMapper.logicDeleteDataByPrimaryKey(sid);
-	}
+    @Override
+    public int insertData(SaOpOrg obj) {
+        return sSaOpOrgMapper.insertData(obj);
+    }
 
-	@Override
-	public int logicRecoveryByPrimaryKey(String sid) {
-		return sSaOpOrgMapper.logicRecoveryByPrimaryKey(sid);
-	}
-	
+    @Override
+    public int updateData(SaOpOrg obj) {
+        return sSaOpOrgMapper.updateData(obj);
+    }
+
+    @Override
+    public int deleteData(SaOpOrg obj) {
+        return sSaOpOrgMapper.deleteData(obj);
+    }
+
+    @Override
+    public int deleteDataByPrimaryKey(String sid) {
+        return sSaOpOrgMapper.deleteDataByPrimaryKey(sid);
+    }
+
+    @Override
+    public int logicDeleteDataByPrimaryKey(String sid) {
+        return sSaOpOrgMapper.logicDeleteDataByPrimaryKey(sid);
+    }
+
+    @Override
+    public int logicRecoveryByPrimaryKey(String sid) {
+        return sSaOpOrgMapper.logicRecoveryByPrimaryKey(sid);
+    }
+
 }

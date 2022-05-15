@@ -27,6 +27,22 @@
 	<sql id="Base_Column_List">
 		sid,sname,scode,slongname,sfname,sfcode,sfid,sorgkindid,svalidstate,sparent,slevel,sphone,sfax,saddress,szip,sdescription,spersonid,snodekind,version,sshowname,ssequence
 	</sql>
+	<select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SA_OpOrg order by slevel,ssequence
+	</select>
+	<select id="selectRootList" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SA_OpOrg where sparent is null or sparent = '' order by slevel,ssequence
+	</select>
+	<select id="selectListByParentID" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SA_OpOrg
+		where sparent = #{parent,jdbcType=VARCHAR} order by slevel,ssequence
+	</select>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select 
 		<include refid="Base_Column_List" />
