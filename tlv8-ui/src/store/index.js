@@ -1,26 +1,17 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import {createLogger, createStore} from 'vuex'
 
-import app from './modules/app'
-import user from './modules/user'
+import app from "./modules/app.js"
+import user from "./modules/user.js"
+import getters from './getters.js'
 
-// default router permission control
-// import permission from './modules/permission'
+const debug = false;
 
-// dynamic router permission control (Experimental)
-import permission from './modules/async-router'
-import getters from './getters'
-
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default createStore({
   modules: {
-    app,
-    user,
-    permission
+     app,
+     user
   },
-  state: {},
-  mutations: {},
-  actions: {},
-  getters
+  getters,
+  strict: debug,
+  plugins: debug ? [createLogger()] : []
 })

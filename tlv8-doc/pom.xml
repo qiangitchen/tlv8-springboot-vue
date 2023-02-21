@@ -31,13 +31,17 @@
 			<version>5.3.3</version>
 		</dependency>
 
-		<!--word文件读取-添加本地的jar包 -->
+		<!--word文件读取 -->
 		<dependency>
-			<groupId>com.aspose</groupId>
+			<groupId>com.luhuiguo</groupId>
 			<artifactId>aspose-words</artifactId>
-			<version>15.8.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/src/main/resources/lib/aspose-words-15.8.0-jdk16.jar</systemPath>
+			<version>22.12</version>
+		</dependency>
+		<!--word文件读取 -->
+		<dependency>
+			<groupId>com.luhuiguo</groupId>
+			<artifactId>aspose-pdf</artifactId>
+			<version>22.12</version>
 		</dependency>
 
 		<!-- 共享文件 -->

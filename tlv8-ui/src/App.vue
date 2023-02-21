@@ -1,28 +1,34 @@
 <template>
-  <a-config-provider :locale="locale">
-    <div id="app">
-      <router-view/>
-    </div>
+  <a-config-provider :locale="antdLocal">
+    <router-view></router-view>
   </a-config-provider>
 </template>
-
 <script>
-import { domTitle, setDocumentTitle } from '@/utils/domUtil'
-import { i18nRender } from '@/locales'
-
-export default {
-  data () {
+//test
+import {computed, defineComponent} from "vue";
+import {useStore} from "vuex";
+import {useI18n} from 'vue-i18n';
+import {toggleTheme} from "@zougt/vite-plugin-theme-preprocessor/dist/browser-utils.js";
+export default defineComponent({
+  name: 'App',
+  setup() {
+    const store = useStore()
+    const color = computed(() => store.getters.color);
+    const antdLocal = computed(() => {
+      const { getLocaleMessage } = useI18n({ useScope: 'global' })
+      return  getLocaleMessage(store.getters.language).antLocal
+    });
+    toggleTheme({
+      scopeName: color.value.scopeName,
+    });
     return {
-    }
-  },
-  computed: {
-    locale () {
-      // 只是为了切换语言时，更新标题
-      const { title } = this.$route.meta
-      title && (setDocumentTitle(`${i18nRender(title)} - ${domTitle}`))
-
-      return this.$i18n.getLocaleMessage(this.$store.getters.lang).antLocale
+      antdLocal
     }
   }
-}
+})
 </script>
+<style>
+#app, body, html {
+  height: 100%;
+}
+</style>

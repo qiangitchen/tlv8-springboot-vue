@@ -1,105 +1,89 @@
-import storage from 'store'
-import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { welcome } from '@/utils/util'
+import {menuList, menuTree, login, logout} from "@/api/module/user";
+import { createRouteByList, createRouteByTree} from "@/route/permission";
+import { message } from "ant-design-vue";
 
-const user = {
-  state: {
-    token: '',
-    name: '',
-    welcome: '',
-    avatar: '',
-    roles: [],
-    info: {}
-  },
+const state = {
+  token: localStorage.getItem("USER_TOKEN") != null ? localStorage.getItem("USER_TOKEN") : "",
+  userInfo: localStorage.getItem('USER_INFO') != null ? localStorage.getItem('USER_INFO') : null,
+  userRoutes: localStorage.getItem("USER_ROUTES") != null ? localStorage.getItem("USER_ROUTES") : [],
+  userPowers: localStorage.getItem("USER_POWERS") != null ? localStorage.getItem("USER_POWERS") : []
+}
 
-  mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
-    },
-    SET_NAME: (state, { name, welcome }) => {
-      state.name = name
-      state.welcome = welcome
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-    },
-    SET_INFO: (state, info) => {
-      state.info = info
+const mutations = {
+  SET_USER_TOKEN(state, token) {
+    if (token) {
+      state.token = token;
+      localStorage.setItem('USER_TOKEN', token);
+    } else {
+      state.token = '';
+      localStorage.removeItem('USER_TOKEN')
     }
   },
-
-  actions: {
-    // 登录
-    Login ({ commit }, userInfo) {
-      return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
-          const result = response.result
-          storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', result.token)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 获取用户信息
-    GetInfo ({ commit }) {
-      return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const result = response.result
-          console.log(result)
-          /*
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
-          }
-          */
-          commit('SET_ROLES', {})
-          commit('SET_INFO', result)
-
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
-          commit('SET_AVATAR', result.avatar)
-
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 登出
-    Logout ({ commit, state }) {
-      return new Promise((resolve) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          storage.remove(ACCESS_TOKEN)
-          resolve()
-        }).catch((err) => {
-          console.log('logout fail:', err)
-          // resolve()
-        }).finally(() => {
-        })
-      })
+  SET_USER_INFO(state, userInfo) {
+    state.userInfo = userInfo
+    localStorage.setItem('USER_INFO', userInfo)
+  },
+  SET_USER_MENU(state, menuList) {
+    if (menuList && menuList.length === 0) {
+      state.userRoutes = []
+      localStorage.removeItem('USER_ROUTES')
+    } else {
+      const finalMenu = menuList
+      state.userRoutes = finalMenu
+      localStorage.setItem('USER_ROUTES', JSON.stringify(finalMenu))
     }
-
   }
 }
 
-export default user
+const actions = {
+  setUserToken({commit}, token) {
+    return new Promise(resolve => {
+      commit('SET_USER_TOKEN', token);
+      resolve()
+    })
+  },
+  async logout({commit}) {
+    await logout()
+    message.success("注销成功", 0.5).then(function(){
+      commit('SET_USER_TOKEN');
+      commit('SET_USER_MENU');
+      window.location.reload();
+    });
+    return Promise.resolve();
+  },
+  async login({commit}, data) {
+    try {
+      const response = await login(data)
+      const {code, message, result: userInfo} = response
+      if (code === 200) {
+        const { token } = userInfo
+        delete userInfo.menuList
+        delete userInfo.token
+        commit('SET_USER_TOKEN', token)
+        commit('SET_USER_INFO', userInfo)
+        return Promise.resolve()
+      } else {
+        return Promise.reject(message)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  async addUserRouteForArray ({ state: { userRoutes }, commit }) {
+    const { result: data } = await menuList()
+    const dynamicRoutes = createRouteByList(data)
+    commit('SET_USER_MENU', dynamicRoutes)
+  },
+  async addUserRouteForTree ({ state: { userRoutes }, commit }) {
+    const { result: data } = await menuTree()
+    const dynamicRoutes = createRouteByTree(data)
+    commit('SET_USER_MENU', dynamicRoutes)
+  }
+}
+
+export default {
+  namespaced: true,
+  mutations,
+  actions,
+  state
+}

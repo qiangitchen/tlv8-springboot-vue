@@ -1,23 +1,73 @@
-import { isIE } from '@/utils/util'
+import Mock from "mockjs2"
+import {generatorResponse, generatorToken, getRequestBody, getRolePermission} from "@/mock/tool";
+import menuList from './service/menuList.json'
+import menuTree from './service/menuTree.json'
 
-// 判断环境不是 prod 或者 preview 是 true 时，加载 mock 服务
-if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'true') {
-  if (isIE()) {
-    console.error('[antd-pro] ERROR: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.')
+const useMock = true
+
+if (useMock) {
+  
+  /**
+   * 登录接口 
+   */
+  const login = request => {
+    const { username, password } = getRequestBody(request)
+    const admin = {
+      username: 'system',
+      password: '1'
+    }
+    if ((username === admin.username && password === admin.password) || username !== admin.username) {
+      localStorage.setItem('user_role', username)
+      const userInfo = {
+        'id': Math.random().toString(36).slice(2),
+        'username': username,
+        'password': password,
+        'token': generatorToken(),
+        'avatar': 'https://portrait.gitee.com/uploads/avatars/user/1611/4835367_Jmysy_1578975358.png',
+        'permissions': getRolePermission(username === admin.username)
+      }
+      return generatorResponse(userInfo)
+    } else {
+      return generatorResponse(null, '账号或密码错误', 500)
+    }
   }
-  // 使用同步加载依赖
-  // 防止 vuex 中的 GetInfo 早于 mock 运行，导致无法 mock 请求返回结果
-  console.log('[antd-pro] mock mounting')
-  const Mock = require('mockjs2')
-  require('./services/auth')
-  require('./services/user')
-  require('./services/manage')
-  require('./services/other')
-  require('./services/tagCloud')
-  require('./services/article')
+  
+  /**
+   * 菜单接口
+   */
+  const getUserMenusArray = request => {
+    const filters = ['form']
+    const userName = localStorage.getItem('user_role')
+    const menus = userName === 'system' ? menuList : menuList.filter(m => (!filters.includes(m.name) && !filters.includes(m.parent)))
+    return generatorResponse(menus)
+  }
+  
+  /**
+   * 菜单接口 
+   */
+  const getUserMenusTree = request => {
+    const filters = ['list', 'form']
+    const userName = localStorage.getItem('user_role')
+    const menus = userName === 'system' ? menuTree : menuTree.filter(m => !filters.includes(m.name))
+    return generatorResponse(menus)
+  }
+  
+  /**
+   * 注销接口 
+   */
+  const logout = request => {
+    return generatorResponse({
+      status: 0
+    })
+  }
+  
+  Mock.mock(/\/api\/login/, 'post', login)
+  Mock.mock(/\/api\/logout/, 'post', logout)
+  Mock.mock(/\/api\/getUserMenusArray/, 'post', getUserMenusArray)
+  Mock.mock(/\/api\/getUserMenusTree/, 'post', getUserMenusTree)
 
   Mock.setup({
-    timeout: 800 // setter delay time
+    timeout: 1000
   })
-  console.log('[antd-pro] mock mounted')
 }
+
