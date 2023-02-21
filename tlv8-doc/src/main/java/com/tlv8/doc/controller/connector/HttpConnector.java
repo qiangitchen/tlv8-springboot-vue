@@ -12,6 +12,7 @@ public class HttpConnector {
 	HttpServletRequest httpservletrequest;
 	List<RequestHandler> handerList;
 
+	@SuppressWarnings("deprecation")
 	public HttpConnector(HttpServletRequest paramHttpServletRequest) {
 		this.httpservletrequest = paramHttpServletRequest;
 		handerList = new ArrayList<RequestHandler>();

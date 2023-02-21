@@ -19,6 +19,7 @@ public abstract class MessageResourceReader {
 	public abstract String getProperty(String paramString, Locale paramLocale,
 			Iterable<Object> paramIterable);
 
+	@SuppressWarnings("deprecation")
 	public static MessageResourceReader getResourceReader() {
 		try {
 			return (MessageResourceReader) Class.forName(
