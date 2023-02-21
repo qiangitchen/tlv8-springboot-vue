@@ -1,7 +1,7 @@
 /*
  * 项目默认配置信息
  *
- * Store 初始化时决定使用 localstore 本地 / pear.js 默认配置
+ * Store 初始化时决定使用 localstore 本地 / 默认配置
  */
 export default {
 
@@ -100,8 +100,8 @@ export default {
   /**
    * 参数: 可选的主题颜色列表
    * color - key
-   * color - scopeName 
-   * color - color 
+   * color - scopeName
+   * color - color
    */
   colorList: [
     { scopeName: "theme-blue", color: '#2d8cf0' },
@@ -119,7 +119,7 @@ export default {
 
   /**
    * 参数：国际化默认语言
-   * 
+   *
    * zh-CN 中文
    * en-US 英文
    */
