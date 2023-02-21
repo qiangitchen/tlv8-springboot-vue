@@ -57,10 +57,17 @@ public interface SaOnlineinfoMapper {
 	/**
 	 * 删除指定sessionid的在线用户信息
 	 * 
-	 * @param sessionID
+	 * @param sessionid
 	 * @return
 	 */
 	int deleteDataBySessionID(String sessionid);
+
+	/**
+	 * 删除指定机器码的在线用户信息
+	 * @param machineCode
+	 * @return
+	 */
+	int deleteDataByMachineCode(String machineCode);
 
 	/**
 	 * 统计在线用户数

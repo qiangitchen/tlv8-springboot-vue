@@ -1,6 +1,7 @@
 package com.tlv8.doc.controller.utils;
 
 import com.aspose.words.Document;
+import com.aspose.words.FontSettings;
 import com.aspose.words.License;
 import com.aspose.words.SaveFormat;
 import org.springframework.core.io.ClassPathResource;
@@ -37,19 +38,26 @@ public class Word2PdfAsposeUtil {
 		return result;
 	}
 
+	public static boolean isLinux() {
+		return System.getProperty("os.name").toLowerCase().contains("linux");
+	}
+
+	public static boolean isWindows() {
+		return System.getProperty("os.name").toLowerCase().contains("windows");
+	}
+
 	public static boolean doc2pdf(InputStream in, OutputStream out) {
 		if (!getLicense()) { // 验证License 若不验证则转化出的pdf文档会有水印产生
 			return false;
 		}
 		try {
-			long old = System.currentTimeMillis();
+			if (isLinux()) {
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+			}
 			Document doc = new Document(in); // Address是将要被转化的word文档
 			doc.save(out, SaveFormat.PDF);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
 			// EPUB, XPS, SWF 相互转换
-			long now = System.currentTimeMillis();
-			System.out.println("pdf转换成功，共耗时：" + ((now - old) / 1000.0) + "秒"); // 转化用时
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -61,16 +69,15 @@ public class Word2PdfAsposeUtil {
 		}
 		FileOutputStream os = null;
 		try {
-			long old = System.currentTimeMillis();
 			File file = new File(outPath); // 新建一个空白pdf文档
 			os = new FileOutputStream(file);
+			if (isLinux()) {
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+			}
 			Document doc = new Document(inPath); // Address是将要被转化的word文档
 			doc.save(os, SaveFormat.PDF);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
 			// EPUB, XPS, SWF 相互转换
-			long now = System.currentTimeMillis();
-			System.out.println("pdf转换成功，共耗时：" + ((now - old) / 1000.0) + "秒"); // 转化用时
 		} catch (Exception e) {
-			e.printStackTrace();
 			return false;
 		} finally {
 			if (os != null) {
@@ -85,9 +92,37 @@ public class Word2PdfAsposeUtil {
 		return true;
 	}
 
-	public static void main(String[] arg) {
-		String docPath = "D:\\SQL2008故障转移群集搭建.doc";
-		String pdfPath = "D:\\SQL2008故障转移群集搭建.pdf";
-		Word2PdfAsposeUtil.doc2pdf(docPath, pdfPath);
+	public static boolean doc2html(InputStream in, String tempath) {
+		if (!getLicense()) { // 验证License 若不验证则转化出的pdf文档会有水印产生
+			return false;
+		}
+		try {
+			if (isLinux()) {
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+			}
+			Document doc = new Document(in);
+			doc.save(tempath, SaveFormat.HTML);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
+			// EPUB, XPS, SWF 相互转换
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean pdf2html(InputStream in, String tempath) {
+		if (!getLicense()) { // 验证License 若不验证则转化出的pdf文档会有水印产生
+			return false;
+		}
+		try {
+			if (isLinux()) {
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+			}
+			com.aspose.pdf.Document pdf = new com.aspose.pdf.Document(in);
+			pdf.save(tempath, com.aspose.pdf.SaveFormat.Html);
+			pdf.close();
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 }

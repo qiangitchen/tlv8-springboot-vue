@@ -2,7 +2,8 @@ package com.tlv8.monitor.controller;
 
 import java.util.concurrent.TimeUnit;
 
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,7 +37,7 @@ public class CPUPercController {
 		SystemInfo si = new SystemInfo();
 		HardwareAbstractionLayer hal = si.getHardware();
 		CentralProcessor processor = hal.getProcessor();
-		JSONObject json = new JSONObject(processor);
+		JSONObject json = JSONObject.parseObject(JSON.toJSONString(processor));
 		long[] prevTicks = processor.getSystemCpuLoadTicks();
 		TimeUnit.SECONDS.sleep(1);
 		long[] ticks = processor.getSystemCpuLoadTicks();

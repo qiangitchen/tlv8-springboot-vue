@@ -1,968 +1,140 @@
 package com.tlv8.common.utils.poi;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.RegExUtils;
-import org.apache.poi.POIXMLDocumentPart;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFPicture;
-import org.apache.poi.hssf.usermodel.HSSFPictureData;
-import org.apache.poi.hssf.usermodel.HSSFShape;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataValidation;
-import org.apache.poi.ss.usermodel.DataValidationConstraint;
-import org.apache.poi.ss.usermodel.DataValidationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.PictureData;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.apache.poi.xssf.usermodel.XSSFDrawing;
-import org.apache.poi.xssf.usermodel.XSSFPicture;
-import org.apache.poi.xssf.usermodel.XSSFShape;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.tlv8.common.annotation.Excel;
-import com.tlv8.common.annotation.Excel.ColumnType;
-import com.tlv8.common.annotation.Excel.Type;
-import com.tlv8.common.annotation.Excels;
-import com.tlv8.common.domain.AjaxResult;
-import com.tlv8.common.exception.UtilException;
-import com.tlv8.common.text.Convert;
-import com.tlv8.common.utils.DateUtils;
-import com.tlv8.common.utils.StringUtils;
-import com.tlv8.common.utils.file.FileTypeUtils;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-/**
- * Excel相关处理
- * 
- * @author tlv8
- */
-public class ExcelUtil<T> {
-	private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);
-
-	public static final String FORMULA_REGEX_STR = "=|-|\\+|@";
-
-	public static final String[] FORMULA_STR = { "=", "-", "+", "@" };
-
-	/**
-	 * Excel sheet最大行数，默认65536
-	 */
-	public static final int sheetSize = 65536;
-
-	/**
-	 * 工作表名称
-	 */
-	private String sheetName;
-
-	/**
-	 * 导出类型（EXPORT:导出数据；IMPORT：导入模板）
-	 */
-	private Type type;
-
-	/**
-	 * 工作薄对象
-	 */
-	private Workbook wb;
-
-	/**
-	 * 工作表对象
-	 */
-	private Sheet sheet;
-
-	/**
-	 * 样式列表
-	 */
-	private Map<String, CellStyle> styles;
-
-	/**
-	 * 导入导出数据列表
-	 */
-	private List<T> list;
-
-	/**
-	 * 注解列表
-	 */
-	private List<Object[]> fields;
-
-	/**
-	 * 当前行号
-	 */
-	private int rownum;
-
-	/**
-	 * 标题
-	 */
-	private String title;
-
-	/**
-	 * 最大高度
-	 */
-	private short maxHeight;
-
-	/**
-	 * 统计列表
-	 */
-	private final Map<Integer, Double> statistics = new HashMap<Integer, Double>();
-
-	/**
-	 * 数字格式
-	 */
-	private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("######0.00");
-
-	/**
-	 * 实体对象
-	 */
-	public Class<T> clazz;
-
-	public ExcelUtil(Class<T> clazz) {
-		this.clazz = clazz;
-	}
-
-	public void init(List<T> list, String sheetName, String title, Type type) {
-		if (list == null) {
-			list = new ArrayList<T>();
-		}
-		this.list = list;
-		this.sheetName = sheetName;
-		this.type = type;
-		this.title = title;
-		createExcelField();
-		createWorkbook();
-		createTitle();
-	}
-
-	/**
-	 * 创建excel第一行标题
-	 */
-	public void createTitle() {
-		if (StringUtils.isNotEmpty(title)) {
-			Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
-			titleRow.setHeightInPoints(30);
-			Cell titleCell = titleRow.createCell(0);
-			titleCell.setCellStyle(styles.get("title"));
-			titleCell.setCellValue(title);
-			sheet.addMergedRegion(new CellRangeAddress(titleRow.getRowNum(), titleRow.getRowNum(), titleRow.getRowNum(),
-					this.fields.size() - 1));
-		}
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param list      导出数据集合
-	 * @param sheetName 工作表的名称
-	 * @return 结果
-	 */
-	public AjaxResult exportExcel(List<T> list, String sheetName) {
-		return exportExcel(list, sheetName, StringUtils.EMPTY);
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param list      导出数据集合
-	 * @param sheetName 工作表的名称
-	 * @param title     标题
-	 * @return 结果
-	 */
-	public AjaxResult exportExcel(List<T> list, String sheetName, String title) {
-		this.init(list, sheetName, title, Type.EXPORT);
-		return exportExcel();
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param response  返回数据
-	 * @param list      导出数据集合
-	 * @param sheetName 工作表的名称
-	 * @return 结果
-	 */
-	public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
-		exportExcel(response, list, sheetName, StringUtils.EMPTY);
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param response  返回数据
-	 * @param list      导出数据集合
-	 * @param sheetName 工作表的名称
-	 * @param title     标题
-	 * @return 结果
-	 */
-	public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title) {
-		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-		response.setCharacterEncoding("utf-8");
-		this.init(list, sheetName, title, Type.EXPORT);
-		exportExcel(response);
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param sheetName 工作表的名称
-	 * @return 结果
-	 */
-	public AjaxResult importTemplateExcel(String sheetName) {
-		return importTemplateExcel(sheetName, StringUtils.EMPTY);
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param sheetName 工作表的名称
-	 * @param title     标题
-	 * @return 结果
-	 */
-	public AjaxResult importTemplateExcel(String sheetName, String title) {
-		this.init(null, sheetName, title, Type.IMPORT);
-		return exportExcel();
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param sheetName 工作表的名称
-	 * @return 结果
-	 */
-	public void importTemplateExcel(HttpServletResponse response, String sheetName) {
-		importTemplateExcel(response, sheetName, StringUtils.EMPTY);
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @param sheetName 工作表的名称
-	 * @param title     标题
-	 * @return 结果
-	 */
-	public void importTemplateExcel(HttpServletResponse response, String sheetName, String title) {
-		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-		response.setCharacterEncoding("utf-8");
-		this.init(null, sheetName, title, Type.IMPORT);
-		exportExcel(response);
-	}
-
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @return 结果
-	 */
-	public void exportExcel(HttpServletResponse response) {
+public class ExcelUtil {
+	public static void main(String[] args) {
 		try {
-			writeSheet();
-			wb.write(response.getOutputStream());
+			System.out.println(readSheet(
+					getWorkbook(new File(
+							"E:\\TuLinv8_win64_jcycg\\workspace\\tlv8\\WebContent\\purchase\\project1\\合同货物清单.xlsx")),
+					0));
 		} catch (Exception e) {
-			log.error("导出Excel异常{}", e.getMessage());
-		} finally {
-			IOUtils.closeQuietly(wb);
+			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * 对list数据源将其里面的数据导入到excel表单
-	 * 
-	 * @return 结果
-	 */
-	public AjaxResult exportExcel() {
-		OutputStream out = null;
-		try {
-			writeSheet();
-			String filename = encodingFilename(sheetName);
-			out = new FileOutputStream(getAbsoluteFile(filename));
-			wb.write(out);
-			return AjaxResult.success(filename);
-		} catch (Exception e) {
-			log.error("导出Excel异常{}", e.getMessage());
-			throw new UtilException("导出Excel失败，请联系网站管理员！");
-		} finally {
-			IOUtils.closeQuietly(wb);
-			IOUtils.closeQuietly(out);
-		}
-	}
-
-	/**
-	 * 创建写入数据到Sheet
-	 */
-	public void writeSheet() {
-		// 取出一共有多少个sheet.
-		int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / sheetSize));
-		for (int index = 0; index < sheetNo; index++) {
-			createSheet(sheetNo, index);
-
-			// 产生一行
-			Row row = sheet.createRow(rownum);
-			int column = 0;
-			// 写入各个字段的列头名称
-			for (Object[] os : fields) {
-				Excel excel = (Excel) os[1];
-				this.createCell(excel, row, column++);
-			}
-			if (Type.EXPORT.equals(type)) {
-				fillExcelData(index, row);
-				addStatisticsRow();
-			}
-		}
-	}
-
-	/**
-	 * 填充excel数据
-	 * 
-	 * @param index 序号
-	 * @param row   单元格行
-	 */
-	public void fillExcelData(int index, Row row) {
-		int startNo = index * sheetSize;
-		int endNo = Math.min(startNo + sheetSize, list.size());
-		for (int i = startNo; i < endNo; i++) {
-			row = sheet.createRow(i + 1 + rownum - startNo);
-			// 得到导出对象.
-			T vo = list.get(i);
-			int column = 0;
-			for (Object[] os : fields) {
-				Field field = (Field) os[0];
-				Excel excel = (Excel) os[1];
-				this.addCell(excel, row, vo, field, column++);
-			}
-		}
-	}
-
-	/**
-	 * 创建表格样式
-	 * 
-	 * @param wb 工作薄对象
-	 * @return 样式列表
-	 */
-	private Map<String, CellStyle> createStyles(Workbook wb) {
-		// 写入各条记录,每条记录对应excel表中的一行
-		Map<String, CellStyle> styles = new HashMap<String, CellStyle>();
-		CellStyle style = wb.createCellStyle();
-		style.setAlignment(HorizontalAlignment.CENTER);
-		style.setVerticalAlignment(VerticalAlignment.CENTER);
-		Font titleFont = wb.createFont();
-		titleFont.setFontName("Arial");
-		titleFont.setFontHeightInPoints((short) 16);
-		titleFont.setBold(true);
-		style.setFont(titleFont);
-		styles.put("title", style);
-
-		style = wb.createCellStyle();
-		style.setAlignment(HorizontalAlignment.CENTER);
-		style.setVerticalAlignment(VerticalAlignment.CENTER);
-		style.setBorderRight(BorderStyle.THIN);
-		style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-		style.setBorderLeft(BorderStyle.THIN);
-		style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-		style.setBorderTop(BorderStyle.THIN);
-		style.setTopBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-		style.setBorderBottom(BorderStyle.THIN);
-		style.setBottomBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-		Font dataFont = wb.createFont();
-		dataFont.setFontName("Arial");
-		dataFont.setFontHeightInPoints((short) 10);
-		style.setFont(dataFont);
-		styles.put("data", style);
-
-		style = wb.createCellStyle();
-		style.cloneStyleFrom(styles.get("data"));
-		style.setAlignment(HorizontalAlignment.CENTER);
-		style.setVerticalAlignment(VerticalAlignment.CENTER);
-		style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
-		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		Font headerFont = wb.createFont();
-		headerFont.setFontName("Arial");
-		headerFont.setFontHeightInPoints((short) 10);
-		headerFont.setBold(true);
-		headerFont.setColor(IndexedColors.WHITE.getIndex());
-		style.setFont(headerFont);
-		styles.put("header", style);
-
-		style = wb.createCellStyle();
-		style.setAlignment(HorizontalAlignment.CENTER);
-		style.setVerticalAlignment(VerticalAlignment.CENTER);
-		Font totalFont = wb.createFont();
-		totalFont.setFontName("Arial");
-		totalFont.setFontHeightInPoints((short) 10);
-		style.setFont(totalFont);
-		styles.put("total", style);
-
-		style = wb.createCellStyle();
-		style.cloneStyleFrom(styles.get("data"));
-		style.setAlignment(HorizontalAlignment.LEFT);
-		styles.put("data1", style);
-
-		style = wb.createCellStyle();
-		style.cloneStyleFrom(styles.get("data"));
-		style.setAlignment(HorizontalAlignment.CENTER);
-		styles.put("data2", style);
-
-		style = wb.createCellStyle();
-		style.cloneStyleFrom(styles.get("data"));
-		style.setAlignment(HorizontalAlignment.RIGHT);
-		styles.put("data3", style);
-
-		return styles;
-	}
-
-	/**
-	 * 创建单元格
-	 */
-	public Cell createCell(Excel attr, Row row, int column) {
-		// 创建列
-		Cell cell = row.createCell(column);
-		// 写入列信息
-		cell.setCellValue(attr.name());
-		setDataValidation(attr, row, column);
-		cell.setCellStyle(styles.get("header"));
-		return cell;
-	}
-
-	/**
-	 * 设置单元格信息
-	 * 
-	 * @param value 单元格值
-	 * @param attr  注解相关
-	 * @param cell  单元格信息
-	 */
-	public void setCellVo(Object value, Excel attr, Cell cell) {
-		if (ColumnType.STRING == attr.cellType()) {
-			String cellValue = Convert.toStr(value);
-			// 对于任何以表达式触发字符 =-+@开头的单元格，直接使用tab字符作为前缀，防止CSV注入。
-			if (StringUtils.startsWithAny(cellValue, FORMULA_STR)) {
-				cellValue = RegExUtils.replaceFirst(cellValue, FORMULA_REGEX_STR, "\t$0");
-			}
-			cell.setCellValue(StringUtils.isNull(cellValue) ? attr.defaultValue() : cellValue + attr.suffix());
-		} else if (ColumnType.NUMERIC == attr.cellType()) {
-			if (StringUtils.isNotNull(value)) {
-				cell.setCellValue(StringUtils.contains(Convert.toStr(value), ".") ? Convert.toDouble(value)
-						: Convert.toInt(value));
-			}
-		} else if (ColumnType.IMAGE == attr.cellType()) {
-//			ClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) cell.getColumnIndex(),
-//					cell.getRow().getRowNum(), (short) (cell.getColumnIndex() + 1), cell.getRow().getRowNum() + 1);
-//			String imagePath = Convert.toStr(value);
-//			if (StringUtils.isNotEmpty(imagePath)) {
-//				byte[] data = ImageUtils.getImage(imagePath);
-//				getDrawingPatriarch(cell.getSheet()).createPicture(anchor,
-//						cell.getSheet().getWorkbook().addPicture(data, getImageType(data)));
-//			}
-		}
-	}
-
-	/**
-	 * 获取画布
-	 */
-	public static Drawing<?> getDrawingPatriarch(Sheet sheet) {
-		if (sheet.getDrawingPatriarch() == null) {
-			sheet.createDrawingPatriarch();
-		}
-		return sheet.getDrawingPatriarch();
-	}
-
-	/**
-	 * 获取图片类型,设置图片插入类型
-	 */
-	public int getImageType(byte[] value) {
-		String type = FileTypeUtils.getFileExtendName(value);
-		if ("JPG".equalsIgnoreCase(type)) {
-			return Workbook.PICTURE_TYPE_JPEG;
-		} else if ("PNG".equalsIgnoreCase(type)) {
-			return Workbook.PICTURE_TYPE_PNG;
-		}
-		return Workbook.PICTURE_TYPE_JPEG;
-	}
-
-	/**
-	 * 创建表格样式
-	 */
-	public void setDataValidation(Excel attr, Row row, int column) {
-		if (attr.name().indexOf("注：") >= 0) {
-			sheet.setColumnWidth(column, 6000);
+	public static Workbook getWorkbook(MultipartFile excel) throws Exception {
+		String[] split = excel.getOriginalFilename().toLowerCase().split("\\.");
+		Workbook wb = null;
+		// 根据文件后缀（xls/xlsx）进行判断
+		if ("xls".equals(split[1])) {
+			InputStream fis = excel.getInputStream(); // 文件流对象
+			wb = new HSSFWorkbook(fis);
+		} else if ("xlsx".equals(split[1])) {
+			wb = new XSSFWorkbook(excel.getInputStream());
 		} else {
-			// 设置列宽
-			sheet.setColumnWidth(column, (int) ((attr.width() + 0.72) * 256));
+			throw new Exception("文件类型错误!");
 		}
-		if (StringUtils.isNotEmpty(attr.prompt()) || attr.combo().length > 0) {
-			// 提示信息或只能选择不能输入的列内容.
-			setPromptOrValidation(sheet, attr.combo(), attr.prompt(), 1, 100, column, column);
-		}
+		return wb;
 	}
 
-	/**
-	 * 添加单元格
-	 */
-	public Cell addCell(Excel attr, Row row, T vo, Field field, int column) {
-		Cell cell = null;
-		try {
-			// 设置行高
-			row.setHeight(maxHeight);
-			// 根据Excel中设置情况决定是否导出,有些情况需要保持为空,希望用户填写这一列.
-			if (attr.isExport()) {
-				// 创建cell
-				cell = row.createCell(column);
-				int align = attr.align().value();
-				cell.setCellStyle(styles.get("data" + (align >= 1 && align <= 3 ? align : "")));
-
-				// 用于读取对象中的属性
-				Object value = getTargetValue(vo, field, attr);
-				String dateFormat = attr.dateFormat();
-				String readConverterExp = attr.readConverterExp();
-				String separator = attr.separator();
-				String dictType = attr.dictType();
-				if (StringUtils.isNotEmpty(dateFormat) && StringUtils.isNotNull(value)) {
-					cell.setCellValue(parseDateToStr(dateFormat, value));
-				} else if (StringUtils.isNotEmpty(readConverterExp) && StringUtils.isNotNull(value)) {
-					cell.setCellValue(convertByExp(Convert.toStr(value), readConverterExp, separator));
-				} else if (StringUtils.isNotEmpty(dictType) && StringUtils.isNotNull(value)) {
-					cell.setCellValue(convertDictByExp(Convert.toStr(value), dictType, separator));
-				} else if (value instanceof BigDecimal && -1 != attr.scale()) {
-					cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).toString());
-				} else if (!attr.handler().equals(ExcelHandlerAdapter.class)) {
-					cell.setCellValue(dataFormatHandlerAdapter(value, attr));
-				} else {
-					// 设置列类型
-					setCellVo(value, attr, cell);
-				}
-				addStatisticsData(column, Convert.toStr(value), attr);
-			}
-		} catch (Exception e) {
-			log.error("导出Excel失败{}", e);
-		}
-		return cell;
-	}
-
-	/**
-	 * 设置 POI XSSFSheet 单元格提示或选择框
-	 * 
-	 * @param sheet         表单
-	 * @param textlist      下拉框显示的内容
-	 * @param promptContent 提示内容
-	 * @param firstRow      开始行
-	 * @param endRow        结束行
-	 * @param firstCol      开始列
-	 * @param endCol        结束列
-	 */
-	public void setPromptOrValidation(Sheet sheet, String[] textlist, String promptContent, int firstRow, int endRow,
-			int firstCol, int endCol) {
-		DataValidationHelper helper = sheet.getDataValidationHelper();
-		DataValidationConstraint constraint = textlist.length > 0 ? helper.createExplicitListConstraint(textlist)
-				: helper.createCustomConstraint("DD1");
-		CellRangeAddressList regions = new CellRangeAddressList(firstRow, endRow, firstCol, endCol);
-		DataValidation dataValidation = helper.createValidation(constraint, regions);
-		if (StringUtils.isNotEmpty(promptContent)) {
-			// 如果设置了提示信息则鼠标放上去提示
-			dataValidation.createPromptBox("", promptContent);
-			dataValidation.setShowPromptBox(true);
-		}
-		// 处理Excel兼容性问题
-		if (dataValidation instanceof XSSFDataValidation) {
-			dataValidation.setSuppressDropDownArrow(true);
-			dataValidation.setShowErrorBox(true);
+	public static Workbook getWorkbook(File excel) throws Exception {
+		String[] split = excel.getName().toLowerCase().split("\\.");
+		Workbook wb = null;
+		// 根据文件后缀（xls/xlsx）进行判断
+		if ("xls".equals(split[1])) {
+			FileInputStream fis = new FileInputStream(excel); // 文件流对象
+			wb = new HSSFWorkbook(fis);
+		} else if ("xlsx".equals(split[1])) {
+			wb = new XSSFWorkbook(excel);
 		} else {
-			dataValidation.setSuppressDropDownArrow(false);
+			throw new Exception("文件类型错误!");
 		}
-		sheet.addValidationData(dataValidation);
+		return wb;
 	}
 
-	/**
-	 * 解析导出值 0=男,1=女,2=未知
-	 * 
-	 * @param propertyValue 参数值
-	 * @param converterExp  翻译注解
-	 * @param separator     分隔符
-	 * @return 解析后值
-	 */
-	public static String convertByExp(String propertyValue, String converterExp, String separator) {
-		StringBuilder propertyString = new StringBuilder();
-		String[] convertSource = converterExp.split(",");
-		for (String item : convertSource) {
-			String[] itemArray = item.split("=");
-			if (StringUtils.containsAny(separator, propertyValue)) {
-				for (String value : propertyValue.split(separator)) {
-					if (itemArray[0].equals(value)) {
-						propertyString.append(itemArray[1] + separator);
-						break;
-					}
-				}
-			} else {
-				if (itemArray[0].equals(propertyValue)) {
-					return itemArray[1];
+	public static Workbook getWorkbook(InputStream fis,String filename) throws Exception {
+		String[] split = filename.toLowerCase().split("\\.");
+		Workbook wb = null;
+		// 根据文件后缀（xls/xlsx）进行判断
+		if ("xls".equals(split[1])) {
+			wb = new HSSFWorkbook(fis);
+		} else if ("xlsx".equals(split[1])) {
+			wb = new XSSFWorkbook(fis);
+		} else {
+			throw new Exception("文件类型错误!");
+		}
+		return wb;
+	}
+
+	public static String[][] readSheet(Workbook workbook, int sheetNum) {
+		String[][] result;
+		Sheet sheet = getSheet(workbook, sheetNum);
+		int rows, cols;
+		rows = sheet.getLastRowNum();
+		cols = sheet.getRow(0).getLastCellNum();
+		result = new String[rows][cols];
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				try {
+					result[i][j] = getCellValue(sheet, j, i);
+				} catch (Exception e) {
+					result[i][j] = "";// 取值异常默认为空字符
 				}
 			}
 		}
-		return StringUtils.stripEnd(propertyString.toString(), separator);
+		return result;
 	}
 
-	/**
-	 * 反向解析值 男=0,女=1,未知=2
-	 * 
-	 * @param propertyValue 参数值
-	 * @param converterExp  翻译注解
-	 * @param separator     分隔符
-	 * @return 解析后值
-	 */
-	public static String reverseByExp(String propertyValue, String converterExp, String separator) {
-		StringBuilder propertyString = new StringBuilder();
-		String[] convertSource = converterExp.split(",");
-		for (String item : convertSource) {
-			String[] itemArray = item.split("=");
-			if (StringUtils.containsAny(separator, propertyValue)) {
-				for (String value : propertyValue.split(separator)) {
-					if (itemArray[1].equals(value)) {
-						propertyString.append(itemArray[0] + separator);
-						break;
-					}
-				}
-			} else {
-				if (itemArray[1].equals(propertyValue)) {
-					return itemArray[0];
-				}
-			}
-		}
-		return StringUtils.stripEnd(propertyString.toString(), separator);
+	public static Sheet getSheet(Workbook workbook, int sheetNum) {
+		Sheet sheet = null;
+		sheet = workbook.getSheetAt(sheetNum);
+		return sheet;
 	}
 
-	/**
-	 * 解析字典值
-	 * 
-	 * @param dictValue 字典值
-	 * @param dictType  字典类型
-	 * @param separator 分隔符
-	 * @return 字典标签
-	 */
-	public static String convertDictByExp(String dictValue, String dictType, String separator) {
-//		return DictUtils.getDictLabel(dictType, dictValue, separator);
-		return dictValue;
-	}
-
-	/**
-	 * 反向解析值字典值
-	 * 
-	 * @param dictLabel 字典标签
-	 * @param dictType  字典类型
-	 * @param separator 分隔符
-	 * @return 字典值
-	 */
-	public static String reverseDictByExp(String dictLabel, String dictType, String separator) {
-//		return DictUtils.getDictValue(dictType, dictLabel, separator);
-		return dictLabel;
-	}
-
-	/**
-	 * 数据处理器
-	 * 
-	 * @param value 数据值
-	 * @param excel 数据注解
-	 * @return
-	 */
-	public String dataFormatHandlerAdapter(Object value, Excel excel) {
+	public static String getCellValue(Sheet sheet, int col, int row) {
+		String result = "";
+		Cell cell = sheet.getRow(row).getCell(col);
+		result = cell == null ? "" : cell.toString();
+		DateFormat dataTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
-			Object instance = excel.handler().newInstance();
-			Method formatMethod = excel.handler().getMethod("format", Object.class, String[].class);
-			value = formatMethod.invoke(instance, value, excel.args());
+			dataTimeFormat.parse(result);
+			Date tempTime = dataTimeFormat.parse(result);
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String sss = formatter.format(tempTime);
+			result = sss;
 		} catch (Exception e) {
-			log.error("不能格式化数据 " + excel.handler(), e.getMessage());
-		}
-		return Convert.toStr(value);
-	}
-
-	/**
-	 * 合计统计信息
-	 */
-	private void addStatisticsData(Integer index, String text, Excel entity) {
-		if (entity != null && entity.isStatistics()) {
-			Double temp = 0D;
-			if (!statistics.containsKey(index)) {
-				statistics.put(index, temp);
-			}
+			dataTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 			try {
-				temp = Double.valueOf(text);
-			} catch (NumberFormatException e) {
-			}
-			statistics.put(index, statistics.get(index) + temp);
-		}
-	}
-
-	/**
-	 * 创建统计行
-	 */
-	public void addStatisticsRow() {
-		if (statistics.size() > 0) {
-			Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-			Set<Integer> keys = statistics.keySet();
-			Cell cell = row.createCell(0);
-			cell.setCellStyle(styles.get("total"));
-			cell.setCellValue("合计");
-
-			for (Integer key : keys) {
-				cell = row.createCell(key);
-				cell.setCellStyle(styles.get("total"));
-				cell.setCellValue(DOUBLE_FORMAT.format(statistics.get(key)));
-			}
-			statistics.clear();
-		}
-	}
-
-	/**
-	 * 编码文件名
-	 */
-	public String encodingFilename(String filename) {
-		filename = UUID.randomUUID() + "_" + filename + ".xlsx";
-		return filename;
-	}
-
-	/**
-	 * 获取下载路径
-	 * 
-	 * @param filename 文件名称
-	 */
-	public String getAbsoluteFile(String filename) {
-		File desc = new File("", filename);
-		if (!desc.getParentFile().exists()) {
-			desc.getParentFile().mkdirs();
-		}
-		return desc.getAbsolutePath();
-	}
-
-	/**
-	 * 获取bean中的属性值
-	 * 
-	 * @param vo    实体对象
-	 * @param field 字段
-	 * @param excel 注解
-	 * @return 最终的属性值
-	 * @throws Exception
-	 */
-	private Object getTargetValue(T vo, Field field, Excel excel) throws Exception {
-		Object o = field.get(vo);
-		if (StringUtils.isNotEmpty(excel.targetAttr())) {
-			String target = excel.targetAttr();
-			if (target.contains(".")) {
-				String[] targets = target.split("[.]");
-				for (String name : targets) {
-					o = getValue(o, name);
-				}
-			} else {
-				o = getValue(o, target);
-			}
-		}
-		return o;
-	}
-
-	/**
-	 * 以类的属性的get方法方法形式获取值
-	 * 
-	 * @param o
-	 * @param name
-	 * @return value
-	 * @throws Exception
-	 */
-	private Object getValue(Object o, String name) throws Exception {
-		if (StringUtils.isNotNull(o) && StringUtils.isNotEmpty(name)) {
-			Class<?> clazz = o.getClass();
-			Field field = clazz.getDeclaredField(name);
-			field.setAccessible(true);
-			o = field.get(o);
-		}
-		return o;
-	}
-
-	/**
-	 * 得到所有定义字段
-	 */
-	private void createExcelField() {
-		this.fields = getFields();
-		this.fields = this.fields.stream().sorted(Comparator.comparing(objects -> ((Excel) objects[1]).sort()))
-				.collect(Collectors.toList());
-		this.maxHeight = getRowHeight();
-	}
-
-	/**
-	 * 获取字段注解信息
-	 */
-	public List<Object[]> getFields() {
-		List<Object[]> fields = new ArrayList<Object[]>();
-		List<Field> tempFields = new ArrayList<>();
-		tempFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
-		tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-		for (Field field : tempFields) {
-			// 单注解
-			if (field.isAnnotationPresent(Excel.class)) {
-				Excel attr = field.getAnnotation(Excel.class);
-				if (attr != null && (attr.type() == Type.ALL || attr.type() == type)) {
-					field.setAccessible(true);
-					fields.add(new Object[] { field, attr });
-				}
-			}
-
-			// 多注解
-			if (field.isAnnotationPresent(Excels.class)) {
-				Excels attrs = field.getAnnotation(Excels.class);
-				Excel[] excels = attrs.value();
-				for (Excel attr : excels) {
-					if (attr != null && (attr.type() == Type.ALL || attr.type() == type)) {
-						field.setAccessible(true);
-						fields.add(new Object[] { field, attr });
+				dataTimeFormat.parse(result);
+				Date tempTime = dataTimeFormat.parse(result);
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String sss = formatter.format(tempTime);
+				result = sss;
+			} catch (Exception er) {
+				DateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					dataFormat.parse(result);
+					Date tempTime = dataTimeFormat.parse(result);
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+					String sss = formatter.format(tempTime);
+					result = sss;
+				} catch (Exception de) {
+					dataFormat = new SimpleDateFormat("MM/dd/yyyy");
+					try {
+						dataFormat.parse(result);
+						Date tempTime = dataTimeFormat.parse(result);
+						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+						String sss = formatter.format(tempTime);
+						result = sss;
+					} catch (Exception der) {
 					}
 				}
 			}
 		}
-		return fields;
-	}
-
-	/**
-	 * 根据注解获取最大行高
-	 */
-	public short getRowHeight() {
-		double maxHeight = 0;
-		for (Object[] os : this.fields) {
-			Excel excel = (Excel) os[1];
-			maxHeight = Math.max(maxHeight, excel.height());
-		}
-		return (short) (maxHeight * 20);
-	}
-
-	/**
-	 * 创建一个工作簿
-	 */
-	public void createWorkbook() {
-		this.wb = new SXSSFWorkbook(500);
-		this.sheet = wb.createSheet();
-		wb.setSheetName(0, sheetName);
-		this.styles = createStyles(wb);
-	}
-
-	/**
-	 * 创建工作表
-	 * 
-	 * @param sheetNo sheet数量
-	 * @param index   序号
-	 */
-	public void createSheet(int sheetNo, int index) {
-		// 设置工作表的名称.
-		if (sheetNo > 1 && index > 0) {
-			this.sheet = wb.createSheet();
-			this.createTitle();
-			wb.setSheetName(index, sheetName + index);
-		}
-	}
-
-	/**
-	 * 获取Excel2003图片
-	 *
-	 * @param sheet    当前sheet对象
-	 * @param workbook 工作簿对象
-	 * @return Map key:图片单元格索引（1_1）String，value:图片流PictureData
-	 */
-	public static Map<String, PictureData> getSheetPictures03(HSSFSheet sheet, HSSFWorkbook workbook) {
-		Map<String, PictureData> sheetIndexPicMap = new HashMap<String, PictureData>();
-		List<HSSFPictureData> pictures = workbook.getAllPictures();
-		if (!pictures.isEmpty()) {
-			for (HSSFShape shape : sheet.getDrawingPatriarch().getChildren()) {
-				HSSFClientAnchor anchor = (HSSFClientAnchor) shape.getAnchor();
-				if (shape instanceof HSSFPicture) {
-					HSSFPicture pic = (HSSFPicture) shape;
-					int pictureIndex = pic.getPictureIndex() - 1;
-					HSSFPictureData picData = pictures.get(pictureIndex);
-					String picIndex = anchor.getRow1() + "_" + String.valueOf(anchor.getCol1());
-					sheetIndexPicMap.put(picIndex, picData);
-				}
-			}
-			return sheetIndexPicMap;
-		} else {
-			return sheetIndexPicMap;
-		}
-	}
-
-	/**
-	 * 获取Excel2007图片
-	 *
-	 * @param sheet    当前sheet对象
-	 * @param workbook 工作簿对象
-	 * @return Map key:图片单元格索引（1_1）String，value:图片流PictureData
-	 */
-	public static Map<String, PictureData> getSheetPictures07(XSSFSheet sheet, XSSFWorkbook workbook) {
-		Map<String, PictureData> sheetIndexPicMap = new HashMap<String, PictureData>();
-		for (POIXMLDocumentPart dr : sheet.getRelations()) {
-			if (dr instanceof XSSFDrawing) {
-				XSSFDrawing drawing = (XSSFDrawing) dr;
-				List<XSSFShape> shapes = drawing.getShapes();
-				for (XSSFShape shape : shapes) {
-					if (shape instanceof XSSFPicture) {
-						XSSFPicture pic = (XSSFPicture) shape;
-						XSSFClientAnchor anchor = pic.getPreferredSize();
-						CTMarker ctMarker = anchor.getFrom();
-						String picIndex = ctMarker.getRow() + "_" + ctMarker.getCol();
-						sheetIndexPicMap.put(picIndex, pic.getPictureData());
-					}
-				}
-			}
-		}
-		return sheetIndexPicMap;
-	}
-
-	/**
-	 * 格式化不同类型的日期对象
-	 * 
-	 * @param dateFormat 日期格式
-	 * @param val        被格式化的日期对象
-	 * @return 格式化后的日期字符
-	 */
-	public String parseDateToStr(String dateFormat, Object val) {
-		if (val == null) {
-			return "";
-		}
-		String str;
-		if (val instanceof Date) {
-			str = DateUtils.parseDateToStr(dateFormat, (Date) val);
-		} else if (val instanceof LocalDateTime) {
-			str = DateUtils.parseDateToStr(dateFormat, DateUtils.toDate((LocalDateTime) val));
-		} else if (val instanceof LocalDate) {
-			str = DateUtils.parseDateToStr(dateFormat, DateUtils.toDate((LocalDate) val));
-		} else {
-			str = val.toString();
-		}
-		return str;
+		return result;
 	}
 }

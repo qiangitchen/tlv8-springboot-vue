@@ -69,6 +69,9 @@
 	<delete id="deleteDataBySessionID" parameterType="java.lang.String">
 		delete from SA_Onlineinfo where ssessionid = #{sessionid,jdbcType=VARCHAR}
 	</delete>
+	<delete id="deleteDataByMachineCode" parameterType="java.lang.String">
+		delete from SA_Onlineinfo where SMACHINECODE = #{machineCode,jdbcType=VARCHAR} or SLOGINIP ='127.0.0.1' or SLOGINIP ='localhost'
+	</delete>
 	<select id="getCount" resultType="java.lang.Long">
 		select count(*) CON from SA_ONLINEINFO
 	</select>

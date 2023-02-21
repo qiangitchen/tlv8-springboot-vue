@@ -1,9 +1,10 @@
 package com.tlv8.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
 
 /**
  * 字符数组操作 类似JS数组
@@ -118,13 +119,13 @@ public class StringArray {
 	 * 转换为JSON字符
 	 */
 	public String toJson() {
-		return new JSONArray(list).toString();
+		return JSONArray.toJSONString(list);
 	}
 
 	/**
 	 * 转换为JSON对象
 	 */
 	public JSONArray toJSON() {
-		return new JSONArray(list);
+		return JSONArray.parseArray(JSONArray.toJSONString(list));
 	}
 }

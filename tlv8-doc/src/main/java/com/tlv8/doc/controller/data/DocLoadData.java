@@ -12,10 +12,10 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.doc.controller.impl.DoupDoc;
@@ -81,7 +81,7 @@ public class DocLoadData {
 					SCACHENAME = "";
 				}
 				jon.put("SCACHENAME", SCACHENAME);
-				json.put(jon);
+				json.add(jon);
 			}
 			stm = conn.createStatement();
 			rs1 = stm.executeQuery("select SHOST,SPORT from SA_DOCNAMESPACE");
@@ -103,9 +103,9 @@ public class DocLoadData {
 	}
 
 	private void downloadFile(String svrurl, JSONArray data) throws Exception {
-		System.out.println("开始下载文件，文件数量:" + data.length());
+		System.out.println("开始下载文件，文件数量:" + data.size());
 		LuceneService.stop();// 先停止自动创建索引服务
-		for (int i = 0; i < data.length(); i++) {
+		for (int i = 0; i < data.size(); i++) {
 			JSONObject json = data.getJSONObject(i);
 			if (!"".equals(json.getString("SFILEID"))) {
 				downloadFile(svrurl, json);
@@ -115,7 +115,7 @@ public class DocLoadData {
 				downloadFile(svrurl, json);
 			}
 		}
-		System.out.println("下载完成，文件数量:" + data.length());
+		System.out.println("下载完成，文件数量:" + data.size());
 		LuceneService.start();// 启动自动创建索引服务
 	}
 

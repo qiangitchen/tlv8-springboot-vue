@@ -3,10 +3,10 @@ package com.tlv8.system.help;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.tlv8.system.help.enums.MsgStatus;
 import com.tlv8.system.help.enums.RenderStatus;
@@ -31,7 +31,7 @@ public class UserResponse {
 				json.put("text", text);
 			if ((data != null) && (data != ""))
 				json.put("data", data);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			logger.debug(e);
 		}
 		return json;
@@ -41,7 +41,7 @@ public class UserResponse {
 		Iterator list = jsonList.iterator();
 		JSONArray array = new JSONArray();
 		while (list.hasNext()) {
-			array.put(list.next());
+			array.add(list.next());
 		}
 		return array;
 	}

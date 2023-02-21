@@ -1,10 +1,11 @@
 package com.tlv8.common.mac.utils;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Map;
-import org.json.JSONObject;
 
 public class CryptUtils
 {

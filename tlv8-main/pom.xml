@@ -17,6 +17,13 @@
 
 
 	<dependencies>
+		<!-- 热部署 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- spring-boot-devtools -->
 		<dependency>
@@ -29,6 +36,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!--spring boot - webSocket-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
 		<!-- Mysql驱动包 -->
@@ -59,6 +72,12 @@
 		<dependency>
 			<groupId>com.tlv8</groupId>
 			<artifactId>tlv8-doc</artifactId>
+		</dependency>
+
+		<!-- 报表模块 -->
+		<dependency>
+			<groupId>com.tlv8</groupId>
+			<artifactId>tlv8-ureport</artifactId>
 		</dependency>
 
 		<!-- 服务器监控 -->

@@ -12,11 +12,12 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.core.io.atr.DocQueryParam;
@@ -67,12 +68,12 @@ public class FileQueryHandler extends AbstractRequestHandler {
 						.searchByParam(sparam);
 				List<JSONObject> rlist = new ArrayList<JSONObject>();
 				for (FileAttribute fileatt : searchResult) {
-					rlist.add(new JSONObject(fileatt));
+					rlist.add(JSONObject.parseObject(JSON.toJSONString(fileatt)));
 				}
 				try {
 					PrintWriter localPrintWriter = paramHttpServletResponse
 							.getWriter();
-					localPrintWriter.write(new JSONArray(rlist).toString());
+					localPrintWriter.write(JSONArray.toJSONString(rlist));
 					localPrintWriter.close();
 				} catch (Exception e) {
 				}

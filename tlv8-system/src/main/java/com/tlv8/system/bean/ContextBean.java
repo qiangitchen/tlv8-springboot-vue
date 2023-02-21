@@ -7,9 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.help.Configuration;
 import com.tlv8.system.help.OnlineHelper;
@@ -585,7 +583,7 @@ public class ContextBean {
 		this.ip = ip;
 	}
 
-	public String toJSONString() throws JSONException {
+	public String toJSONString() throws Exception {
 		JSONObject json = new JSONObject();
 		json.put("username", this.username);
 		json.put("personID", this.personID);
@@ -649,7 +647,7 @@ public class ContextBean {
 		return json.toString();
 	}
 
-	public Map toMap() throws JSONException {
+	public Map toMap() throws Exception {
 		Map json = new HashMap();
 		json.put("username", this.username);
 		json.put("personID", this.personID);

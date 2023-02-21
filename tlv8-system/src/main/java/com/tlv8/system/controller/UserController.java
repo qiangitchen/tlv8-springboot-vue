@@ -11,13 +11,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -358,13 +357,13 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/check")
-	public void check() throws JSONException {
+	public void check() throws Exception {
 		renderData(getContext().isLogin(), getContext().toJSONString());
 	}
 
 	@ResponseBody
 	@RequestMapping("/getAgents")
-	public void getAgents() throws IOException, DocumentException, JSONException {
+	public void getAgents() throws IOException, DocumentException, Exception {
 		JSONObject json = new JSONObject();
 		renderData(Boolean.valueOf(true), json.toString());
 	}
@@ -480,7 +479,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/getOnlineUserInfo")
-	public Object getOnlineUserInfo() throws JSONException {
+	public Object getOnlineUserInfo() throws Exception {
 		Map m = OnlineHelper.getOnlineUserMap();
 		Iterator it = m.keySet().iterator();
 		List jsonList = new ArrayList();
@@ -511,14 +510,14 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/getOnceFunc")
-	public void getOnceFunc() throws JSONException {
+	public void getOnceFunc() throws Exception {
 		Boolean b = getContext().isLogin();
 		String s = "";
 		if (b.booleanValue()) {
 			String onceFunc = getContext().getOnceFunc();
 			if ((onceFunc != null) && (!onceFunc.equals(""))) {
-				JSONObject jsonOnceFunc = new JSONObject(onceFunc);
-				if (jsonOnceFunc.has("url")) {
+				JSONObject jsonOnceFunc = JSONObject.parseObject(onceFunc);
+				if (jsonOnceFunc.containsKey("url")) {
 					JSONObject json = new JSONObject();
 
 					json.put("onceFunc", jsonOnceFunc.toString());

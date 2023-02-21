@@ -36,6 +36,10 @@ public final class OnlineHelper implements HttpSessionListener {
 	@Autowired
 	ISaOnlineinfoService onlineinfosvr;
 
+	public OnlineHelper(ISaOnlineinfoService onlineinfosvr){
+		this.onlineinfosvr = onlineinfosvr;
+	}
+
 	public void sessionCreated(HttpSessionEvent se) {
 		Sys.printMsg("session创建：" + new java.util.Date());
 	}

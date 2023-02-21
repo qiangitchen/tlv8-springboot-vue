@@ -1,12 +1,5 @@
 package com.tlv8.doc.controller.handlers;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.controller.utils.ExcelToPDFUtils;
 import com.tlv8.doc.controller.utils.MimeUtils;
@@ -17,6 +10,13 @@ import com.tlv8.doc.generator.pojo.DocDocPath;
 import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 以pdf格式查看文件
