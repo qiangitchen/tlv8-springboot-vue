@@ -44,6 +44,7 @@ if (process.env.vis) {
 export default defineConfig({
   plugins,
   server: {
+    host: '0.0.0.0',
     port: 80
   },
   resolve: {

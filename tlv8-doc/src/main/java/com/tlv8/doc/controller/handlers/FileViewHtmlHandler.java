@@ -92,7 +92,7 @@ public class FileViewHtmlHandler extends AbstractRequestHandler {
 			if (istr) {
 				ByteArrayOutputStream tout = new ByteArrayOutputStream();
 				String fileurl = "htmlcache/" + fileID + "/" + fileID + ".html";
-				String temppath = paramHttpServletRequest.getRealPath(fileurl);
+				String temppath = paramHttpServletRequest.getServletContext().getRealPath(fileurl);
 				if (".xls".equals(extnm) || ".xlsx".equals(extnm)) {
 					ExcelToPDFUtils.excel2pdf(inputStream, tout);
 					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), temppath);

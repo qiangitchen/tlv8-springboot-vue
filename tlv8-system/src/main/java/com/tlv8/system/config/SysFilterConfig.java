@@ -18,7 +18,7 @@ public class SysFilterConfig {
 	public FilterRegistrationBean systemFilterRegistration() {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
 		registration.setFilter(new JurisdictionFilter());
-		registration.addUrlPatterns("/system/*");
+		registration.addUrlPatterns("/*");
 		registration.setName("systemFilter");
 		registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
 		return registration;

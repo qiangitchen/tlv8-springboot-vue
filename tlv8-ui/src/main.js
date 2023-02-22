@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import {createApp} from "vue";
 import App from "./App.vue";
 import Router from "./route";
 import Store from "./store/index.js";
@@ -11,7 +11,6 @@ import * as antIcons from '@ant-design/icons-vue';
 import "./mock";
 import "./assets/css/index.less";
 import "ant-design-vue/dist/antd.less";
-
 
 const app = createApp(App);
 app.use(Antd);

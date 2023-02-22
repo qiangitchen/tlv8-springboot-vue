@@ -1,5 +1,6 @@
 package com.tlv8.system.config;
 
+import com.tlv8.system.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,34 +11,34 @@ import com.tlv8.system.action.WriteLoginLog;
 
 /**
  * 配置动态类
- * 
- * @author chenqian
  *
+ * @author chenqian
  */
 @Configuration
 public class BeanConfig {
 
-	@Bean
-	public Login initLogin() {
-		Login login = new Login();
-		return login;
-	}
+    @Bean
+    public Login initLogin() {
+        return new Login();
+    }
 
-	@Bean
-	public GetSysParams initGetSysParams() {
-		GetSysParams sysparams = new GetSysParams();
-		return sysparams;
-	}
+    @Bean
+    public GetSysParams initGetSysParams() {
+        return new GetSysParams();
+    }
 
-	@Bean
-	public SAPerson initSAPerson() {
-		SAPerson bean = new SAPerson();
-		return bean;
-	}
+    @Bean
+    public SAPerson initSAPerson() {
+        return new SAPerson();
+    }
 
-	@Bean
-	public WriteLoginLog initWriteLoginLog() {
-		WriteLoginLog bean = new WriteLoginLog();
-		return bean;
-	}
+    @Bean
+    public WriteLoginLog initWriteLoginLog() {
+        return new WriteLoginLog();
+    }
+
+    @Bean
+    public TokenService initTokenService() {
+        return new TokenService();
+    }
 }

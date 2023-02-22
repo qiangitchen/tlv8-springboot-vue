@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tlv8.common.constant.CacheConstants;
+import com.tlv8.common.redis.RedisCache;
+import com.tlv8.system.service.TokenService;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.dom4j.Document;
@@ -61,6 +64,12 @@ public class UserController extends BaseController {
 	@Autowired
 	private SAPerson saPerson;
 
+	@Autowired
+	private TokenService tokenService;
+
+	@Autowired
+	private RedisCache redisCache;
+
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public void login(@RequestBody Map<String, String> rqparams) throws DocumentException, IOException {
@@ -77,6 +86,7 @@ public class UserController extends BaseController {
 		String ip = rqparams.get("ip");
 
 		String msg = "";
+		String token = "";
 
 		boolean isAgent = ((agent != null) && (!agent.equals("")));
 		boolean isNTLogin = ((mode != null) && (mode.equals("nt")));
@@ -130,6 +140,7 @@ public class UserController extends BaseController {
 			getContext().setLoginDate(loginDate);
 			getContext().setIp(ip);
 			OnlineHelper.refresh(this.request, this.response);
+			token = tokenService.createToken(getContext());
 			success = true;
 			writeLoginLog.write(getContext().getCurrentUserID(), username, getRemoteAddr(this.request), password,
 					this.request);
@@ -146,7 +157,7 @@ public class UserController extends BaseController {
 			getContext().initLogoutContext(this.request);
 		}
 		System.out.println("sessionid:" + getContext().getSessionID());
-		renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\"}");
+		renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\",\"token\":\""+token+"\"}");
 	}
 
 	@ResponseBody
@@ -158,7 +169,7 @@ public class UserController extends BaseController {
 		String password = rqparams.get("password");
 		String loginDate = rqparams.get("loginDate");
 		String language = rqparams.get("language");
-
+		String uuid = rqparams.get("uuid");
 		String captcha = rqparams.get("captcha");
 		String agent = rqparams.get("agent");
 		String onceFunc = rqparams.get("onceFunc");
@@ -168,6 +179,7 @@ public class UserController extends BaseController {
 		// String title = "jpolite.res.system.UserController.login.0";
 		String msg = "";
 		String hxname = "";
+		String token = "";
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date()) + " " + username + ":登录系统");
 		boolean isAgent = ((agent != null) && (!agent.equals("")));
 		boolean isNTLogin = ((mode != null) && (mode.equals("nt")));
@@ -178,17 +190,18 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + uuid;
 		if (!"no_captcha".equals(captcha) && captcha != null) {
 			if (captcha == "") {
 				msg = "请输入验证码!";
-				res.put("state", false);
-				res.put("msg", r(msg));
+				res.put("code", HttpStatus.ERROR);
+				res.put("message", r(msg));
 				return res;
 			}
-			if (!captcha.equals(SessionHelper.getAttrString(this.request, "SESSION_SECURITY_CODE"))) {
+			if (!captcha.equals(redisCache.getCacheObject(verifyKey))) {
 				msg = "验证码错误！";
-				res.put("state", false);
-				res.put("msg", r(msg));
+				res.put("code", HttpStatus.ERROR);
+				res.put("message", r(msg));
 				return res;
 			}
 		}
@@ -219,6 +232,7 @@ public class UserController extends BaseController {
 			getContext().setLoginDate(loginDate);
 			getContext().setIp(ip);
 			OnlineHelper.refresh(this.request, this.response);
+			token = tokenService.createToken(getContext());
 			success = true;
 			String signm = p("signm");
 			if ((signm != null) && (!"".equals(signm)))
@@ -239,7 +253,7 @@ public class UserController extends BaseController {
 		res.put("mobilestatus", mobilestatus);
 		res.put("hxname", hxname);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("token", getContext().getSessionID());
+		result.put("token", token);
 		res.put("result", result);
 		return res;
 	}
@@ -251,6 +265,7 @@ public class UserController extends BaseController {
 		String serverURL = Configuration.getUIServerURL(null);
 		getContext().setUIServerURL(serverURL);
 		String msg = "";
+		String token = "";
 		clearHttpClient();
 		String signm = p("signm");
 		boolean success = false;
@@ -266,6 +281,7 @@ public class UserController extends BaseController {
 			getContext().setLoginDate(p("loginDate"));
 			getContext().setIp(getRemoteAddr(this.request));
 			OnlineHelper.refresh(this.request, this.response);
+			token = tokenService.createToken(getContext());
 			success = true;
 			writeLoginLog.write(getContext().getCurrentUserID(), (String) params.get("username"),
 					getRemoteAddr(this.request), "", this.request);
@@ -279,7 +295,7 @@ public class UserController extends BaseController {
 			getContext().initLogoutContext(this.request);
 		}
 		System.out.println("sessionid:" + getContext().getSessionID());
-		renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\"}");
+		renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\",\"token\":\""+token+"\"}");
 	}
 
 	@ResponseBody
@@ -331,6 +347,7 @@ public class UserController extends BaseController {
 				System.out.println(e.getMessage());
 			}
 		}
+		tokenService.deleteContextBean(getContext().getToken());
 		getContext().initLogoutContext(this.request);
 		renderData(Boolean.valueOf(true));
 	}
@@ -351,6 +368,7 @@ public class UserController extends BaseController {
 				System.out.println(e.getMessage());
 			}
 		}
+		tokenService.deleteContextBean(getContext().getToken());
 		getContext().initLogoutContext(this.request);
 		renderData(Boolean.valueOf(true));
 	}

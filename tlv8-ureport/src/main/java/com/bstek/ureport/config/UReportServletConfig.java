@@ -1,4 +1,4 @@
-package com.tlv8.config;
+package com.bstek.ureport.config;
 
 import com.bstek.ureport.console.UReportServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class ServletConfig {
+public class UReportServletConfig {
 
 	@Bean
 	public ServletRegistrationBean webServletRegistrationBean() {

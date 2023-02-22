@@ -24,6 +24,11 @@
 	</repositories>
 
 	<dependencies>
+		<!-- servlet包 -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>e-iceblue</groupId>

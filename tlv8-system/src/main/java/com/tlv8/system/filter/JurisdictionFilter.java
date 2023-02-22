@@ -16,34 +16,40 @@ import com.tlv8.system.help.SessionHelper;
 
 public class JurisdictionFilter implements Filter {
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse res = (HttpServletResponse) response;
-		String patex = req.getRequestURI();
-		if (!isLoginPage(patex)) {
-			// 页面访问登录控制
-			ContextBean context = SessionHelper.getContext(req);
-			// 判断是否已登录
-			if (context.isLogin()) {
-				chain.doFilter(request, response);
-			} else {
-				res.setStatus(HttpStatus.UNAUTHORIZED);
-			}
-		} else {
-			chain.doFilter(request, response);
-		}
-	}
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        String patex = req.getRequestURI();
+        System.out.println(patex);
+        if (!isLoginPage(patex) && !isIgnore(patex)) {
+            // 页面访问登录控制
+            ContextBean context = SessionHelper.getContext(req);
+            // 判断是否已登录
+            if (context.isLogin()) {
+                chain.doFilter(request, response);
+            } else {
+                res.setStatus(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            chain.doFilter(request, response);
+        }
+    }
 
-	/**
-	 * 判断是否为登录-检查登录
-	 */
-	private boolean isLoginPage(String patex) {
-		boolean isre = patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
-				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
-				|| patex.contains("/logout") || patex.contains("/MD5logout");
-		return isre;
-	}
+    /**
+     * 判断是否为登录-检查登录
+     */
+    private boolean isLoginPage(String patex) {
+        boolean isre = patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
+                || patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
+                || patex.contains("/logout") || patex.contains("/MD5logout");
+        return isre;
+    }
+
+    private boolean isIgnore(String patex) {
+        boolean isre = patex.contains("/favicon.ico");
+        return isre;
+    }
 
 }

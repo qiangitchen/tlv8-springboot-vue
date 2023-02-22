@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useStore } from "vuex";
-import { notification, message as Msg } from "ant-design-vue";
+import {useStore} from "vuex";
+import {notification, message as Msg} from "ant-design-vue";
 import store from "../store";
+
 class Http {
 
   constructor(config) {
@@ -24,10 +25,11 @@ class Http {
         const token = localStorage.getItem("USER_TOKEN");
         if (token) {
           config.headers["Access-Token"] = token;
+          config.headers["Authorization"] = token; //携带自定义token
         }
         // 请求时缓存该请求，路由跳转时取消, 如果timeout值过大，可能在上一个次请求还没完成时，切换了页面。
         config.cancelToken = new axios.CancelToken(async cancel => {
-          await store.dispatch("app/execCancelToken", { cancelToken: cancel });
+          await store.dispatch("app/execCancelToken", {cancelToken: cancel});
         });
         return config;
       },
@@ -38,6 +40,16 @@ class Http {
     /** 响应拦截 */
     instance.interceptors.response.use(
       response => {
+        // 未设置状态码则默认成功状态
+        const code = response.data.code || 200;
+        const msg = response.data.message
+        if (response.request.responseType === 'blob' || response.request.responseType === 'arraybuffer') {
+          return response.data
+        }
+        if (code != 200) {
+          Msg.error(msg);
+          return Promise.reject(new Error(msg));
+        }
         return response.data;
       },
       error => {
@@ -58,7 +70,7 @@ class Http {
             });
           }
         } else {
-          let { message } = error;
+          let {message} = error;
           if (message === "Network Error") {
             message = "连接异常";
           }

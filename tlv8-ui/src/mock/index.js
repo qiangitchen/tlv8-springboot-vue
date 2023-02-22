@@ -3,12 +3,12 @@ import {generatorResponse, generatorToken, getRequestBody, getRolePermission} fr
 import menuList from './service/menuList.json'
 import menuTree from './service/menuTree.json'
 
-const useMock = true
+const useMock = false
 
 if (useMock) {
-  
+
   /**
-   * 登录接口 
+   * 登录接口
    */
   const login = request => {
     const { username, password } = getRequestBody(request)
@@ -31,7 +31,7 @@ if (useMock) {
       return generatorResponse(null, '账号或密码错误', 500)
     }
   }
-  
+
   /**
    * 菜单接口
    */
@@ -41,9 +41,9 @@ if (useMock) {
     const menus = userName === 'system' ? menuList : menuList.filter(m => (!filters.includes(m.name) && !filters.includes(m.parent)))
     return generatorResponse(menus)
   }
-  
+
   /**
-   * 菜单接口 
+   * 菜单接口
    */
   const getUserMenusTree = request => {
     const filters = ['list', 'form']
@@ -51,16 +51,16 @@ if (useMock) {
     const menus = userName === 'system' ? menuTree : menuTree.filter(m => !filters.includes(m.name))
     return generatorResponse(menus)
   }
-  
+
   /**
-   * 注销接口 
+   * 注销接口
    */
   const logout = request => {
     return generatorResponse({
       status: 0
     })
   }
-  
+
   Mock.mock(/\/api\/login/, 'post', login)
   Mock.mock(/\/api\/logout/, 'post', logout)
   Mock.mock(/\/api\/getUserMenusArray/, 'post', getUserMenusArray)

@@ -22,6 +22,7 @@
         <druid.version>1.2.8</druid.version>
         <swagger.version>3.0.0</swagger.version>
         <mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
+        <servlet.version>4.0.1</servlet.version>
         <commons.io.version>2.11.0</commons.io.version>
         <commons.fileupload.version>1.4</commons.fileupload.version>
         <commons.collections.version>3.2.2</commons.collections.version>
@@ -55,14 +56,6 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
-            <!-- 热部署 -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-devtools</artifactId>
-                <version>${spring.boot.version}</version>
-                <optional>true</optional>
-                <scope>provided</scope>
-            </dependency>
 
             <!-- SpringBoot的依赖配置 -->
             <dependency>
@@ -78,6 +71,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-websocket</artifactId>
                 <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <!-- 阿里数据库连接池 -->
@@ -112,6 +112,13 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
+            </dependency>
+
+            <!-- servlet包 -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet.version}</version>
             </dependency>
 
             <!-- httpclinet -->
