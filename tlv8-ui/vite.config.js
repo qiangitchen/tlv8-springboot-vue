@@ -1,4 +1,4 @@
-import { resolve } from 'path/posix';
+import { resolve } from "path/posix";
 import { defineConfig } from 'vite';
 import vue from "@vitejs/plugin-vue";
 import visualizer from "rollup-plugin-visualizer";
@@ -12,22 +12,22 @@ themePreprocessorPlugin({
     multipleScopeVars: [
       {
         scopeName: "theme-blue",
-        path: path.resolve("src/assets/theme/blue.less"),
+        path: path.resolve("src/assets/theme/blue.less")
       },{
         scopeName: "theme-green",
-        path: path.resolve("src/assets/theme/green.less"),
+        path: path.resolve("src/assets/theme/green.less")
       }, {
         scopeName: "theme-yellow",
-        path: path.resolve("src/assets/theme/yellow.less"),
+        path: path.resolve("src/assets/theme/yellow.less")
       }, {
         scopeName: "theme-red",
-        path: path.resolve("src/assets/theme/red.less"),
+        path: path.resolve("src/assets/theme/red.less")
       }, {
         scopeName: "theme-purple",
-        path: path.resolve("src/assets/theme/purple.less"),
+        path: path.resolve("src/assets/theme/purple.less")
       }
-    ],
-  },
+    ]
+  }
 })
 ];
 
@@ -36,7 +36,7 @@ if (process.env.vis) {
     visualizer({
       open: true,
       gzipSize: true,
-      brotliSize: true,
+      brotliSize: true
     })
   );
 }

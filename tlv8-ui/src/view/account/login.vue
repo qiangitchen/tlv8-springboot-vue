@@ -97,7 +97,7 @@ export default {
       formState,
       onSubmit,
       formRef,
-      load,
+      load
     };
   },
   created() {

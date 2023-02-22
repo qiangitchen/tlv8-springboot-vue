@@ -138,7 +138,7 @@ const dataItem = {
   age: 32,
   createTime: "2020-02-09 00:00:00",
   address: "Sidney No. 1 Lake Park Sidney No. 1 ",
-  tags: ["cool", "teacher"],
+  tags: ["cool", "teacher"]
 };
 
 export default {
@@ -161,13 +161,13 @@ export default {
         label: "新增",
         event: function (keys) {
           alert("新增操作:" + JSON.stringify(keys));
-        },
+        }
       },
       {
         label: "删除",
         event: function (keys) {
           alert("批量删除:" + JSON.stringify(keys));
-        },
+        }
       },
       {
         label: "更多操作",
@@ -176,16 +176,16 @@ export default {
             label: "批量导入",
             event(keys) {
               alert("批量导入");
-            },
+            }
           },
           {
             label: "批量导出",
             event(keys) {
               alert("批量导出");
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     ];
 
     /// 字段
@@ -194,11 +194,11 @@ export default {
         title: "姓名",
         dataIndex: "name",
         key: "name",
-        slots: {customRender: "name"},
+        slots: {customRender: "name"}
       },
       {title: "性别", dataIndex: "sex", key: "sex"},
       {title: "年龄", dataIndex: "age", key: "age"},
-      {title: "地址", dataIndex: "address", key: "address"},
+      {title: "地址", dataIndex: "address", key: "address"}
     ];
 
     /// 行操作
@@ -207,19 +207,19 @@ export default {
         label: "查看",
         event: function (record) {
           alert("查看详情:" + JSON.stringify(record));
-        },
+        }
       },
       {
         label: "修改",
         event: function (record) {
           alert("修改事件:" + JSON.stringify(record));
-        },
+        }
       },
       {
         label: "删除",
         event: function (record) {
           alert("删除事件:" + JSON.stringify(record));
-        },
+        }
       },
       {
         label: "更多",
@@ -234,10 +234,10 @@ export default {
             label: "下载",
             event: function (record) {
               alert("下载");
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     ];
 
     /// 表单
@@ -264,7 +264,7 @@ export default {
   },
   components: {
     DownOutlined,
-    UpOutlined,
+    UpOutlined
   }
 };
 </script>

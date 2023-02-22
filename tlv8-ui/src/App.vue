@@ -19,7 +19,7 @@ export default defineComponent({
       return  getLocaleMessage(store.getters.language).antLocal
     });
     toggleTheme({
-      scopeName: color.value.scopeName,
+      scopeName: color.value.scopeName
     });
     return {
       antdLocal
