@@ -1,6 +1,6 @@
-import {menuList, menuTree, login, logout} from "@/api/module/user";
-import { createRouteByList, createRouteByTree} from "@/route/permission";
-import { message } from "ant-design-vue";
+import {menuList, menuTree, login, logout} from "@/api/module/user"
+import {createRouteByList, createRouteByTree} from "@/route/permission"
+import {message} from "ant-design-vue"
 
 const state = {
   token: localStorage.getItem("USER_TOKEN") != null ? localStorage.getItem("USER_TOKEN") : "",
@@ -44,7 +44,7 @@ const actions = {
   },
   async logout({commit}) {
     await logout()
-    message.success("注销成功", 0.5).then(function(){
+    message.success("注销成功", 0.5).then(function () {
       commit('SET_USER_TOKEN');
       commit('SET_USER_MENU');
       window.location.reload();
@@ -52,30 +52,31 @@ const actions = {
     return Promise.resolve();
   },
   async login({commit}, data) {
-    try {
-      const response = await login(data)
-      const {code, message, result: userInfo} = response
-      if (code === 200) {
-        const { token } = userInfo
-        delete userInfo.menuList
-        delete userInfo.token
-        commit('SET_USER_TOKEN', token)
-        commit('SET_USER_INFO', userInfo)
-        return Promise.resolve()
-      } else {
-        return Promise.reject(message)
-      }
-    } catch (e) {
-      console.log(e)
+    const response = await login(data)
+    const {code, message, result: userInfo} = response
+    if (code === 200) {
+      const {token} = userInfo
+      delete userInfo.menuList
+      delete userInfo.token
+      delete userInfo.password
+      console.log(userInfo);
+      commit('SET_USER_TOKEN', token)
+      commit('SET_USER_INFO', userInfo)
+      return Promise.resolve()
+    } else {
+      commit('SET_USER_TOKEN');
+      commit('SET_USER_MENU');
+      return Promise.reject(message)
     }
   },
-  async addUserRouteForArray ({ state: { userRoutes }, commit }) {
-    const { result: data } = await menuList()
+  async addUserRouteForArray({state: {userRoutes}, commit}) {
+    const {result: data} = await menuList()
+    console.log(data)
     const dynamicRoutes = createRouteByList(data)
     commit('SET_USER_MENU', dynamicRoutes)
   },
-  async addUserRouteForTree ({ state: { userRoutes }, commit }) {
-    const { result: data } = await menuTree()
+  async addUserRouteForTree({state: {userRoutes}, commit}) {
+    const {result: data} = await menuTree()
     const dynamicRoutes = createRouteByTree(data)
     commit('SET_USER_MENU', dynamicRoutes)
   }

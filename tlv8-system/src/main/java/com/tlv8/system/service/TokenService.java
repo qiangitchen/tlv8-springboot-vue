@@ -1,5 +1,6 @@
 package com.tlv8.system.service;
 
+import com.alibaba.fastjson.JSON;
 import com.tlv8.common.constant.CacheConstants;
 import com.tlv8.common.constant.Constants;
 import com.tlv8.common.redis.RedisCache;
@@ -159,7 +160,7 @@ public class TokenService {
                 token = token.replace(Constants.TOKEN_PREFIX, "");
             }
             return token;
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         return null;
     }

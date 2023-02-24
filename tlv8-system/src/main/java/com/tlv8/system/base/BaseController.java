@@ -11,6 +11,8 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tlv8.common.redis.RedisCache;
+import com.tlv8.system.service.TokenService;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -39,265 +41,274 @@ import com.tlv8.system.help.enums.RenderStatus;
  * @category 2011-2-12
  */
 public class BaseController {
-	@Autowired
-	protected HttpServletRequest request;
-	@Autowired
-	protected HttpServletResponse response;
-	@Autowired
-	private GetSysParams sysParams;
+    @Autowired
+    protected HttpServletRequest request;
+    @Autowired
+    protected HttpServletResponse response;
+    @Autowired
+    private GetSysParams sysParams;
 
-	private UserResponse uesrResponse;
+    @Autowired
+    protected TokenService tokenService;
 
-	private ContextBean contextbean;
+    @Autowired
+    protected RedisCache redisCache;
 
-	protected void renderData() {
-		if (this.uesrResponse == null) {
-			this.uesrResponse = new UserResponse(request);
-		}
-		try {
-			ResponseProcessor.renderText(this.response, this.uesrResponse.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			this.uesrResponse.reset();
-		}
-	}
+    private UserResponse uesrResponse;
 
-	private void renderData(RenderStatus status, String data) {
-		if (this.uesrResponse == null) {
-			this.uesrResponse = new UserResponse(request);
-		}
-		this.uesrResponse.put(status, data);
-		renderData();
-	}
+    private ContextBean contextbean;
 
-	protected void renderData(Boolean success, String data) {
-		renderData(success.booleanValue() ? RenderStatus.SUCCESS : RenderStatus.FAILURE, data);
-	}
+    protected void renderData() {
+        if (this.uesrResponse == null) {
+            this.uesrResponse = new UserResponse(request);
+        }
+        try {
+            ResponseProcessor.renderText(this.response, this.uesrResponse.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.uesrResponse.reset();
+        }
+    }
 
-	protected void renderData(Boolean success) {
-		renderData(success, null);
-	}
+    private void renderData(RenderStatus status, String data) {
+        if (this.uesrResponse == null) {
+            this.uesrResponse = new UserResponse(request);
+        }
+        this.uesrResponse.put(status, data);
+        renderData();
+    }
 
-	protected void renderData(String data) {
-		renderData(Boolean.valueOf(true), data);
-	}
+    protected void renderData(Boolean success, String data) {
+        renderData(success.booleanValue() ? RenderStatus.SUCCESS : RenderStatus.FAILURE, data);
+    }
 
-	protected void prepareMsg(MsgStatus status, String code, String title, String text) {
-		if (this.uesrResponse == null) {
-			this.uesrResponse = new UserResponse(request);
-		}
-		this.uesrResponse.put(status, code, title, text);
-	}
+    protected void renderData(Boolean success) {
+        renderData(success, null);
+    }
 
-	protected void prepareMsg(MsgStatus status, String code, String title, String text, Object[] params) {
-		if (this.uesrResponse == null) {
-			this.uesrResponse = new UserResponse(request);
-		}
-		this.uesrResponse.put(status, code, title, text, params);
-	}
+    protected void renderData(String data) {
+        renderData(Boolean.valueOf(true), data);
+    }
 
-	public void setDependency(HttpServletRequest request, HttpServletResponse response) {
-		this.request = request;
-		this.response = response;
-		this.uesrResponse = new UserResponse(this.request);
-	}
+    protected void prepareMsg(MsgStatus status, String code, String title, String text) {
+        if (this.uesrResponse == null) {
+            this.uesrResponse = new UserResponse(request);
+        }
+        this.uesrResponse.put(status, code, title, text);
+    }
 
-	private void initRequest() {
-		if (this.request == null) {
-			request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
-		}
-	}
+    protected void prepareMsg(MsgStatus status, String code, String title, String text, Object[] params) {
+        if (this.uesrResponse == null) {
+            this.uesrResponse = new UserResponse(request);
+        }
+        this.uesrResponse.put(status, code, title, text, params);
+    }
 
-	public String p(String name) {
-		initRequest();
-		return this.request.getParameter(name);
-	}
+    public void setDependency(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
+        this.uesrResponse = new UserResponse(this.request);
+    }
 
-	public Object a(String name) {
-		initRequest();
-		return this.request.getAttribute(name);
-	}
+    private void initRequest() {
+        if (this.request == null) {
+            request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+        }
+    }
 
-	public String r(String key) {
-		initRequest();
-		return MessageResource.getMessage(SessionHelper.getLocale(this.request), key);
-	}
+    public String p(String name) {
+        initRequest();
+        return this.request.getParameter(name);
+    }
 
-	public String r(String key, Object[] params) {
-		initRequest();
-		return MessageResource.getMessage(SessionHelper.getLocale(this.request), key, params);
-	}
+    public Object a(String name) {
+        initRequest();
+        return this.request.getAttribute(name);
+    }
 
-	public String r(String key, Iterable<Object> params) {
-		initRequest();
-		return MessageResource.getMessage(SessionHelper.getLocale(this.request), key, params);
-	}
+    public String r(String key) {
+        initRequest();
+        return MessageResource.getMessage(SessionHelper.getLocale(this.request), key);
+    }
 
-	public void setContext(ContextBean contextbean) {
-		this.contextbean = contextbean;
-	}
+    public String r(String key, Object[] params) {
+        initRequest();
+        return MessageResource.getMessage(SessionHelper.getLocale(this.request), key, params);
+    }
 
-	public ContextBean getContext() {
-		String sessionid = p("seesionid");
-		if (this.contextbean == null) {
-			this.contextbean = ContextBean.getContext(request);
-		}
-		if (this.contextbean.getCurrentPersonID() == null) {
-			if (sessionid != null && !sessionid.equals("") && !sessionid.equals("undefined")) {
-				this.contextbean = this.getContext(sessionid);
-			}
-		}
-		return this.contextbean;
-	}
+    public String r(String key, Iterable<Object> params) {
+        initRequest();
+        return MessageResource.getMessage(SessionHelper.getLocale(this.request), key, params);
+    }
 
-	public ContextBean getContext(String sessionid) {
-		return OnlineHelper.getOnlineUserMap(sessionid);
-	}
+    public void setContext(ContextBean contextbean) {
+        this.contextbean = contextbean;
+    }
 
-	/**
-	 * 
-	 * */
-	private HttpBean http = new HttpBean();
+    public ContextBean getContext() {
+        String sessionid = p("seesionid");
+        if (this.contextbean == null) {
+            this.contextbean = tokenService.getContextBean(request);
+        }
+        if (this.contextbean ==null || this.contextbean.getCurrentPersonID() == null) {
+            if (sessionid != null && !sessionid.equals("") && !sessionid.equals("undefined")) {
+                this.contextbean = this.getContext(sessionid);
+            }
+        }
+        if (this.contextbean == null) {
+            this.contextbean = new ContextBean();
+        }
+        return this.contextbean;
+    }
 
-	public void setHttp(HttpBean http) {
-		this.http = http;
-	}
+    public ContextBean getContext(String sessionid) {
+        return OnlineHelper.getOnlineUserMap(sessionid);
+    }
 
-	public int executeMethod(String key, HttpMethod method) throws IOException {
-		HttpClient client = this.http.getClient(key);
-		return client.executeMethod(method);
-	}
+    /**
+     *
+     */
+    private HttpBean http = new HttpBean();
 
-	public void clearHttpClient() {
-		this.http.clear();
-	}
+    public void setHttp(HttpBean http) {
+        this.http = http;
+    }
 
-	public Document executeMethodAsDocument(String key, HttpMethod method)
-			throws IOException, DocumentException {
-		int r = this.executeMethod(key, method);
-		if (r == HttpStatus.SC_OK) {
-			SAXReader reader = new SAXReader();
-			return reader.read(new InputStreamReader(method.getResponseBodyAsStream(), StandardCharsets.UTF_8));
-		} else {
-			return null;
-		}
-	}
+    public int executeMethod(String key, HttpMethod method) throws IOException {
+        HttpClient client = this.http.getClient(key);
+        return client.executeMethod(method);
+    }
 
-	public Document executeMethodAsDocument(HttpMethod method) throws IOException, DocumentException {
-		return executeMethodAsDocument("BusinessServer", method);
-	}
+    public void clearHttpClient() {
+        this.http.clear();
+    }
 
-	public void registerBusinessSession() throws IOException, DocumentException {
-		String msg = "";
-		String title = "jpolite.res.system.BaseHttpController.registerBusinessSession.0";
+    public Document executeMethodAsDocument(String key, HttpMethod method)
+            throws IOException, DocumentException {
+        int r = this.executeMethod(key, method);
+        if (r == HttpStatus.SC_OK) {
+            SAXReader reader = new SAXReader();
+            return reader.read(new InputStreamReader(method.getResponseBodyAsStream(), StandardCharsets.UTF_8));
+        } else {
+            return null;
+        }
+    }
 
-		PostMethod post = new PostMethod(
-				this.getContext().getBusinessServerURL(this.request, "register", "/register-session"));
-		try {
-			Document resultDoc = this.executeMethodAsDocument(post);
-			if (resultDoc != null) {
-				Header cookie = post.getResponseHeader("Set-Cookie");
-				if (cookie != null) {
-					this.getContext()
-							.setBusinessID(URLEncoder.encode(
-									cookie.getValue() + "; sessionId=" + resultDoc.getRootElement().elementText("data"),
-									"UTF-8"));
-				} else {
-					this.getContext().setBusinessID("");
-					msg = "jpolite.res.system.BaseHttpController.registerBusinessSession.2";
-					this.prepareMsg(MsgStatus.ERROR, "system.BaseHttpController.registerBusinessSession.2", title, msg);
-				}
-			} else {
-				this.getContext().setBusinessID("");
-				msg = "jpolite.res.system.BaseHttpController.registerBusinessSession.1";
-				this.prepareMsg(MsgStatus.ERROR, "system.BaseHttpController.registerBusinessSession.1", title, msg);
-			}
-		} finally {
-			post.releaseConnection();
-		}
-	}
+    public Document executeMethodAsDocument(HttpMethod method) throws IOException, DocumentException {
+        return executeMethodAsDocument("BusinessServer", method);
+    }
 
-	public void unregisterBusinessSession() throws IOException, DocumentException {
-		PostMethod post = new PostMethod(
-				this.getContext().getBusinessServerURL(this.request, "unregister", "/clean-session"));
-		if (post != null) {
-			try {
-				this.executeMethodAsDocument(post);
-				this.getContext().setBusinessID("");
-			} finally {
-				post.releaseConnection();
-			}
-		}
-	}
+    public void registerBusinessSession() throws IOException, DocumentException {
+        String msg = "";
+        String title = "jpolite.res.system.BaseHttpController.registerBusinessSession.0";
 
-	public String genAction(Hashtable<String, String> attributes, Hashtable<String, String> parameters) {
-		StringBuffer str = new StringBuffer();
-		str.append("<action xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\r\n");
-		str.append("	xmlns:justep=\"http://www.justep.com/x5#\"\r\n");
-		str.append("	xmlns:oxf=\"http://www.orbeon.com/oxf/processors\"\r\n");
-		str.append("	xmlns:p=\"http://www.orbeon.com/oxf/pipeline\"\r\n");
-		str.append("	xmlns:xslt=\"http://www.orbeon.com/oxf/processors\"\r\n");
-		Iterator<String> attrs = attributes.keySet().iterator();
-		while (attrs.hasNext()) {
-			String key = attrs.next();
-			String value = attributes.get(key);
-			str.append("	" + key + "=\"" + value + "\"\r\n");
-		}
-		if (attributes.get("activity") == null) {
-			str.append("	activity=\"startActivity\"\r\n");
-		}
-		str.append("	>\r\n");
-		str.append("<parameter>\r\n");
-		Iterator<String> params = parameters.keySet().iterator();
-		while (params.hasNext()) {
-			String key = params.next();
-			String value = parameters.get(key);
-			String type = "string";
-			if (key.lastIndexOf("#") >= 0) {
-				type = key.replaceAll(".*#", "");
-				key = key.replaceAll("#.*", "");
-			}
+        PostMethod post = new PostMethod(
+                this.getContext().getBusinessServerURL(this.request, "register", "/register-session"));
+        try {
+            Document resultDoc = this.executeMethodAsDocument(post);
+            if (resultDoc != null) {
+                Header cookie = post.getResponseHeader("Set-Cookie");
+                if (cookie != null) {
+                    this.getContext()
+                            .setBusinessID(URLEncoder.encode(
+                                    cookie.getValue() + "; sessionId=" + resultDoc.getRootElement().elementText("data"),
+                                    "UTF-8"));
+                } else {
+                    this.getContext().setBusinessID("");
+                    msg = "jpolite.res.system.BaseHttpController.registerBusinessSession.2";
+                    this.prepareMsg(MsgStatus.ERROR, "system.BaseHttpController.registerBusinessSession.2", title, msg);
+                }
+            } else {
+                this.getContext().setBusinessID("");
+                msg = "jpolite.res.system.BaseHttpController.registerBusinessSession.1";
+                this.prepareMsg(MsgStatus.ERROR, "system.BaseHttpController.registerBusinessSession.1", title, msg);
+            }
+        } finally {
+            post.releaseConnection();
+        }
+    }
 
-			if (value == null) {
-				str.append("<" + key + "/>\r\n");
-			} else {
-				str.append("<" + key + "><constant rdf:type=\"http://www.w3.org/2001/XMLSchema#" + type + "\">" + value
-						+ "</constant></" + key + ">\r\n");
-			}
-		}
-		str.append("</parameter>\r\n");
-		str.append("</action>\r\n");
-		return str.toString();
-	}
+    public void unregisterBusinessSession() throws IOException, DocumentException {
+        PostMethod post = new PostMethod(
+                this.getContext().getBusinessServerURL(this.request, "unregister", "/clean-session"));
+        if (post != null) {
+            try {
+                this.executeMethodAsDocument(post);
+                this.getContext().setBusinessID("");
+            } finally {
+                post.releaseConnection();
+            }
+        }
+    }
 
-	protected String getRemoteAddr(HttpServletRequest req) {
-		String ip = req.getHeader("X-Forwarded-For");
-		if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
-			ip = req.getHeader("Proxy-Client-IP");
-		}
-		if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
-			ip = req.getHeader("WL-Proxy-Client-IP");
-		}
-		if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
-			ip = req.getHeader("HTTP_CLIENT_IP");
-		}
-		if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
-			ip = req.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
-			ip = req.getRemoteAddr();
-		}
-		return ip;
-	}
+    public String genAction(Hashtable<String, String> attributes, Hashtable<String, String> parameters) {
+        StringBuffer str = new StringBuffer();
+        str.append("<action xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\r\n");
+        str.append("	xmlns:justep=\"http://www.justep.com/x5#\"\r\n");
+        str.append("	xmlns:oxf=\"http://www.orbeon.com/oxf/processors\"\r\n");
+        str.append("	xmlns:p=\"http://www.orbeon.com/oxf/pipeline\"\r\n");
+        str.append("	xmlns:xslt=\"http://www.orbeon.com/oxf/processors\"\r\n");
+        Iterator<String> attrs = attributes.keySet().iterator();
+        while (attrs.hasNext()) {
+            String key = attrs.next();
+            String value = attributes.get(key);
+            str.append("	" + key + "=\"" + value + "\"\r\n");
+        }
+        if (attributes.get("activity") == null) {
+            str.append("	activity=\"startActivity\"\r\n");
+        }
+        str.append("	>\r\n");
+        str.append("<parameter>\r\n");
+        Iterator<String> params = parameters.keySet().iterator();
+        while (params.hasNext()) {
+            String key = params.next();
+            String value = parameters.get(key);
+            String type = "string";
+            if (key.lastIndexOf("#") >= 0) {
+                type = key.replaceAll(".*#", "");
+                key = key.replaceAll("#.*", "");
+            }
 
-	protected void getSysParams(HttpServletRequest req, HashMap<String, String> params)
-			throws IOException, DocumentException {
-		try {
-			sysParams.getSysParamsFunc(params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            if (value == null) {
+                str.append("<" + key + "/>\r\n");
+            } else {
+                str.append("<" + key + "><constant rdf:type=\"http://www.w3.org/2001/XMLSchema#" + type + "\">" + value
+                        + "</constant></" + key + ">\r\n");
+            }
+        }
+        str.append("</parameter>\r\n");
+        str.append("</action>\r\n");
+        return str.toString();
+    }
+
+    protected String getRemoteAddr(HttpServletRequest req) {
+        String ip = req.getHeader("X-Forwarded-For");
+        if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
+            ip = req.getHeader("Proxy-Client-IP");
+        }
+        if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
+            ip = req.getHeader("WL-Proxy-Client-IP");
+        }
+        if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
+            ip = req.getHeader("HTTP_CLIENT_IP");
+        }
+        if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
+            ip = req.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if ((ip == null) || (ip.length() == 0) || ("unknown".equalsIgnoreCase(ip))) {
+            ip = req.getRemoteAddr();
+        }
+        return ip;
+    }
+
+    protected void getSysParams(HttpServletRequest req, HashMap<String, String> params)
+            throws IOException, DocumentException {
+        try {
+            sysParams.getSysParamsFunc(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

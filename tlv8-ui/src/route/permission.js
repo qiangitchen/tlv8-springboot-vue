@@ -2,20 +2,20 @@ import store from "@/store"
 import NProgress from "nprogress"
 import router from "@/route/index"
 import permissionRoutes from './module/main-routes'
-import { toTree, hasRoute } from "@/tools/menu"
+import {toTree, hasRoute} from "@/tools/menu"
 import config from "../configure/config.js"
 
 /**
  * 根据 菜单树 数据 生成 路由树
- * 
+ *
  * @param menuList
  */
 export const createRouteByTree = (menuList) => {
   const userRoutes = menuList.map(menu => {
-    const { id, parent, icon, name, children = [], path, hidden = false, title, i18n } = menu
+    const {id, parent, icon, name, children = [], path, hidden = false, title, i18n} = menu
     const currentMenu = {
       id, path, name, hidden, parent,
-      meta: { title, i18n, icon},
+      meta: {title, i18n, icon},
       children: children.length === 0 ? [] : createRouteByTree(children)
     }
     if (children.length <= 0) {
@@ -28,7 +28,7 @@ export const createRouteByTree = (menuList) => {
 
 /**
  * 根据 菜单集合 数据 生成 路由树
- * 
+ *
  * @param menuList
  */
 export const createRouteByList = menuList => {
@@ -38,7 +38,7 @@ export const createRouteByList = menuList => {
 
 /**
  * 路由 添加 布局
- * 
+ *
  * @param routes
  */
 export const setUserRouteComponent = routes => {
@@ -52,7 +52,7 @@ export const setUserRouteComponent = routes => {
 
 /**
  * 网站 设置 标题
- * 
+ *
  * @param title 标题
  */
 const setDocumentTitle = title => {
@@ -60,14 +60,14 @@ const setDocumentTitle = title => {
 }
 /**
  * 前置拦截
- * 
+ *
  * @param to    前往路由
  * @param from  来至路由
  * @param next  放行路由
  */
 export const permissionController = async (to, from, next) => {
   NProgress.start();
-  const { meta } = to
+  const {meta} = to
   setDocumentTitle(meta.title)
   await store.dispatch('app/execCancelToken')
   // 检 测 登 录
@@ -76,7 +76,7 @@ export const permissionController = async (to, from, next) => {
   } else {
     // 基本路由 是否包括 前往路由
     if (!router.getRoutes().map(it => it.path).includes(to.path)) {
-      
+
       await store.dispatch('user/addUserRouteForArray')
 
       const userRoutes = JSON.parse(JSON.stringify(store.getters.menu))

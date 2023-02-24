@@ -617,7 +617,7 @@ public class ContextBean implements Serializable {
         return expireTime;
     }
 
-    public String toJSONString() throws Exception {
+    public String toJSONString() {
         JSONObject json = new JSONObject();
         json.put("username", this.username);
         json.put("personID", this.personID);
@@ -683,7 +683,7 @@ public class ContextBean implements Serializable {
         return json.toString();
     }
 
-    public Map toMap() throws Exception {
+    public Map toMap() {
         Map json = new HashMap();
         json.put("username", this.username);
         json.put("personID", this.personID);

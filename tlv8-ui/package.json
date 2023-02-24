@@ -16,6 +16,7 @@
     "ant-design-vue": "^3.2.0",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "js-cookie": "^3.0.1",
     "js-md5": "^0.7.3",
     "lodash.get": "^4.4.2",
     "moment": "^2.27.0",

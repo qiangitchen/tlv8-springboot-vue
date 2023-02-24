@@ -81,13 +81,16 @@ export default {
     const onSubmit = async (e) => {
       formRef.value.validate().then(async () => {
         load.value = true;
-        await store.dispatch("user/login", formState);
-        await router.push("/");
-      })
-        .catch((error) => {
-          console.log("error", e);
-          message.error(e);
+        await store.dispatch("user/login", formState).then(() => {
+          router.push("/");
+        }).catch(() => {
+          load.value = false;
+          this.getCode();
         });
+        //await router.push("/");
+      }).catch((error) => {
+        console.log("error", e);
+      });
     };
 
     return {

@@ -22,7 +22,7 @@ public interface ISysLoginService {
 	/**
 	 * 根据ca签名获取用户信息
 	 * 
-	 * @param casn
+	 * @param signm
 	 * @return
 	 */
 	Map<String, Object> getInfoBySignm(String signm);
