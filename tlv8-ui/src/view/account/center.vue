@@ -3,14 +3,15 @@
     <page-layout>
       <a-row :gutter="[15, 15]">
         <a-col :lg="6" :md="6" :sm="24" :xs="24">
-          <a-card style="position: relative">
+          <a-card style="position: relative; text-align: center;">
             <a-avatar
               class="avatar"
               :size="64"
-              src="https://portrait.gitee.com/uploads/avatars/user/2813/8441097_shaynas_1610801433.png!avatar200"
+              src="/src/assets/header/header01.png"
+              style="margin: auto;"
             />
-            <div class="username">就眠仪式</div>
-            <div class="address">China</div>
+            <div class="username">{{userInfo.personName}}</div>
+            <div class="address">{{userInfo.currentOgnName}}</div>
             <a-divider />
             <div class="desc">江湖无名，安心练剑</div>
           </a-card>
@@ -56,17 +57,11 @@
                   :wrapper-col="wrapperCol"
                   style="margin-top: 20px"
                 >
-                  <a-form-item ref="name" label="账号" name="name">
+                  <a-form-item ref="name" label="姓名" name="name">
                     <a-input v-model:value="form.name" />
                   </a-form-item>
-                  <a-form-item label="地区" name="region">
-                    <a-select
-                      v-model:value="form.region"
-                      placeholder="请选择地区"
-                    >
-                      <a-select-option value="shanghai"> 上海 </a-select-option>
-                      <a-select-option value="beijing"> 北京 </a-select-option>
-                    </a-select>
+                  <a-form-item label="单位" name="region">
+                    <a-input v-model:value="form.region" aria-readonly="true"/>
                   </a-form-item>
                   <a-form-item label="生日" required name="date1">
                     <a-date-picker
@@ -98,9 +93,11 @@
                   </a-form-item>
                 </a-form>
               </a-tab-pane>
+              <!--
               <a-tab-pane key="2" tab="账号绑定" force-render>
                 Content of Tab Pane 2
               </a-tab-pane>
+              -->
             </a-tabs>
           </a-card>
         </a-col>
@@ -109,15 +106,21 @@
   </div>
 </template>
 <script>
+
+import user from "../../store/modules/user"
+
 export default {
   data() {
+    const userInfo = user.state.userInfo;
+    console.log(userInfo)
     return {
+      userInfo: userInfo,
       labelCol: { span: 4 },
       wrapperCol: { span: 12 },
       other: "",
       form: {
-        name: "就眠仪式",
-        region: undefined,
+        name: userInfo.personName,
+        region: userInfo.currentOgnName,
         date1: undefined,
         delivery: true,
         type: ["1", "2"],

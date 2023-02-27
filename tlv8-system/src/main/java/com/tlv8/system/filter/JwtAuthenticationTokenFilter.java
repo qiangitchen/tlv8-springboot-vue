@@ -41,7 +41,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } else {
             // 判断是否已登录
-            if (contextBean.isLogin()) {
+            if (contextBean != null && contextBean.isLogin()) {
                 chain.doFilter(request, response);
             } else {
                 ServletUtils.renderString(response, JSON.toJSONString(AjaxResult.error(HttpStatus.UNAUTHORIZED, "请先登录")));

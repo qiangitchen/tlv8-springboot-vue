@@ -363,17 +363,17 @@
     "i18n": "system"
   },
   {
-    "id": "28",
+    "id": "99",
     "parent": "27",
-    "path": "/system/userInfo",
-    "name": "userInfo",
+    "path": "/system/organization",
+    "name": "organization",
     "type": "menu",
     "icon": "DatabaseOutlined",
-    "title": "用户管理",
+    "title": "机构管理",
     "sort": 0,
     "link": "",
     "hidden": false,
     "status": true,
-    "i18n": "userInfo"
+    "i18n": "organization"
   }
 ]

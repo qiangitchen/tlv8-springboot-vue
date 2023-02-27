@@ -10,7 +10,7 @@ export const isNotProduction = () => {
 
 /**
  * 定时时间
- * 
+ *
  * @param timeout   超时事件
  * @param callback  回调事件
  */
@@ -28,15 +28,15 @@ export const isTimeout = (timeout, callback) => {
 
 /**
  * 根据 当前路径 查询 所有父级 (包括当前)
- * 
+ *
  * @param arr 菜单列表
  * @param id 指定路由
  */
  export const findParentAll = (arr, id) => {
-  var temp = []
-  var forFn = function (list, path) {
-    for (var i = 0; i < list.length; i++) {
-      var item = list[i]
+  const temp = []
+  const forFn = function (list, path) {
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i]
       if (item.path === path) {
         temp.push(findPathById(arr, item.id))
         forFn(list, item.parent);
@@ -53,16 +53,16 @@ export const isTimeout = (timeout, callback) => {
 }
 
 /**
- * 根据 当前路径 查询 所有父级 
- * 
+ * 根据 当前路径 查询 所有父级
+ *
  * @param arr 菜单列表
  * @param id  当前路由
  */
 export const findParent = (arr, id) => {
-  var temp = []
-  var forFn = function (list, path) {
-    for (var i = 0; i < list.length; i++) {
-      var item = list[i]
+  const temp = []
+  const forFn = function (list, path) {
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i]
       if (item.path === path) {
         let path = findPathById(arr, item.parent);
         if (path) {
@@ -83,15 +83,15 @@ export const findParent = (arr, id) => {
 
 /**
  * 根据 当前路径 查询 菜单编号
- * 
+ *
  * @param arr 菜单列表
- * @param id  当前路由
+ * @param key  当前路由
  */
 export const findPathById = (arr, key) => {
   let path = null;
-  var forFn = function (list, id) {
-    for (var i = 0; i < list.length; i++) {
-      var item = list[i]
+  const forFn = function (list, id) {
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i]
       if (item.id === id) {
         path = item.path;
       } else {

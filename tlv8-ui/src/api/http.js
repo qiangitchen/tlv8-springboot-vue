@@ -15,8 +15,8 @@ service.interceptors.request.use(config => {
     const isToken = (config.headers || {}).isToken === true;
     if (isToken) {
       const token = localStorage.getItem("USER_TOKEN");
-      console.log("url:" + config.url);
-      console.log("token:" + token);
+      //console.log("url:" + config.url);
+      //console.log("token:" + token);
       if (token) {
         //config.headers["Access-Token"] = token;
         config.headers["Authorization"] = 'TLv8 ' + token; //携带自定义token
@@ -36,18 +36,21 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(response => {
     // 未设置状态码则默认成功状态
     const code = response.data.code || 200;
-    const msg = response.data.message
+    const msg = response.data.message || response.data.msg;
     if (response.request.responseType === 'blob' || response.request.responseType === 'arraybuffer') {
       return response.data
     }
-    if (code !== 200) {
+    if (code === 401) {
+      Msg.error(msg);
+      localStorage.setItem("USER_TOKEN", "");
+      window.location.reload();
+    } else if (code !== 200) {
       Msg.error(msg);
       return Promise.reject(new Error(msg));
     }
     return response.data;
   },
   error => {
-    console.log(error);
     if (error.response) {
       const data = error.response.data;
       if (error.response.status === 403) {
@@ -57,12 +60,8 @@ service.interceptors.response.use(response => {
         });
       }
       if (error.response.status === 401) {
-        const store = useStore();
-        store.dispatch("app/logout").then(() => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        });
+        localStorage.setItem("USER_TOKEN", "");
+        window.location.reload();
       }
     } else {
       let {message} = error;
@@ -77,8 +76,6 @@ service.interceptors.response.use(response => {
         message = "接口" + code + "异常";
       }
       Msg.error(message);
-      const store = useStore();
-      store.dispatch("app/logout");
     }
     return Promise.reject(error);
   }

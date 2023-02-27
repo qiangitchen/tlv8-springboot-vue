@@ -25,5 +25,6 @@ export default {
   "permission": "系统权限",
   "permission-test": "权限测试",
   "system":"系统管理",
-  "userInfo":"用户管理"
+  "userInfo":"用户管理",
+  "organization":"机构管理"
 }

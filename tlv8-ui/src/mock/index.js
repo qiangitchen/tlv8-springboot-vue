@@ -23,7 +23,7 @@ if (useMock) {
         'username': username,
         'password': password,
         'token': generatorToken(),
-        'avatar': 'https://portrait.gitee.com/uploads/avatars/user/1611/4835367_Jmysy_1578975358.png',
+        'avatar': '/src/assets/header/header01.png',
         'permissions': getRolePermission(username === admin.username)
       }
       return generatorResponse(userInfo)

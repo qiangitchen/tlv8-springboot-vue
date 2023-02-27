@@ -21,5 +21,6 @@ export default {
   'error-404': () => import('@/view/error/404.vue'),
   'error-500': () => import('@/view/error/500.vue'),
   'permission-test': () => import('@/view/permission/permission.vue'),
-  'userInfo': () => import('@/view/systemManager/userInfo.vue')
+  'userInfo': () => import('@/view/systemManager/userInfo.vue'),
+  'organization': () => import('@/view/systemManager/organization.vue')
 }

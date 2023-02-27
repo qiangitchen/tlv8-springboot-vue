@@ -9,6 +9,10 @@ const state = {
   userPowers: localStorage.getItem("USER_POWERS") != null ? localStorage.getItem("USER_POWERS") : []
 }
 
+if (typeof state.userInfo == "string") {
+  state.userInfo = JSON.parse(state.userInfo);
+}
+
 const mutations = {
   SET_USER_TOKEN(state, token) {
     if (token) {
@@ -21,7 +25,7 @@ const mutations = {
   },
   SET_USER_INFO(state, userInfo) {
     state.userInfo = userInfo
-    localStorage.setItem('USER_INFO', userInfo)
+    localStorage.setItem('USER_INFO', JSON.stringify(userInfo))
   },
   SET_USER_MENU(state, menuList) {
     if (menuList && menuList.length === 0) {
@@ -59,7 +63,6 @@ const actions = {
       delete userInfo.menuList
       delete userInfo.token
       delete userInfo.password
-      console.log(userInfo);
       commit('SET_USER_TOKEN', token)
       commit('SET_USER_INFO', userInfo)
       return Promise.resolve()
@@ -70,15 +73,22 @@ const actions = {
     }
   },
   async addUserRouteForArray({state: {userRoutes}, commit}) {
-    const {result: data} = await menuList()
-    console.log(data)
-    const dynamicRoutes = createRouteByList(data)
-    commit('SET_USER_MENU', dynamicRoutes)
+    const result = await menuList()
+    if (result.code === 200) {
+      const dynamicRoutes = createRouteByList(result.data)
+      commit('SET_USER_MENU', dynamicRoutes)
+    } else {
+      return Promise.reject(result.message)
+    }
   },
   async addUserRouteForTree({state: {userRoutes}, commit}) {
-    const {result: data} = await menuTree()
-    const dynamicRoutes = createRouteByTree(data)
-    commit('SET_USER_MENU', dynamicRoutes)
+    const result = await menuTree()
+    if (result.code === 200) {
+      const dynamicRoutes = createRouteByTree(result.data)
+      commit('SET_USER_MENU', dynamicRoutes)
+    } else {
+      return Promise.reject(result.message)
+    }
   }
 }
 
