@@ -30,13 +30,15 @@ SpringBoot+Vue
 
 1. 主目录运行：mvn install
 2. tlv8-main: 运行TLv8Application
-3. 运行前端：
+3. 运行前端：进入tlv8-ui>
 
-进入tlv8-ui:
 
+```
 npm install
 
 npm run serve
+```
+
 
 
 
