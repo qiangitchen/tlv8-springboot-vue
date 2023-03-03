@@ -11,3 +11,15 @@ export const loadOrgTree = data => {
     method: 'post'
   })
 }
+
+/// 加载机构列列表
+export const loadOrgList = data => {
+  return request({
+    url: "/system/org/orgList",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}

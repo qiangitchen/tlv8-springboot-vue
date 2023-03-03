@@ -72,4 +72,34 @@ public class OrganizationController {
         return "team-outlined";
     }
 
+    @ResponseBody
+    @RequestMapping("/orgList")
+    public Object orgList(String pid) {
+        List<Map<String, Object>> res = new ArrayList<>();
+        List<SaOpOrg> root_list = new ArrayList<>();
+        if (pid == null) {
+            root_list = saOpOrgService.selectRootList();
+        } else {
+            root_list = saOpOrgService.selectListByParentID(pid);
+        }
+        for (int i = 0; i < root_list.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            SaOpOrg org = root_list.get(i);
+            map.put("key", org.getSid());
+            map.put("SSEQUENCE", org.getSsequence());
+            map.put("SCODE", org.getScode());
+            map.put("SNAME", org.getSname());
+            map.put("SADDRESS", org.getSaddress());
+            map.put("SDESCRIPTION", org.getSdescription());
+            map.put("sfid", org.getSfid());
+            map.put("sfcode", org.getSfcode());
+            map.put("sfname", org.getSfname());
+            map.put("svalidstate", org.getSvalidstate());
+            map.put("sorgkindid", org.getSorgkindid());
+            map.put("version", org.getVersion());
+            res.add(map);
+        }
+        return res;
+    }
+
 }
