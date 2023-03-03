@@ -9,6 +9,7 @@
               :expanded-keys="expandedKeys"
               :auto-expand-parent="autoExpandParent"
               :tree-data="treeData"
+              :load-data="reloadOrgTree"
               @expand="onExpand"
             >
               <template #title="{ title }">
@@ -47,37 +48,9 @@
 </template>
 <script>
 import {loadOrgTree, loadOrgList} from "../../api/module/system";
-import {DownOutlined, SmileOutlined, FrownOutlined, FrownFilled} from '@ant-design/icons-vue';
 import {defineComponent, ref, watch} from 'vue';
 
-const x = 3;
-const y = 2;
-const z = 1;
-const genData = [];
-const generateData = (_level, _preKey, _tns) => {
-  const preKey = _preKey || '0';
-  const tns = _tns || genData;
-  const children = [];
-  for (let i = 0; i < x; i++) {
-    const key = `${preKey}-${i}`;
-    tns.push({
-      title: key,
-      key,
-    });
-    if (i < y) {
-      children.push(key);
-    }
-  }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-};
-generateData(z);
+const genData = [{key:"root",title:"组织机构树"}];
 const dataList = [];
 const generateList = data => {
   for (let i = 0; i < data.length; i++) {
@@ -85,7 +58,7 @@ const generateList = data => {
     const key = node.key;
     dataList.push({
       key,
-      title: key,
+      title: key
     });
     if (node.children) {
       generateList(node.children);
@@ -114,29 +87,23 @@ const dataItem = {
   SNAME: "boy",
   SADDRESS: "Sidney No. 1 Lake Park Sidney No. 1 ",
   SDESCRIPTION: "Sidney No. 1 Lake Park Sidney No. 1 ",
-  tags: ["cool", "teacher"],
+  tags: ["cool", "teacher"]
 };
 export default defineComponent({
-  components: {
-    DownOutlined,
-    SmileOutlined,
-    FrownOutlined,
-    FrownFilled,
-  },
-  data() {
+  setup() {
     /// 工具栏
     const toolbar = [
       {
         label: "新增",
         event: function (keys) {
           alert("新增操作:" + JSON.stringify(keys));
-        },
+        }
       },
       {
         label: "删除",
         event: function (keys) {
           alert("批量删除:" + JSON.stringify(keys));
-        },
+        }
       },
       {
         label: "更多操作",
@@ -145,16 +112,16 @@ export default defineComponent({
             label: "批量导入",
             event(keys) {
               alert("批量导入");
-            },
+            }
           },
           {
             label: "批量导出",
             event(keys) {
               alert("批量导出");
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     ];
 
     /// 字段
@@ -163,7 +130,7 @@ export default defineComponent({
       {title: "编号", dataIndex: "SCODE", key: "SCODE"},
       {title: "名称", dataIndex: "SNAME", key: "SNAME"},
       {title: "地址", dataIndex: "SADDRESS", key: "SADDRESS"},
-      {title: "描述", dataIndex: "SDESCRIPTION", key: "SDESCRIPTION"},
+      {title: "描述", dataIndex: "SDESCRIPTION", key: "SDESCRIPTION"}
     ];
 
     /// 行操作
@@ -172,19 +139,19 @@ export default defineComponent({
         label: "查看",
         event: function (record) {
           alert("查看详情:" + JSON.stringify(record));
-        },
+        }
       },
       {
         label: "修改",
         event: function (record) {
           alert("修改事件:" + JSON.stringify(record));
-        },
+        }
       },
       {
         label: "删除",
         event: function (record) {
           alert("删除事件:" + JSON.stringify(record));
-        },
+        }
       },
       {
         label: "更多",
@@ -193,21 +160,21 @@ export default defineComponent({
             label: "导出",
             event: function (record) {
               alert("导出");
-            },
+            }
           },
           {
             label: "下载",
             event: function (record) {
               alert("下载");
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     ];
     const expandedKeys = ref([]);
     const searchValue = ref('');
     const autoExpandParent = ref(true);
-    const gData = ref(genData);
+    const treeData = ref(genData);
     const onExpand = keys => {
       expandedKeys.value = keys;
       autoExpandParent.value = false;
@@ -215,7 +182,7 @@ export default defineComponent({
     watch(searchValue, value => {
       const expanded = dataList.map(item => {
         if (item.title.indexOf(value) > -1) {
-          return getParentKey(item.key, gData.value);
+          return getParentKey(item.key, treeData.value);
         }
         return null;
       }).filter((item, i, self) => item && self.indexOf(item) === i);
@@ -223,46 +190,39 @@ export default defineComponent({
       searchValue.value = value;
       autoExpandParent.value = true;
     });
-    return {
-      expandedKeys,
-      searchValue,
-      autoExpandParent,
-      treeData: gData,
-      onExpand,
-      pagination: {current: 1, pageSize: 16}, // 分页配置
-      toolbar: toolbar, // 工具栏
-      columns: columns, // 列配置
-      operate: operate, // 行操作
+    const reloadOrgTree = treeNode => {
+      return new Promise(resolve => {
+        const param = {pid:treeNode.key};
+        loadOrgTree(param).then(res=>{
+          treeNode.dataRef.children = res;
+          treeData.value = [...treeData.value];
+          resolve();
+        });
+      });
     };
-  },
-  methods: {
-    reloadOrgTree: () => {
-      loadOrgTree().then(res => {
-          console.log(res);
-          this.treeData = res;
-        }
-      );
-    },
-    fetch: async (param) => {
+    const fetch = async (param) => {
       return new Promise((resolve) => {
-        loadOrgList().then(res => {
-          console.log(res);
+        loadOrgList({pid:""}).then(res => {
           resolve({
             total: res.length,
             data: res
           });
         });
       });
-    },
-    loadOrgList: () => {
-      loadOrgList().then(res => {
-        this.datasource = res;
-      });
-    }
-  },
-  created() {
-    this.reloadOrgTree();
-    this.loadOrgList();
+    };
+    return {
+      expandedKeys,
+      searchValue,
+      autoExpandParent,
+      treeData,
+      reloadOrgTree,
+      onExpand,
+      fetch:fetch,
+      pagination: {current: 1, pageSize: 16}, // 分页配置
+      toolbar: toolbar, // 工具栏
+      columns: columns, // 列配置
+      operate: operate // 行操作
+    };
   }
 });
 </script>

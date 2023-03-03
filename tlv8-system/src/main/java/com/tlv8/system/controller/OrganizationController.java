@@ -4,6 +4,7 @@ import com.tlv8.system.pojo.SaOpOrg;
 import com.tlv8.system.service.ISaOpOrgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,9 +22,16 @@ public class OrganizationController {
 
     @ResponseBody
     @RequestMapping("/orgTree")
-    public Object orgTree() {
+    public Object orgTree(@RequestBody Map<String, String> param) {
         List<Map<String, Object>> res = new ArrayList<>();
-        List<SaOpOrg> root_list = saOpOrgService.selectRootList();
+        List<SaOpOrg> root_list = new ArrayList<>();
+        String pid = param.get("pid");
+        System.out.println(pid);
+        if (pid == null || "root".equals(pid)) {
+            root_list = saOpOrgService.selectRootList();
+        } else {
+            root_list = saOpOrgService.selectListByParentID(pid);
+        }
         for (int i = 0; i < root_list.size(); i++) {
             Map<String, Object> map = new HashMap<>();
             SaOpOrg org = root_list.get(i);
@@ -74,10 +82,11 @@ public class OrganizationController {
 
     @ResponseBody
     @RequestMapping("/orgList")
-    public Object orgList(String pid) {
+    public Object orgList(@RequestBody Map<String, String> param) {
+        String pid = param.get("pid");
         List<Map<String, Object>> res = new ArrayList<>();
         List<SaOpOrg> root_list = new ArrayList<>();
-        if (pid == null) {
+        if (pid == null || "".equals(pid) || "root".equals(pid)) {
             root_list = saOpOrgService.selectRootList();
         } else {
             root_list = saOpOrgService.selectListByParentID(pid);
