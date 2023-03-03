@@ -11,11 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.constant.CacheConstants;
-import com.tlv8.common.redis.RedisCache;
-import com.tlv8.system.service.TokenService;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.dom4j.Document;
@@ -38,7 +35,6 @@ import com.tlv8.system.base.BaseController;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.help.Configuration;
 import com.tlv8.system.help.OnlineHelper;
-import com.tlv8.system.help.SessionHelper;
 import com.tlv8.system.service.ISaOnlineinfoService;
 
 /**
@@ -72,7 +68,7 @@ public class UserController extends BaseController {
         String loginDate = rqparams.get("loginDate");
         String language = rqparams.get("language");
         String logintype = (rqparams.get("logintype") != null ? rqparams.get("logintype") : "mobile");
-
+        String uuid = rqparams.get("uuid");
         String captcha = rqparams.get("captcha");
         String agent = rqparams.get("agent");
         String onceFunc = rqparams.get("onceFunc");
@@ -99,14 +95,15 @@ public class UserController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + uuid;
         if ((!"no_captcha".equals(captcha)) && (Configuration.getCaptchaEnabled().booleanValue())) {
             if (captcha == "") {
                 msg = "system.UserController.login.3:请输入验证码!";
                 renderData(Boolean.valueOf(false), "{\"msg\":\"" + r(msg) + "\"}");
                 return;
             }
-            if (!captcha.equals(SessionHelper.getAttrString(this.request, "SESSION_SECURITY_CODE"))) {
-                msg = "system.UserController.login.4:验证码错误！";
+            if (!captcha.equals(redisCache.getCacheObject(verifyKey))) {
+                msg = "验证码错误！";
                 renderData(Boolean.valueOf(false), "{\"msg\":\"" + r(msg) + "\"}");
                 return;
             }
@@ -115,7 +112,7 @@ public class UserController extends BaseController {
             loginDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         }
         ContextBean contextBean = getContext();
-        contextBean.setLocale(this.request, language);
+        contextBean.setLocale(language);
         String serverURL = Configuration.getUIServerURL(null);
         contextBean.setUIServerURL(serverURL);
 
@@ -136,7 +133,6 @@ public class UserController extends BaseController {
             contextBean.setIp(ip);
             OnlineHelper.refresh(this.request, this.response);
             token = tokenService.createToken(contextBean);
-            contextBean.setToken(token);
             success = true;
             writeLoginLog.write(contextBean.getCurrentUserID(), username, getRemoteAddr(this.request), password,
                     this.request);
@@ -152,7 +148,6 @@ public class UserController extends BaseController {
             clearHttpClient();
             contextBean.initLogoutContext(this.request);
         }
-        System.out.println("sessionid:" + contextBean.getSessionID());
         renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\",\"token\":\"" + token + "\"}");
     }
 
@@ -212,7 +207,7 @@ public class UserController extends BaseController {
             loginDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         }
         ContextBean contextBean = getContext();
-        contextBean.setLocale(this.request, language);
+        contextBean.setLocale(language);
         String serverURL = Configuration.getUIServerURL(null);
         contextBean.setUIServerURL(serverURL);
 
@@ -230,7 +225,6 @@ public class UserController extends BaseController {
             contextBean.setIp(ip);
             OnlineHelper.refresh(this.request, this.response);
             token = tokenService.createToken(contextBean);
-            contextBean.setToken(token);
             success = true;
             String signm = p("signm");
             if ((signm != null) && (!"".equals(signm)))
@@ -246,7 +240,6 @@ public class UserController extends BaseController {
         }
         res.put("code", HttpStatus.SUCCESS);
         res.put("message", r(msg));
-        res.put("bsessionID", contextBean.getSessionID());
         res.put("mobilestatus", mobilestatus);
         res.put("hxname", hxname);
         res.put("token", token);
@@ -258,7 +251,7 @@ public class UserController extends BaseController {
     @RequestMapping({"/sCALogin"})
     public void scalogin() {
         ContextBean contextBean = getContext();
-        contextBean.setLocale(this.request, "zh_CN");
+        contextBean.setLocale("zh_CN");
         String serverURL = Configuration.getUIServerURL(null);
         contextBean.setUIServerURL(serverURL);
         String msg = "";
@@ -279,7 +272,6 @@ public class UserController extends BaseController {
             contextBean.setIp(getRemoteAddr(this.request));
             OnlineHelper.refresh(this.request, this.response);
             token = tokenService.createToken(contextBean);
-            contextBean.setToken(token);
             success = true;
             writeLoginLog.write(contextBean.getCurrentUserID(), (String) params.get("username"),
                     getRemoteAddr(this.request), "", this.request);
@@ -292,18 +284,7 @@ public class UserController extends BaseController {
             clearHttpClient();
             contextBean.initLogoutContext(this.request);
         }
-        System.out.println("sessionid:" + contextBean.getSessionID());
         renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\",\"token\":\"" + token + "\"}");
-    }
-
-    @ResponseBody
-    @RequestMapping("/Sessionlogin")
-    public void Sessionlogin() throws DocumentException, IOException {
-        String session = p("sessionid");
-        SessionHelper.setContext(this.request, getContext(session));
-        ContextBean contextBean = getContext();
-        renderData(Boolean.valueOf(true),
-                "{\"msg\":\"" + r("") + "\",bsessionID:\"" + contextBean.getSessionID() + "\"}");
     }
 
     @ResponseBody
@@ -336,18 +317,7 @@ public class UserController extends BaseController {
     public void logout() throws IOException, DocumentException {
         ContextBean contextBean = getContext();
         System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date()) + " 用户："
-                + contextBean.getPersonName() + " 退出系统,sessionid:" + contextBean.getSessionID() + ".");
-        if ((contextBean.getSessionID() != null) && (!contextBean.getSessionID().equals(""))) {
-            OnlineHelper.reMove(contextBean.getSessionID());
-            onlineinfosvr.deleteDataBySessionID(contextBean.getSessionID());
-            try {
-                if (contextBean.hasBusinessSession().booleanValue()) {
-                    unregisterBusinessSession();
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+                + contextBean.getPersonName() + " 退出系统.");
         tokenService.deleteContextBean(contextBean.getToken());
         contextBean.initLogoutContext(this.request);
         renderData(Boolean.valueOf(true));
@@ -358,18 +328,7 @@ public class UserController extends BaseController {
     public void MD5logout() throws IOException, DocumentException {
         ContextBean contextBean = getContext();
         System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date()) + " 用户："
-                + contextBean.getPersonName() + " 退出系统,sessionid:" + contextBean.getSessionID() + ".");
-        if ((contextBean.getSessionID() != null) && (!contextBean.getSessionID().equals(""))) {
-            OnlineHelper.reMove(contextBean.getSessionID());
-            onlineinfosvr.deleteDataBySessionID(contextBean.getSessionID());
-            try {
-                if (contextBean.hasBusinessSession().booleanValue()) {
-                    unregisterBusinessSession();
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+                + contextBean.getPersonName() + " 退出系统.");
         tokenService.deleteContextBean(contextBean.getToken());
         contextBean.initLogoutContext(this.request);
         renderData(Boolean.valueOf(true));
@@ -463,7 +422,7 @@ public class UserController extends BaseController {
             json.put("personfcode", context.getCurrentPersonFullCode());
             json.put("personfname", context.getCurrentPersonFullName());
             json.put("businessid", context.getBusinessID());
-            json.put("locale", context.getLocale(request));
+            json.put("locale", context.getLocale());
             json.put("uiserverremoteurl", context.getUIServerURL(this.request, null, null));
         } catch (Exception e) {
         }
@@ -554,14 +513,14 @@ public class UserController extends BaseController {
     @RequestMapping("/setLanguage")
     public void setLanguage() {
         String language = p("language");
-        getContext().setLocale(this.request, language);
+        getContext().setLocale(language);
         renderData(Boolean.valueOf(true), "{\"language\":\"" + language + "\"}");
     }
 
     @ResponseBody
     @RequestMapping("/getLanguage")
     public void getLanguage() {
-        String language = getContext().getLocale(this.request);
+        String language = getContext().getLocale();
         renderData(Boolean.valueOf(true), "{\"language\":\"" + language + "\"}");
     }
 
@@ -596,14 +555,14 @@ public class UserController extends BaseController {
                 parameters.put("pwd", password);
             }
             parameters.put("loginDate#date", loginDate);
-            parameters.put("lang", contextBean.getLocale(this.request));
+            parameters.put("lang", contextBean.getLocale());
 
             String act = genAction(attributes, parameters);
             String actionURL = isNTLogin
                     ? contextBean.getBusinessServerURL(this.request, "ntloginaction", "/ntLoginAction")
                     : contextBean.getBusinessServerURL(this.request, "action", "/business-action");
 
-            PostMethod post = new PostMethod(actionURL + "?language=" + contextBean.getLocale(this.request));
+            PostMethod post = new PostMethod(actionURL + "?language=" + contextBean.getLocale());
             try {
                 post.setRequestEntity(new StringRequestEntity(act, "text/html", "UTF-8"));
                 Document resultDoc = executeMethodAsDocument(post);

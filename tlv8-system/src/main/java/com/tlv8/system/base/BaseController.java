@@ -31,7 +31,6 @@ import com.tlv8.system.bean.HttpBean;
 import com.tlv8.system.help.MessageResource;
 import com.tlv8.system.help.OnlineHelper;
 import com.tlv8.system.help.ResponseProcessor;
-import com.tlv8.system.help.SessionHelper;
 import com.tlv8.system.help.UserResponse;
 import com.tlv8.system.help.enums.MsgStatus;
 import com.tlv8.system.help.enums.RenderStatus;
@@ -129,17 +128,17 @@ public class BaseController {
 
     public String r(String key) {
         initRequest();
-        return MessageResource.getMessage(SessionHelper.getLocale(this.request), key);
+        return MessageResource.getMessage(contextbean.getLocale(), key);
     }
 
     public String r(String key, Object[] params) {
         initRequest();
-        return MessageResource.getMessage(SessionHelper.getLocale(this.request), key, params);
+        return MessageResource.getMessage(contextbean.getLocale(), key, params);
     }
 
     public String r(String key, Iterable<Object> params) {
         initRequest();
-        return MessageResource.getMessage(SessionHelper.getLocale(this.request), key, params);
+        return MessageResource.getMessage(contextbean.getLocale(), key, params);
     }
 
     public void setContext(ContextBean contextbean) {
@@ -151,7 +150,7 @@ public class BaseController {
         if (this.contextbean == null) {
             this.contextbean = tokenService.getContextBean(request);
         }
-        if (this.contextbean ==null || this.contextbean.getCurrentPersonID() == null) {
+        if (this.contextbean == null || this.contextbean.getCurrentPersonID() == null) {
             if (sessionid != null && !sessionid.equals("") && !sessionid.equals("undefined")) {
                 this.contextbean = this.getContext(sessionid);
             }

@@ -3,22 +3,9 @@
     <a-layout-sider width="300" style="background: #eee">
       <page-layout>
         <a-card>
-          <a-tree v-model:selectedKeys="selectedKeys" :tree-data="treeData" show-icon default-expand-all>
-            <template #switcherIcon="{ switcherCls }">
-              <down-outlined :class="switcherCls"/>
-            </template>
-            <template #icon="{ key, selected }">
-              <template v-if="key === '0-0' || key === 'root'">
-                <apartment-outlined />
-              </template>
-              <template v-else-if="key === '0-0-1'">
-                <codepen-circle-outlined />
-              </template>
-              <template v-else>
-                <codepen-outlined />
-              </template>
-            </template>
-          </a-tree>
+          <a-tree
+            :tree-data="treeData"
+          />
         </a-card>
       </page-layout>
     </a-layout-sider>
@@ -46,21 +33,8 @@
 <script>
 import {DownOutlined, SmileOutlined, FrownOutlined, FrownFilled} from '@ant-design/icons-vue';
 import {defineComponent, ref} from 'vue';
+import {loadOrgTree} from "../../api/module/system";
 
-const treeData = [{
-  title: 'TLv8开源组',
-  key: '0-0',
-  children: [{
-    title: '设计部',
-    key: '0-0-0',
-  }, {
-    title: '开发部',
-    key: '0-0-1',
-  }, {
-    title: '市场部',
-    key: '0-0-2',
-  }],
-}];
 const dataItem = {
   key: "1",
   name: "Joe Black",
@@ -128,11 +102,11 @@ export default defineComponent({
         title: "姓名",
         dataIndex: "name",
         key: "name",
-        slots: { customRender: "name" },
+        slots: {customRender: "name"},
       },
-      { title: "性别", dataIndex: "sex", key: "sex" },
-      { title: "年龄", dataIndex: "age", key: "age" },
-      { title: "地址", dataIndex: "address", key: "address" },
+      {title: "性别", dataIndex: "sex", key: "sex"},
+      {title: "年龄", dataIndex: "age", key: "age"},
+      {title: "地址", dataIndex: "address", key: "address"},
     ];
 
     /// 行操作
@@ -173,15 +147,20 @@ export default defineComponent({
         ],
       },
     ];
+    const treeData = [];
     return {
-      selectedKeys: ref(['0-0-0']),
       treeData,
-      pagination: { current: 1, pageSize: 16 }, // 分页配置
+      pagination: {current: 1, pageSize: 16}, // 分页配置
       fetch: fetch, // 数据回调
       toolbar: toolbar, // 工具栏
       columns: columns, // 列配置
       operate: operate, // 行操作
     };
   },
+  created() {
+    loadOrgTree().then(res => {
+      this.$set(this.treeData, res);
+    });
+  }
 });
 </script>

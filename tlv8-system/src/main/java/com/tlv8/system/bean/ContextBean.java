@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.help.Configuration;
 import com.tlv8.system.help.OnlineHelper;
-import com.tlv8.system.help.SessionHelper;
 import com.tlv8.system.service.TokenService;
 
 /**
@@ -28,7 +27,6 @@ public class ContextBean implements Serializable {
     private String uiServerRemoteURL;
     private String businessServerRemoteURL;
     private String businessID;
-    private String sessionID;
     private String onceFunc;
     private String username;
     private String password;
@@ -92,6 +90,8 @@ public class ContextBean implements Serializable {
     private String currentOrgID;
     private String loginID;
 
+    private String locale;
+
     /**
      * 用户唯一标识
      */
@@ -105,14 +105,12 @@ public class ContextBean implements Serializable {
      * 根据request获取
      */
     public static ContextBean getContext(HttpServletRequest request) {
-        //OnlineHelper.getOnlineUserMap();
-        //return SessionHelper.getContext(request);
-        ContextBean contextBean = SessionHelper.getContext(request);
-        if (contextBean.isLogin) {
-            return contextBean;
-        }
         TokenService tokenService = new TokenService();
-        return tokenService.getContextBean(request);
+        ContextBean contextBean = tokenService.getContextBean(request);
+        if (contextBean == null) {
+            contextBean = new ContextBean();
+        }
+        return contextBean;
     }
 
     /**
@@ -146,9 +144,6 @@ public class ContextBean implements Serializable {
     }
 
     public void initLoginContext(HttpServletRequest request, HashMap<String, String> params) {
-        SessionHelper.setUsername(request, params.get("personID"));
-        this.sessionID = request.getSession().getId();
-        SessionHelper.setSessionID(request, this.sessionID);
         this.isLogin = Boolean.TRUE;
         this.username = params.get("username");
         this.personID = params.get("personID");
@@ -212,18 +207,16 @@ public class ContextBean implements Serializable {
             for (int i = keys.length - 1; i >= 0; i--) {
                 String locale = Configuration.getLocale(keys[i].replaceAll("\\..*", ""));
                 if ((locale != null) && (!locale.equals(""))) {
-                    setLocale(request, locale);
+                    setLocale(locale);
                     break;
                 }
             }
         }
         this.loginID = IDUtils.getGUID();
-        SessionHelper.setContext(request, this);
     }
 
     public void initLogoutContext(HttpServletRequest request) {
         this.isLogin = Boolean.FALSE;
-        SessionHelper.invalidate(request);
     }
 
     public Boolean hasBusinessSession() {
@@ -283,12 +276,12 @@ public class ContextBean implements Serializable {
         this.uiServerRemoteURL = url;
     }
 
-    public String getLocale(HttpServletRequest request) {
-        return SessionHelper.getLocale(request);
+    public String getLocale() {
+        return locale;
     }
 
-    public void setLocale(HttpServletRequest request, String language) {
-        SessionHelper.setLocale(request, language);
+    public void setLocale(String language) {
+        this.locale = language;
     }
 
     public String getBusinessID() {
@@ -535,14 +528,6 @@ public class ContextBean implements Serializable {
 
     public void setLoginDate(String loginDate) {
         this.loginDate = loginDate;
-    }
-
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
-    }
-
-    public String getSessionID() {
-        return sessionID;
     }
 
     public void setPassword(String password) {

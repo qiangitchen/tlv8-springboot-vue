@@ -57,9 +57,8 @@ const actions = {
   },
   async login({commit}, data) {
     const response = await login(data)
-    const {code, message, result: userInfo} = response
+    const {code, message, token, result: userInfo} = response
     if (code === 200) {
-      const {token} = userInfo
       delete userInfo.menuList
       delete userInfo.token
       delete userInfo.password

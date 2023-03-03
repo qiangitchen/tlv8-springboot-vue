@@ -60,13 +60,6 @@ public final class OnlineHelper implements HttpSessionListener {
 		// RegisterCheck.check();
 		Date date = new Date();
 		// LoginSetting.checkLog(getOnlineCount() + 1);
-		String sessionID = SessionHelper.getContext(request).getSessionID();
-		// String userID = SessionHelper.getContext(request).getCurrentUserID();
-		if ((sessionID != null) && (!"".equals(sessionID))) {
-			userList.put(sessionID, date);
-			onlienusemap.put(sessionID, SessionHelper.getContext(request));
-			Sys.printMsg("系统当前在线人数：" + userList.size());
-		}
 
 		try {
 			new InitOnlineInfoAction().execute(request, response);
