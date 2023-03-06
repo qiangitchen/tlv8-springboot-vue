@@ -17,10 +17,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <spring.boot.version>2.6.7</spring.boot.version>
+        <spring.boot.version>2.7.9</spring.boot.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <druid.version>1.2.8</druid.version>
         <swagger.version>3.0.0</swagger.version>
+        <mysql-connector.version>8.0.32</mysql-connector.version>
+        <postgresql-connector.version>42.5.4</postgresql-connector.version>
         <mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
         <servlet.version>4.0.1</servlet.version>
         <commons.io.version>2.11.0</commons.io.version>
@@ -79,6 +81,20 @@
                 <version>${spring.boot.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <!-- Mysql驱动包 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            
+            <!-- PostgreSQL驱动包 -->
+            <dependency>
+			    <groupId>org.postgresql</groupId>
+			    <artifactId>postgresql</artifactId>
+			    <version>${postgresql-connector.version}</version>
+			</dependency>
 
             <!-- 阿里数据库连接池 -->
             <dependency>

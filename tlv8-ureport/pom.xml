@@ -75,6 +75,10 @@
             <groupId>com.tlv8</groupId>
             <artifactId>tlv8-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 
     </dependencies>
 

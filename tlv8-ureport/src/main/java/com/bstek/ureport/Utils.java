@@ -234,6 +234,7 @@ public class Utils implements ApplicationContextAware {
 					}
 
 					@Override
+					@SuppressWarnings("deprecation")
 					public Connection getConnection() {
 						try {
 							return DBUtils.getAppConn(k);

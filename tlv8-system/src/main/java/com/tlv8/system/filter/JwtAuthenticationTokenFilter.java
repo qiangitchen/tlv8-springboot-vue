@@ -1,22 +1,22 @@
 package com.tlv8.system.filter;
 
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import com.alibaba.fastjson.JSON;
-import com.tlv8.common.base.Sys;
 import com.tlv8.common.constant.HttpStatus;
 import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.ServletUtils;
 import com.tlv8.common.utils.StringUtils;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.service.TokenService;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * token过滤器 验证token有效性

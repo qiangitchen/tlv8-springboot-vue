@@ -58,9 +58,7 @@ public final class OnlineHelper implements HttpSessionListener {
 
 	public static synchronized void refresh(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// RegisterCheck.check();
-		Date date = new Date();
 		// LoginSetting.checkLog(getOnlineCount() + 1);
-
 		try {
 			new InitOnlineInfoAction().execute(request, response);
 		} catch (Exception e) {

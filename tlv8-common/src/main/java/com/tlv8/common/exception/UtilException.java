@@ -5,6 +5,7 @@ package com.tlv8.common.exception;
  * 
  * @author tlv8
  */
+@SuppressWarnings("serial")
 public class UtilException extends RuntimeException {
 
 	public UtilException(Throwable e) {

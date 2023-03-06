@@ -15,6 +15,7 @@ import com.tlv8.common.utils.poi.ExcelHandlerAdapter;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
+@SuppressWarnings("deprecation")
 public @interface Excel
 {
     /**
@@ -55,7 +56,7 @@ public @interface Excel
     /**
      * BigDecimal 舍入规则 默认:BigDecimal.ROUND_HALF_EVEN
      */
-    int roundingMode() default BigDecimal.ROUND_HALF_EVEN;
+	int roundingMode() default BigDecimal.ROUND_HALF_EVEN;
 
     /**
      * 导出类型（0数字 1字符串）

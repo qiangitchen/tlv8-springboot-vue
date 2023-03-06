@@ -43,6 +43,7 @@ import com.bstek.ureport.model.Row;
  * @author Jacky.gao
  * @since 2016年12月30日
  */
+@SuppressWarnings("deprecation")
 public class HtmlProducer{
 	public String produce(Report report) {
 		List<Row> rows=report.getRows();

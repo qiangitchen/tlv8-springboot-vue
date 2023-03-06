@@ -1,9 +1,9 @@
 package com.tlv8.system.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.tlv8.common.domain.AjaxResult;
-import com.tlv8.common.utils.FileAndString;
-import com.tlv8.system.service.ISaMenuService;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -11,20 +11,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.tlv8.common.domain.AjaxResult;
+import com.tlv8.common.utils.FileAndString;
+import com.tlv8.system.service.ISaMenuService;
 
 @Controller
 @RequestMapping("/system/User")
+@SuppressWarnings("rawtypes")
 public class MenusController {
 
     @Autowired
     ISaMenuService saMenuService;
 
-    @RequestMapping("/getUserMenusArray")
+	@RequestMapping("/getUserMenusArray")
     @ResponseBody
     public Object getUserMenusArray() {
         List list = new ArrayList();

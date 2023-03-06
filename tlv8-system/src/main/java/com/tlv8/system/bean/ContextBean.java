@@ -19,7 +19,7 @@ import com.tlv8.system.service.TokenService;
  *
  * @author chenqian
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "serial"})
 public class ContextBean implements Serializable {
     private Boolean isLogin = Boolean.FALSE;
     private String uiServerURL;
