@@ -1,6 +1,6 @@
 package com.tlv8.system.service;
 
-import java.util.Map;
+import com.tlv8.system.pojo.SysLogin;
 
 public interface ISysLoginService {
 	/**
@@ -9,7 +9,7 @@ public interface ISysLoginService {
 	 * @param code
 	 * @return
 	 */
-	Map<String, Object> getInfoByCode(String code, String loginname, String mphone);
+	SysLogin getInfoByCode(String code, String loginname, String mphone);
 
 	/**
 	 * 根据ca编号获取用户信息
@@ -17,7 +17,7 @@ public interface ISysLoginService {
 	 * @param casn
 	 * @return
 	 */
-	Map<String, Object> getInfoByCASN(String casn);
+	SysLogin getInfoByCASN(String casn);
 
 	/**
 	 * 根据ca签名获取用户信息
@@ -25,5 +25,5 @@ public interface ISysLoginService {
 	 * @param signm
 	 * @return
 	 */
-	Map<String, Object> getInfoBySignm(String signm);
+	SysLogin getInfoBySignm(String signm);
 }

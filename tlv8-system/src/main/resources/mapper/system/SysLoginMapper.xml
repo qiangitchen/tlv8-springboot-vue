@@ -1,26 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tlv8.system.mapper.SysLoginMapper">
+    <resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SysLogin">
+        <id column="sid" property="sid" jdbcType="VARCHAR"/>
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="PERSONID" property="personid" jdbcType="VARCHAR"/>
+        <result column="PERSONNAME" property="personname" jdbcType="VARCHAR"/>
+        <result column="PERSONCODE" property="personcode" jdbcType="VARCHAR"/>
+        <result column="ORGID" property="orgid" jdbcType="VARCHAR"/>
+        <result column="ORGNAME" property="orgname" jdbcType="VARCHAR"/>
+        <result column="ORGPATH" property="orgpath" jdbcType="VARCHAR"/>
+        <result column="AGENTPERSONID" property="agentpersonid" jdbcType="VARCHAR"/>
+        <result column="AGENTPERSONNAME" property="agentpersonname" jdbcType="VARCHAR"/>
+        <result column="AGENTPERSONCODE" property="agentpersoncode" jdbcType="VARCHAR"/>
+        <result column="AGENTORGID" property="agentorgid" jdbcType="VARCHAR"/>
+        <result column="AGENTORGNAME" property="agentorgname" jdbcType="VARCHAR"/>
+        <result column="AGENTORGPATH" property="agentorgpath" jdbcType="VARCHAR"/>
+        <result column="SMOBILEPHONE" property="smobilephone" jdbcType="VARCHAR"/>
+        <result column="SPASSWORD" property="spassword" jdbcType="VARCHAR"/>
+        <result column="SVALIDSTATE" property="svalidstate" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="getInfoByCode" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select p.sName                                                                 USERNAME,
+               p.sID                                                                   PERSONID,
+               p.sName                                                                 PERSONNAME,
+               p.sCode                                                                 PERSONCODE,
+               o.sID                                                                   ORGID,
+               o.sName                                                                 ORGNAME,
+               o.sFID                                                                  ORGPATH,
+               p.sID                                                                   AGENTPERSONID,
+               p.sName                                                                 AGENTPERSONNAME,
+               p.sCode                                                                 AGENTPERSONCODE,
+               o.sID                                                                   AGENTORGID,
+               o.sName                                                                 AGENTORGNAME,
+               o.sFID                                                                  AGENTORGPATH,
+               p.SPASSWORD,
+               p.SMOBILEPHONE,
+               case when (p.SVALIDSTATE = 1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE
+        from SA_OPPerson p
+                 left join SA_OPOrg o on p.SMAINORGID = o.SID
+        where (upper(p.sCode) = upper(#{code,jdbcType=VARCHAR}) or
+               upper(p.sloginname) = upper(#{loginname,jdbcType=VARCHAR}) or
+               p.SMOBILEPHONE = #{mphone,jdbcType=VARCHAR})
+    </select>
 
-	<select id="getInfoByCode" resultType="java.util.Map" parameterType="java.util.Map">
-		select p.sName USERNAME,p.sID PERSONID,p.sName PERSONNAME,p.sCode PERSONCODE,o.sID ORGID,o.sName ORGNAME,o.sFID ORGPATH,p.sID AGENTPERSONID,p.sName AGENTPERSONNAME,p.sCode AGENTPERSONCODE,o.sID AGENTORGID,o.sName AGENTORGNAME,o.sFID AGENTORGPATH , p.SPASSWORD,p.SMOBILEPHONE,
-		  case when (p.SVALIDSTATE=1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE 
-		 from SA_OPPerson p left join SA_OPOrg o on p.SMAINORGID = o.SID
-		   where (upper(p.sCode) = upper(#{code,jdbcType=VARCHAR}) or upper(p.sloginname) = upper(#{loginname,jdbcType=VARCHAR}) or p.SMOBILEPHONE=#{mphone,jdbcType=VARCHAR})
-	</select>
-	
-	<select id="getInfoByCASN" resultType="java.util.Map" parameterType="java.lang.String">
-		select p.sName USERNAME,p.sID PERSONID,p.sName PERSONNAME,p.sCode PERSONCODE,o.sID ORGID,o.sName ORGNAME,o.sFID ORGPATH,p.sID AGENTPERSONID,p.sName AGENTPERSONNAME,p.sCode AGENTPERSONCODE,o.sID AGENTORGID,o.sName AGENTORGNAME,o.sFID AGENTORGPATH , p.SPASSWORD,p.SMOBILEPHONE,
-		  case when (p.SVALIDSTATE=1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE 
-		 from SA_OPPerson p left join SA_OPOrg o on p.SMAINORGID = o.SID
-		   where p.fCASN=#{casn,jdbcType=VARCHAR}
-	</select>
-	
-	<select id="getInfoBySignm" resultType="java.util.Map" parameterType="java.lang.String">
-		select p.sName USERNAME,p.sID PERSONID,p.sName PERSONNAME,p.sCode PERSONCODE,o.sID ORGID,o.sName ORGNAME,o.sFID ORGPATH,p.sID AGENTPERSONID,p.sName AGENTPERSONNAME,p.sCode AGENTPERSONCODE,o.sID AGENTORGID,o.sName AGENTORGNAME,o.sFID AGENTORGPATH , p.SPASSWORD,p.SMOBILEPHONE,
-		  case when (p.SVALIDSTATE=1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE 
-		 from SA_OPPerson p left join SA_OPOrg o on p.SMAINORGID = o.SID
-		   where p.fsignm=#{signm,jdbcType=VARCHAR}
-	</select>
+    <select id="getInfoByCASN" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select p.sName                                                                 USERNAME,
+               p.sID                                                                   PERSONID,
+               p.sName                                                                 PERSONNAME,
+               p.sCode                                                                 PERSONCODE,
+               o.sID                                                                   ORGID,
+               o.sName                                                                 ORGNAME,
+               o.sFID                                                                  ORGPATH,
+               p.sID                                                                   AGENTPERSONID,
+               p.sName                                                                 AGENTPERSONNAME,
+               p.sCode                                                                 AGENTPERSONCODE,
+               o.sID                                                                   AGENTORGID,
+               o.sName                                                                 AGENTORGNAME,
+               o.sFID                                                                  AGENTORGPATH,
+               p.SPASSWORD,
+               p.SMOBILEPHONE,
+               case when (p.SVALIDSTATE = 1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE
+        from SA_OPPerson p
+                 left join SA_OPOrg o on p.SMAINORGID = o.SID
+        where p.fCASN = #{casn,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getInfoBySignm" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select p.sName                                                                 USERNAME,
+               p.sID                                                                   PERSONID,
+               p.sName                                                                 PERSONNAME,
+               p.sCode                                                                 PERSONCODE,
+               o.sID                                                                   ORGID,
+               o.sName                                                                 ORGNAME,
+               o.sFID                                                                  ORGPATH,
+               p.sID                                                                   AGENTPERSONID,
+               p.sName                                                                 AGENTPERSONNAME,
+               p.sCode                                                                 AGENTPERSONCODE,
+               o.sID                                                                   AGENTORGID,
+               o.sName                                                                 AGENTORGNAME,
+               o.sFID                                                                  AGENTORGPATH,
+               p.SPASSWORD,
+               p.SMOBILEPHONE,
+               case when (p.SVALIDSTATE = 1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE
+        from SA_OPPerson p
+                 left join SA_OPOrg o on p.SMAINORGID = o.SID
+        where p.fsignm = #{signm,jdbcType=VARCHAR}
+    </select>
 
 </mapper>
