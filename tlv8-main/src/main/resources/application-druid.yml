@@ -2,10 +2,10 @@
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
-        driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/v8sys?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: root
-        password: TLv8MySQL
+        driverClassName: org.postgresql.Driver
+        url: jdbc:postgresql://dev.tlv8.com:5432/tlv8-vue
+        username: postgres
+        password: Password
         # 初始连接数
         initialSize: 5
         # 最小连接池数量
