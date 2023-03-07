@@ -20,7 +20,10 @@ export default {
   'error-403': () => import('@/view/error/403.vue'),
   'error-404': () => import('@/view/error/404.vue'),
   'error-500': () => import('@/view/error/500.vue'),
-  'permission-test': () => import('@/view/permission/permission.vue'),
   'userInfo': () => import('@/view/systemManager/userInfo.vue'),
-  'organization': () => import('@/view/systemManager/organization.vue')
+  'sysMenu': () => import('@/view/systemManager/sysMenu.vue'),
+  'organization': () => import('@/view/systemManager/organization.vue'),
+  'roleManage': () => import('@/view/systemManager/roleManage.vue'),
+  'authorManage': () => import('@/view/systemManager/authorManage.vue'),
+  'manageMeant': () => import('@/view/systemManager/manageMeant.vue')
 }

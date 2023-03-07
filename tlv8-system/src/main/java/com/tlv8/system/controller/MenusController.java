@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tlv8.system.service.ISaMenuTreeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
@@ -15,11 +17,20 @@ import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.FileAndString;
 
 @Controller
-@RequestMapping("/system/User")
+@RequestMapping("/system")
 @SuppressWarnings("rawtypes")
 public class MenusController {
 
-	@RequestMapping("/getUserMenusArray")
+    @Autowired
+    ISaMenuTreeService saMenuTreeService;
+
+    @RequestMapping("/Menu/loadMenuTree")
+    @ResponseBody
+    public Object loadMenuTree() {
+        return AjaxResult.success(saMenuTreeService.selectList());
+    }
+
+    @RequestMapping("/User/getUserMenusArray")
     @ResponseBody
     public Object getUserMenusArray() {
         List list = new ArrayList();
@@ -36,19 +47,4 @@ public class MenusController {
         return AjaxResult.success(list);
     }
 
-    @RequestMapping("/getUserMenusTree")
-    @ResponseBody
-    public Object getUserMenusTree() {
-        List list = new ArrayList();
-        if (list.size() < 1) {
-            Resource resource = new ClassPathResource("menuTree.json");
-            try {
-                return AjaxResult.success(JSON.parseArray(FileAndString.FileToString(resource.getFile())));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return AjaxResult.error(e.getMessage());
-            }
-        }
-        return AjaxResult.success(list);
-    }
 }

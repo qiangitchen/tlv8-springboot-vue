@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tlv8.system.mapper.SaMenuTreeMapper">
+    <resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaMenuTree">
+        <id column="sid" property="sid" jdbcType="VARCHAR"/>
+        <result column="label" property="label" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="layuiicon" property="layuiicon" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="process" property="process" jdbcType="VARCHAR"/>
+        <result column="activity" property="activity" jdbcType="VARCHAR"/>
+        <result column="display" property="display" jdbcType="VARCHAR"/>
+        <result column="icon32" property="icon32" jdbcType="VARCHAR"/>
+        <result column="icon64" property="icon64" jdbcType="VARCHAR"/>
+        <result column="pid" property="pid" jdbcType="VARCHAR"/>
+        <result column="sorts" property="sorts" jdbcType="INTEGER"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid
+        ,label,icon,layuiicon,url,process,activity,display,icon32,icon64,pid,sorts,version
+    </sql>
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opmenutree
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opmenutree
+        where sid = #{sid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByPID" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opmenutree
+        where pid = #{pid,jdbcType=VARCHAR}
+    </select>
+    <insert id="insertData" parameterType="com.tlv8.system.pojo.SaMenuTree">
+        insert into
+        sa_opmenutree(<include refid="Base_Column_List"/>)
+        values( #{sid,jdbcType=VARCHAR},
+        #{label,jdbcType=VARCHAR},
+        #{icon,jdbcType=VARCHAR},
+        #{layuiicon,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR},
+        #{process,jdbcType=VARCHAR},
+        #{activity,jdbcType=VARCHAR},
+        #{display,jdbcType=VARCHAR},
+        #{icon32,jdbcType=VARCHAR},
+        #{icon64,jdbcType=VARCHAR},
+        #{pid,jdbcType=VARCHAR},
+        #{sorts,jdbcType=INTEGER},
+        #{version,jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="updateData" parameterType="com.tlv8.system.pojo.SaMenuTree">
+        update
+            sa_opmenutree
+        set label     = #{label,jdbcType=VARCHAR},
+            icon      = #{icon,jdbcType=VARCHAR},
+            layuiicon = #{layuiicon,jdbcType=VARCHAR},
+            url       = #{url,jdbcType=VARCHAR},
+            process   = #{process,jdbcType=VARCHAR},
+            activity  = #{activity,jdbcType=VARCHAR},
+            display   = #{display,jdbcType=VARCHAR},
+            icon32    = #{icon32,jdbcType=VARCHAR},
+            icon64    = #{icon64,jdbcType=VARCHAR},
+            pid       = #{pid,jdbcType=VARCHAR},
+            sorts     = #{sorts,jdbcType=INTEGER},
+            version   = #{version,jdbcType=INTEGER}
+        where sid = #{sid,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteData" parameterType="com.tlv8.system.pojo.SaMenuTree">
+        delete
+        from sa_opmenutree
+        where sid = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from sa_opmenutree
+        where sid = #{id,jdbcType=VARCHAR}
+    </delete>
+</mapper>

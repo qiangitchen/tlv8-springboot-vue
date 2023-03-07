@@ -8,7 +8,6 @@ import i18n from './locale/index.js';
 import directives from "./directive/index.js"
 import * as antIcons from '@ant-design/icons-vue';
 
-import "./mock";
 import "./assets/css/index.less";
 import "ant-design-vue/dist/antd.less";
 

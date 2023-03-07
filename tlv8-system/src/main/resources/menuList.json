@@ -321,34 +321,6 @@
     "i18n": "error-500"
   },
   {
-    "id": "25",
-    "parent": "27",
-    "path": "/permission",
-    "name": "permission",
-    "type": "dir",
-    "icon": "DatabaseOutlined",
-    "title": "系统权限",
-    "sort": 6,
-    "link": "",
-    "hidden": false,
-    "status": true,
-    "i18n": "permission"
-  },
-  {
-    "id": "26",
-    "parent": "25",
-    "path": "/permission/permission-test",
-    "name": "permission-test",
-    "type": "menu",
-    "icon": "DatabaseOutlined",
-    "title": "权限页面",
-    "sort": 7,
-    "link": "",
-    "hidden": false,
-    "status": true,
-    "i18n": "permission-test"
-  },
-  {
     "id": "27",
     "parent": "0",
     "path": "/system",
@@ -363,6 +335,20 @@
     "i18n": "system"
   },
   {
+    "id": "98",
+    "parent": "27",
+    "path": "/system/sysMenu",
+    "name": "sysMenu",
+    "type": "menu",
+    "icon": "DatabaseOutlined",
+    "title": "菜单配置",
+    "sort": 1,
+    "link": "",
+    "hidden": false,
+    "status": true,
+    "i18n": "sysMenu"
+  },
+  {
     "id": "99",
     "parent": "27",
     "path": "/system/organization",
@@ -370,10 +356,52 @@
     "type": "menu",
     "icon": "DatabaseOutlined",
     "title": "机构管理",
-    "sort": 0,
+    "sort": 2,
     "link": "",
     "hidden": false,
     "status": true,
     "i18n": "organization"
+  },
+  {
+    "id": "100",
+    "parent": "27",
+    "path": "/system/roleManage",
+    "name": "roleManage",
+    "type": "menu",
+    "icon": "DatabaseOutlined",
+    "title": "角色管理",
+    "sort": 3,
+    "link": "",
+    "hidden": false,
+    "status": true,
+    "i18n": "roleManage"
+  },
+  {
+    "id": "101",
+    "parent": "27",
+    "path": "/system/authorManage",
+    "name": "authorManage",
+    "type": "menu",
+    "icon": "DatabaseOutlined",
+    "title": "授权管理",
+    "sort": 4,
+    "link": "",
+    "hidden": false,
+    "status": true,
+    "i18n": "authorManage"
+  },
+  {
+    "id": "110",
+    "parent": "27",
+    "path": "/manageMeant",
+    "name": "manageMeant",
+    "type": "menu",
+    "icon": "DatabaseOutlined",
+    "title": "权限管理",
+    "sort": 6,
+    "link": "",
+    "hidden": false,
+    "status": true,
+    "i18n": "manageMeant"
   }
 ]

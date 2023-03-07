@@ -80,15 +80,6 @@ const getParentKey = (key, tree) => {
   }
   return parentKey;
 };
-const dataItem = {
-  key: "1",
-  SSEQUENCE: 1,
-  SCODE: "Joe Black",
-  SNAME: "boy",
-  SADDRESS: "Sidney No. 1 Lake Park Sidney No. 1 ",
-  SDESCRIPTION: "Sidney No. 1 Lake Park Sidney No. 1 ",
-  tags: ["cool", "teacher"]
-};
 export default defineComponent({
   setup() {
     /// 工具栏

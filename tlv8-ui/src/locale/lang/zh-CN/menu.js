@@ -22,9 +22,11 @@ export default {
   "error-403": "403",
   "error-404": "404",
   "error-500": "500",
-  "permission": "系统权限",
-  "permission-test": "权限测试",
-  "system":"系统管理",
-  "userInfo":"用户管理",
-  "organization":"机构管理"
+  "system": "系统管理",
+  "sysMenu": "菜单配置",
+  "userInfo": "用户管理",
+  "organization": "机构管理",
+  "roleManage": "角色管理",
+  "authorManage": "授权管理",
+  "manageMeant": "权限管理"
 }

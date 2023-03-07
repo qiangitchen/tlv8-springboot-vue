@@ -4,8 +4,7 @@ import md5 from 'js-md5'
 const Api = {
   login: '/system/User/MD5login',
   logout: '/system/User/logout',
-  menuList: '/system/User/getUserMenusArray',
-  menuTree: '/system/User/getUserMenusTree',
+  menuList: '/system/User/getUserMenusArray'
 }
 
 // 获取验证码
