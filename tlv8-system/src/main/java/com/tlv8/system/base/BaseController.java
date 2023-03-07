@@ -121,17 +121,7 @@ public class BaseController {
 
 	public String r(String key) {
 		initRequest();
-		return MessageResource.getMessage(contextbean.getLocale(), key);
-	}
-
-	public String r(String key, Object[] params) {
-		initRequest();
-		return MessageResource.getMessage(contextbean.getLocale(), key, params);
-	}
-
-	public String r(String key, Iterable<Object> params) {
-		initRequest();
-		return MessageResource.getMessage(contextbean.getLocale(), key, params);
+		return key;
 	}
 
 	public void setContext(ContextBean contextbean) {
