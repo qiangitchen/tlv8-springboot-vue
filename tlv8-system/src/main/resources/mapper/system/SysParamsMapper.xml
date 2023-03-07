@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tlv8.system.mapper.SysParamsMapper">
 
-	<select id="getOrgInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getOrgInfo" resultType="com.tlv8.system.pojo.SysParams" parameterType="java.lang.String">
 		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o where o.sid = #{orgid,jdbcType=VARCHAR} and o.SVALIDSTATE =1
 	</select>
 	
-	<select id="getOgnInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getOgnInfo" resultType="com.tlv8.system.pojo.SysParams" parameterType="java.lang.String">
 		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
 		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
 		 and (o.sorgkindid = 'ogn' or o.sorgkindid = 'org')
@@ -14,7 +14,7 @@
 		 order by SFID desc
 	</select>
 	
-	<select id="getDeptInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getDeptInfo" resultType="com.tlv8.system.pojo.SysParams" parameterType="java.lang.String">
 		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
 		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
 		 and (o.sorgkindid = 'dept' or o.sorgkindid = 'dpt')
@@ -22,7 +22,7 @@
 		 order by SFID desc
 	</select>
 	
-	<select id="getPositionInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getPositionInfo" resultType="com.tlv8.system.pojo.SysParams" parameterType="java.lang.String">
 		select o.SID,o.SNAME,o.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPOrg o 
 		where #{orgfid,jdbcType=VARCHAR} like concat(o.sFID,'%') 
 		 and o.sorgkindid = 'pos' 
@@ -30,13 +30,13 @@
 		 order by SFID desc
 	</select>
 	
-	<select id="getPersonInfo" resultType="java.util.Map" parameterType="java.lang.String">
+	<select id="getPersonInfo" resultType="com.tlv8.system.pojo.SysParams" parameterType="java.lang.String">
 		select p.SID,p.SNAME,p.SCODE,o.SFID,o.SFNAME,o.SFCODE from SA_OPPERSON p 
 		inner join SA_OPORG o on o.SPERSONID=p.SID and p.SMAINORGID=o.SPARENT 
 		where p.SID = #{personid,jdbcType=VARCHAR} and o.SVALIDSTATE =1 and p.SVALIDSTATE =1
 	</select>
 	
-	<select id="getUserInfo" resultType="java.util.Map" parameterType="java.util.Map">
+	<select id="getUserInfo" resultType="com.tlv8.system.pojo.SysParams" parameterType="java.util.Map">
 		select p.SID,p.SNAME,p.SCODE,concat(o.sFID,'/',p.sid) SFID,concat(o.sFName,'/',p.sName) SFNAME,concat(o.sFCode,'/',p.sCode) SFCODE from SA_OPPERSON p , SA_OPOrg o 
 		where o.sid = #{orgid,jdbcType=VARCHAR} 
 		 and p.sid = #{personid,jdbcType=VARCHAR} 

@@ -5,8 +5,7 @@ import java.util.Locale;
 import com.tlv8.system.resource.MessageResourceReader;
 
 public final class MessageResource {
-	private static final MessageResourceReader reader = MessageResourceReader
-			.getResourceReader();
+	private static final MessageResourceReader reader = MessageResourceReader.getResourceReader();
 
 	public static String getMessage(String locale, String key, Object[] params) {
 		Locale theLocale = null;
@@ -16,8 +15,7 @@ public final class MessageResource {
 		return reader.getProperty(key, theLocale, params);
 	}
 
-	public static String getMessage(String locale, String key,
-			Iterable<Object> params) {
+	public static String getMessage(String locale, String key, Iterable<Object> params) {
 		Locale theLocale = null;
 		if (locale != null) {
 			theLocale = new Locale(locale);

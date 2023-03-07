@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.tlv8.common.base.Data;
+import com.tlv8.common.redis.RedisCache;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.service.ISysParamsService;
+
+import cn.dev33.satoken.stp.StpUtil;
 
 /**
  * 角色
@@ -26,12 +29,15 @@ public class RolesController {
 	@Autowired
 	private ISysParamsService sysParamsService;
 
+	@Autowired
+	private RedisCache redisCache;
+
 	@ResponseBody
 	@RequestMapping("/getAllRolesAction")
 	public Object getAllRoles(HttpServletRequest request) throws Exception {
 		Data data = new Data();
 		try {
-			ContextBean context = ContextBean.getContext(request);
+			ContextBean context = redisCache.getCacheObject(StpUtil.getTokenValue());
 			String personfid = context.getCurrentPersonFullID();
 			List<Map<String, String>> list = sysParamsService.getRoles(personfid);
 			List<String> rolelist = new ArrayList<String>();

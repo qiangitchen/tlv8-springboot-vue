@@ -87,5 +87,27 @@
                  left join SA_OPOrg o on p.SMAINORGID = o.SID
         where p.fsignm = #{signm,jdbcType=VARCHAR}
     </select>
+    
+    <select id="getInfoByPersonId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select p.sName                                                                 USERNAME,
+               p.sID                                                                   PERSONID,
+               p.sName                                                                 PERSONNAME,
+               p.sCode                                                                 PERSONCODE,
+               o.sID                                                                   ORGID,
+               o.sName                                                                 ORGNAME,
+               o.sFID                                                                  ORGPATH,
+               p.sID                                                                   AGENTPERSONID,
+               p.sName                                                                 AGENTPERSONNAME,
+               p.sCode                                                                 AGENTPERSONCODE,
+               o.sID                                                                   AGENTORGID,
+               o.sName                                                                 AGENTORGNAME,
+               o.sFID                                                                  AGENTORGPATH,
+               p.SPASSWORD,
+               p.SMOBILEPHONE,
+               case when (p.SVALIDSTATE = 1) then o.SVALIDSTATE else p.SVALIDSTATE end SVALIDSTATE
+        from SA_OPPerson p
+                 left join SA_OPOrg o on p.SMAINORGID = o.SID
+        where p.sid = #{personid,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

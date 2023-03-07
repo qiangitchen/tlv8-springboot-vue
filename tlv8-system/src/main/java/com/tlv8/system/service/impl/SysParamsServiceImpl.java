@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tlv8.system.mapper.SysParamsMapper;
+import com.tlv8.system.pojo.SysParams;
 import com.tlv8.system.service.ISysParamsService;
 
 @Service
@@ -17,32 +18,32 @@ public class SysParamsServiceImpl implements ISysParamsService {
 	SysParamsMapper sysParamsMapper;
 
 	@Override
-	public Map<String, String> getOrgInfo(String orgid) {
+	public SysParams getOrgInfo(String orgid) {
 		return sysParamsMapper.getOrgInfo(orgid);
 	}
 
 	@Override
-	public Map<String, String> getOgnInfo(String orgfid) {
+	public SysParams getOgnInfo(String orgfid) {
 		return sysParamsMapper.getOgnInfo(orgfid);
 	}
 
 	@Override
-	public Map<String, String> getDeptInfo(String orgfid) {
+	public SysParams getDeptInfo(String orgfid) {
 		return sysParamsMapper.getDeptInfo(orgfid);
 	}
 
 	@Override
-	public Map<String, String> getPositionInfo(String orgfid) {
+	public SysParams getPositionInfo(String orgfid) {
 		return sysParamsMapper.getPositionInfo(orgfid);
 	}
 
 	@Override
-	public Map<String, String> getPersonInfo(String personid) {
+	public SysParams getPersonInfo(String personid) {
 		return sysParamsMapper.getPersonInfo(personid);
 	}
 
 	@Override
-	public Map<String, String> getUserInfo(String orgid, String personid) {
+	public SysParams getUserInfo(String orgid, String personid) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("orgid", orgid);
 		map.put("personid", personid);

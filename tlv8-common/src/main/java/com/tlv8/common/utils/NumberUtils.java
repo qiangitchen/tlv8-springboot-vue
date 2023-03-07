@@ -63,9 +63,4 @@ public class NumberUtils {
 		return df.format(num);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(format(100));
-		System.out.println(format(10000.5232d));
-		System.out.println(format(2323.23232f));
-	}
 }

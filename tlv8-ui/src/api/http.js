@@ -18,7 +18,7 @@ service.interceptors.request.use(config => {
       //console.log("url:" + config.url);
       //console.log("token:" + token);
       if (token) {
-        //config.headers["Access-Token"] = token;
+        config.headers["satoken"] = token; //sa-token
         config.headers["Authorization"] = 'TLv8 ' + token; //携带自定义token
       }
     }

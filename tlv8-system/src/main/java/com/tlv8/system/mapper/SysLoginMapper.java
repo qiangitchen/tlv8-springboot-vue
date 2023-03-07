@@ -32,4 +32,12 @@ public interface SysLoginMapper {
 	 */
 	SysLogin getInfoBySignm(String signm);
 
+	/**
+	 * 根据personid获取用户信息
+	 * 
+	 * @param personid
+	 * @return
+	 */
+	SysLogin getInfoByPersonId(String personid);
+
 }

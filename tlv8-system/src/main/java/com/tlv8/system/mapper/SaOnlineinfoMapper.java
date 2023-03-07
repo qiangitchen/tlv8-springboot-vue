@@ -1,11 +1,20 @@
 package com.tlv8.system.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.tlv8.system.pojo.SaOnlineinfo;
 
 @Mapper
 public interface SaOnlineinfoMapper {
+	/**
+	 * 获取在线用户信息列表
+	 * 
+	 * @return
+	 */
+	List<SaOnlineinfo> selectList();
+
 	/**
 	 * 根据主键获取数据对象
 	 * 
@@ -64,6 +73,7 @@ public interface SaOnlineinfoMapper {
 
 	/**
 	 * 删除指定机器码的在线用户信息
+	 * 
 	 * @param machineCode
 	 * @return
 	 */

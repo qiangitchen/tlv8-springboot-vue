@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.tlv8.system.pojo.SysParams;
+
 @Mapper
 public interface SysParamsMapper {
 	/**
@@ -13,7 +15,7 @@ public interface SysParamsMapper {
 	 * @param orgid
 	 * @return
 	 */
-	Map<String, String> getOrgInfo(String orgid);
+	SysParams getOrgInfo(String orgid);
 
 	/**
 	 * 获取机构信息
@@ -21,7 +23,7 @@ public interface SysParamsMapper {
 	 * @param orgfid
 	 * @return
 	 */
-	Map<String, String> getOgnInfo(String orgfid);
+	SysParams getOgnInfo(String orgfid);
 
 	/**
 	 * 获取部门信息
@@ -29,7 +31,7 @@ public interface SysParamsMapper {
 	 * @param orgfid
 	 * @return
 	 */
-	Map<String, String> getDeptInfo(String orgfid);
+	SysParams getDeptInfo(String orgfid);
 
 	/**
 	 * 获取岗位信息
@@ -37,7 +39,7 @@ public interface SysParamsMapper {
 	 * @param orgfid
 	 * @return
 	 */
-	Map<String, String> getPositionInfo(String orgfid);
+	SysParams getPositionInfo(String orgfid);
 
 	/**
 	 * 获取人员信息
@@ -45,7 +47,7 @@ public interface SysParamsMapper {
 	 * @param personid
 	 * @return
 	 */
-	Map<String, String> getPersonInfo(String personid);
+	SysParams getPersonInfo(String personid);
 
 	/**
 	 * 获取用户信息
@@ -54,7 +56,7 @@ public interface SysParamsMapper {
 	 * @param personid
 	 * @return
 	 */
-	Map<String, String> getUserInfo(Map<String, String> map);
+	SysParams getUserInfo(Map<String, String> map);
 
 	/**
 	 * 获取用户的角色列表

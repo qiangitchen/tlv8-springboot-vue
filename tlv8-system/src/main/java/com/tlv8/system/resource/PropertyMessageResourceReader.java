@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 
-import com.tlv8.system.help.Configuration;
-
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PropertyMessageResourceReader extends MessageResourceReader {
 	protected static final Logger logger = Logger
@@ -23,32 +21,32 @@ public class PropertyMessageResourceReader extends MessageResourceReader {
 		if (this.messages.containsKey(locale)) {
 			return;
 		}
-		Properties properties = new Properties();
-		String name = Configuration.getConfig("jpolite.resource");
-		name = (name == null) ? "" : name.replace(".", "/");
-		if ((locale != null) && (locale.trim().length() > 0))
-			name = name + "_" + locale;
-		name = name + ".properties";
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("DEBUG:: PropertyMessageResourceReader.load -- 加载的本地资源文件为"
-					+ name);
-		}
-		ClassLoader classLoader = Thread.currentThread()
-				.getContextClassLoader();
-		if (classLoader == null)
-			classLoader = getClass().getClassLoader();
-		try {
-			if (classLoader != null) {
-				properties.load(classLoader.getResourceAsStream(name));
-				this.messages.put(locale, properties);
-			} else {
-				logger.info("DEBUG:: PropertyMessageResourceReader.load -- 无法加载资源"
-						+ name);
-			}
-		} catch (Exception e) {
-			logger.debug(e);
-		}
+//		Properties properties = new Properties();
+//		String name = Configuration.getConfig("jpolite.resource");
+//		name = (name == null) ? "" : name.replace(".", "/");
+//		if ((locale != null) && (locale.trim().length() > 0))
+//			name = name + "_" + locale;
+//		name = name + ".properties";
+//
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("DEBUG:: PropertyMessageResourceReader.load -- 加载的本地资源文件为"
+//					+ name);
+//		}
+//		ClassLoader classLoader = Thread.currentThread()
+//				.getContextClassLoader();
+//		if (classLoader == null)
+//			classLoader = getClass().getClassLoader();
+//		try {
+//			if (classLoader != null) {
+//				properties.load(classLoader.getResourceAsStream(name));
+//				this.messages.put(locale, properties);
+//			} else {
+//				logger.info("DEBUG:: PropertyMessageResourceReader.load -- 无法加载资源"
+//						+ name);
+//			}
+//		} catch (Exception e) {
+//			logger.debug(e);
+//		}
 	}
 
 	public String getProperty(String key, Locale locale) {

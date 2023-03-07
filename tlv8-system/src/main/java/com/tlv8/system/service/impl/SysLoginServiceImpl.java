@@ -34,5 +34,10 @@ public class SysLoginServiceImpl implements ISysLoginService {
 	public SysLogin getInfoBySignm(String signm) {
 		return sysLoginMapper.getInfoBySignm(signm);
 	}
+	
+	@Override
+	public SysLogin getInfoByPersonId(String personid) {
+		return sysLoginMapper.getInfoByPersonId(personid);
+	}
 
 }

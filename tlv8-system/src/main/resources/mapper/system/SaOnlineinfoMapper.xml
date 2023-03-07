@@ -17,6 +17,11 @@
 	<sql id="Base_Column_List">
 		sid,suserid,susername,suserfid,suserfname,sloginip,slogindate,ssessionid,sserviceip,smachinecode,version
 	</sql>
+	<select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_Onlineinfo
+	</select>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select 
 		<include refid="Base_Column_List" />

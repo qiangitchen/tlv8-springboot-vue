@@ -1,6 +1,5 @@
 package com.tlv8.system.config;
 
-import com.tlv8.system.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,8 +36,4 @@ public class BeanConfig {
         return new WriteLoginLog();
     }
 
-    @Bean
-    public TokenService initTokenService() {
-        return new TokenService();
-    }
 }

@@ -1,8 +1,18 @@
 package com.tlv8.system.service;
 
+import java.util.List;
+
 import com.tlv8.system.pojo.SaOnlineinfo;
 
 public interface ISaOnlineinfoService {
+
+	/**
+	 * 获取在线用户信息列表
+	 * 
+	 * @return
+	 */
+	List<SaOnlineinfo> selectList();
+
 	/**
 	 * 根据主键获取数据对象
 	 * 
@@ -61,6 +71,7 @@ public interface ISaOnlineinfoService {
 
 	/**
 	 * 删除指定机器码的在线用户信息
+	 * 
 	 * @param machineCode
 	 * @return
 	 */

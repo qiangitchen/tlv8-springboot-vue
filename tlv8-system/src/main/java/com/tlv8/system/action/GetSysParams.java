@@ -1,12 +1,11 @@
 package com.tlv8.system.action;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tlv8.system.pojo.SysLogin;
+import com.tlv8.system.pojo.SysParams;
 import com.tlv8.system.service.ISysParamsService;
 
 public class GetSysParams {
@@ -14,34 +13,32 @@ public class GetSysParams {
 	@Autowired
 	ISysParamsService iSysParamsService;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public HashMap<String, String> getSysParamsFunc(HashMap<String, String> params) throws Exception {
-		String loginDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+	public HashMap<String, String> getSysParamsFunc(SysLogin sysLogin) throws Exception {
+		HashMap<String, String> params = new HashMap<String, String>();
 		try {
-			params.put("loginDate", loginDate);
-			getOrgInfo(params);
-			getOgnInfo(params);
-			getUserInfo(params);
-			getPersonInfo(params);
-			getDeptInfo(params);
-			getPositionInfo(params);
+			params.put("username", sysLogin.getUsername());
+			getOrgInfo(sysLogin, params);
+			getOgnInfo(sysLogin, params);
+			getUserInfo(sysLogin, params);
+			getPersonInfo(sysLogin, params);
+			getDeptInfo(sysLogin, params);
+			getPositionInfo(sysLogin, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		HashMap m = params;
-		return m;
+		return params;
 	}
 
-	private void getOrgInfo(HashMap<String, String> params) throws Exception {
+	private void getOrgInfo(SysLogin sysLogin, HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> orgmap = iSysParamsService.getOrgInfo(params.get("orgID"));
-			if (orgmap != null && !orgmap.isEmpty()) {
-				params.put("currentOrgID", orgmap.get("SID"));
-				params.put("currentOrgName", orgmap.get("SNAME"));
-				params.put("currentOrgCode", orgmap.get("SCODE"));
-				params.put("currentOrgFullID", orgmap.get("SFID"));
-				params.put("currentOrgFullName", orgmap.get("SFNAME"));
-				params.put("currentOrgFullCode", orgmap.get("SFCODE"));
+			SysParams sysParams = iSysParamsService.getOrgInfo(sysLogin.getOrgid());
+			if (sysParams != null) {
+				params.put("currentOrgID", sysParams.getSid());
+				params.put("currentOrgName", sysParams.getSname());
+				params.put("currentOrgCode", sysParams.getScode());
+				params.put("currentOrgFullID", sysParams.getSfid());
+				params.put("currentOrgFullName", sysParams.getSfname());
+				params.put("currentOrgFullCode", sysParams.getSfcode());
 			} else {
 				params.put("currentOrgID", "");
 				params.put("currentOrgName", "");
@@ -55,16 +52,16 @@ public class GetSysParams {
 		}
 	}
 
-	private void getOgnInfo(HashMap<String, String> params) throws Exception {
+	private void getOgnInfo(SysLogin sysLogin, HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = iSysParamsService.getOgnInfo(params.get("currentOrgFullID"));
-			if (map != null && !map.isEmpty()) {
-				params.put("currentOgnID", map.get("SID"));
-				params.put("currentOgnName", map.get("SNAME"));
-				params.put("currentOgnCode", map.get("SCODE"));
-				params.put("currentOgnFullID", map.get("SFID"));
-				params.put("currentOgnFullName", map.get("SFNAME"));
-				params.put("currentOgnFullCode", map.get("SFCODE"));
+			SysParams sysParams = iSysParamsService.getOgnInfo(sysLogin.getOrgpath());
+			if (sysParams != null) {
+				params.put("currentOgnID", sysParams.getSid());
+				params.put("currentOgnName", sysParams.getSname());
+				params.put("currentOgnCode", sysParams.getScode());
+				params.put("currentOgnFullID", sysParams.getSfid());
+				params.put("currentOgnFullName", sysParams.getSfname());
+				params.put("currentOgnFullCode", sysParams.getSfcode());
 			} else {
 				params.put("currentOgnID", params.get("currentOrgID"));
 				params.put("currentOgnName", params.get("currentOrgName"));
@@ -78,16 +75,16 @@ public class GetSysParams {
 		}
 	}
 
-	private void getUserInfo(HashMap<String, String> params) throws Exception {
+	private void getUserInfo(SysLogin sysLogin, HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = iSysParamsService.getUserInfo(params.get("orgID"), params.get("personID"));
-			if (map != null && !map.isEmpty()) {
-				params.put("currentUserID", map.get("SID"));
-				params.put("currentUserName", map.get("SNAME"));
-				params.put("currentUserCode", map.get("SCODE"));
-				params.put("currentUserFullID", map.get("SFID"));
-				params.put("currentUserFullName", map.get("SFNAME"));
-				params.put("currentUserFullCode", map.get("SFCODE"));
+			SysParams sysParams = iSysParamsService.getUserInfo(sysLogin.getOrgid(), sysLogin.getPersonid());
+			if (sysParams != null) {
+				params.put("currentUserID", sysParams.getSid());
+				params.put("currentUserName", sysParams.getSname());
+				params.put("currentUserCode", sysParams.getScode());
+				params.put("currentUserFullID", sysParams.getSfid());
+				params.put("currentUserFullName", sysParams.getSfname());
+				params.put("currentUserFullCode", sysParams.getSfcode());
 			} else {
 				params.put("currentUserID", "");
 				params.put("currentUserName", "");
@@ -101,17 +98,20 @@ public class GetSysParams {
 		}
 	}
 
-	private void getPersonInfo(HashMap<String, String> params) throws Exception {
+	private void getPersonInfo(SysLogin sysLogin, HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = iSysParamsService.getPersonInfo(params.get("personID"));
-			if (map != null && !map.isEmpty()) {
-				params.put("currentPersonID", map.get("SID"));
-				params.put("currentPersonName", map.get("SNAME"));
-				params.put("currentPersonCode", map.get("SCODE"));
-				params.put("currentPersonFullID", map.get("SFID"));
-				params.put("allMemberOfOrgFullID", map.get("SFID"));
-				params.put("currentPersonFullName", map.get("SFNAME"));
-				params.put("currentPersonFullCode", map.get("SCODEID"));
+			SysParams sysParams = iSysParamsService.getPersonInfo(sysLogin.getPersonid());
+			if (sysParams != null) {
+				params.put("currentPersonID", sysParams.getSid());
+				params.put("personID", sysParams.getSid());
+				params.put("currentPersonName", sysParams.getSname());
+				params.put("personName", sysParams.getSname());
+				params.put("currentPersonCode", sysParams.getScode());
+				params.put("personCode", sysParams.getScode());
+				params.put("currentPersonFullID", sysParams.getSfid());
+				params.put("allMemberOfOrgFullID", sysParams.getSfid());
+				params.put("currentPersonFullName", sysParams.getSfname());
+				params.put("currentPersonFullCode", sysParams.getSfcode());
 				params.put("currentProcessLabel", "系统调用");
 				params.put("currentActivityLabel", "系统调用活动");
 			} else {
@@ -130,16 +130,16 @@ public class GetSysParams {
 		}
 	}
 
-	private void getDeptInfo(HashMap<String, String> params) throws Exception {
+	private void getDeptInfo(SysLogin sysLogin, HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = iSysParamsService.getDeptInfo(params.get("currentOrgFullID"));
-			if (map != null && !map.isEmpty()) {
-				params.put("currentDeptID", map.get("SID"));
-				params.put("currentDeptName", map.get("SNAME"));
-				params.put("currentDeptCode", map.get("SCODE"));
-				params.put("currentDeptFullID", map.get("SFID"));
-				params.put("currentDeptFullName", map.get("SFNAME"));
-				params.put("currentDeptFullCode", map.get("SFCODE"));
+			SysParams sysParams = iSysParamsService.getDeptInfo(sysLogin.getOrgpath());
+			if (sysParams != null) {
+				params.put("currentDeptID", sysParams.getSid());
+				params.put("currentDeptName", sysParams.getSname());
+				params.put("currentDeptCode", sysParams.getScode());
+				params.put("currentDeptFullID", sysParams.getSfid());
+				params.put("currentDeptFullName", sysParams.getSfname());
+				params.put("currentDeptFullCode", sysParams.getSfcode());
 			} else {
 				params.put("currentDeptID", "");
 				params.put("currentDeptName", "");
@@ -153,16 +153,16 @@ public class GetSysParams {
 		}
 	}
 
-	private void getPositionInfo(HashMap<String, String> params) throws Exception {
+	private void getPositionInfo(SysLogin sysLogin, HashMap<String, String> params) throws Exception {
 		try {
-			Map<String, String> map = iSysParamsService.getPositionInfo(params.get("currentOrgFullID"));
-			if (map != null && !map.isEmpty()) {
-				params.put("currentPositionID", map.get("SID"));
-				params.put("currentPositionName", map.get("SNAME"));
-				params.put("currentPositionCode", map.get("SCODE"));
-				params.put("currentPositionFullID", map.get("SFID"));
-				params.put("currentPositionFullName", map.get("SNAME"));
-				params.put("currentPositionFullCode", map.get("SFCODE"));
+			SysParams sysParams = iSysParamsService.getPositionInfo(sysLogin.getOrgpath());
+			if (sysParams != null) {
+				params.put("currentPositionID", sysParams.getSid());
+				params.put("currentPositionName", sysParams.getSname());
+				params.put("currentPositionCode", sysParams.getScode());
+				params.put("currentPositionFullID", sysParams.getSfid());
+				params.put("currentPositionFullName", sysParams.getSfname());
+				params.put("currentPositionFullCode", sysParams.getSfcode());
 			} else {
 				params.put("currentPositionID", "");
 				params.put("currentPositionName", "");

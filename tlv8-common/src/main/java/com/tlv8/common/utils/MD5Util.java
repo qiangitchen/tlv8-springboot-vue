@@ -43,9 +43,4 @@ public class MD5Util {
 		return encode("webadmin" + password);
 	}
 
-	public static void main(String[] args) {
-		String encodepass = encode("demo" + System.currentTimeMillis());
-		System.out.println(encodepass);
-		System.out.println(enCodeAdminPass("123456"));
-	}
 }
