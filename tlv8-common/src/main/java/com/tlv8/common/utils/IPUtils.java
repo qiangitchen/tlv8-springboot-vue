@@ -10,18 +10,16 @@ public class IPUtils {
 	 * 获取服务器的IP
 	 */
 	public static String getIP() {
-		String IP = "";
+		String IP = "127.0.0.1";
 		try {
 			InetAddress address = InetAddress.getLocalHost();
 			IP = address.getHostAddress();
-			// System.out.println("localhost:"+address.getHostAddress());
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return IP;
 	}
-	
+
 	/**
 	 * 获取访问者的IP
 	 */
@@ -42,6 +40,8 @@ public class IPUtils {
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = req.getRemoteAddr();
 		}
+		if (ip.equals("0:0:0:0:0:0:0:1"))
+			ip = "127.0.0.1";
 		return ip;
 	}
 }
