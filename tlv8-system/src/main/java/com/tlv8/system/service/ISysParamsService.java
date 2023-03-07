@@ -1,8 +1,8 @@
 package com.tlv8.system.service;
 
 import java.util.List;
-import java.util.Map;
 
+import com.tlv8.system.pojo.SaOpRole;
 import com.tlv8.system.pojo.SysParams;
 
 public interface ISysParamsService {
@@ -61,5 +61,5 @@ public interface ISysParamsService {
 	 * @param personfid
 	 * @return
 	 */
-	List<Map<String, String>> getRoles(String personfid);
+	List<SaOpRole> getRoles(String personfid);
 }

@@ -23,35 +23,36 @@ import cn.dev33.satoken.stp.StpUtil;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-        String patex = request.getRequestURI();
-        if (isLoginPage(patex) || isIgnore(patex)) {
-            chain.doFilter(request, response);
-        } else {
-            // 判断是否已登录
-            if (StpUtil.isLogin()) {
-                chain.doFilter(request, response);
-            } else {
-                ServletUtils.renderString(response, JSON.toJSONString(AjaxResult.error(HttpStatus.UNAUTHORIZED, "请先登录")));
-            }
-        }
-    }
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+		String patex = request.getRequestURI();
+		if (isLoginPage(patex) || isIgnore(patex)) {
+			chain.doFilter(request, response);
+		} else {
+			// 判断是否已登录
+			if (StpUtil.isLogin()) {
+				chain.doFilter(request, response);
+			} else {
+				ServletUtils.renderString(response,
+						JSON.toJSONString(AjaxResult.error(HttpStatus.UNAUTHORIZED, "请先登录")));
+			}
+		}
+	}
 
-    /**
-     * 判断是否为登录-检查登录
-     */
-    private boolean isLoginPage(String patex) {
-        boolean isre = patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
-                || patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
-                || patex.contains("/logout") || patex.contains("/MD5logout");
-        return isre;
-    }
+	/**
+	 * 判断是否为登录-检查登录
+	 */
+	private boolean isLoginPage(String patex) {
+		boolean isre = patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
+				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
+				|| patex.contains("/logout") || patex.contains("/MD5logout");
+		return isre;
+	}
 
-    private boolean isIgnore(String patex) {
-        boolean isre = patex.contains("/favicon.ico");
-        return isre;
-    }
+	private boolean isIgnore(String patex) {
+		boolean isre = patex.contains("/favicon.ico") || patex.contains("/DocServer/");
+		return isre;
+	}
 
 }

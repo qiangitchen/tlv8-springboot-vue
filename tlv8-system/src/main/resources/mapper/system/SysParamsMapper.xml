@@ -43,8 +43,8 @@
 		 and o.SVALIDSTATE =1 and p.SVALIDSTATE =1
 	</select>
 	
-	<select id="getRoles" resultType="java.util.Map" parameterType="java.lang.String">
-		select r.SID,r.SCODE,r.SNAME,t.SORGID,t.SORGNAME from sa_opauthorize t left join sa_oprole r on r.sid = t.sauthorizeroleid 
+	<select id="getRoles" resultType="com.tlv8.system.pojo.SaOpRole" parameterType="java.lang.String">
+		select r.* from sa_opauthorize t left join sa_oprole r on r.sid = t.sauthorizeroleid 
 		 where #{personfid,jdbcType=VARCHAR} like CONCAT(t.SORGFID,'%')
 	</select>
 

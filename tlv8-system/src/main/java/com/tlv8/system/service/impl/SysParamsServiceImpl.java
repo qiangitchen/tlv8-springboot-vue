@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tlv8.system.mapper.SysParamsMapper;
+import com.tlv8.system.pojo.SaOpRole;
 import com.tlv8.system.pojo.SysParams;
 import com.tlv8.system.service.ISysParamsService;
 
@@ -51,7 +52,7 @@ public class SysParamsServiceImpl implements ISysParamsService {
 	}
 
 	@Override
-	public List<Map<String, String>> getRoles(String personfid) {
+	public List<SaOpRole> getRoles(String personfid) {
 		return sysParamsMapper.getRoles(personfid);
 	}
 

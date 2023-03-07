@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.tlv8.system.pojo.SaOpRole;
 import com.tlv8.system.pojo.SysParams;
 
 @Mapper
@@ -64,5 +65,5 @@ public interface SysParamsMapper {
 	 * @param personfid
 	 * @return
 	 */
-	List<Map<String, String>> getRoles(String personfid);
+	List<SaOpRole> getRoles(String personfid);
 }
