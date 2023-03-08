@@ -109,6 +109,7 @@
       :dataSource="datasource"
       :row-selection="rowSelection"
       :size="size"
+      bordered
     >
       <!-- 列转换 -->
       <template

@@ -36,7 +36,10 @@ public class MenusController {
 			JSONObject json = (JSONObject) JSONObject.toJSON(me);
 			json.put("id", me.getSid());
 			json.put("key", me.getSid());
-			json.put("children", loadMenuChild(me.getSid()));
+			JSONArray child = loadMenuChild(me.getSid());
+			if (!child.isEmpty()) {
+				json.put("children", child);
+			}
 			jsona.add(json);
 		}
 		return AjaxResult.success(jsona);
@@ -49,7 +52,10 @@ public class MenusController {
 			JSONObject json = (JSONObject) JSONObject.toJSON(me);
 			json.put("id", me.getSid());
 			json.put("key", me.getSid());
-			json.put("children", loadMenuChild(me.getSid()));
+			JSONArray child = loadMenuChild(me.getSid());
+			if (!child.isEmpty()) {
+				json.put("children", child);
+			}
 			jsona.add(json);
 		}
 		return jsona;
