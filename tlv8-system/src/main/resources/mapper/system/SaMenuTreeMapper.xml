@@ -25,6 +25,11 @@
         <include refid="Base_Column_List"/>
         from sa_opmenutree
     </select>
+    <select id="selectRootList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opmenutree where pid is null or pid = ''
+    </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>

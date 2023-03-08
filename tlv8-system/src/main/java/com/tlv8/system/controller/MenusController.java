@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tlv8.system.pojo.SaMenuTree;
 import com.tlv8.system.service.ISaMenuTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.FileAndString;
 
@@ -21,30 +24,52 @@ import com.tlv8.common.utils.FileAndString;
 @SuppressWarnings("rawtypes")
 public class MenusController {
 
-    @Autowired
-    ISaMenuTreeService saMenuTreeService;
+	@Autowired
+	ISaMenuTreeService saMenuTreeService;
 
-    @RequestMapping("/Menu/loadMenuTree")
-    @ResponseBody
-    public Object loadMenuTree() {
-        return AjaxResult.success(saMenuTreeService.selectList());
-    }
+	@RequestMapping("/Menu/loadMenuTree")
+	@ResponseBody
+	public Object loadMenuTree() {
+		JSONArray jsona = new JSONArray();
+		List<SaMenuTree> roots = saMenuTreeService.selectRootList();
+		for (SaMenuTree me : roots) {
+			JSONObject json = (JSONObject) JSONObject.toJSON(me);
+			json.put("id", me.getSid());
+			json.put("key", me.getSid());
+			json.put("children", loadMenuChild(me.getSid()));
+			jsona.add(json);
+		}
+		return AjaxResult.success(jsona);
+	}
 
-    @RequestMapping("/User/getUserMenusArray")
-    @ResponseBody
-    public Object getUserMenusArray() {
-        List list = new ArrayList();
-        if (list.size() < 1) {
-            Resource resource = new ClassPathResource("menuList.json");
-            try {
-                String menuList = FileAndString.FileToString(resource.getFile());
-                return AjaxResult.success(JSON.parseArray(menuList));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return AjaxResult.error(e.getMessage());
-            }
-        }
-        return AjaxResult.success(list);
-    }
+	private JSONArray loadMenuChild(String pid) {
+		JSONArray jsona = new JSONArray();
+		List<SaMenuTree> roots = saMenuTreeService.selectByPID(pid);
+		for (SaMenuTree me : roots) {
+			JSONObject json = (JSONObject) JSONObject.toJSON(me);
+			json.put("id", me.getSid());
+			json.put("key", me.getSid());
+			json.put("children", loadMenuChild(me.getSid()));
+			jsona.add(json);
+		}
+		return jsona;
+	}
+
+	@RequestMapping("/User/getUserMenusArray")
+	@ResponseBody
+	public Object getUserMenusArray() {
+		List list = new ArrayList();
+		if (list.size() < 1) {
+			Resource resource = new ClassPathResource("menuList.json");
+			try {
+				String menuList = FileAndString.FileToString(resource.getFile());
+				return AjaxResult.success(JSON.parseArray(menuList));
+			} catch (IOException e) {
+				e.printStackTrace();
+				return AjaxResult.error(e.getMessage());
+			}
+		}
+		return AjaxResult.success(list);
+	}
 
 }

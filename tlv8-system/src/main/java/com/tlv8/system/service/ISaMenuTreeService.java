@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ISaMenuTreeService {
     List<SaMenuTree> selectList();
+    
+    List<SaMenuTree> selectRootList();
 
     /**
      * 根据主键获取数据对象

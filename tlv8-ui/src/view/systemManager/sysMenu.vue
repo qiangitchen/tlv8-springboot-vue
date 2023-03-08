@@ -1,5 +1,6 @@
 <template>
   <div id="table-dome">
+    <page-header title="菜单配置" describe="配置系统内可用功能清单"></page-header>
     <page-layout>
       <a-card>
         <p-table
@@ -22,10 +23,11 @@
 </template>
 <script>
 import {loadMenuTree} from "../../api/module/system";
+import {ref} from 'vue';
 
 export default {
   setup() {
-    /// 数据来源 [模拟]
+    /// 数据来源
     const fetch = async (param) => {
       return new Promise((resolve) => {
         loadMenuTree().then(res => {
@@ -41,22 +43,16 @@ export default {
     /// 工具栏
     const toolbar = [
       {
-        label: "新增",
+        label: "新增根目录",
         event: function (keys) {
           alert("新增操作:" + JSON.stringify(keys));
-        },
-      },
-      {
-        label: "删除",
-        event: function (keys) {
-          alert("批量删除:" + JSON.stringify(keys));
         },
       }
     ];
 
     /// 字段
     const columns = [
-      {title: "名称",dataIndex: "label",  key: "label"},
+      {title: "名称", dataIndex: "label", key: "label"},
       {title: "图标", dataIndex: "icon", key: "icon"},
       {title: "样式图标", dataIndex: "layuiicon", key: "layuiicon"},
       {title: "process", dataIndex: "process", key: "process"},
@@ -67,12 +63,11 @@ export default {
     /// 行操作
     const operate = [
       {
-        label: "查看",
+        label: "新增",
         event: function (record) {
-          alert("查看详情:" + JSON.stringify(record));
+          alert("新增事件:" + JSON.stringify(record));
         },
-      },
-      {
+      }, {
         label: "修改",
         event: function (record) {
           alert("修改事件:" + JSON.stringify(record));
@@ -85,7 +80,18 @@ export default {
         },
       }
     ];
-
+    const rowSelection = ref({
+      checkStrictly: true,
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      onSelect: (record, selected, selectedRows) => {
+        console.log(record, selected, selectedRows);
+      },
+      onSelectAll: (selected, selectedRows, changeRows) => {
+        console.log(selected, selectedRows, changeRows);
+      },
+    });
     /// 声明抛出
     return {
       pagination: {current: 1, pageSize: 10}, // 分页配置
@@ -93,6 +99,7 @@ export default {
       toolbar: toolbar, // 工具栏
       columns: columns, // 列配置
       operate: operate, // 行操作
+      rowSelection
     };
   },
 };
