@@ -1,6 +1,5 @@
 <template>
   <div id="table-dome">
-    <page-header title="菜单配置" describe="配置系统内可用功能清单"></page-header>
     <page-layout>
       <a-card>
         <p-table
