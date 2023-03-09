@@ -46,12 +46,16 @@
       <div class="p-table-next" v-if="defaultToolbar">
         <!-- 刷新工具栏 -->
         <a-button @click="reload">
-          <template #icon><SyncOutlined /></template>
+          <template #icon>
+            <SyncOutlined/>
+          </template>
         </a-button>
         <!-- 过滤工具栏 -->
         <a-dropdown>
           <a-button>
-            <template #icon><AppstoreOutlined /></template>
+            <template #icon>
+              <AppstoreOutlined/>
+            </template>
           </a-button>
           <template #overlay>
             <a-menu class="filtration">
@@ -78,24 +82,31 @@
         <!-- 过滤工具栏 -->
         <a-dropdown>
           <a-button>
-            <template #icon><ColumnHeightOutlined /></template>
+            <template #icon>
+              <ColumnHeightOutlined/>
+            </template>
           </a-button>
           <template #overlay>
             <a-menu :selectedKeys="[size]">
               <a-menu-item @click="changeSize('default')" key="default"
-                >默认尺寸</a-menu-item
+              >默认尺寸
+              </a-menu-item
               >
               <a-menu-item @click="changeSize('middle')" key="middle"
-                >中等尺寸</a-menu-item
+              >中等尺寸
+              </a-menu-item
               >
               <a-menu-item @click="changeSize('small')" key="small"
-                >最小尺寸</a-menu-item
+              >最小尺寸
+              </a-menu-item
               >
             </a-menu>
           </template>
         </a-dropdown>
         <a-button @click="print">
-          <template #icon><ExportOutlined /></template>
+          <template #icon>
+            <ExportOutlined/>
+          </template>
         </a-button>
       </div>
     </div>
@@ -143,7 +154,7 @@
             <!-- 单个操作 -->
             <p-authority :value="item.code ? item.code : false" v-else>
               <a @click="item.event(record)"> {{ item.label }} </a>
-              <a-divider type="vertical" v-if="i != operate.length - 1" />
+              <a-divider type="vertical" v-if="i != operate.length - 1"/>
             </p-authority>
           </template>
         </span>
@@ -173,7 +184,7 @@
             :size="column.avatar.size"
             :shape="column.avatar.shape"
           >
-            <template #icon><UserOutlined /></template>
+            <template #icon><UserOutlined/></template>
           </a-avatar>
 
           <!-- 非头像 -->
@@ -195,7 +206,7 @@
 
         <!-- 使用format -->
         <span v-else-if="column.format">
-          {{column.format(record)}}
+          {{ column.format(record) }}
         </span>
 
         <!-- 原样输出 -->
@@ -214,7 +225,7 @@
 <script>
 import "./index.less";
 import T from "ant-design-vue/es/table/Table";
-import { defineComponent, onMounted, reactive, toRefs, watch, ref } from "vue";
+import {defineComponent, onMounted, reactive, toRefs, watch, ref, defineExpose} from "vue";
 import {
   AppstoreOutlined,
   ExportOutlined,
@@ -305,14 +316,14 @@ export default defineComponent({
     /// 为所有 column 新增默认 customRender 属性
     state.columns.forEach((column) => {
       if (!column?.slots?.customRender) {
-        column.slots = { customRender: column.dataIndex };
+        column.slots = {customRender: column.dataIndex};
       }
     });
 
     /// 过滤字段
     const filtrationColumns = [];
     props.columns.forEach(function (item) {
-      filtrationColumns.push({ label: item.title, value: item.key });
+      filtrationColumns.push({label: item.title, value: item.key});
       state.filtrationColumnKeys.push(item.key);
     });
 
@@ -336,7 +347,7 @@ export default defineComponent({
       /// 开启加载
       state.loading = true;
       /// 请求数据
-      const { total, data } = await props.fetch(
+      const {total, data} = await props.fetch(
         Object.assign({}, state.pagination, props.param)
       );
       /// 状态重置
@@ -363,7 +374,7 @@ export default defineComponent({
       () => {
         fetchData();
       },
-      { deep: true }
+      {deep: true}
     );
 
     /// 改变按钮尺寸
@@ -381,7 +392,10 @@ export default defineComponent({
       window.location.reload();
       document.body.innerHTML = oldContent;
     };
-
+    defineExpose({
+      reload,
+      print
+    });
     return {
       // 数据信息
       ...toRefs(state),
@@ -401,6 +415,6 @@ export default defineComponent({
       // 插槽信息
       slotsData,
     };
-  },
+  }
 });
 </script>

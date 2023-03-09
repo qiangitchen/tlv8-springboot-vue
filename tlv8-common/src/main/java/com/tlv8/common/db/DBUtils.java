@@ -36,7 +36,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.tlv8.common.base.Sys;
-import com.tlv8.common.db.dao.UtilsMapper;
+import com.tlv8.common.db.dao.UtilsDao;
 import com.tlv8.common.utils.NumberUtils;
 
 /**
@@ -430,7 +430,7 @@ public class DBUtils {
 		SqlSession session = getSession(key);
 		List li = new ArrayList();
 		try {
-			li = session.selectList(UtilsMapper.select, sql);
+			li = session.selectList(UtilsDao.select, sql);
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
@@ -529,7 +529,7 @@ public class DBUtils {
 		String result = "success";
 		SqlSession session = getSession(dbkey);
 		try {
-			session.update(UtilsMapper.update, sql);
+			session.update(UtilsDao.update, sql);
 			session.commit();
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -585,7 +585,7 @@ public class DBUtils {
 		String result = "success";
 		SqlSession session = getSession(dbkey);
 		try {
-			session.insert(UtilsMapper.insert, sql);
+			session.insert(UtilsDao.insert, sql);
 			session.commit();
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -608,7 +608,7 @@ public class DBUtils {
 		String result = "success";
 		SqlSession session = getSession(dbkey);
 		try {
-			session.delete(UtilsMapper.delete, sql);
+			session.delete(UtilsDao.delete, sql);
 			session.commit();
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -744,7 +744,7 @@ public class DBUtils {
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
 	 */
 	public static List<Map<String, Object>> selectList(SqlSession session, String sql) {
-		List<Map<String, Object>> rlist = session.selectList(UtilsMapper.select, sql);
+		List<Map<String, Object>> rlist = session.selectList(UtilsDao.select, sql);
 		return rlist;
 	}
 
@@ -954,7 +954,7 @@ public class DBUtils {
 		SqlSession session = getSession(dbname);
 		int r = 0;
 		try {
-			r = session.update(UtilsMapper.insert, sql);
+			r = session.update(UtilsDao.insert, sql);
 			session.commit();
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -974,7 +974,7 @@ public class DBUtils {
 	 */
 	public static int excuteInsert(SqlSession session, String sql) throws Exception {
 		try {
-			int r = session.update(UtilsMapper.insert, sql);
+			int r = session.update(UtilsDao.insert, sql);
 			return r;
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -1005,7 +1005,7 @@ public class DBUtils {
 		SqlSession session = getSession(dbname);
 		int r = 0;
 		try {
-			r = session.update(UtilsMapper.update, sql);
+			r = session.update(UtilsDao.update, sql);
 			session.commit();
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -1025,7 +1025,7 @@ public class DBUtils {
 	 */
 	public static int excuteDelete(SqlSession session, String sql) throws Exception {
 		try {
-			int r = session.update(UtilsMapper.update, sql);
+			int r = session.update(UtilsDao.update, sql);
 			return r;
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -1044,7 +1044,7 @@ public class DBUtils {
 		SqlSession session = getSession(dbname);
 		int r = 0;
 		try {
-			r = session.update(UtilsMapper.update, sql);
+			r = session.update(UtilsDao.update, sql);
 			session.commit();
 		} catch (Exception e) {
 			Sys.printErr(e);
@@ -1064,7 +1064,7 @@ public class DBUtils {
 	 */
 	public static int excuteUpdate(SqlSession session, String sql) throws Exception {
 		try {
-			int r = session.update(UtilsMapper.update, sql);
+			int r = session.update(UtilsDao.update, sql);
 			return r;
 		} catch (Exception e) {
 			Sys.printErr(e);

@@ -12,6 +12,18 @@ export const loadMenuTree = data => {
   })
 }
 
+/// 加载功能菜单当行数据
+export const loadMenuData = data => {
+  return request({
+    url: "/system/Menu/loadMenuData",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
 /// 加载机构树
 export const loadOrgTree = data => {
   return request({

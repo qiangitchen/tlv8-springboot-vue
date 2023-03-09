@@ -313,7 +313,7 @@ CREATE TABLE sa_opmanagetype (
   PRIMARY KEY (sid)
 );
 
-CREATE TABLE sa_function_tree  (
+CREATE TABLE sa_opmenutree  (
   sid varchar(32) NOT NULL,
   label varchar(200) DEFAULT NULL,
   icon varchar(100)  DEFAULT NULL,
@@ -326,10 +326,11 @@ CREATE TABLE sa_function_tree  (
   icon64 varchar(100)  DEFAULT NULL,
   pid varchar(32)  DEFAULT NULL,
   sorts int DEFAULT NULL,
+  code varchar(100),
   version int NULL DEFAULT 0,
   PRIMARY KEY (sid)
 );
-CREATE INDEX idx_sa_function_tree_pid on sa_function_tree(pid);
+CREATE INDEX idx_sa_opmenutree_pid on sa_opmenutree(pid);
 
 CREATE TABLE sa_docnamespace (
   sid varchar(128) NOT NULL,
@@ -401,11 +402,10 @@ INSERT INTO sa_oppermission VALUES ('C8DC2295AA6000017BF83A6965004D50', 'RL01', 
 INSERT INTO sa_oppermission VALUES ('C94EE90006D000013BDE12401F401700', 'RL01', '/SA/task/taskCenter/process', '/任务中心/系统提醒', 'reminActivity', null, null, '0', null, null, null, '1', '1');
 INSERT INTO sa_opauthorize VALUES('AHR01', 'PSN01@ORG01', '管理员', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', 'RL01', '超级管理员', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', '2009/11/3', 0, '0');
 
-INSERT INTO sa_function_tree VALUES ('sysfun', '系统管理', 'xt.gif', 'layui-icon layui-icon-set', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0);
-INSERT INTO sa_function_tree VALUES ('sysmenus', '菜单设置', NULL, NULL, '/SA/functionTree/mainActivity.html', '/SA/functionTree/process', 'mainActivity', NULL, NULL, NULL, 'sysognm', 21, 21);
-INSERT INTO sa_function_tree VALUES ('sysognm', '组织机构', 'org_manage003.png', 'fa fa-sitemap', NULL, NULL, NULL, NULL, NULL, NULL, 'sysfun', 1, 1);
-INSERT INTO sa_function_tree VALUES ('sysognzation', '机构管理', 'org_manage003.png', NULL, '/SA/OPM/organization/mainActivity.html', '/SA/OPM/organization/organizationProcess', 'mainActivity', NULL, NULL, NULL, 'sysognm', 20, 20);
-INSERT INTO sa_function_tree VALUES ('sysrolem', '角色管理', 'rule003.png', NULL, '/SA/OPM/role/mainActivity.html', '/SA/OPM/role/roleProcess', 'mainActivity', NULL, NULL, NULL, 'sysognm', 22, 22);
+INSERT INTO sa_opmenutree VALUES ('sysfun', '系统管理', 'SettingOutlined', 'SettingOutlined', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'system', 0);
+INSERT INTO sa_opmenutree VALUES ('sysmenus', '菜单设置', 'DatabaseOutlined', 'DatabaseOutlined', '/system/sysMenu', '/SA/functionTree/process', 'mainActivity', NULL, NULL, NULL, 'sysfun', 1, 'sysMenu', 0);
+INSERT INTO sa_opmenutree VALUES ('sysognzation', '机构管理', 'DatabaseOutlined', 'DatabaseOutlined', '/system/organization', '/SA/organization/organizationProcess', 'mainActivity', NULL, NULL, NULL, 'sysfun', 3, 'organization', 0);
+INSERT INTO sa_opmenutree VALUES ('sysrolem', '角色管理', 'DatabaseOutlined', 'DatabaseOutlined', '/system/roleManage', '/SA/role/roleProcess', 'mainActivity', NULL, NULL, NULL, 'sysfun', 4, 'roleManage', 0);
 
 INSERT INTO sa_oprole VALUES ('RL01', '超级管理员', 'opm', '勿删-系统应用', 'fun', '', '', '1', '1', '4');
 INSERT INTO sa_oprole VALUES ('RL02', '任务', 'task', '系统管理', 'fun', '', '', '2', '1', '2');

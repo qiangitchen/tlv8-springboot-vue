@@ -14,21 +14,22 @@
         <result column="icon64" property="icon64" jdbcType="VARCHAR"/>
         <result column="pid" property="pid" jdbcType="VARCHAR"/>
         <result column="sorts" property="sorts" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         sid
-        ,label,icon,layuiicon,url,process,activity,display,icon32,icon64,pid,sorts,version
+        ,label,icon,layuiicon,url,process,activity,display,icon32,icon64,pid,sorts,code,version
     </sql>
     <select id="selectList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sa_opmenutree
+        from sa_opmenutree order by sorts
     </select>
     <select id="selectRootList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sa_opmenutree where pid is null or pid = ''
+        from sa_opmenutree where pid is null or pid = ''  order by sorts
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
@@ -40,7 +41,7 @@
         select
         <include refid="Base_Column_List"/>
         from sa_opmenutree
-        where pid = #{pid,jdbcType=VARCHAR}
+        where pid = #{pid,jdbcType=VARCHAR}  order by sorts
     </select>
     <insert id="insertData" parameterType="com.tlv8.system.pojo.SaMenuTree">
         insert into
@@ -57,6 +58,7 @@
         #{icon64,jdbcType=VARCHAR},
         #{pid,jdbcType=VARCHAR},
         #{sorts,jdbcType=INTEGER},
+        #{code,jdbcType=VARCHAR},
         #{version,jdbcType=INTEGER}
         )
     </insert>
@@ -74,6 +76,7 @@
             icon64    = #{icon64,jdbcType=VARCHAR},
             pid       = #{pid,jdbcType=VARCHAR},
             sorts     = #{sorts,jdbcType=INTEGER},
+            code      = #{code,jdbcType=VARCHAR},
             version   = #{version,jdbcType=INTEGER}
         where sid = #{sid,jdbcType=VARCHAR}
     </update>

@@ -16,15 +16,15 @@
               :wrapper-col="wrapperCol"
             >
               <a-form-item ref="name" label="事件" name="name">
-                <a-input v-model:value="form.name" />
+                <a-input v-model:value="form.name"/>
               </a-form-item>
               <a-form-item label="地点" name="region">
                 <a-select
                   v-model:value="form.region"
                   placeholder="please select your zone"
                 >
-                  <a-select-option value="shanghai"> Zone one </a-select-option>
-                  <a-select-option value="beijing"> Zone two </a-select-option>
+                  <a-select-option value="shanghai"> Zone one</a-select-option>
+                  <a-select-option value="beijing"> Zone two</a-select-option>
                 </a-select>
               </a-form-item>
               <a-form-item label="时间" required name="date1">
@@ -37,26 +37,26 @@
                 />
               </a-form-item>
               <a-form-item label="启用" name="delivery">
-                <a-switch v-model:checked="form.delivery" />
+                <a-switch v-model:checked="form.delivery"/>
               </a-form-item>
               <a-form-item label="状态" name="type">
                 <a-checkbox-group v-model:value="form.type">
-                  <a-checkbox value="1" name="type"> Online </a-checkbox>
-                  <a-checkbox value="2" name="type"> Promotion </a-checkbox>
-                  <a-checkbox value="3" name="type"> Offline </a-checkbox>
+                  <a-checkbox value="1" name="type"> Online</a-checkbox>
+                  <a-checkbox value="2" name="type"> Promotion</a-checkbox>
+                  <a-checkbox value="3" name="type"> Offline</a-checkbox>
                 </a-checkbox-group>
               </a-form-item>
               <a-form-item label="资源" name="resource">
                 <a-radio-group v-model:value="form.resource">
-                  <a-radio value="1"> Sponsor </a-radio>
-                  <a-radio value="2"> Venue </a-radio>
+                  <a-radio value="1"> Sponsor</a-radio>
+                  <a-radio value="2"> Venue</a-radio>
                 </a-radio-group>
               </a-form-item>
               <a-form-item label="描述" name="desc">
-                <a-textarea v-model:value="form.desc" />
+                <a-textarea v-model:value="form.desc"/>
               </a-form-item>
               <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-                <a-button type="primary" @click="onSubmit"> Create </a-button>
+                <a-button type="primary" @click="onSubmit"> Create</a-button>
                 <a-button style="margin-left: 10px" @click="resetForm">
                   Reset
                 </a-button>
@@ -73,8 +73,8 @@
 export default {
   data() {
     return {
-      labelCol: { xs: 4, sm: 3, md: 3, lg: 3, xl: 2, xxl: 3 },
-      wrapperCol: { xs: 20, sm: 21, md: 21, lg: 21, xl: 20, xxl: 17 },
+      labelCol: {xs: 4, sm: 3, md: 3, lg: 3, xl: 2, xxl: 3},
+      wrapperCol: {xs: 20, sm: 21, md: 21, lg: 21, xl: 20, xxl: 17},
       other: "",
       form: {
         name: "",
@@ -157,3 +157,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.ant-form-item-label {
+  width: 100px;
+}
+</style>

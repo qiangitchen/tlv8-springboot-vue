@@ -393,7 +393,7 @@
   {
     "id": "110",
     "parent": "27",
-    "path": "/manageMeant",
+    "path": "/system/manageMeant",
     "name": "manageMeant",
     "type": "menu",
     "icon": "DatabaseOutlined",

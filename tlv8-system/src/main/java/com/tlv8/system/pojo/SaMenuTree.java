@@ -13,7 +13,16 @@ public class SaMenuTree {
     private String icon64;// 大图标
     private String pid;// 父id
     private int sorts; // 序号
-    private int version; // 版本号
+    private String code;// 父id
+    private int version; // 序号
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getSid() {
         return sid;
