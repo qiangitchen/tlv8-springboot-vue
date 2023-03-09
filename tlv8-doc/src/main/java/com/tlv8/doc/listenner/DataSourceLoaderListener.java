@@ -46,7 +46,7 @@ public class DataSourceLoaderListener implements ServletContextListener {
 							stm.executeQuery("select * from Doc_Admin");
 						} catch (Exception e) {
 						} finally {
-							DBUtils.CloseConn(session, conn, stm, null);
+							DBUtils.closeConn(session, conn, stm, null);
 						}
 						try {
 							Thread.sleep(5 * 60 * 1000);// 5分钟检测一次

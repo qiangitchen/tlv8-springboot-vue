@@ -57,7 +57,7 @@ public class PaymentInfo {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBUtils.CloseConn(session,conn, ps, rs);
+            DBUtils.closeConn(session,conn, ps, rs);
         }
     }
 
@@ -86,7 +86,7 @@ public class PaymentInfo {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            DBUtils.CloseConn(session,conn, ps, null);
+            DBUtils.closeConn(session,conn, ps, null);
         }
     }
 
@@ -112,7 +112,7 @@ public class PaymentInfo {
             session.rollback(true);
             e.printStackTrace();
         } finally {
-            DBUtils.CloseConn(session,conn, ps, null);
+            DBUtils.closeConn(session,conn, ps, null);
         }
     }
 
