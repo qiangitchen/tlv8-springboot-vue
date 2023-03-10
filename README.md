@@ -37,9 +37,27 @@ UI参考： [Pear Admin Ant](https://gitee.com/pear-admin/pear-admin-ant)
 
 
 ```
+
+// 依赖安装
+
 npm install
 
+// 开发预览
+
 npm run serve
+
+// 开发打包
+
+npm run build
+
+// 生产打包
+
+npm run build-prod
+
+// 项目分析
+
+npm run analyzer
+
 ```
 
 
