@@ -21,10 +21,13 @@
 #### 软件架构
 SpringBoot+Vue
 
-后端：SpringBoot+MyBatis
+后端框架：SpringBoot+MyBatis Plus
 
-前端：Ant Design Vue
+登录鉴权：[Sa-Token](https://gitee.com/dromara/sa-token)
 
+前端框架：Ant Design Vue
+
+UI参考： [Pear Admin Ant](https://gitee.com/pear-admin/pear-admin-ant)
 
 #### 安装教程
 
