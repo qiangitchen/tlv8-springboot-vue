@@ -25,7 +25,7 @@ SpringBoot+Vue
 
 登录鉴权：[Sa-Token](https://gitee.com/dromara/sa-token)
 
-前端框架：Ant Design Vue
+前端框架：[Ant Design Vue](https://antdv.com/components/overview-cn)
 
 UI参考： [Pear Admin Ant](https://gitee.com/pear-admin/pear-admin-ant)
 
