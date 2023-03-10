@@ -22,7 +22,6 @@
     v-model:visible="visible"
     title="添加/修改"
     :confirm-loading="confirmLoading"
-    @ok="handleOk"
   >
     <a-form
       ref="ruleForm"
@@ -181,7 +180,8 @@ export default {
         value: 'solid',
       }],
       scroll: {y: 240},
-      handleCancel
+      handleCancel,
+      loading: false
     };
   },
   methods: {
@@ -189,6 +189,7 @@ export default {
       this.$refs.ruleForm
         .validate()
         .then(() => {
+          this.loading = true;
           saveData({
             tableName: "sa_opmenutree",
             keyField: "sid",
@@ -203,9 +204,11 @@ export default {
             } else {
               message.error(res.msg);
             }
+            this.loading = false;
           });
         })
         .catch(error => {
+          this.loading = false;
           console.log("error", error);
         });
     },

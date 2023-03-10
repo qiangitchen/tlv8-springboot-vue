@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ant-design-vue/use": "^0.0.1-alpha.10",
-    "@ant-design/icons-vue": "^6.0.1",
+    "@ant-design/icons-vue": "^6.1.0",
     "@antv/g2": "^4.1.32",
     "@vitejs/plugin-vue": "^1.10.1",
     "ant-design-vue": "^3.2.0",

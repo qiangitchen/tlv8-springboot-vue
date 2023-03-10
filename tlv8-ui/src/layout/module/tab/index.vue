@@ -11,7 +11,7 @@
       <a-tab-pane
         v-for="pane in list"
         :key="pane.path"
-        :closable="list.length > 1"
+        :closable="list.length > 1 && pane.path.indexOf('console')<0 "
       >
         <template #tab>
           <span class="tab-dot"></span>
@@ -22,14 +22,14 @@
         <a-dropdown class="tab-tool">
           <a-button>
             <template v-slot:icon>
-              <DownOutlined />
+              <DownOutlined/>
             </template>
           </a-button>
           <template v-slot:overlay>
             <a-menu>
-              <a-menu-item @click="closeOther()"> 关 闭 其 他 </a-menu-item>
-              <a-menu-item @click="closeCurrent()"> 关 闭 当 前 </a-menu-item>
-              <a-menu-item @click="closeAll()"> 关 闭 全 部 </a-menu-item>
+              <a-menu-item @click="closeOther()"> 关 闭 其 他</a-menu-item>
+              <a-menu-item @click="closeCurrent()"> 关 闭 当 前</a-menu-item>
+              <a-menu-item @click="closeAll()"> 关 闭 全 部</a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
@@ -38,22 +38,22 @@
   </div>
 </template>
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
-import { DownOutlined } from "@ant-design/icons-vue";
-import { useTab } from "@/composable/useTab";
-import { useI18n } from "vue-i18n";
+import {computed} from "vue";
+import {useStore} from "vuex";
+import {DownOutlined} from "@ant-design/icons-vue";
+import {useTab} from "@/composable/useTab";
+import {useI18n} from "vue-i18n";
 
 export default {
   components: {
     DownOutlined,
   },
   setup() {
-    const { t } = useI18n();
-    const { getters } = useStore();
-    const { to, list, active, close, closeOther, closeCurrent, closeAll } = useTab();
+    const {t} = useI18n();
+    const {getters} = useStore();
+    const {to, list, active, close, closeOther, closeCurrent, closeAll} = useTab();
     const tabType = computed(() => getters.tabType);
-    
+
     const onEdit = function (path, action) {
       if (action === "remove") {
         close(path);
@@ -61,7 +61,7 @@ export default {
     };
 
     const onChange = function (path) {
-      to({ path });
+      to({path});
     };
 
     const i18nTitle = function (content) {
@@ -89,9 +89,11 @@ export default {
 .pear-tab-2,
 .pear-tab-3 {
   height: 44px;
+
   .ant-tabs-nav {
     height: 44px;
   }
+
   .tab-tool {
     margin-left: 6px;
     margin-right: 6px;
@@ -104,6 +106,7 @@ export default {
   background: #fff !important;
   border-radius: 3px !important;
   color: #808695 !important;
+
   .tab-dot {
     width: 8px;
     height: 8px;
@@ -114,13 +117,16 @@ export default {
     margin-right: 5px;
     top: -1px;
   }
+
   &.ant-tabs-tab-active {
     .tab-dot {
       background: @primary-color;
     }
+
     .ant-tabs-tab-btn {
       color: #808695 !important;
     }
+
     border-bottom: none;
   }
 }
@@ -142,6 +148,7 @@ export default {
   color: #808695 !important;
   border: none !important;
   border-right: 1px solid whitesmoke !important;
+
   .tab-dot {
     width: 8px;
     height: 8px;
@@ -152,13 +159,16 @@ export default {
     margin-right: 5px;
     top: -1px;
   }
+
   &.ant-tabs-tab-active {
     .tab-dot {
       background: @primary-color;
     }
+
     .ant-tabs-tab-btn {
       color: #808695 !important;
     }
+
     border-bottom: none;
   }
 }

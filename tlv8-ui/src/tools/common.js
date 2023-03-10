@@ -1,5 +1,4 @@
-
-import { onUnmounted } from "vue";
+import {onUnmounted} from "vue";
 
 /**
  * 开发环境
@@ -32,7 +31,7 @@ export const isTimeout = (timeout, callback) => {
  * @param arr 菜单列表
  * @param id 指定路由
  */
- export const findParentAll = (arr, id) => {
+export const findParentAll = (arr, id) => {
   const temp = []
   const forFn = function (list, path) {
     for (let i = 0; i < list.length; i++) {
@@ -103,4 +102,20 @@ export const findPathById = (arr, key) => {
     return path;
   }
   return forFn(arr, key);
+}
+
+/**
+ * 获取组织机构对应的名称
+ * @param kind
+ */
+export const getOrgKindName = (kind) => {
+  if (kind == 'ogn' || kind == 'org') {
+    return '机构';
+  } else if (kind == 'dept' || kind == 'dpt') {
+    return '部门';
+  } else if (kind == 'post' || kind == 'pos') {
+    return '岗位';
+  } else {
+    return '人员';
+  }
 }

@@ -47,3 +47,15 @@ export const loadOrgList = data => {
     method: 'post'
   })
 }
+
+/// 加载机构信息
+export const loadOrgData = data => {
+  return request({
+    url: "/system/org/loadOrgData",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}

@@ -209,6 +209,19 @@
           {{ column.format(record) }}
         </span>
 
+        <!-- 使用tag -->
+        <span v-else-if="column.tag">
+          <template v-if="record[column.dataIndex]=='-1'">
+            <a-tag color="red">删除</a-tag>
+          </template>
+          <template v-else-if="record[column.dataIndex]=='0'">
+            <a-tag color="orange">禁用</a-tag>
+          </template>
+          <template v-else>
+            <a-tag color="green">启用</a-tag>
+          </template>
+        </span>
+
         <!-- 原样输出 -->
         <span v-else-if="record">
           {{ record[column.dataIndex] }}
@@ -294,7 +307,7 @@ export default defineComponent({
 
     /// 状态共享
     const state = reactive({
-      pagination: props.pagination == false ? false : props.pagination, // 分页
+      pagination: props.pagination === false ? false : props.pagination, // 分页
       datasource: [], // 数据源
       loading: true, // 加载
       columns: props.columns, // 字段
@@ -304,7 +317,7 @@ export default defineComponent({
     });
 
     /// 默认操作
-    if (props.operate != false) {
+    if (props.operate !== false) {
       state.columns.push({
         dataIndex: "operate",
         key: "operate",
@@ -341,7 +354,7 @@ export default defineComponent({
     /// 数据请求
     const fetchData = async (pagination) => {
       /// 分页处理
-      if (pagination != undefined) {
+      if (pagination !== undefined) {
         state.pagination.pageNum = pagination.current;
       }
       /// 开启加载
@@ -351,7 +364,7 @@ export default defineComponent({
         Object.assign({}, state.pagination, props.param)
       );
       /// 状态重置
-      if (state.pagination != false) {
+      if (state.pagination !== false) {
         state.pagination.total = total;
       }
       state.datasource = data;

@@ -1,5 +1,6 @@
 package com.tlv8.system.controller;
 
+import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.system.pojo.SaOpOrg;
 import com.tlv8.system.service.ISaOpOrgService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,11 +96,12 @@ public class OrganizationController {
             Map<String, Object> map = new HashMap<>();
             SaOpOrg org = root_list.get(i);
             map.put("key", org.getSid());
-            map.put("SSEQUENCE", org.getSsequence());
-            map.put("SCODE", org.getScode());
-            map.put("SNAME", org.getSname());
-            map.put("SADDRESS", org.getSaddress());
-            map.put("SDESCRIPTION", org.getSdescription());
+            map.put("sid", org.getSid());
+            map.put("ssequence", org.getSsequence());
+            map.put("scode", org.getScode());
+            map.put("sname", org.getSname());
+            map.put("saddress", org.getSaddress());
+            map.put("sdescription", org.getSdescription());
             map.put("sfid", org.getSfid());
             map.put("sfcode", org.getSfcode());
             map.put("sfname", org.getSfname());
@@ -109,6 +111,39 @@ public class OrganizationController {
             res.add(map);
         }
         return res;
+    }
+
+    /**
+     * 加载组织信息
+     *
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/loadOrgData")
+    public Object loadOrgData(@RequestBody Map<String, String> param) {
+        AjaxResult result = null;
+        try {
+            String id = param.get("id");
+            result = AjaxResult.success(saOpOrgService.selectByPrimaryKey(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = AjaxResult.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 保存组织信息
+     *
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/saveOrgData")
+    public Object saveOrgData(@RequestBody SaOpOrg param) {
+        AjaxResult result = null;
+        return result;
     }
 
 }
