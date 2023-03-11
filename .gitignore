@@ -4,6 +4,7 @@
 */test-classes/*
 
 # Log file
+log
 *.log
 
 # BlueJ files
@@ -31,6 +32,7 @@ target
 # Eclipse
 .metadata
 /.metadata/
+.data
 
 ### STS ###
 .apt_generated
