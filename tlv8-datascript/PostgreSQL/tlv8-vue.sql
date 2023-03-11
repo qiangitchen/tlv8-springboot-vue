@@ -382,6 +382,46 @@ CREATE INDEX idx_sa_docnode on sa_docnode(sparentid);
 CREATE INDEX inx_sa_donnode_skind on sa_docnode(skind);
 CREATE INDEX idx_sa_docnode_sfileid on sa_docnode(sfileid);
 
+CREATE TABLE sa_flowfolder (
+  sid varchar(32) NOT NULL,
+  sprocessid varchar(100) DEFAULT NULL,
+  sprocessname varchar(100) DEFAULT NULL,
+  scode varchar(100) DEFAULT NULL,
+  sname varchar(100) DEFAULT NULL,
+  sparent varchar(32) DEFAULT NULL,
+  sidpath varchar(4000) DEFAULT NULL,
+  snamepath varchar(4000) DEFAULT NULL,
+  scodepath varchar(4000) DEFAULT NULL,
+  version int NOT NULL DEFAULT '0',
+  PRIMARY KEY (sid)
+);
+CREATE INDEX idx_sa_flwfolder_sparent on sa_flowfolder(sparent);
+
+CREATE TABLE sa_flowdrawlg (
+  sid varchar(32) NOT NULL,
+  sprocessid varchar(100) NOT NULL,
+  sprocessname varchar(100),
+  sdrawlg text,
+  sprocessacty text,
+  screatorid varchar(100),
+  screatorname varchar(100),
+  supdatorid varchar(100),
+  supdatorname varchar(100),
+  screatetime timestamp,
+  supdatetime timestamp,
+  fenabled int, 
+  sfolderid varchar(32),
+  version int DEFAULT 0,
+  PRIMARY KEY (sid)
+);
+CREATE INDEX idx_sa_flowdrawlg_sprocessid on sa_flowdrawlg(sprocessid);
+
+CREATE TABLE sa_kvsequence (
+  k varchar(200) NOT NULL,
+  v int NOT NULL,
+  PRIMARY KEY (k)
+);
+
 
 INSERT INTO sa_oporg VALUES ('ORG01', '管理员', 'TULIN', '', '/管理员', '/TULIN', '/ORG01.ogn', 'ogn', '1', null, '1', '', '', '', '', '', '', '', '16', '', '96');
 INSERT INTO sa_oporg VALUES ('PSN01@ORG01', 'system', 'SYSTEM', '', '/管理员/system', '/TULIN/SYSTEM', '/ORG01.ogn/PSN01@ORG01.psm', 'psm', '1', 'ORG01', '2', '', '', '', '', '', 'PSN01', 'nkLeaf', '15', '', '1');
