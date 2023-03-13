@@ -2,6 +2,9 @@ package com.tlv8.doc.controller.data;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.doc.core.io.FileUploader;
 import com.tlv8.doc.core.io.centent.FileIOContent;
@@ -10,11 +13,17 @@ import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
+@Component
 public class FileUploadData {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
+
 	/*
 	 * 新文件数据保存
 	 */
-	public static void newDocSave(FileIOContent content) {
+	public void newDocSave(FileIOContent content) {
 		Date addtime = new Date();
 		DocDocument doc = new DocDocument();
 		doc.setFID(IDUtils.getGUID());
@@ -25,7 +34,7 @@ public class FileUploadData {
 		doc.setFDocType(content.getFileType());
 		doc.setFAddTime(addtime);
 		doc.setVersion(0);
-		DocDocumentService.addDocument(doc);
+		docDocumentService.addDocument(doc);
 
 		DocDocPath docpath = new DocDocPath();
 		docpath.setFID(IDUtils.getGUID());
@@ -35,31 +44,27 @@ public class FileUploadData {
 		docpath.setFVersion(1);
 		docpath.setFAddTime(addtime);
 		docpath.setVersion(0);
-		DocDocPathService.addDocDocPath(docpath);
+		docDocPathService.addDocDocPath(docpath);
 	}
 
 	/*
 	 * 保存新版本
 	 */
-	public static void saveDocNewVersion(String fileID, String cachename) {
-		DocDocPath docpath = DocDocPathService.getDocDocPathByFileID(fileID);
-		DocDocPath cachepath = DocDocPathService
-				.getDocDocPathByFileID(cachename);
+	public void saveDocNewVersion(String fileID, String cachename) {
+		DocDocPath docpath = docDocPathService.getDocDocPathByFileID(fileID);
+		DocDocPath cachepath = docDocPathService.getDocDocPathByFileID(cachename);
 		cachepath.setFVersion(docpath.getFVersion() + 1);
 		cachepath.setFFileID(docpath.getFFileID());
-		DocDocPathService.updateDocDocPath(cachepath);
-
-		DocDocument doc = DocDocumentService.getDocumentByDocID(fileID);
-		DocDocument cachedoc = DocDocumentService.getDocumentByDocID(cachename);
+		docDocPathService.updateDocDocPath(cachepath);
+		DocDocument doc = docDocumentService.getDocumentByDocID(fileID);
+		DocDocument cachedoc = docDocumentService.getDocumentByDocID(cachename);
 		doc.setFDocName(cachedoc.getFDocName());
 		doc.setFDocSize(cachedoc.getFDocSize());
 		doc.setFDocType(cachedoc.getFDocType());
 		doc.setFExtName(cachedoc.getFExtName());
 		doc.setFUpdateTime(cachedoc.getFAddTime());
-		DocDocumentService.updateDocument(doc);// 更新版本信息
-
-		DocDocumentService.deleteDocumentByDocID(cachename);// 删除临时版本
-
+		docDocumentService.updateDocument(doc);// 更新版本信息
+		docDocumentService.deleteDocumentByDocID(cachename);// 删除临时版本
 		FileUploader.ChangeFileID(fileID, cachename, cachepath.getFFilePath());
 	}
 }

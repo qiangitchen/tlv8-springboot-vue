@@ -1,6 +1,5 @@
 package com.tlv8.doc.controller.handlers;
 
-import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.controller.utils.ExcelToPDFUtils;
 import com.tlv8.doc.controller.utils.MimeUtils;
 import com.tlv8.doc.controller.utils.PdfConverUtil;
@@ -19,36 +18,39 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 /**
  * 以pdf格式查看文件
  * 
  * @author qianp
  * 
  */
-public class FileViewHtmlHandler extends AbstractRequestHandler {
+@Controller
+@RequestMapping("/DocServer/repository")
+public class FileViewHtmlHandler {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
 
-	@Override
 	public String getPathPattern() {
 		return "/file/viewhtml/*/*/*";
 	}
 
-	@Override
-	public void initHttpHeader(HttpServletResponse paramHttpServletResponse) {
-		paramHttpServletResponse.setHeader("Cache-Control", "pre-check=0, post-check=0, max-age=0");
-	}
-
-	@Override
-	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
-			throws Exception {
-		String fileID = getFileID(paramHttpServletRequest);
-		String fVersion = getVersion(paramHttpServletRequest);
+	@RequestMapping("/file/viewhtml/{fileID}/*/{fVersion}")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
+			@PathVariable("fileID") String fileID, @PathVariable("fVersion") String fVersion) throws Exception {
 		DocDocPath dpath = null;
 		if ("last".equals(fVersion)) {
-			dpath = DocDocPathService.getDocDocPathByFileID(fileID);
+			dpath = docDocPathService.getDocDocPathByFileID(fileID);
 		} else {
-			dpath = DocDocPathService.getDocDocPathByFileIDVersion(fileID, Long.parseLong(fVersion));
+			dpath = docDocPathService.getDocDocPathByFileIDVersion(fileID, Long.parseLong(fVersion));
 		}
-		DocDocument doc = DocDocumentService.getDocumentByDocID(fileID);
+		DocDocument doc = docDocumentService.getDocumentByDocID(fileID);
 		// 文件创建时间
 		paramHttpServletResponse.setDateHeader("Last-Modified", doc.getFAddTime().getTime());
 		// 文件大小
@@ -141,34 +143,6 @@ public class FileViewHtmlHandler extends AbstractRequestHandler {
 				inputStream.close(); // 关闭输入流
 			}
 		}
-	}
-
-	protected String getFileID(HttpServletRequest paramHttpServletRequest) {
-		String fileID = null;
-		String pathinfo = paramHttpServletRequest.getPathInfo();
-		pathinfo = pathinfo.replace("/repository/file/viewhtml/", "");
-		if (pathinfo.indexOf("/") > 0) {
-			fileID = pathinfo.substring(0, pathinfo.indexOf("/"));
-		} else {
-			fileID = pathinfo;
-		}
-		if (fileID.indexOf("-") < 0) {
-			fileID = fileID + "-root";// 只传数字时处理
-		}
-		return fileID;
-	}
-
-	protected String getVersion(HttpServletRequest paramHttpServletRequest) {
-		String version = null;
-		String pathinfo = paramHttpServletRequest.getPathInfo();
-		pathinfo = pathinfo.replace("/repository/file/viewhtml/", "");
-		String[] params = pathinfo.split("/");
-		if (params.length > 1) {
-			version = params[1];
-		} else {
-			version = "last";
-		}
-		return version;
 	}
 
 	protected boolean isOffice(String extnm) {

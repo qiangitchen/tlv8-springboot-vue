@@ -1,4 +1,4 @@
-package com.tlv8.doc.generator.mapper;
+package com.tlv8.doc.generator.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.controller.impl.FileDeleter;
@@ -23,8 +26,16 @@ import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 import com.tlv8.doc.lucene.LuceneService;
 
+@Controller
+@RequestMapping("/DocServer/repository")
 @SuppressWarnings({ "rawtypes" })
 public class FileCacheCommitHandler extends AbstractRequestHandler {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
+	@Autowired
+	FileDeleter fileDeleter;
 
 	public String getPathPattern() {
 		return "/file/cache/commit";
@@ -35,26 +46,23 @@ public class FileCacheCommitHandler extends AbstractRequestHandler {
 	}
 
 	@SuppressWarnings("unused")
-	public void handleRequest(HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
+	@RequestMapping("/file/cache/commit")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
+			throws Exception {
 		if (paramHttpServletRequest.getMethod().equals("POST")) {
-			StringBuilder localStringBuilder = new StringBuilder(
-					"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>");
+			StringBuilder localStringBuilder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>");
 			ServletInputStream servletinputstream;
 			if (("text/xml".equals(paramHttpServletRequest.getContentType()))
-					|| ("application/xml".equals(paramHttpServletRequest
-							.getContentType()))) {
+					|| ("application/xml".equals(paramHttpServletRequest.getContentType()))) {
 				servletinputstream = paramHttpServletRequest.getInputStream();
 			} else {
-				paramHttpServletResponse.sendError(400,
-						"The post need type of \"text/xml\".");
+				paramHttpServletResponse.sendError(400, "The post need type of \"text/xml\".");
 				return;
 			}
 			try {
 				SAXReader saxreader = new SAXReader();
 				Document localObject3 = saxreader.read(servletinputstream);
-				List localList = localObject3
-						.selectNodes("//item[kind!='dir']");
+				List localList = localObject3.selectNodes("//item[kind!='dir']");
 				Iterator iterator = localList.iterator();
 				while (iterator.hasNext()) {
 					Element element = (Element) iterator.next();
@@ -63,37 +71,30 @@ public class FileCacheCommitHandler extends AbstractRequestHandler {
 					String fileID = element.elementText("file-id");
 					String docType = element.elementText("doc-type");
 					String cachename = element.elementText("cache-name");
-					String recacheName = element
-							.elementText("revision-cache-name");
-					String fileConten = element
-							.elementText("comment-file-content");
+					String recacheName = element.elementText("revision-cache-name");
+					String fileConten = element.elementText("comment-file-content");
 					String docName = element.elementText("doc-name");
 					String sKind = element.elementText("kind");
 					HashMap ocalHashMap = new HashMap();
 					if ("new".equals(operation)) {
-						DocDocument docdocument = DocDocumentService
-								.getDocumentByDocID(cachename);
+						DocDocument docdocument = docDocumentService.getDocumentByDocID(cachename);
 						docdocument.setFDocName(docName);
 						docdocument.setFDocType(sKind);
-						docdocument.setFExtName(FileExtArray
-								.getExtName(docName));
-						DocDocumentService.updateDocument(docdocument);
+						docdocument.setFExtName(FileExtArray.getExtName(docName));
+						docDocumentService.updateDocument(docdocument);
 						FileAttribute fatt = new FileAttribute();
 						fatt.setAddTime(docdocument.getFAddTime());
 						fatt.setFileExt(docdocument.getFExtName());
 						fatt.setFileID(docdocument.getFDocID());
-						DocDocPath dpath = DocDocPathService
-								.getDocDocPathByFileID(cachename);
+						DocDocPath dpath = docDocPathService.getDocDocPathByFileID(cachename);
 						fatt.setFilePath(dpath.getFFilePath());
 						fatt.setFileSize(dpath.getFFileSize());
 						fatt.setVersion(dpath.getFVersion());
 						fatt.setFileName(docName);
 						LuceneService.addHandFile(fatt.getFileID(), fatt);
-						localStringBuilder
-								.append(String
-										.format("<item><doc-id>%s</doc-id><file-id>%s</file-id><doc-version-id>%s</doc-version-id></item>",
-												docID,
-												cachename, 1));
+						localStringBuilder.append(String.format(
+								"<item><doc-id>%s</doc-id><file-id>%s</file-id><doc-version-id>%s</doc-version-id></item>",
+								docID, cachename, 1));
 					} else {
 						if ("edit".equals(operation)) {
 							if (!"".equals(cachename)) {
@@ -138,7 +139,7 @@ public class FileCacheCommitHandler extends AbstractRequestHandler {
 							// logicDeleteDoc(paramRepository, str2);
 						} else if ("delete".equals(operation)) {
 							if (!"".equals(fileID)) {
-								new FileDeleter().delete(fileID);// 删除文件
+								fileDeleter.delete(fileID);// 删除文件
 								LuceneService.addMoveID(fileID);// 追加删除索引的ID
 							}
 						} else if ("logicReverse".equals(operation)) {
@@ -159,7 +160,8 @@ public class FileCacheCommitHandler extends AbstractRequestHandler {
 					// str3 = str2 + "/" + direlement.elementText("doc-id");
 					// localObject7 = paramRepository.getQueryManager();
 					// localObject8 =
-					// ((QueryManager)localObject7).performQueryReturnKeys("select id, name,#sDocPath where #sDocPath = '"
+					// ((QueryManager)localObject7).performQueryReturnKeys("select id,
+					// name,#sDocPath where #sDocPath = '"
 					// + str3 + "' or #sDocPath like '" + str3 + "/%'",
 					// Locale.getDefault());
 					// for (localHashMap : localObject8)
@@ -190,8 +192,7 @@ public class FileCacheCommitHandler extends AbstractRequestHandler {
 				writer.close();
 			} catch (Exception localException) {
 				this.requestErrorLogger.error("commit error", localException);
-				paramHttpServletResponse.sendError(400,
-						localException.toString());
+				paramHttpServletResponse.sendError(400, localException.toString());
 			}
 		} else {
 			paramHttpServletResponse.sendError(405);

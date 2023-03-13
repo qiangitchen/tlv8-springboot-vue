@@ -5,13 +5,23 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.tlv8.doc.controller.data.FileUploadData;
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.controller.impl.DoupDoc;
 import com.tlv8.doc.core.io.FileUploader;
 import com.tlv8.doc.core.io.centent.FileIOContent;
 
+@Controller
+@RequestMapping("/DocServer/repository")
 public class FileCacheUploadHandler extends AbstractRequestHandler {
+	@Autowired
+	FileUploadData fileUploadData;
+	@Autowired
+	DoupDoc doupDoc;
 
 	public String getPathPattern() {
 		return "/file/cache/upload";
@@ -21,21 +31,17 @@ public class FileCacheUploadHandler extends AbstractRequestHandler {
 		paramHttpServletResponse.setCharacterEncoding("utf-8");
 	}
 
-	public void handleRequest(HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
+	@RequestMapping("/file/cache/upload")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
+			throws Exception {
 		if (paramHttpServletRequest.getMethod().equals("POST")) {
-			StringBuilder localStringBuilder = new StringBuilder(
-					"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>");
+			StringBuilder localStringBuilder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>");
 			try {
-				FileIOContent rdoc = FileUploader.fileUpload(
-						paramHttpServletRequest, new DoupDoc());// 保存文件
-				FileUploadData.newDocSave(rdoc);// 保存数据
+				FileIOContent rdoc = FileUploader.fileUpload(paramHttpServletRequest, doupDoc);// 保存文件
+				fileUploadData.newDocSave(rdoc);// 保存数据
 				localStringBuilder
-						.append(String
-								.format("<file mediatype=\"%s\" file-name=\"%s\" fileSize=\"%s\"></file>",
-										rdoc.getFileType(),
-										rdoc.getFileID(),
-										rdoc.getFileSize() + ""));
+						.append(String.format("<file mediatype=\"%s\" file-name=\"%s\" fileSize=\"%s\"></file>",
+								rdoc.getFileType(), rdoc.getFileID(), rdoc.getFileSize() + ""));
 			} catch (Exception localException) {
 				this.requestErrorLogger.error(localException);
 				localStringBuilder.append("<flag>false</flag>");
@@ -43,6 +49,7 @@ public class FileCacheUploadHandler extends AbstractRequestHandler {
 				localStringBuilder.append("upload fileCache  failure");
 				localStringBuilder.append(localException.getMessage());
 				localStringBuilder.append("</message>");
+				localException.printStackTrace();
 			}
 			localStringBuilder.append("</root>");
 			PrintWriter localPrintWriter = paramHttpServletResponse.getWriter();

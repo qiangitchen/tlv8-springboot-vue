@@ -1,4 +1,4 @@
-package com.tlv8.config;
+package com.tlv8.common.config;
 
 import java.util.HashMap;
 import java.util.Map;

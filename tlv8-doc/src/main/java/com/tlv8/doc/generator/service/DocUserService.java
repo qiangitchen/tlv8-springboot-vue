@@ -2,19 +2,19 @@ package com.tlv8.doc.generator.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.mapper.IDocUserDao;
+import com.tlv8.doc.generator.mapper.DocUserMapper;
 import com.tlv8.doc.generator.pojo.DocUser;
 
+@Service
 public class DocUserService {
-	private static IDocUserDao docuserdao;
+	@Autowired
+	private DocUserMapper docuserMapper;
 
-	public void setDocuserdao(IDocUserDao docuserdao) {
-		DocUserService.docuserdao = docuserdao;
-	}
-
-	public static String addDocUser(String fLoginID, String fUserName,
-			int fEnable) {
+	public String addDocUser(String fLoginID, String fUserName, int fEnable) {
 		String nusid = IDUtils.getGUID();
 		DocUser docuser = new DocUser();
 		docuser.setFID(nusid);
@@ -22,41 +22,40 @@ public class DocUserService {
 		docuser.setFUserName(fUserName);
 		docuser.setFEnable(fEnable);
 		docuser.setVersion(0);
-		docuserdao.insert(docuser);
+		docuserMapper.insert(docuser);
 		return nusid;
 	}
 
-	public static void addDocUser(DocUser docuser) {
-		docuserdao.insert(docuser);
+	public void addDocUser(DocUser docuser) {
+		docuserMapper.insert(docuser);
 	}
 
-	public static void updateDocUser(String fID, String fLoginID,
-			String fUserName, int fEnable) {
-		DocUser docuser = docuserdao.getByPrimaryKey(fID);
+	public void updateDocUser(String fID, String fLoginID, String fUserName, int fEnable) {
+		DocUser docuser = docuserMapper.getByPrimaryKey(fID);
 		docuser.setFLoginID(fLoginID);
 		docuser.setFUserName(fUserName);
 		docuser.setFEnable(fEnable);
 		docuser.setVersion(docuser.getVersion() + 1);
-		docuserdao.update(docuser);
+		docuserMapper.update(docuser);
 	}
-	
-	public static int deleteDocUser(String fID){
-		return docuserdao.deleteByPrimaryKey(fID);
+
+	public int deleteDocUser(String fID) {
+		return docuserMapper.deleteByPrimaryKey(fID);
 	}
-	
-	public static int deleteDocUserByLoginID(String fLoginID){
-		return docuserdao.deleteByLoginID(fLoginID);
+
+	public int deleteDocUserByLoginID(String fLoginID) {
+		return docuserMapper.deleteByLoginID(fLoginID);
 	}
-	
-	public static DocUser getDocUser(String fID){
-		return docuserdao.getByPrimaryKey(fID);
+
+	public DocUser getDocUser(String fID) {
+		return docuserMapper.getByPrimaryKey(fID);
 	}
-	
-	public static DocUser getDocUserByLoginID(String fLoginID){
-		return docuserdao.getByLoginID(fLoginID);
+
+	public DocUser getDocUserByLoginID(String fLoginID) {
+		return docuserMapper.getByLoginID(fLoginID);
 	}
-	
-	public static List<DocUser> getDocUserList(){
-		return docuserdao.getList();
+
+	public List<DocUser> getDocUserList() {
+		return docuserMapper.getList();
 	}
 }

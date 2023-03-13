@@ -16,6 +16,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.doc.controller.impl.DoupDoc;
@@ -31,7 +33,17 @@ import com.tlv8.doc.generator.service.DocService;
 import com.tlv8.doc.lucene.LuceneService;
 import com.tlv8.doc.lucene.art.IndexWrite;
 
+@Component
 public class DocLoadData {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
+	@Autowired
+	DocService docService;
+	@Autowired
+	FileDeleter fileDeleter;
+
 	/*
 	 * 
 	 */
@@ -86,8 +98,7 @@ public class DocLoadData {
 			stm = conn.createStatement();
 			rs1 = stm.executeQuery("select SHOST,SPORT from SA_DOCNAMESPACE");
 			if (rs1.next()) {
-				docsvurl = "http://" + rs1.getString(1) + ":"
-						+ rs1.getString(2) + "/DocServer";
+				docsvurl = "http://" + rs1.getString(1) + ":" + rs1.getString(2) + "/DocServer";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,11 +131,9 @@ public class DocLoadData {
 	}
 
 	private void downloadFile(String svrurl, JSONObject json) throws Exception {
-		String downloadurl = svrurl
-				+ "/repository/file/download/%s/last/content";
+		String downloadurl = svrurl + "/repository/file/download/%s/last/content";
 		HttpClient client = new HttpClient();
-		GetMethod httpGet = new GetMethod(String.format(downloadurl,
-				json.getString("SFILEID")));
+		GetMethod httpGet = new GetMethod(String.format(downloadurl, json.getString("SFILEID")));
 		System.out.println("下载文件:" + json.getString("SFILEID"));
 		try {
 			client.executeMethod(httpGet);
@@ -132,9 +141,10 @@ public class DocLoadData {
 			DoupDoc doup = new DoupDoc(json.getString("SFILEID"));
 			try {
 				// 上传之前先删除fileID相同的文件
-				new FileDeleter().delete(doup.getDocID());
+				fileDeleter.delete(doup.getDocID());
 			} catch (Exception e) {
 			}
+
 			String docPath = doup.getNewDocPath();
 			FileUploader.upload(in, doup.getDocID(), docPath);
 			// 文档信息
@@ -147,7 +157,7 @@ public class DocLoadData {
 			doc.setFDocType(json.getString("SKIND"));
 			doc.setFAddTime(new Date(json.getLong("SCREATETIME")));
 			doc.setVersion(0);
-			DocDocumentService.addDocument(doc);
+			docDocumentService.addDocument(doc);
 			// 文档路径信息
 			DocDocPath docpath = new DocDocPath();
 			docpath.setFID(IDUtils.getGUID());
@@ -157,7 +167,7 @@ public class DocLoadData {
 			docpath.setFVersion(1);
 			docpath.setFAddTime(doc.getFAddTime());
 			docpath.setVersion(0);
-			DocDocPathService.addDocDocPath(docpath);
+			docDocPathService.addDocDocPath(docpath);
 			// 索引信息
 			FileAttribute fatt = new FileAttribute();
 			fatt.setAddTime(doc.getFAddTime());
@@ -171,23 +181,21 @@ public class DocLoadData {
 			try {
 				// 处理编辑产生的文件
 				String SCACHENAME = json.getString("SCACHENAME");
-				if (SCACHENAME != null && !"".equals(SCACHENAME)
-						&& !"null".equals(SCACHENAME)) {
+				if (SCACHENAME != null && !"".equals(SCACHENAME) && !"null".equals(SCACHENAME)) {
 					json.put("SFILEID", SCACHENAME);
 					json.remove("SCACHENAME");
 					downloadFile(svrurl, json);
 				}
 			} catch (Exception e) {
 			}
-			DocService.getNewDocID();// 追加序列
+			docService.getNewDocID();// 追加序列
 			System.out.println(json.getString("SFILEID") + ",装载成功!");
 		} catch (Exception e) {
 			System.out.println(json.getString("SFILEID") + ",装载失败!");
 		}
 	}
 
-	private Connection getConnection(HttpServletRequest request)
-			throws Exception {
+	private Connection getConnection(HttpServletRequest request) throws Exception {
 		System.out.println("初始化数据链接... ...");
 		String driver = request.getParameter("driver");
 		String url = request.getParameter("url");
@@ -203,8 +211,7 @@ public class DocLoadData {
 		try {
 			cn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException eJ) {
-			System.out.println(String.format("获取连接错误。url:%s, 用户名：%s，密码：%s",
-					url, username, password));
+			System.out.println(String.format("获取连接错误。url:%s, 用户名：%s，密码：%s", url, username, password));
 			throw new SQLException(eJ.toString());
 		}
 		System.out.println("数据库链接成功");

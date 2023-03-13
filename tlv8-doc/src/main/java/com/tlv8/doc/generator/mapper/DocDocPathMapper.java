@@ -2,9 +2,12 @@ package com.tlv8.doc.generator.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.tlv8.doc.generator.pojo.DocDocPath;
 
-public interface IDocDocPathDao {
+@Mapper
+public interface DocDocPathMapper {
 	DocDocPath getByPrimaryKey(String fID);
 	DocDocPath getByFileID(String fFileID);
 	List<DocDocPath> getList();

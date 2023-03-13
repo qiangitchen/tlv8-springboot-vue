@@ -1,4 +1,4 @@
-package com.tlv8.config;
+package com.tlv8.common.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;

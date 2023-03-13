@@ -7,7 +7,11 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tlv8.doc.controller.impl.AbstractRequestHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.tlv8.doc.controller.impl.DoupDoc;
 import com.tlv8.doc.core.io.FileUploader;
 import com.tlv8.doc.core.io.centent.FileIOContent;
@@ -16,23 +20,21 @@ import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
-public class WPSFileEditHandler extends AbstractRequestHandler {
-
-	@Override
+@Controller
+@RequestMapping("/DocServer/repository")
+public class WPSFileEditHandler {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
+	
 	public String getPathPattern() {
 		return "/file/wpsedit/*/*";
 	}
 
-	@Override
-	public void initHttpHeader(HttpServletResponse paramHttpServletResponse) {
-		paramHttpServletResponse.setHeader("Cache-Control", "pre-check=0, post-check=0, max-age=0");
-	}
-
-	@Override
-	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
-			throws Exception {
-		String fileID = getFileID(paramHttpServletRequest);
-		String user = getUser(paramHttpServletRequest);
+	@RequestMapping("/file/wpsedit/{fileID}/{user}")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
+			@PathVariable("fileID") String fileID, @PathVariable("user") String user) throws Exception {
 		if ("tourist".equals(user)) {
 			paramHttpServletResponse.sendError(403);
 		}
@@ -53,15 +55,15 @@ public class WPSFileEditHandler extends AbstractRequestHandler {
 						rdoc.setFileSize(paramHttpServletRequest.getContentLength());
 						if (rdoc.getFileSize() > 0) {
 							FileUploader.ChangeFileID(fileID, rdoc.getFileID(), rdoc.getFilePath());
-							DocDocPath ddocpath = DocDocPathService.getDocDocPathByFileID(fileID);
+							DocDocPath ddocpath = docDocPathService.getDocDocPathByFileID(fileID);
 							ddocpath.setFFilePath(rdoc.getFilePath());
 							ddocpath.setFFileSize(rdoc.getFileSize());
 							ddocpath.setFVersion(ddocpath.getFVersion() + 1);
-							DocDocPathService.updateDocDocPath(ddocpath);// 更新路径
-							DocDocument ddoc = DocDocumentService.getDocumentByDocID(fileID);
+							docDocPathService.updateDocDocPath(ddocpath);// 更新路径
+							DocDocument ddoc = docDocumentService.getDocumentByDocID(fileID);
 							ddoc.setFDocSize(rdoc.getFileSize());
 							ddoc.setFUpdateTime(new Date());
-							DocDocumentService.updateDocument(ddoc);// 更新版本信息
+							docDocumentService.updateDocument(ddoc);// 更新版本信息
 						}
 					}
 				}
@@ -72,36 +74,8 @@ public class WPSFileEditHandler extends AbstractRequestHandler {
 				paramHttpServletResponse.sendError(405);
 			}
 		} catch (Exception e) {
-			this.requestErrorLogger.error(e);
 			paramHttpServletResponse.sendError(500);
 		}
 	}
 
-	protected String getFileID(HttpServletRequest paramHttpServletRequest) {
-		String fileID = null;
-		String pathinfo = paramHttpServletRequest.getPathInfo();
-		pathinfo = pathinfo.replace("/repository/file/wpsedit/", "");
-		if (pathinfo.indexOf("/") > 0) {
-			fileID = pathinfo.substring(0, pathinfo.indexOf("/"));
-		} else {
-			fileID = pathinfo;
-		}
-		if (fileID.indexOf("-") < 0) {
-			fileID = fileID + "-root";// 只传数字时处理
-		}
-		return fileID;
-	}
-
-	protected String getUser(HttpServletRequest paramHttpServletRequest) {
-		String user = null;
-		String pathinfo = paramHttpServletRequest.getPathInfo();
-		pathinfo = pathinfo.replace("/repository/file/wpsedit/", "");
-		String[] params = pathinfo.split("/");
-		if (params.length > 1) {
-			user = params[1];
-		} else {
-			user = "tourist";
-		}
-		return user;
-	}
 }

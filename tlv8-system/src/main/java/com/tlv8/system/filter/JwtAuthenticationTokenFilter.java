@@ -51,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	}
 
 	private boolean isIgnore(String patex) {
-		boolean isre = patex.contains("/favicon.ico") || patex.contains("/DocServer/");
+		boolean isre = patex.contains("/favicon.ico") || patex.contains("/DocServer/") || patex.contains("/ureport/");
 		return isre;
 	}
 

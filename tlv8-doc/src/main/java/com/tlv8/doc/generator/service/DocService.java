@@ -5,17 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import com.tlv8.doc.generator.mapper.IConnectionDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.tlv8.doc.generator.dao.IConnectionDao;
+
+@Service
 public class DocService {
 	private static long docIndex = 1;
-	/*
-	 * 其他辅助表的操作<使用spring SqlConnection>
-	 */
-	private static IConnectionDao connectiondao;
 
-	public void setConnectiondao(IConnectionDao connectiondao) {
-		DocService.connectiondao = connectiondao;
+	@Autowired
+	IConnectionDao connectiondao;
+
+	@ModelAttribute
+	public void setConnectiondao() {
 		Connection conn = null;
 		Statement stm = null;
 		ResultSet rs = null;
@@ -46,7 +50,8 @@ public class DocService {
 	/*
 	 * 获取新的文档id（兼容老系统）
 	 */
-	public synchronized static String getNewDocID() {
+	public synchronized String getNewDocID() {
+		setConnectiondao();
 		docIndex++;
 		String docid = "";
 		Connection conn = null;
@@ -67,7 +72,8 @@ public class DocService {
 	/*
 	 * 保留老系统逻辑
 	 */
-	public synchronized static String getNewFileID() {
+	public synchronized String getNewFileID() {
+		setConnectiondao();
 		docIndex++;
 		String docid = "";
 		Connection conn = null;
@@ -88,7 +94,7 @@ public class DocService {
 	/*
 	 * 根据位置回去ID（预留）
 	 */
-	public synchronized static String getNewDocIDBydocPath(String docPath) {
+	public synchronized String getNewDocIDBydocPath(String docPath) {
 		String docid = "";
 		Connection conn = null;
 		Statement stm = null;
@@ -116,7 +122,7 @@ public class DocService {
 	/*
 	 * 存储键值信息
 	 */
-	public synchronized static void setCustomField(String filedID, String text) {
+	public synchronized void setCustomField(String filedID, String text) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
@@ -135,7 +141,7 @@ public class DocService {
 	/*
 	 * 获取信息
 	 */
-	public static String getCustomField(String filedID) {
+	public String getCustomField(String filedID) {
 		String resultText = "";
 		Connection conn = null;
 		Statement stm = null;

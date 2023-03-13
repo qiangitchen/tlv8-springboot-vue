@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import com.tlv8.doc.core.TransePath;
 
 public class ServerConfigInit {
+	public static String DOC_HOME;
 
 	public static void init() {
 		String docDir = "/tlv8-doc/data/doc";
@@ -36,6 +37,12 @@ public class ServerConfigInit {
 					e.printStackTrace();
 				}
 			}
+		}
+		if (docDir.startsWith("/")) {
+			docDir = DOC_HOME + docDir;
+		}
+		if (docDir.toLowerCase().indexOf("file://") == 0) {
+			docDir = docDir.substring(7);
 		}
 		TransePath.setBaseDocPath(docDir);
 	}

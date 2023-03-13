@@ -1,20 +1,23 @@
-package com.tlv8.doc.generator.mapper.impl;
+package com.tlv8.doc.generator.dao.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.tlv8.doc.generator.mapper.IConnectionDao;
+import com.tlv8.doc.generator.dao.IConnectionDao;
 
-public class ConnectionDaoImpl extends SqlSessionDaoSupport implements
-		IConnectionDao {
+@Component
+public class ConnectionDaoImpl implements IConnectionDao {
+	@Autowired
+	SqlSessionFactory sqlSessionFactory;
 
 	@Override
 	public Connection getConnection() throws Exception {
-		return this.getSqlSession().getConfiguration().getEnvironment()
-				.getDataSource().getConnection();
+		return sqlSessionFactory.openSession(true).getConnection();
 	}
 
 	@Override

@@ -9,8 +9,13 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 
+@Controller
+@RequestMapping("/DocServer/repository")
 public class FileTypeByNameHandler extends AbstractRequestHandler {
 
 	@Override
@@ -23,7 +28,7 @@ public class FileTypeByNameHandler extends AbstractRequestHandler {
 		paramHttpServletResponse.setContentType("text/xml");
 	}
 
-	@Override
+	@RequestMapping("/file/typeByName/**")
 	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
 			throws Exception {
 		Map<String, String> paramMap = getParams(paramHttpServletRequest);

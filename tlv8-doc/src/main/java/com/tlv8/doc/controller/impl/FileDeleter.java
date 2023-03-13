@@ -5,24 +5,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.tlv8.doc.core.io.AbstractFileDeleter;
 import com.tlv8.doc.generator.pojo.DocDocPath;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
+@Component
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class FileDeleter extends AbstractFileDeleter {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
 
 	/*
 	 * 删除所有版本
 	 * 
-	 * @see
-	 * com.tlv8.doc.core.inter.IFileDeleter#delete(java.lang.String)
+	 * @see com.tlv8.doc.core.inter.IFileDeleter#delete(java.lang.String)
 	 */
 	public List<Map> delete(String docID) {
 		List<Map> rlist = new ArrayList<Map>();
-		List<DocDocPath> pathList = DocDocPathService
-				.getDocDocPathListByFileID(docID);
+		List<DocDocPath> pathList = docDocPathService.getDocDocPathListByFileID(docID);
 		for (int i = 0; i < pathList.size(); i++) {
 			DocDocPath path = pathList.get(i);
 			Map rmap = new HashMap();
@@ -32,22 +38,20 @@ public class FileDeleter extends AbstractFileDeleter {
 			rlist.add(rmap);
 		}
 		// 删除数据
-		DocDocPathService.deleteDocDocPathByFileID(docID);
-		DocDocumentService.deleteDocumentByDocID(docID);
+		docDocPathService.deleteDocDocPathByFileID(docID);
+		docDocumentService.deleteDocumentByDocID(docID);
 		return rlist;
 	}
 
 	/*
 	 * 删除指定版本
 	 * 
-	 * @see
-	 * com.tlv8.doc.core.inter.IFileDeleter#deleteVersion(java.lang
-	 * .String, long)
+	 * @see com.tlv8.doc.core.inter.IFileDeleter#deleteVersion(java.lang .String,
+	 * long)
 	 */
 	public Map deleteVersion(String docID, long version) {
 		Map rmap = new HashMap();
-		List<DocDocPath> pathList = DocDocPathService
-				.getDocDocPathListByFileID(docID);
+		List<DocDocPath> pathList = docDocPathService.getDocDocPathListByFileID(docID);
 		rmap.put("liveVersionId", version);
 		long lastVersionId = 1;
 		DocDocPath path = null;
@@ -64,7 +68,7 @@ public class FileDeleter extends AbstractFileDeleter {
 		// 逻辑上不能删除最终版本
 		if (path != null && lastVersionId != version) {
 			deleteFile(docID, path.getFFilePath());// 删除文件
-			DocDocPathService.deleteDocDocPath(path.getFID());// 删除数据
+			docDocPathService.deleteDocDocPath(path.getFID());// 删除数据
 		}
 		return rmap;
 	}

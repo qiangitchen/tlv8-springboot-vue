@@ -7,6 +7,10 @@ import com.tlv8.doc.controller.inter.RequestHandler;
 public abstract class AbstractRequestHandler implements RequestHandler {
 	protected Logger requestErrorLogger = Logger.getLogger(getClass());
 
+	public String getContextPath() {
+		return "/DocServer";
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

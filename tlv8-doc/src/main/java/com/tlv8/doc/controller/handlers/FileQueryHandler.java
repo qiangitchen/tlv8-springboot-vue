@@ -18,12 +18,16 @@ import com.alibaba.fastjson.JSONObject;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.core.io.atr.DocQueryParam;
 import com.tlv8.doc.core.io.atr.FileAttribute;
 import com.tlv8.doc.lucene.impl.IndexQuery;
 
+@Controller
+@RequestMapping("/DocServer/repository")
 public class FileQueryHandler extends AbstractRequestHandler {
 
 	@Override
@@ -36,43 +40,34 @@ public class FileQueryHandler extends AbstractRequestHandler {
 		paramHttpServletResponse.setCharacterEncoding("utf-8");
 	}
 
-	@Override
-	public void handleRequest(HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
+	@RequestMapping("/file/query")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
+			throws Exception {
 		if (paramHttpServletRequest.getMethod().equals("POST")) {
 			if (("text/xml".equals(paramHttpServletRequest.getContentType()))
-					|| ("application/xml".equals(paramHttpServletRequest
-							.getContentType()))) {
-				handerOldrequest(paramHttpServletRequest,
-						paramHttpServletResponse);// 保留原来的请求方式
+					|| ("application/xml".equals(paramHttpServletRequest.getContentType()))) {
+				handerOldrequest(paramHttpServletRequest, paramHttpServletResponse);// 保留原来的请求方式
 			} else if (paramHttpServletRequest.getParameter("keywords") != null) {
 				// 自己扩展的搜索方法
 				DocQueryParam sparam = new DocQueryParam();
-				sparam.setSearchKey(paramHttpServletRequest.getParameter(
-						"keywors").split(" "));// 用空格分词
-				sparam.setSeachFolder(paramHttpServletRequest
-						.getParameter("seachFolder"));
+				sparam.setSearchKey(paramHttpServletRequest.getParameter("keywors").split(" "));// 用空格分词
+				sparam.setSeachFolder(paramHttpServletRequest.getParameter("seachFolder"));
 				try {
-					sparam.setStartTime(new SimpleDateFormat()
-							.parse(paramHttpServletRequest
-									.getParameter("startTime")));
+					sparam.setStartTime(
+							new SimpleDateFormat().parse(paramHttpServletRequest.getParameter("startTime")));
 				} catch (Exception e) {
 				}
 				try {
-					sparam.setEndTime(new SimpleDateFormat()
-							.parse(paramHttpServletRequest
-									.getParameter("endTime")));
+					sparam.setEndTime(new SimpleDateFormat().parse(paramHttpServletRequest.getParameter("endTime")));
 				} catch (Exception e) {
 				}
-				List<FileAttribute> searchResult = new IndexQuery()
-						.searchByParam(sparam);
+				List<FileAttribute> searchResult = new IndexQuery().searchByParam(sparam);
 				List<JSONObject> rlist = new ArrayList<JSONObject>();
 				for (FileAttribute fileatt : searchResult) {
 					rlist.add(JSONObject.parseObject(JSON.toJSONString(fileatt)));
 				}
 				try {
-					PrintWriter localPrintWriter = paramHttpServletResponse
-							.getWriter();
+					PrintWriter localPrintWriter = paramHttpServletResponse.getWriter();
 					localPrintWriter.write(JSONArray.toJSONString(rlist));
 					localPrintWriter.close();
 				} catch (Exception e) {
@@ -89,19 +84,16 @@ public class FileQueryHandler extends AbstractRequestHandler {
 	@Deprecated
 	public void handerOldrequest(HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse) throws IOException {
-		ServletInputStream localServletInputStream = paramHttpServletRequest
-				.getInputStream();
+		ServletInputStream localServletInputStream = paramHttpServletRequest.getInputStream();
 		try {
 			SAXReader localSAXReader = new SAXReader();
-			Document localDocument = localSAXReader
-					.read(localServletInputStream);
+			Document localDocument = localSAXReader.read(localServletInputStream);
 			String querystr = getNodeText(localDocument, "//form/querySql");
 			String keyword = transeKeys(querystr);
 			StringBuffer restring = new StringBuffer();
 			restring.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			restring.append("<ns:searchResult xmlns:ns=\"http://outerx.org/daisy/1.0\">");
-			restring.append("<ns:titles><ns:title name=\"id\">ID</ns:title>"
-					+ "<ns:title name=\"name\">Name</ns:title>"
+			restring.append("<ns:titles><ns:title name=\"id\">ID</ns:title>" + "<ns:title name=\"name\">Name</ns:title>"
 					+ "<ns:title name=\"lastModified\">Last Modified</ns:title>"
 					+ "<ns:title name=\"#sDocId\">sDocId</ns:title>"
 					+ "<ns:title name=\"#sDocPath\">sDocPath</ns:title>"
@@ -112,22 +104,16 @@ public class FileQueryHandler extends AbstractRequestHandler {
 					+ "<ns:title name=\"#sLastWriterName\">sLastWriterName</ns:title>"
 					+ "<ns:title name=\"#sDescription\">sDescription</ns:title></ns:titles>");
 			restring.append("<ns:rows>");
-			List<FileAttribute> searchresult = new IndexQuery()
-					.searchByKeyWords(keyword);
+			List<FileAttribute> searchresult = new IndexQuery().searchByKeyWords(keyword);
 			for (int i = 0; i < searchresult.size(); i++) {
 				restring.append("<ns:row>");
-				restring.append("<ns:value>" + searchresult.get(i).getFileID()
-						+ "</ns:value>");
+				restring.append("<ns:value>" + searchresult.get(i).getFileID() + "</ns:value>");
 				restring.append("</ns:row>");
 			}
 			restring.append("</ns:rows>");
-			restring.append("<ns:resultInfo size=\""
-					+ searchresult.size()
+			restring.append("<ns:resultInfo size=\"" + searchresult.size()
 					+ "\" chunkOffset=\"1\" chunkLength=\"100\" requestedChunkLength=\"100\" requestedChunkOffset=\"1\"/>");
-			restring.append("<ns:executionInfo>"
-					+ "<ns:query>"
-					+ querystr
-					+ "</ns:query>"
+			restring.append("<ns:executionInfo>" + "<ns:query>" + querystr + "</ns:query>"
 					+ "<ns:locale>zh_CN</ns:locale><ns:parseAndPrepareTime>1</ns:parseAndPrepareTime>"
 					+ "<ns:fullTextQueryTime>5</ns:fullTextQueryTime><ns:aclFilterTime>0</ns:aclFilterTime>"
 					+ "<ns:sortTime>0</ns:sortTime><ns:outputGenerationTime>1</ns:outputGenerationTime>"
@@ -137,14 +123,12 @@ public class FileQueryHandler extends AbstractRequestHandler {
 			localPrintWriter.write(restring.toString());
 			localPrintWriter.close();
 		} catch (Exception localException) {
-			paramHttpServletResponse.sendError(400,
-					"The post data is not type of \"xml\".");
+			paramHttpServletResponse.sendError(400, "The post data is not type of \"xml\".");
 		}
 	}
 
 	private String getNodeText(Document paramDocument, String paramString) {
-		Element localElement = (Element) paramDocument.selectNodes(paramString)
-				.get(0);
+		Element localElement = (Element) paramDocument.selectNodes(paramString).get(0);
 		return localElement.getText();
 	}
 

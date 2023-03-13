@@ -10,6 +10,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.tlv8.doc.controller.connector.RequestHandlerSupport;
 import com.tlv8.doc.controller.connector.UploadItem;
 import com.tlv8.doc.controller.data.FileUploadData;
@@ -21,7 +25,13 @@ import com.tlv8.doc.core.io.FileUploader;
 import com.tlv8.doc.core.io.centent.FileIOContent;
 import com.tlv8.doc.generator.service.DocService;
 
+@Controller
+@RequestMapping("/DocServer/repository")
 public class FileCacheOfficeHandler extends AbstractRequestHandler {
+	@Autowired
+	FileUploadData fileUploadData;
+	@Autowired
+	DocService docService;
 
 	@Override
 	public String getPathPattern() {
@@ -34,67 +44,57 @@ public class FileCacheOfficeHandler extends AbstractRequestHandler {
 	}
 
 	@SuppressWarnings({ "unused", "rawtypes" })
-	@Override
-	public void handleRequest(HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
+	@RequestMapping("/file/cache/office/*")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
+			throws Exception {
 		if (paramHttpServletRequest.getMethod().equals("POST")) {
-			Map localHashMap = RequestHandlerSupport.parseMultipartRequest(
-					paramHttpServletRequest, paramHttpServletResponse);
+			Map localHashMap = RequestHandlerSupport.parseMultipartRequest(paramHttpServletRequest,
+					paramHttpServletResponse);
 			if ((localHashMap.get("EDA_GETSTREAMDATA") != null)
 					&& ("EDA_YES".equals(localHashMap.get("EDA_GETSTREAMDATA")))) {
 				String FileID = (String) localHashMap.get("FileID");
 				String VersionID = (String) localHashMap.get("VersionID");
 				String PartType = (String) localHashMap.get("PartType");
-				InputStream inputsteream = FileDownloader.download(new DoupDoc(
-						FileID));
-				downloadStream(inputsteream,
-						paramHttpServletResponse.getOutputStream());
+				InputStream inputsteream = FileDownloader.download(new DoupDoc(FileID));
+				downloadStream(inputsteream, paramHttpServletResponse.getOutputStream());
 			} else if (localHashMap.get("trackdata") != null) {
 				String partType = (String) localHashMap.get("partType");
 				String cacheName = (String) localHashMap.get("cacheName");
 				String fileID = (String) localHashMap.get("fileID");
 				String resultID = (String) localHashMap.get("resultID");
-				UploadItem uploaditem = (UploadItem) localHashMap
-						.get("trackdata");
+				UploadItem uploaditem = (UploadItem) localHashMap.get("trackdata");
 				FileIOContent iocontent = new FileIOContent();
 				if ("content".equals(partType)) {
 					String changes = (String) localHashMap.get("changes");
-					FileUploadData.saveDocNewVersion(fileID, cacheName);
+					fileUploadData.saveDocNewVersion(fileID, cacheName);
 					iocontent.setFileID("");
 				} else {
 					IDoc ndoc = new DoupDoc();
 					String nfileid = ndoc.getNewDocID();
 					String nfilepath = ndoc.getNewDocPath();
-					FileUploader.upload(uploaditem.getInputStream(), nfileid,
-							nfilepath);
+					FileUploader.upload(uploaditem.getInputStream(), nfileid, nfilepath);
 					iocontent.setExtName(uploaditem.getExtName());
 					iocontent.setFileID(nfileid);
 					iocontent.setFilePath(nfilepath);
 					iocontent.setFileName(uploaditem.getFileName());
 					iocontent.setFileSize(uploaditem.getSize());
 					iocontent.setFileType(uploaditem.getContentType());
-					FileUploadData.newDocSave(iocontent);
+					fileUploadData.newDocSave(iocontent);
 				}
 				if (resultID != null) {
-					String localObject2 = "{\"size\":" + uploaditem.getSize()
-							+ ",\"cacheName\":\"" + iocontent.getFileID()
-							+ "\",\"mediatype\":\""
-							+ getMediaType(uploaditem.getExtName()) + "\"}";
-					DocService.setCustomField(resultID, localObject2);
+					String localObject2 = "{\"size\":" + uploaditem.getSize() + ",\"cacheName\":\""
+							+ iocontent.getFileID() + "\",\"mediatype\":\"" + getMediaType(uploaditem.getExtName())
+							+ "\"}";
+					docService.setCustomField(resultID, localObject2);
 				}
 				BufferedOutputStream localBufferedOutputStream = null;
 				try {
-					localBufferedOutputStream = new BufferedOutputStream(
-							paramHttpServletResponse.getOutputStream());
-					localBufferedOutputStream.write("EDA_STREAMBOUNDARY"
-							.getBytes());
-					String str5 = "{\"size\":" + uploaditem.getSize()
-							+ ",\"cacheName\":\"" + iocontent.getFileID()
-							+ "\",\"mediatype\":\""
-							+ getMediaType(uploaditem.getExtName()) + "\"}";
+					localBufferedOutputStream = new BufferedOutputStream(paramHttpServletResponse.getOutputStream());
+					localBufferedOutputStream.write("EDA_STREAMBOUNDARY".getBytes());
+					String str5 = "{\"size\":" + uploaditem.getSize() + ",\"cacheName\":\"" + iocontent.getFileID()
+							+ "\",\"mediatype\":\"" + getMediaType(uploaditem.getExtName()) + "\"}";
 					localBufferedOutputStream.write(str5.getBytes());
-					localBufferedOutputStream.write("EDA_STREAMBOUNDARY"
-							.getBytes());
+					localBufferedOutputStream.write("EDA_STREAMBOUNDARY".getBytes());
 					localBufferedOutputStream.flush();
 				} catch (Exception localException) {
 					localException.printStackTrace();
@@ -103,8 +103,7 @@ public class FileCacheOfficeHandler extends AbstractRequestHandler {
 						localBufferedOutputStream.close();
 				}
 			} else {
-				throw new Exception(
-						"[OfficeViewer Error] 400 Field not found! Request:");
+				throw new Exception("[OfficeViewer Error] 400 Field not found! Request:");
 			}
 		} else {
 			paramHttpServletResponse.sendError(405);
@@ -128,19 +127,16 @@ public class FileCacheOfficeHandler extends AbstractRequestHandler {
 		return str;
 	}
 
-	private void downloadStream(InputStream paramInputStream,
-			OutputStream paramOutputStream) throws IOException {
+	private void downloadStream(InputStream paramInputStream, OutputStream paramOutputStream) throws IOException {
 		byte[] arrayOfByte = new byte[4096];
 		BufferedOutputStream localBufferedOutputStream = null;
 		BufferedInputStream localBufferedInputStream = null;
 		try {
-			localBufferedOutputStream = new BufferedOutputStream(
-					paramOutputStream);
+			localBufferedOutputStream = new BufferedOutputStream(paramOutputStream);
 			localBufferedInputStream = new BufferedInputStream(paramInputStream);
 			localBufferedOutputStream.write("EDA_STREAMBOUNDARY".getBytes());
 			int i = -1;
-			while ((i = localBufferedInputStream.read(arrayOfByte, 0,
-					arrayOfByte.length)) > -1)
+			while ((i = localBufferedInputStream.read(arrayOfByte, 0, arrayOfByte.length)) > -1)
 				localBufferedOutputStream.write(arrayOfByte, 0, i);
 			localBufferedOutputStream.write("EDA_STREAMBOUNDARY".getBytes());
 			localBufferedOutputStream.flush();

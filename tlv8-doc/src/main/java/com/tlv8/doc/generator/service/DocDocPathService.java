@@ -3,19 +3,19 @@ package com.tlv8.doc.generator.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.mapper.IDocDocPathDao;
+import com.tlv8.doc.generator.mapper.DocDocPathMapper;
 import com.tlv8.doc.generator.pojo.DocDocPath;
 
+@Service
 public class DocDocPathService {
-	private static IDocDocPathDao docdocpathdao;
+	@Autowired
+	private DocDocPathMapper docdocpathMapper;
 
-	public void setDocdocpathdao(IDocDocPathDao docdocpathdao) {
-		DocDocPathService.docdocpathdao = docdocpathdao;
-	}
-
-	public static String addDocDocPath(String fFileID, String fFilePath,
-			float fFileSize, int fVersion) {
+	public String addDocDocPath(String fFileID, String fFilePath, float fFileSize, int fVersion) {
 		String ndpid = IDUtils.getGUID();
 		DocDocPath docpath = new DocDocPath();
 		docpath.setFID(ndpid);
@@ -25,56 +25,54 @@ public class DocDocPathService {
 		docpath.setFVersion(fVersion);
 		docpath.setFAddTime(new Date());
 		docpath.setVersion(0);
-		docdocpathdao.insert(docpath);
+		docdocpathMapper.insert(docpath);
 		return ndpid;
 	}
 
-	public static void addDocDocPath(DocDocPath docpath) {
-		docdocpathdao.insert(docpath);
+	public void addDocDocPath(DocDocPath docpath) {
+		docdocpathMapper.insert(docpath);
 	}
 
-	public static void updateDocDocPath(String fID, String fFileID,
-			String fFilePath, float fFileSize, int fVersion) {
-		DocDocPath docpath = docdocpathdao.getByPrimaryKey(fID);
+	public void updateDocDocPath(String fID, String fFileID, String fFilePath, float fFileSize, int fVersion) {
+		DocDocPath docpath = docdocpathMapper.getByPrimaryKey(fID);
 		docpath.setFFileID(fFileID);
 		docpath.setFFilePath(fFilePath);
 		docpath.setFFileSize(fFileSize);
 		docpath.setFVersion(fVersion);
 		docpath.setFAddTime(new Date());
 		docpath.setVersion(docpath.getVersion() + 1);
-		docdocpathdao.update(docpath);
+		docdocpathMapper.update(docpath);
 	}
 
-	public static void updateDocDocPath(DocDocPath docpath) {
-		docdocpathdao.update(docpath);
+	public void updateDocDocPath(DocDocPath docpath) {
+		docdocpathMapper.update(docpath);
 	}
 
-	public static int deleteDocDocPath(String fID) {
-		return docdocpathdao.deleteByPrimaryKey(fID);
+	public int deleteDocDocPath(String fID) {
+		return docdocpathMapper.deleteByPrimaryKey(fID);
 	}
 
-	public static int deleteDocDocPathByFileID(String fFileID) {
-		return docdocpathdao.deleteByFileID(fFileID);
+	public int deleteDocDocPathByFileID(String fFileID) {
+		return docdocpathMapper.deleteByFileID(fFileID);
 	}
 
-	public static DocDocPath getDocDocPath(String fID) {
-		return docdocpathdao.getByPrimaryKey(fID);
+	public DocDocPath getDocDocPath(String fID) {
+		return docdocpathMapper.getByPrimaryKey(fID);
 	}
 
-	public static DocDocPath getDocDocPathByFileID(String fFileID) {
-		return docdocpathdao.getByFileID(fFileID);
+	public DocDocPath getDocDocPathByFileID(String fFileID) {
+		return docdocpathMapper.getByFileID(fFileID);
 	}
 
-	public static List<DocDocPath> getDocDocPathList() {
-		return docdocpathdao.getList();
+	public List<DocDocPath> getDocDocPathList() {
+		return docdocpathMapper.getList();
 	}
 
-	public static List<DocDocPath> getDocDocPathListByFileID(String fFileID) {
-		return docdocpathdao.getListByFileID(fFileID);
+	public List<DocDocPath> getDocDocPathListByFileID(String fFileID) {
+		return docdocpathMapper.getListByFileID(fFileID);
 	}
 
-	public static DocDocPath getDocDocPathByFileIDVersion(String fFileID,
-			long fVersion) {
+	public DocDocPath getDocDocPathByFileIDVersion(String fFileID, long fVersion) {
 		List<DocDocPath> flist = getDocDocPathListByFileID(fFileID);
 		long maxversion = 1;
 		DocDocPath rdpath = flist.get(0);

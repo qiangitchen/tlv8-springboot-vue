@@ -13,7 +13,6 @@ import java.util.Map;
 
 import com.tlv8.common.db.DBUtils;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class DataTypeHelper {
 
     /**

@@ -2,61 +2,63 @@ package com.tlv8.doc.generator.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.mapper.IDocAuthorDao;
+import com.tlv8.doc.generator.mapper.DocAuthorMapper;
 import com.tlv8.doc.generator.pojo.DocAuthor;
 
+@Service
 public class DocAuthorService {
-	private static IDocAuthorDao docauthordao;
+	
+	@Autowired
+	private  DocAuthorMapper docauthorMapper;
 
-	public static void setDocauthordao(IDocAuthorDao docauthordao) {
-		DocAuthorService.docauthordao = docauthordao;
-	}
-
-	public static String addDocAuthor(String fUserID, int fAmLeve) {
+	public  String addDocAuthor(String fUserID, int fAmLeve) {
 		String nauid = IDUtils.getGUID();
 		DocAuthor docauthor = new DocAuthor();
 		docauthor.setFID(nauid);
 		docauthor.setFUserID(fUserID);
 		docauthor.setFAmLeve(fAmLeve);
 		docauthor.setVersion(0);
-		docauthordao.insert(docauthor);
+		docauthorMapper.insert(docauthor);
 		return nauid;
 	}
 
-	public static void addDocAuthor(DocAuthor docauthor) {
-		docauthordao.insert(docauthor);
+	public  void addDocAuthor(DocAuthor docauthor) {
+		docauthorMapper.insert(docauthor);
 	}
 
-	public static void updateDocAuthor(String fID, String fUserID, int fAmLeve) {
-		DocAuthor docauthor = docauthordao.getByPrimaryKey(fID);
+	public  void updateDocAuthor(String fID, String fUserID, int fAmLeve) {
+		DocAuthor docauthor = docauthorMapper.getByPrimaryKey(fID);
 		docauthor.setFUserID(fUserID);
 		docauthor.setFAmLeve(fAmLeve);
 		docauthor.setVersion(docauthor.getVersion() + 1);
-		docauthordao.update(docauthor);
+		docauthorMapper.update(docauthor);
 	}
 
-	public static void updateDocAuthor(DocAuthor docauthor) {
-		docauthordao.update(docauthor);
+	public  void updateDocAuthor(DocAuthor docauthor) {
+		docauthorMapper.update(docauthor);
 	}
 
-	public static int deleteDocAuthor(String fID) {
-		return docauthordao.deleteByPrimaryKey(fID);
+	public  int deleteDocAuthor(String fID) {
+		return docauthorMapper.deleteByPrimaryKey(fID);
 	}
 
-	public static int deleteDocAuthorByUserID(String fUserID) {
-		return docauthordao.deleteByUserID(fUserID);
+	public  int deleteDocAuthorByUserID(String fUserID) {
+		return docauthorMapper.deleteByUserID(fUserID);
 	}
 
-	public static DocAuthor getDocAuthor(String fID) {
-		return docauthordao.getByPrimaryKey(fID);
+	public  DocAuthor getDocAuthor(String fID) {
+		return docauthorMapper.getByPrimaryKey(fID);
 	}
 
-	public static DocAuthor getDocAuthorByUserID(String fUserID) {
-		return docauthordao.getByUserID(fUserID);
+	public  DocAuthor getDocAuthorByUserID(String fUserID) {
+		return docauthorMapper.getByUserID(fUserID);
 	}
 
-	public static List<DocAuthor> getDocAuthorList() {
-		return docauthordao.getList();
+	public  List<DocAuthor> getDocAuthorList() {
+		return docauthorMapper.getList();
 	}
 }

@@ -7,14 +7,16 @@ public interface RequestHandler {
 	/*
 	 * 请求处理程序接口
 	 */
-    String getNamespace();
+	String getContextPath();
+
+	String getNamespace();
 
 	String getPathPattern();
 
 	void initHttpHeader(HttpServletResponse paramHttpServletResponse);
 
-	void handleRequest(HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception;
-	
+	void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
+			throws Exception;
+
 	boolean isWin();
 }

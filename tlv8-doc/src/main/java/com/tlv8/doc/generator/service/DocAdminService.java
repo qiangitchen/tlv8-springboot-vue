@@ -2,75 +2,77 @@ package com.tlv8.doc.generator.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.tlv8.common.utils.IDUtils;
-import com.tlv8.doc.generator.mapper.IDocAdminDao;
+import com.tlv8.doc.generator.mapper.DocAdminMapper;
 import com.tlv8.doc.generator.pojo.DocAdmin;
 
+@Service
 public class DocAdminService {
-	private static IDocAdminDao docadmindao;
-
-	public static void setDocadmindao(IDocAdminDao docadmindao) {
-		DocAdminService.docadmindao = docadmindao;
-	}
+	
+	@Autowired
+	private DocAdminMapper docadminMapper;
 
 	/*
 	 * 添加
 	 */
-	public static String addDocAdmin(int fLeve, String fName) {
+	public String addDocAdmin(int fLeve, String fName) {
 		String naid = IDUtils.getGUID();
 		DocAdmin docadmin = new DocAdmin();
 		docadmin.setFID(naid);
 		docadmin.setFLeve(fLeve);
 		docadmin.setFName(fName);
 		docadmin.setVersion(0);
-		docadmindao.insert(docadmin);
+		docadminMapper.insert(docadmin);
 		return naid;
 	}
 
 	/*
 	 * 添加
 	 */
-	public static void addDocAdmin(DocAdmin docadmin) {
-		docadmindao.insert(docadmin);
+	public void addDocAdmin(DocAdmin docadmin) {
+		docadminMapper.insert(docadmin);
 	}
 
 	/*
 	 * 更新
 	 */
-	public static void updateDocAdmin(String fID, int fLeve, String fName) {
-		DocAdmin docadmin = docadmindao.getByPrimaryKey(fID);
+	public void updateDocAdmin(String fID, int fLeve, String fName) {
+		DocAdmin docadmin = docadminMapper.getByPrimaryKey(fID);
 		docadmin.setFID(fID);
 		docadmin.setFLeve(fLeve);
 		docadmin.setFName(fName);
 		docadmin.setVersion(docadmin.getVersion() + 1);
-		docadmindao.update(docadmin);
+		docadminMapper.update(docadmin);
 	}
 
 	/*
 	 * 更新
 	 */
-	public static void updateDocAdmin(DocAdmin docadmin) {
-		docadmindao.update(docadmin);
+	public void updateDocAdmin(DocAdmin docadmin) {
+		docadminMapper.update(docadmin);
 	}
 
 	/*
 	 * 删除
 	 */
-	public static int deleteDocAdmin(String fID) {
-		return docadmindao.deleteByPrimaryKey(fID);
+	public int deleteDocAdmin(String fID) {
+		return docadminMapper.deleteByPrimaryKey(fID);
 	}
 
 	/*
 	 * 获取指定ID的数据
 	 */
-	public static DocAdmin getDocAdminByFID(String fID) {
-		return docadmindao.getByPrimaryKey(fID);
+	public DocAdmin getDocAdminByFID(String fID) {
+		return docadminMapper.getByPrimaryKey(fID);
 	}
 
 	/*
 	 * 获取所有数据
 	 */
-	public static List<DocAdmin> getDocAdminList() {
-		return docadmindao.getList();
+	public List<DocAdmin> getDocAdminList() {
+		return docadminMapper.getList();
 	}
 }

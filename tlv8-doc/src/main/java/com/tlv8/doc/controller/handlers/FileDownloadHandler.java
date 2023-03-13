@@ -7,7 +7,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.tlv8.doc.controller.impl.AbstractRequestHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.tlv8.doc.controller.utils.MimeUtils;
 import com.tlv8.doc.core.io.FileDownloader;
 import com.tlv8.doc.generator.pojo.DocDocPath;
@@ -15,21 +19,19 @@ import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
-public class FileDownloadHandler extends AbstractRequestHandler {
+@Controller
+@RequestMapping("/DocServer/repository")
+public class FileDownloadHandler {
+	@Autowired
+	DocDocPathService docDocPathService;
+	@Autowired
+	DocDocumentService docDocumentService;
 
-	public String getPathPattern() {
-		return "/file/download/*/*/*";
-	}
-
-	public void initHttpHeader(HttpServletResponse paramHttpServletResponse) {
-		paramHttpServletResponse.setHeader("Cache-Control", "pre-check=0, post-check=0, max-age=0");
-	}
-
-	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse)
-			throws Exception {
-		String fileID = getFileID(paramHttpServletRequest);
-		DocDocPath dpath = DocDocPathService.getDocDocPathByFileID(fileID);
-		DocDocument doc = DocDocumentService.getDocumentByDocID(fileID);
+	@RequestMapping("/file/download/{fileID}/**")
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
+			@PathVariable("fileID") String fileID) throws Exception {
+		DocDocPath dpath = docDocPathService.getDocDocPathByFileID(fileID);
+		DocDocument doc = docDocumentService.getDocumentByDocID(fileID);
 		// 文件创建时间
 		paramHttpServletResponse.setDateHeader("Last-Modified", doc.getFAddTime().getTime());
 		// 文件大小
@@ -84,21 +86,6 @@ public class FileDownloadHandler extends AbstractRequestHandler {
 				inputStream.close(); // 关闭输入流
 			}
 		}
-	}
-
-	protected String getFileID(HttpServletRequest paramHttpServletRequest) {
-		String fileID = null;
-		String pathinfo = paramHttpServletRequest.getPathInfo();
-		pathinfo = pathinfo.replace("/repository/file/download/", "");
-		if (pathinfo.indexOf("/") > 0) {
-			fileID = pathinfo.substring(0, pathinfo.indexOf("/"));
-		} else {
-			fileID = pathinfo;
-		}
-		if (fileID.indexOf("-") < 0) {
-			fileID = fileID + "-root";// 只传数字时处理
-		}
-		return fileID;
 	}
 
 }
