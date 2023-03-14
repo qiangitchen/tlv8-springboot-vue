@@ -1,8 +1,13 @@
 package com.tlv8.system.controller;
 
 import com.tlv8.common.domain.AjaxResult;
+import com.tlv8.common.utils.IDUtils;
+import com.tlv8.common.utils.MD5Util;
+import com.tlv8.common.utils.StringUtils;
 import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.pojo.SaOpPerson;
 import com.tlv8.system.service.ISaOpOrgService;
+import com.tlv8.system.service.ISaOpPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +25,8 @@ public class OrganizationController {
 
     @Autowired
     ISaOpOrgService saOpOrgService;
+    @Autowired
+    ISaOpPersonService saOpPersonService;
 
     @ResponseBody
     @RequestMapping("/orgTree")
@@ -143,6 +150,60 @@ public class OrganizationController {
     @RequestMapping("/saveOrgData")
     public Object saveOrgData(@RequestBody SaOpOrg param) {
         AjaxResult result = null;
+        try {
+            String orgid = IDUtils.getGUID();
+            if (StringUtils.isEmpty(param.getSid())) {
+                param.setSid(orgid);
+            }
+            SaOpOrg porg = saOpOrgService.selectByPrimaryKey(param.getSparent());
+            if (porg != null) {
+                param.setSfid(porg.getSfid() + "/" + param.getSid() + "." + param.getSorgkindid());
+                param.setSfcode(porg.getSfcode() + "/" + param.getScode());
+                param.setSfname(porg.getSfname() + "/" + param.getSname());
+                param.setSlevel(porg.getSlevel() + 1);
+            } else {
+                param.setSfid("/" + param.getSid() + "." + param.getSorgkindid());
+                param.setSfcode("/" + param.getScode());
+                param.setSfname("/" + param.getSname());
+                param.setSlevel(1);
+            }
+            SaOpOrg org = saOpOrgService.selectByPrimaryKey(param.getSid());
+            if (org != null) {
+                param.setVersion(org.getVersion() + 1);
+                saOpOrgService.updateData(param);
+            } else {
+                if ("psm".equalsIgnoreCase(param.getSorgkindid())) {//人员类型需要特殊处理
+                    SaOpPerson person = saOpPersonService.selectByCode(param.getScode());
+                    if (person != null) {
+                        return AjaxResult.error("保存失败，用户编号已经存在！");
+                    } else {
+                        String psmid = IDUtils.getGUID();
+                        person = new SaOpPerson();
+                        person.setSid(psmid);
+                        person.setScode(param.getScode());
+                        person.setSname(param.getSname());
+                        person.setSpassword(MD5Util.encode("123456"));//默认密码：123456
+                        person.setSmainorgid(param.getSparent());
+                        person.setSmobilephone(param.getSphone());
+                        person.setSzip(param.getSzip());
+                        person.setSfamilyaddress(param.getSaddress());
+                        person.setSsequence(param.getSsequence());
+                        person.setSvalidstate(1);
+                        saOpPersonService.insertData(person);
+                        param.setSpersonid(psmid);
+                        orgid = psmid + "@" + param.getSparent();
+                    }
+                }
+                param.setSvalidstate(1);
+                param.setSid(orgid);
+                param.setVersion(0);
+                saOpOrgService.insertData(param);
+            }
+            result = AjaxResult.success("保存成功", param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = AjaxResult.error(e.getMessage());
+        }
         return result;
     }
 

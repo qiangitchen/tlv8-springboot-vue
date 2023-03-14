@@ -10,42 +10,46 @@ import com.tlv8.system.service.ISaOpPersonService;
 @Service
 public class SaOpPersonServiceImpl implements ISaOpPersonService {
 
-	@Autowired
-	SaOpPersonMapper saOpPersonMapper;
+    @Autowired
+    SaOpPersonMapper saOpPersonMapper;
 
-	@Override
-	public SaOpPerson selectByPrimaryKey(String sid) {
-		return saOpPersonMapper.selectByPrimaryKey(sid);
-	}
+    @Override
+    public SaOpPerson selectByPrimaryKey(String sid) {
+        return saOpPersonMapper.selectByPrimaryKey(sid);
+    }
 
-	@Override
-	public int insertData(SaOpPerson obj) {
-		return saOpPersonMapper.insertData(obj);
-	}
+    public SaOpPerson selectByCode(String scode) {
+        return saOpPersonMapper.selectByCode(scode);
+    }
 
-	@Override
-	public int updateData(SaOpPerson obj) {
-		return saOpPersonMapper.updateData(obj);
-	}
+    @Override
+    public int insertData(SaOpPerson obj) {
+        return saOpPersonMapper.insertData(obj);
+    }
 
-	@Override
-	public int deleteData(SaOpPerson obj) {
-		return saOpPersonMapper.deleteData(obj);
-	}
+    @Override
+    public int updateData(SaOpPerson obj) {
+        return saOpPersonMapper.updateData(obj);
+    }
 
-	@Override
-	public int deleteDataByPrimaryKey(String sid) {
-		return saOpPersonMapper.deleteDataByPrimaryKey(sid);
-	}
+    @Override
+    public int deleteData(SaOpPerson obj) {
+        return saOpPersonMapper.deleteData(obj);
+    }
 
-	@Override
-	public int logicDeleteDataByPrimaryKey(String sid) {
-		return saOpPersonMapper.logicDeleteDataByPrimaryKey(sid);
-	}
+    @Override
+    public int deleteDataByPrimaryKey(String sid) {
+        return saOpPersonMapper.deleteDataByPrimaryKey(sid);
+    }
 
-	@Override
-	public int logicRecoveryByPrimaryKey(String sid) {
-		return saOpPersonMapper.logicRecoveryByPrimaryKey(sid);
-	}
+    @Override
+    public int logicDeleteDataByPrimaryKey(String sid) {
+        return saOpPersonMapper.logicDeleteDataByPrimaryKey(sid);
+    }
+
+    @Override
+    public int logicRecoveryByPrimaryKey(String sid) {
+        return saOpPersonMapper.logicRecoveryByPrimaryKey(sid);
+    }
 
 }

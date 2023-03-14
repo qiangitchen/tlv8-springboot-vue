@@ -6,60 +6,61 @@ import com.tlv8.system.pojo.SaOpPerson;
 
 @Mapper
 public interface SaOpPersonMapper {
-	/**
-	 * 根据主键获取数据对象
-	 * 
-	 * @param sid
-	 * @return
-	 */
-	SaOpPerson selectByPrimaryKey(String sid);
+    /**
+     * 根据主键获取数据对象
+     *
+     * @param sid
+     * @return
+     */
+    SaOpPerson selectByPrimaryKey(String sid);
 
-	/**
-	 * 插入数据到数据库
-	 * 
-	 * @param saoporg
-	 * @return
-	 */
-	int insertData(SaOpPerson obj);
+    SaOpPerson selectByCode(String scode);
 
-	/**
-	 * 更新数据
-	 * 
-	 * @param saoporg
-	 * @return
-	 */
-	int updateData(SaOpPerson obj);
+    /**
+     * 插入数据到数据库
+     *
+     * @param saOpPerson
+     * @return
+     */
+    int insertData(SaOpPerson saOpPerson);
 
-	/**
-	 * 删除对象对应的数据
-	 * 
-	 * @param saoporg
-	 * @return
-	 */
-	int deleteData(SaOpPerson obj);
+    /**
+     * 更新数据
+     *
+     * @param saOpPerson
+     * @return
+     */
+    int updateData(SaOpPerson saOpPerson);
 
-	/**
-	 * 删除指定主键的数据
-	 * 
-	 * @param sid
-	 * @return
-	 */
-	int deleteDataByPrimaryKey(String sid);
+    /**
+     * 删除对象对应的数据
+     *
+     * @param saOpPerson
+     * @return
+     */
+    int deleteData(SaOpPerson saOpPerson);
 
-	/**
-	 * 逻辑删除指定主键的数据
-	 * 
-	 * @param sid
-	 * @return
-	 */
-	int logicDeleteDataByPrimaryKey(String sid);
+    /**
+     * 删除指定主键的数据
+     *
+     * @param sid
+     * @return
+     */
+    int deleteDataByPrimaryKey(String sid);
 
-	/**
-	 * 逻辑恢复指定主键的数据
-	 * 
-	 * @param sid
-	 * @param state
-	 * @return
-	 */
-	int logicRecoveryByPrimaryKey(String sid);
+    /**
+     * 逻辑删除指定主键的数据
+     *
+     * @param sid
+     * @return
+     */
+    int logicDeleteDataByPrimaryKey(String sid);
+
+    /**
+     * 逻辑恢复指定主键的数据
+     *
+     * @param sid
+     * @return
+     */
+    int logicRecoveryByPrimaryKey(String sid);
 }

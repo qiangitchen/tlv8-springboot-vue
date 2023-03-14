@@ -1,169 +1,185 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tlv8.system.mapper.SaOpPersonMapper">
-	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpPerson">
-		<id column="sid" property="sid" jdbcType="VARCHAR" />
-		<result column="sname" property="sname" jdbcType="VARCHAR" />
-		<result column="scode" property="scode" jdbcType="VARCHAR" />
-		<result column="sidcard" property="sidcard" jdbcType="VARCHAR" />
-		<result column="snumb" property="snumb" jdbcType="INTEGER" />
-		<result column="sloginname" property="sloginname" jdbcType="VARCHAR" />
-		<result column="spassword" property="spassword" jdbcType="VARCHAR" />
-		<result column="spasswordtimelimit" property="spasswordtimelimit" jdbcType="INTEGER" />
-		<result column="spasswordmodifytime" property="spasswordmodifytime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
-		<result column="smainorgid" property="smainorgid" jdbcType="VARCHAR" />
-		<result column="ssafelevelid" property="ssafelevelid" jdbcType="VARCHAR" />
-		<result column="ssequence" property="ssequence" jdbcType="INTEGER" />
-		<result column="svalidstate" property="svalidstate" jdbcType="INTEGER" />
-		<result column="sdescription" property="sdescription" jdbcType="VARCHAR" />
-		<result column="ssex" property="ssex" jdbcType="VARCHAR" />
-		<result column="sbirthday" property="sbirthday" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
-		<result column="sjoindate" property="sjoindate" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
-		<result column="shomeplace" property="shomeplace" jdbcType="VARCHAR" />
-		<result column="sdegree" property="sdegree" jdbcType="VARCHAR" />
-		<result column="sgraduateschool" property="sgraduateschool" jdbcType="VARCHAR" />
-		<result column="sspeciality" property="sspeciality" jdbcType="VARCHAR" />
-		<result column="sschoollength" property="sschoollength" jdbcType="VARCHAR" />
-		<result column="smarriage" property="smarriage" jdbcType="VARCHAR" />
-		<result column="scardkind" property="scardkind" jdbcType="VARCHAR" />
-		<result column="sfamilyaddress" property="sfamilyaddress" jdbcType="VARCHAR" />
-		<result column="szip" property="szip" jdbcType="VARCHAR" />
-		<result column="smsn" property="smsn" jdbcType="VARCHAR" />
-		<result column="sqq" property="sqq" jdbcType="VARCHAR" />
-		<result column="smail" property="smail" jdbcType="VARCHAR" />
-		<result column="smobilephone" property="smobilephone" jdbcType="VARCHAR" />
-		<result column="sfamilyphone" property="sfamilyphone" jdbcType="VARCHAR" />
-		<result column="sofficephone" property="sofficephone" jdbcType="VARCHAR" />
-		<result column="version" property="version" jdbcType="INTEGER" />
-		<result column="scountry" property="scountry" jdbcType="VARCHAR" />
-		<result column="sprovince" property="sprovince" jdbcType="VARCHAR" />
-		<result column="scity" property="scity" jdbcType="VARCHAR" />
-		<result column="spositions" property="spositions" jdbcType="VARCHAR" />
-		<result column="sschool" property="sschool" jdbcType="VARCHAR" />
-		<result column="sstudy" property="sstudy" jdbcType="VARCHAR" />
-		<result column="senglishname" property="senglishname" jdbcType="VARCHAR" />
-		<result column="fcasn" property="fcasn" jdbcType="VARCHAR" />
-		<result column="fsignm" property="fsignm" jdbcType="VARCHAR" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		sid,sname,scode,sidcard,snumb,sloginname,spassword,spasswordtimelimit,spasswordmodifytime,smainorgid,ssafelevelid,ssequence,svalidstate,
+    <resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpPerson">
+        <id column="sid" property="sid" jdbcType="VARCHAR"/>
+        <result column="sname" property="sname" jdbcType="VARCHAR"/>
+        <result column="scode" property="scode" jdbcType="VARCHAR"/>
+        <result column="sidcard" property="sidcard" jdbcType="VARCHAR"/>
+        <result column="snumb" property="snumb" jdbcType="INTEGER"/>
+        <result column="sloginname" property="sloginname" jdbcType="VARCHAR"/>
+        <result column="spassword" property="spassword" jdbcType="VARCHAR"/>
+        <result column="spasswordtimelimit" property="spasswordtimelimit" jdbcType="INTEGER"/>
+        <result column="spasswordmodifytime" property="spasswordmodifytime" jdbcType="TIMESTAMP"
+                javaType="java.sql.Timestamp"/>
+        <result column="smainorgid" property="smainorgid" jdbcType="VARCHAR"/>
+        <result column="ssafelevelid" property="ssafelevelid" jdbcType="VARCHAR"/>
+        <result column="ssequence" property="ssequence" jdbcType="INTEGER"/>
+        <result column="svalidstate" property="svalidstate" jdbcType="INTEGER"/>
+        <result column="sdescription" property="sdescription" jdbcType="VARCHAR"/>
+        <result column="ssex" property="ssex" jdbcType="VARCHAR"/>
+        <result column="sbirthday" property="sbirthday" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result column="sjoindate" property="sjoindate" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result column="shomeplace" property="shomeplace" jdbcType="VARCHAR"/>
+        <result column="sdegree" property="sdegree" jdbcType="VARCHAR"/>
+        <result column="sgraduateschool" property="sgraduateschool" jdbcType="VARCHAR"/>
+        <result column="sspeciality" property="sspeciality" jdbcType="VARCHAR"/>
+        <result column="sschoollength" property="sschoollength" jdbcType="VARCHAR"/>
+        <result column="smarriage" property="smarriage" jdbcType="VARCHAR"/>
+        <result column="scardkind" property="scardkind" jdbcType="VARCHAR"/>
+        <result column="sfamilyaddress" property="sfamilyaddress" jdbcType="VARCHAR"/>
+        <result column="szip" property="szip" jdbcType="VARCHAR"/>
+        <result column="smsn" property="smsn" jdbcType="VARCHAR"/>
+        <result column="sqq" property="sqq" jdbcType="VARCHAR"/>
+        <result column="smail" property="smail" jdbcType="VARCHAR"/>
+        <result column="smobilephone" property="smobilephone" jdbcType="VARCHAR"/>
+        <result column="sfamilyphone" property="sfamilyphone" jdbcType="VARCHAR"/>
+        <result column="sofficephone" property="sofficephone" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+        <result column="scountry" property="scountry" jdbcType="VARCHAR"/>
+        <result column="sprovince" property="sprovince" jdbcType="VARCHAR"/>
+        <result column="scity" property="scity" jdbcType="VARCHAR"/>
+        <result column="spositions" property="spositions" jdbcType="VARCHAR"/>
+        <result column="sschool" property="sschool" jdbcType="VARCHAR"/>
+        <result column="sstudy" property="sstudy" jdbcType="VARCHAR"/>
+        <result column="senglishname" property="senglishname" jdbcType="VARCHAR"/>
+        <result column="fcasn" property="fcasn" jdbcType="VARCHAR"/>
+        <result column="fsignm" property="fsignm" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid
+        ,sname,scode,sidcard,snumb,sloginname,spassword,spasswordtimelimit,spasswordmodifytime,smainorgid,ssafelevelid,ssequence,svalidstate,
 		sdescription,ssex,sbirthday,sjoindate,shomeplace,sdegree,sgraduateschool,sspeciality,sschoollength,stitle,smarriage,scardno,scardkind,sfamilyaddress,
 		szip,smsn,sqq,smail,smobilephone,sfamilyphone,sofficephone,version,scountry,sprovince,scity,spositions,sschool,sstudy,senglishname,fcasn,fsignm
-	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select 
-		<include refid="Base_Column_List" />
-		from SA_OpPerson
-		where sid = #{sid,jdbcType=VARCHAR}
-	</select>
-	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpPerson">
-		insert into  
-		 SA_OpPerson(<include refid="Base_Column_List" />) 
-			values( #{sid,jdbcType=VARCHAR},
-			 #{sname,jdbcType=VARCHAR},
-			 #{scode,jdbcType=VARCHAR},
-			 #{sidcard,jdbcType=VARCHAR},
-			 #{snumb,jdbcType=INTEGER},
-			 #{sloginname,jdbcType=VARCHAR},
-			 #{spassword,jdbcType=VARCHAR},
-			 #{spasswordtimelimit,jdbcType=INTEGER},
-			 #{spasswordmodifytime,jdbcType=TIMESTAMP},
-			 #{smainorgid,jdbcType=VARCHAR},
-			 #{ssafelevelid,jdbcType=VARCHAR},
-			 #{ssequence,jdbcType=INTEGER},
-			 #{svalidstate,jdbcType=INTEGER},
-			 #{sdescription,jdbcType=VARCHAR},
-			 #{ssex,jdbcType=VARCHAR},
-			 #{sbirthday,jdbcType=TIMESTAMP},
-			 #{sjoindate,jdbcType=TIMESTAMP},
-			 #{shomeplace,jdbcType=VARCHAR},
-			 #{sdegree,jdbcType=VARCHAR},
-			 #{sgraduateschool,jdbcType=VARCHAR},
-			 #{sspeciality,jdbcType=VARCHAR},
-			 #{sschoollength,jdbcType=VARCHAR},
-			 #{stitle,jdbcType=VARCHAR},
-			 #{smarriage,jdbcType=VARCHAR},
-			 #{scardno,jdbcType=VARCHAR},
-			 #{scardkind,jdbcType=VARCHAR},
-			 #{sfamilyaddress,jdbcType=VARCHAR},
-			 #{szip,jdbcType=VARCHAR},
-			 #{smsn,jdbcType=VARCHAR},
-			 #{sqq,jdbcType=VARCHAR},
-			 #{smail,jdbcType=VARCHAR},
-			 #{smobilephone,jdbcType=VARCHAR},
-			 #{sfamilyphone,jdbcType=VARCHAR},
-			 #{sofficephone,jdbcType=VARCHAR},
-			 #{version,jdbcType=INTEGER},
-			 #{scountry,jdbcType=VARCHAR},
-			 #{sprovince,jdbcType=VARCHAR},
-			 #{scity,jdbcType=VARCHAR},
-			 #{spositions,jdbcType=VARCHAR},
-			 #{sschool,jdbcType=VARCHAR},
-			 #{sstudy,jdbcType=VARCHAR},
-			 #{senglishname,jdbcType=VARCHAR},
-			 #{fcasn,jdbcType=VARCHAR},
-			 #{fsignm,jdbcType=VARCHAR}
-			 )
-	</insert>
-	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOpPerson">
-		update 
-		SA_OpPerson 
-			set sname = #{sname,jdbcType=VARCHAR},
-			scode = #{scode,jdbcType=VARCHAR},
-			sidcard = #{sidcard,jdbcType=VARCHAR},
-			snumb = #{snumb,jdbcType=INTEGER},
-			sloginname = #{sloginname,jdbcType=VARCHAR},
-			spassword = #{spassword,jdbcType=VARCHAR},
-			spasswordtimelimit = #{spasswordtimelimit,jdbcType=INTEGER},
-			spasswordmodifytime = #{spasswordmodifytime,jdbcType=TIMESTAMP},
-			smainorgid = #{smainorgid,jdbcType=VARCHAR},
-			ssafelevelid = #{ssafelevelid,jdbcType=VARCHAR},
-			ssequence = #{ssequence,jdbcType=INTEGER},
-			svalidstate = #{svalidstate,jdbcType=INTEGER},
-			sdescription = #{sdescription,jdbcType=VARCHAR},
-			ssex = #{ssex,jdbcType=VARCHAR},
-			sbirthday = #{sbirthday,jdbcType=TIMESTAMP},
-			sjoindate = #{sjoindate,jdbcType=TIMESTAMP},
-			shomeplace = #{shomeplace,jdbcType=VARCHAR},
-			sdegree = #{sdegree,jdbcType=VARCHAR},
-			sgraduateschool = #{sgraduateschool,jdbcType=VARCHAR},
-			sspeciality = #{sspeciality,jdbcType=VARCHAR},
-			sschoollength = #{sschoollength,jdbcType=VARCHAR},
-			stitle = #{stitle,jdbcType=VARCHAR},
-			smarriage = #{smarriage,jdbcType=VARCHAR},
-			scardno = #{scardno,jdbcType=VARCHAR},
-			scardkind = #{scardkind,jdbcType=VARCHAR},
-			sfamilyaddress = #{sfamilyaddress,jdbcType=VARCHAR},
-			szip = #{szip,jdbcType=VARCHAR},
-			smsn = #{smsn,jdbcType=VARCHAR},
-			sqq = #{sqq,jdbcType=VARCHAR},
-			smail = #{smail,jdbcType=VARCHAR},
-			smobilephone = #{smobilephone,jdbcType=VARCHAR},
-			sfamilyphone = #{sfamilyphone,jdbcType=VARCHAR},
-			sofficephone = #{sofficephone,jdbcType=VARCHAR},
-			version = #{version,jdbcType=INTEGER},
-			scountry = #{scountry,jdbcType=VARCHAR},
-			sprovince = #{sprovince,jdbcType=VARCHAR},
-			sprovince = #{sprovince,jdbcType=VARCHAR},
-			scity = #{scity,jdbcType=VARCHAR},
-			spositions = #{spositions,jdbcType=VARCHAR},
-			sschool = #{sschool,jdbcType=VARCHAR},
-			sstudy = #{sstudy,jdbcType=VARCHAR},
-			senglishname = #{senglishname,jdbcType=VARCHAR},
-			fcasn = #{fcasn,jdbcType=VARCHAR},
-			fsignm = #{fsignm,jdbcType=VARCHAR} 
-		where sid = #{sid,jdbcType=VARCHAR}
-	</update>
-	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpPerson">
-		delete from SA_OpPerson where sid = #{sid,jdbcType=VARCHAR}
-	</delete>
-	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
-		delete from SA_OpPerson where sid = #{sid,jdbcType=VARCHAR}
-	</delete>
-	<update id="logicDeleteDataByPrimaryKey" parameterType="java.lang.String">
-		update SA_OpPerson set svalidstate=-1 where sid = #{sid,jdbcType=VARCHAR}
-	</update>
-	<update id="logicRecoveryByPrimaryKey" parameterType="java.lang.String">
-		update SA_OpPerson set svalidstate=1 where sid = #{sid,jdbcType=VARCHAR}
-	</update>
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from SA_OpPerson
+        where sid = #{sid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from SA_OpPerson
+        where scode = #{scode,jdbcType=VARCHAR}
+    </select>
+    <insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpPerson">
+        insert into
+        SA_OpPerson(<include refid="Base_Column_List"/>)
+        values( #{sid,jdbcType=VARCHAR},
+        #{sname,jdbcType=VARCHAR},
+        #{scode,jdbcType=VARCHAR},
+        #{sidcard,jdbcType=VARCHAR},
+        #{snumb,jdbcType=INTEGER},
+        #{sloginname,jdbcType=VARCHAR},
+        #{spassword,jdbcType=VARCHAR},
+        #{spasswordtimelimit,jdbcType=INTEGER},
+        #{spasswordmodifytime,jdbcType=TIMESTAMP},
+        #{smainorgid,jdbcType=VARCHAR},
+        #{ssafelevelid,jdbcType=VARCHAR},
+        #{ssequence,jdbcType=INTEGER},
+        #{svalidstate,jdbcType=INTEGER},
+        #{sdescription,jdbcType=VARCHAR},
+        #{ssex,jdbcType=VARCHAR},
+        #{sbirthday,jdbcType=TIMESTAMP},
+        #{sjoindate,jdbcType=TIMESTAMP},
+        #{shomeplace,jdbcType=VARCHAR},
+        #{sdegree,jdbcType=VARCHAR},
+        #{sgraduateschool,jdbcType=VARCHAR},
+        #{sspeciality,jdbcType=VARCHAR},
+        #{sschoollength,jdbcType=VARCHAR},
+        #{stitle,jdbcType=VARCHAR},
+        #{smarriage,jdbcType=VARCHAR},
+        #{scardno,jdbcType=VARCHAR},
+        #{scardkind,jdbcType=VARCHAR},
+        #{sfamilyaddress,jdbcType=VARCHAR},
+        #{szip,jdbcType=VARCHAR},
+        #{smsn,jdbcType=VARCHAR},
+        #{sqq,jdbcType=VARCHAR},
+        #{smail,jdbcType=VARCHAR},
+        #{smobilephone,jdbcType=VARCHAR},
+        #{sfamilyphone,jdbcType=VARCHAR},
+        #{sofficephone,jdbcType=VARCHAR},
+        #{version,jdbcType=INTEGER},
+        #{scountry,jdbcType=VARCHAR},
+        #{sprovince,jdbcType=VARCHAR},
+        #{scity,jdbcType=VARCHAR},
+        #{spositions,jdbcType=VARCHAR},
+        #{sschool,jdbcType=VARCHAR},
+        #{sstudy,jdbcType=VARCHAR},
+        #{senglishname,jdbcType=VARCHAR},
+        #{fcasn,jdbcType=VARCHAR},
+        #{fsignm,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="updateData" parameterType="com.tlv8.system.pojo.SaOpPerson">
+        update
+            SA_OpPerson
+        set sname               = #{sname,jdbcType=VARCHAR},
+            scode               = #{scode,jdbcType=VARCHAR},
+            sidcard             = #{sidcard,jdbcType=VARCHAR},
+            snumb               = #{snumb,jdbcType=INTEGER},
+            sloginname          = #{sloginname,jdbcType=VARCHAR},
+            spassword           = #{spassword,jdbcType=VARCHAR},
+            spasswordtimelimit  = #{spasswordtimelimit,jdbcType=INTEGER},
+            spasswordmodifytime = #{spasswordmodifytime,jdbcType=TIMESTAMP},
+            smainorgid          = #{smainorgid,jdbcType=VARCHAR},
+            ssafelevelid        = #{ssafelevelid,jdbcType=VARCHAR},
+            ssequence           = #{ssequence,jdbcType=INTEGER},
+            svalidstate         = #{svalidstate,jdbcType=INTEGER},
+            sdescription        = #{sdescription,jdbcType=VARCHAR},
+            ssex                = #{ssex,jdbcType=VARCHAR},
+            sbirthday           = #{sbirthday,jdbcType=TIMESTAMP},
+            sjoindate           = #{sjoindate,jdbcType=TIMESTAMP},
+            shomeplace          = #{shomeplace,jdbcType=VARCHAR},
+            sdegree             = #{sdegree,jdbcType=VARCHAR},
+            sgraduateschool     = #{sgraduateschool,jdbcType=VARCHAR},
+            sspeciality         = #{sspeciality,jdbcType=VARCHAR},
+            sschoollength       = #{sschoollength,jdbcType=VARCHAR},
+            stitle              = #{stitle,jdbcType=VARCHAR},
+            smarriage           = #{smarriage,jdbcType=VARCHAR},
+            scardno             = #{scardno,jdbcType=VARCHAR},
+            scardkind           = #{scardkind,jdbcType=VARCHAR},
+            sfamilyaddress      = #{sfamilyaddress,jdbcType=VARCHAR},
+            szip                = #{szip,jdbcType=VARCHAR},
+            smsn                = #{smsn,jdbcType=VARCHAR},
+            sqq                 = #{sqq,jdbcType=VARCHAR},
+            smail               = #{smail,jdbcType=VARCHAR},
+            smobilephone        = #{smobilephone,jdbcType=VARCHAR},
+            sfamilyphone        = #{sfamilyphone,jdbcType=VARCHAR},
+            sofficephone        = #{sofficephone,jdbcType=VARCHAR},
+            version             = #{version,jdbcType=INTEGER},
+            scountry            = #{scountry,jdbcType=VARCHAR},
+            sprovince           = #{sprovince,jdbcType=VARCHAR},
+            sprovince           = #{sprovince,jdbcType=VARCHAR},
+            scity               = #{scity,jdbcType=VARCHAR},
+            spositions          = #{spositions,jdbcType=VARCHAR},
+            sschool             = #{sschool,jdbcType=VARCHAR},
+            sstudy              = #{sstudy,jdbcType=VARCHAR},
+            senglishname        = #{senglishname,jdbcType=VARCHAR},
+            fcasn               = #{fcasn,jdbcType=VARCHAR},
+            fsignm              = #{fsignm,jdbcType=VARCHAR}
+        where sid = #{sid,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpPerson">
+        delete
+        from SA_OpPerson
+        where sid = #{sid,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from SA_OpPerson
+        where sid = #{sid,jdbcType=VARCHAR}
+    </delete>
+    <update id="logicDeleteDataByPrimaryKey" parameterType="java.lang.String">
+        update SA_OpPerson
+        set svalidstate= -1
+        where sid = #{sid,jdbcType=VARCHAR}
+    </update>
+    <update id="logicRecoveryByPrimaryKey" parameterType="java.lang.String">
+        update SA_OpPerson
+        set svalidstate=1
+        where sid = #{sid,jdbcType=VARCHAR}
+    </update>
 </mapper>

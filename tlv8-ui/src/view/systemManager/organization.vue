@@ -109,7 +109,7 @@
 </template>
 <script>
 import {message, Modal} from 'ant-design-vue'
-import {loadOrgTree, loadOrgList, loadOrgData} from "../../api/module/system";
+import {loadOrgTree, loadOrgList, loadOrgData, saveOrgData} from "../../api/module/system";
 import {defineComponent, ref, watch} from 'vue';
 import {ApartmentOutlined, CodepenOutlined, ContactsOutlined, UserOutlined} from '@ant-design/icons-vue';
 import {getOrgKindName} from "../../tools/common.js"
@@ -386,7 +386,8 @@ export default defineComponent({
           content: '未选中父节点！'
         });
       } else {
-
+        this.currentId = '';
+        this.reloadForm('dpt');
       }
     },
     addPersonnel() {
@@ -396,7 +397,8 @@ export default defineComponent({
           content: '请先选中需要分配人员的组织！'
         });
       } else {
-
+        this.currentId = '';
+        this.reloadForm('psm');
       }
     },
     assignPersonnel() {
@@ -418,6 +420,18 @@ export default defineComponent({
         .validate()
         .then(() => {
           this.loading = true;
+          saveOrgData(this.form).then(res => {
+            console.log(res);
+            if (res.code === 200) {
+              this.form = res.data;
+              this.visible = false;
+              message.success(res.msg);
+              this.$refs.table.reload();
+            } else {
+              message.error(res.msg);
+            }
+            this.loading = false;
+          });
         })
         .catch(error => {
           this.loading = false;

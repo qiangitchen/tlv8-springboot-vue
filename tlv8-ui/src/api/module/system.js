@@ -59,3 +59,15 @@ export const loadOrgData = data => {
     method: 'post'
   })
 }
+
+/// 加载机构信息
+export const saveOrgData = data => {
+  return request({
+    url: "/system/org/saveOrgData",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
