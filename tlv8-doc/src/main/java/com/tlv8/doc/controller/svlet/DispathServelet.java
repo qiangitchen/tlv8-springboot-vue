@@ -1,6 +1,5 @@
 package com.tlv8.doc.controller.svlet;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -9,14 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tlv8.doc.controller.connector.HttpConnector;
 import com.tlv8.doc.controller.connector.ShttpServletRequest;
 import com.tlv8.doc.controller.inter.RequestHandler;
-import com.tlv8.doc.core.config.ServerConfigInit;
-import com.tlv8.doc.lucene.LuceneService;
 
 @Controller
 @RequestMapping("/DocServer")
@@ -48,22 +44,6 @@ public class DispathServelet {
 			infolog.error(e);
 			e.printStackTrace();
 			response.sendError(500);
-		}
-	}
-
-	@ModelAttribute
-	public void init(HttpServletRequest request) throws ServletException {
-		try {
-			String conPath = request.getServletContext().getRealPath("/");
-			File curfile = new File(conPath);
-			String homepath = curfile.getParent() + "../../..";
-			File localFile = new File(homepath);
-			ServerConfigInit.DOC_HOME = localFile.getParentFile().getParentFile().getParentFile().getCanonicalPath();
-			ServerConfigInit.init();
-			LuceneService.start();// 启动索引服务
-		} catch (Throwable e) {
-			infolog.error("启动文档服务异常!" + e);
-			e.printStackTrace();
 		}
 	}
 

@@ -5,8 +5,8 @@ import visualizer from "rollup-plugin-visualizer";
 import path from 'path'
 import themePreprocessorPlugin from "@zougt/vite-plugin-theme-preprocessor";
 
-const port = 81 // 前端访问端口
-const server = "http://localhost:8080" //后端服务地址
+const port = 8080 // 前端访问端口
+const server = "http://localhost:8085" //后端服务地址
 
 const plugins = [vue(),
   themePreprocessorPlugin({

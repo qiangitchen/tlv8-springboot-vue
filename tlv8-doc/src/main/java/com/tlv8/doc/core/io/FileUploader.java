@@ -93,6 +93,7 @@ public class FileUploader {
 				// 只对单个文件相应
 				// 获取表单的属性名字
 				String name = item.getFieldName();
+				System.out.println(name);
 				// 如果获取的 表单信息是普通的 文本 信息
 				if (item.isFormField()) {
 					// 获取用户具体输入的字符串 ，名字起得挺好，因为表单提交过来的是 字符串类型的

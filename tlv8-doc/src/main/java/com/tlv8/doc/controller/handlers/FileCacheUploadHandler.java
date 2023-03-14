@@ -5,19 +5,21 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tlv8.doc.controller.data.FileUploadData;
-import com.tlv8.doc.controller.impl.AbstractRequestHandler;
 import com.tlv8.doc.controller.impl.DoupDoc;
 import com.tlv8.doc.core.io.FileUploader;
 import com.tlv8.doc.core.io.centent.FileIOContent;
 
 @Controller
 @RequestMapping("/DocServer/repository")
-public class FileCacheUploadHandler extends AbstractRequestHandler {
+public class FileCacheUploadHandler {
+	protected Logger requestErrorLogger = Logger.getLogger(getClass());
+
 	@Autowired
 	FileUploadData fileUploadData;
 	@Autowired
@@ -25,10 +27,6 @@ public class FileCacheUploadHandler extends AbstractRequestHandler {
 
 	public String getPathPattern() {
 		return "/file/cache/upload";
-	}
-
-	public void initHttpHeader(HttpServletResponse paramHttpServletResponse) {
-		paramHttpServletResponse.setCharacterEncoding("utf-8");
 	}
 
 	@RequestMapping("/file/cache/upload")

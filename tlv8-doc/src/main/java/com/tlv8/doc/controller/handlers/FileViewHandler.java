@@ -31,7 +31,7 @@ public class FileViewHandler {
 		return "/file/view/*/*/*";
 	}
 
-	@RequestMapping("/file/view/{fileID}/*/{fVersion}")
+	@RequestMapping("/file/view/{fileID}/{fVersion}/*")
 	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
 			@PathVariable("fileID") String fileID, @PathVariable("fVersion") String fVersion) throws Exception {
 		if (fVersion == null) {

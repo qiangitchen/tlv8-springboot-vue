@@ -40,7 +40,7 @@ public class FileViewPDFHandler {
 		return "/file/viewpdf/*/*/*";
 	}
 
-	@RequestMapping("/file/viewpdf/{fileID}/*/{fVersion}")
+	@RequestMapping("/file/viewpdf/{fileID}/{fVersion}/*")
 	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
 			@PathVariable("fileID") String fileID, @PathVariable("fVersion") String fVersion) throws Exception {
 		DocDocPath dpath = null;

@@ -41,7 +41,7 @@ public class FileViewHtmlHandler {
 		return "/file/viewhtml/*/*/*";
 	}
 
-	@RequestMapping("/file/viewhtml/{fileID}/*/{fVersion}")
+	@RequestMapping("/file/viewhtml/{fileID}/{fVersion}/*")
 	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
 			@PathVariable("fileID") String fileID, @PathVariable("fVersion") String fVersion) throws Exception {
 		DocDocPath dpath = null;
