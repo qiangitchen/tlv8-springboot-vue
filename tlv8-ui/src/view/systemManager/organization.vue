@@ -106,16 +106,35 @@
       <a-button key="submit" type="primary" :loading="loading" @click="onSubmit">提交</a-button>
     </template>
   </a-modal>
+  <org-select-dialog
+    ref="orgSelect"
+    :handleOk="orgSelectOk"
+  />
 </template>
 <script>
 import {message, Modal} from 'ant-design-vue'
-import {loadOrgTree, loadOrgList, loadOrgData, saveOrgData} from "../../api/module/system";
-import {defineComponent, ref, watch} from 'vue';
-import {ApartmentOutlined, CodepenOutlined, ContactsOutlined, UserOutlined} from '@ant-design/icons-vue';
+import {
+  loadOrgTree,
+  loadOrgList,
+  loadOrgData,
+  saveOrgData,
+  changeOrgState,
+  resetPassword
+} from "../../api/module/system";
+import {createVNode, defineComponent, ref, watch} from 'vue';
+import {
+  ApartmentOutlined,
+  CodepenOutlined,
+  ContactsOutlined,
+  ExclamationCircleOutlined,
+  UserOutlined
+} from '@ant-design/icons-vue';
 import {getOrgKindName} from "../../tools/common.js"
+import OrgSelectDialog from "../../component/orgSelectDialog/index"
 
 export default defineComponent({
   components: {
+    OrgSelectDialog,
     ApartmentOutlined,
     CodepenOutlined,
     ContactsOutlined,
@@ -227,26 +246,54 @@ export default defineComponent({
       },
       {
         label: "移动",
-        event: function (record) {
-          alert("移动:" + JSON.stringify(record));
+        event: this.moveOrg,
+        render: function (record) {//超管用户不能移动
+          return record.key !== 'ORG01' && record.key !== 'PSN01@ORG01';
         }
       },
       {
         label: "启用/禁用",
-        event: function (record) {
-          alert("启用/禁用:" + JSON.stringify(record));
+        getLabel: function (record) {
+          if (record.svalidstate == 1) {
+            return '禁用';
+          } else {
+            return '启用';
+          }
+        },
+        event: this.doChangeOrgState,
+        render: function (record) {//超管用户不能禁用
+          return record.key !== 'ORG01' && record.key !== 'PSN01@ORG01';
         }
       },
       {
         label: "重置密码",
         event: function (record) {
-          alert("重置密码:" + JSON.stringify(record));
+          Modal.confirm({
+            title: '确认',
+            icon: createVNode(ExclamationCircleOutlined),
+            content: '确认重置用户【' + record.sname + '】的密码吗？',
+            cancelText: '取消',
+            okText: '确认',
+            onOk() {
+              resetPassword({personid: record.spersonid}).then(res => {
+                if (res.code === 200) {
+                  message.success(res.msg);
+                } else {
+                  message.error(res.msg);
+                }
+              });
+            }
+          });
+        },
+        render: function (record) {
+          return record.sorgkindid === 'psm';
         }
       },
       {
         label: "删除",
-        event: function (record) {
-          alert("删除事件:" + JSON.stringify(record));
+        event: this.doDelete,
+        render: function (record) {//超管用户不能删除
+          return record.key !== 'ORG01' && record.key !== 'PSN01@ORG01' && record.svalidstate > -1;
         }
       }
     ];
@@ -342,7 +389,9 @@ export default defineComponent({
       }, {
         label: '人员',
         value: 'psm'
-      }]
+      }],
+      orgSelect: ref(null),
+      orgSelectOk: this.orgSelectHandleOk
     }
   },
   methods: {
@@ -367,7 +416,6 @@ export default defineComponent({
         sid: this.currentId
       };
       loadOrgData({id: this.currentId}).then(res => {
-        console.log(res);
         if (res.data) {
           this.form = res.data;
         }
@@ -384,6 +432,11 @@ export default defineComponent({
         Modal.warning({
           title: '提示',
           content: '未选中父节点！'
+        });
+      } else if (this.currentTreeNode.orgkind == 'psm') {
+        Modal.warning({
+          title: '提示',
+          content: '【人员】不可以添加子！'
         });
       } else {
         this.currentId = '';
@@ -440,6 +493,59 @@ export default defineComponent({
     },
     handleCancel() {
       this.visible = false;
+    },
+    moveOrg(record) {
+      const orgSelect = this.$refs.orgSelect;
+      orgSelect.loadTreeData();
+      orgSelect.visible = true;
+    },
+    orgSelectHandleOk() {
+      const orgSelect = this.$refs.orgSelect;
+      const node = orgSelect.currentTreeNode;
+      console.log(node);
+      orgSelect.visible = false;
+    },
+    doChangeOrgState(record) {
+      const table = this.$refs.table;
+      const label = record.svalidstate == 1 ? '禁用' : '启用';
+      Modal.confirm({
+        title: '确认',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: '确认' + label + '【' + record.sname + '】吗？',
+        cancelText: '取消',
+        okText: '确认',
+        onOk() {
+          const state = record.svalidstate == 1 ? 0 : 1;
+          changeOrgState({sid: record.key, state: state}).then(res => {
+            if (res.code === 200) {
+              message.success(res.msg);
+              table.reload();
+            } else {
+              message.error(res.msg);
+            }
+          });
+        }
+      });
+    },
+    doDelete(record) {
+      const table = this.$refs.table;
+      Modal.confirm({
+        title: '确认',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: '确认删除【' + record.sname + '】吗？',
+        cancelText: '取消',
+        okText: '确认',
+        onOk() {
+          changeOrgState({sid: record.key, state: '-1'}).then(res => {
+            if (res.code === 200) {
+              message.success(res.msg);
+              table.reload();
+            } else {
+              message.error(res.msg);
+            }
+          });
+        }
+      });
     }
   }
 });

@@ -114,6 +114,7 @@ public class OrganizationController {
             map.put("sfname", org.getSfname());
             map.put("svalidstate", org.getSvalidstate());
             map.put("sorgkindid", org.getSorgkindid());
+            map.put("spersonid", org.getSpersonid());
             map.put("version", org.getVersion());
             res.add(map);
         }
@@ -202,9 +203,44 @@ public class OrganizationController {
             result = AjaxResult.success("保存成功", param);
         } catch (Exception e) {
             e.printStackTrace();
-            result = AjaxResult.error(e.getMessage());
+            result = AjaxResult.error("保存异常：" + e.getMessage());
         }
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping("/changeOrgState")
+    public Object changeOrgState(@RequestBody Map<String, String> param) {
+        try {
+            String sid = param.get("sid");
+            int state = Integer.parseInt(param.get("state"));
+            SaOpOrg org = saOpOrgService.selectByPrimaryKey(sid);
+            if (org != null) {
+                if (state < 1 && (sid.equalsIgnoreCase("ORG01") || sid.equalsIgnoreCase("PSN01@ORG01"))) {
+                    return AjaxResult.error("超管用户不能删除和禁用");
+                }
+                org.setSvalidstate(state);
+                saOpOrgService.updateData(org);
+                changeChildSate(org.getSid(), state);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("操作异常：" + e.getMessage());
+        }
+        return AjaxResult.success("操作成功");
+    }
+
+    private void changeChildSate(String pid, int state) {
+        List<SaOpOrg> orgList = saOpOrgService.selectListByParentID(pid);
+        for (SaOpOrg org : orgList) {
+            if (state < 1 && (org.getSid().equalsIgnoreCase("ORG01") || org.getSid().equalsIgnoreCase("PSN01@ORG01"))) {
+                continue;
+            }
+            org.setSvalidstate(state);
+            saOpOrgService.updateData(org);
+            changeChildSate(org.getSid(), state);
+        }
+    }
+
 
 }

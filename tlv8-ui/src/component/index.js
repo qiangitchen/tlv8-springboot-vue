@@ -9,17 +9,18 @@ import Icon from './icon/index';
 import IconPicker from './iconPicker/index';
 import Demo from './demo/index'
 import Authority from './authority/index'
+import OrgSelectDialog from './orgSelectDialog/index'
 
 const components = [
-    Footer,Header,Layout, Quick, Count,Table, Query, Icon, IconPicker, Demo, Authority
+  Footer, Header, Layout, Quick, Count, Table, Query, Icon, IconPicker, Demo, Authority, OrgSelectDialog
 ];
 
 const install = function (Vue) {
-    if (install.installed) return
-    components.map(component => Vue.component(component.name, component))
+  if (install.installed) return
+  components.map(component => Vue.component(component.name, component))
 }
 
 export default {
-    install,
-    Footer, Header, Layout, Quick, Count, Table, Query, Icon, IconPicker, Demo,Authority
+  install,
+  Footer, Header, Layout, Quick, Count, Table, Query, Icon, IconPicker, Demo, Authority, OrgSelectDialog
 }

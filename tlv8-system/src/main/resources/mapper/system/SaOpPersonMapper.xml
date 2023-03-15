@@ -152,7 +152,6 @@
             version             = #{version,jdbcType=INTEGER},
             scountry            = #{scountry,jdbcType=VARCHAR},
             sprovince           = #{sprovince,jdbcType=VARCHAR},
-            sprovince           = #{sprovince,jdbcType=VARCHAR},
             scity               = #{scity,jdbcType=VARCHAR},
             spositions          = #{spositions,jdbcType=VARCHAR},
             sschool             = #{sschool,jdbcType=VARCHAR},

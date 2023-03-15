@@ -131,31 +131,50 @@
         <!-- 行操作 -->
         <span v-if="column.dataIndex == 'operate'">
           <template :key="i" v-for="(item, i) in operate">
-            <!-- 下拉操作 -->
-            <a-dropdown v-if="item.children && item.children.length > 0">
-              <a> {{ item.label }} </a>
-              <template #overlay>
-                <a-menu>
-                  <!-- 遍历子集 -->
-                  <p-authority
-                    v-for="(child, i) in item.children"
-                    :key="i"
-                    :value="child.code ? item.code : false"
-                  >
-                    <a-menu-item>
-                      <a @click="child.event(selectedRowKeys)">
-                        {{ child.label }}
-                      </a>
-                    </a-menu-item>
-                  </p-authority>
-                </a-menu>
-              </template>
-            </a-dropdown>
-            <!-- 单个操作 -->
-            <p-authority :value="item.code ? item.code : false" v-else>
-              <a @click="item.event(record)"> {{ item.label }} </a>
-              <a-divider type="vertical" v-if="i != operate.length - 1"/>
-            </p-authority>
+            <template v-if="!item.render || (item.render && item.render(record))">
+                <!-- 下拉操作 -->
+                <a-dropdown v-if="item.children && item.children.length > 0">
+                  <template v-if="item.getLabel && item.getLabel(record)">
+                    <a> {{ item.getLabel(record) }} </a>
+                  </template>
+                  <template v-else>
+                    <a> {{ item.label }} </a>
+                  </template>
+                  <template #overlay>
+                    <a-menu>
+                      <!-- 遍历子集 -->
+                      <p-authority
+                        v-for="(child, i) in item.children"
+                        :key="i"
+                        :value="child.code ? item.code : false"
+                      >
+                        <a-menu-item>
+                          <a @click="child.event(selectedRowKeys)">
+                            <template v-if="child.getLabel && child.getLabel(record)">
+                              <a> {{ child.getLabel(record) }} </a>
+                            </template>
+                            <template v-else>
+                                      {{ child.label }}
+                            </template>
+                          </a>
+                        </a-menu-item>
+                      </p-authority>
+                    </a-menu>
+                  </template>
+                </a-dropdown>
+              <!-- 单个操作 -->
+                <p-authority :value="item.code ? item.code : false" v-else>
+                  <a @click="item.event(record)">
+                    <template v-if="item.getLabel && item.getLabel(record)">
+                       {{ item.getLabel(record) }}
+                    </template>
+                    <template v-else>
+                       {{ item.label }}
+                    </template>
+                  </a>
+                  <a-divider type="vertical" v-if="i != operate.length - 1"/>
+                </p-authority>
+             </template>
           </template>
         </span>
 

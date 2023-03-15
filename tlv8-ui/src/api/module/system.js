@@ -60,10 +60,34 @@ export const loadOrgData = data => {
   })
 }
 
-/// 加载机构信息
+/// 保存机构信息
 export const saveOrgData = data => {
   return request({
     url: "/system/org/saveOrgData",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+/// 改变状态
+export const changeOrgState = data => {
+  return request({
+    url: "/system/org/changeOrgState",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+/// 重置密码
+export const resetPassword = data => {
+  return request({
+    url: "/system/person/resetPassword",
     headers: {
       isToken: true
     },
