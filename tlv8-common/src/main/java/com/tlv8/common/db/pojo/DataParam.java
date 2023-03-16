@@ -1,5 +1,7 @@
 package com.tlv8.common.db.pojo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,10 +9,10 @@ public class DataParam {
     private String tableName;
     private String keyField;
     private String keyValue;
-    private int version;
-    private Map<String, String> data;
+    private int version = 0;
+    private Map<String, String> data = new HashMap<>();
 
-    private List<SubData> subDataList;
+    private List<SubData> subDataList = new ArrayList<>();
 
     public String getTableName() {
         return tableName;

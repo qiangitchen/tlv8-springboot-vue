@@ -1,12 +1,16 @@
 package com.tlv8.common.db.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.db.pojo.DataListParam;
 import com.tlv8.common.db.pojo.DataParam;
 import com.tlv8.common.db.pojo.SubData;
 import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.helper.DataTypeHelper;
 import com.tlv8.common.utils.IDUtils;
+import com.tlv8.common.utils.StringArray;
+import com.tlv8.common.utils.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -214,6 +218,75 @@ public class DBUtilsController {
             } else {
                 result = AjaxResult.error("没有查询到指定的数据!");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = AjaxResult.error(e.getMessage());
+        } finally {
+            DBUtils.closeConn(sqlSession, conn, ps, rs);
+        }
+        return result;
+    }
+
+    /**
+     * 通用数据列表方法
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping("/queryDataList")
+    @ResponseBody
+    public Object queryDataList(@RequestBody DataListParam param) {
+        AjaxResult result = null;
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = sqlSession.getConnection();
+            SQL sql = new SQL().SELECT("*");
+            sql.FROM(param.getTableName());
+            String searchValue = param.getSearchValue();
+            List<String> queryParam = new ArrayList<>();
+            if (StringUtils.isNotEmpty(searchValue)) {
+                List<Map<String, String>> columns = param.getColumns();
+                StringArray qa = new StringArray();
+                for (Map<String, String> field : columns) {
+                    qa.push(field.get("dataIndex") + " like ?");
+                    queryParam.add("%" + searchValue + "%");
+                }
+                sql.WHERE(qa.join(" or "));
+            }
+            PreparedStatement ps1 = conn.prepareStatement("select count(*) as total from(" + sql.toString() + ")a");
+            for (int i = 0; i < queryParam.size(); i++) {
+                ps1.setString(i + 1, queryParam.get(i));
+            }
+            long total = 0;
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) {
+                total = rs1.getLong(1);
+            }
+            if (StringUtils.isNotEmpty(param.getDataOrder())) {
+                sql.ORDER_BY(param.getDataOrder());
+            }
+            ps = conn.prepareStatement(sql.toString());
+            for (int i = 0; i < queryParam.size(); i++) {
+                ps.setString(i + 1, queryParam.get(i));
+            }
+            rs = ps.executeQuery();
+            Map<String, Object> data = new HashMap<>();
+            JSONArray jsona = new JSONArray();
+            while (rs.next()) {
+                JSONObject json = new JSONObject();
+                ResultSetMetaData rsd = rs.getMetaData();
+                for (int i = 0; i < rsd.getColumnCount(); i++) {
+                    String column = rsd.getColumnLabel(i + 1);
+                    json.put(column, rs.getString(column));
+                }
+                jsona.add(json);
+            }
+            data.put("total", total);
+            data.put("data", jsona);
+            result = AjaxResult.success(data);
         } catch (Exception e) {
             e.printStackTrace();
             result = AjaxResult.error(e.getMessage());
