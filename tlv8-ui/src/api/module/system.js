@@ -84,6 +84,18 @@ export const changeOrgState = data => {
   })
 }
 
+/// 移动组织
+export const moveOrg = data => {
+  return request({
+    url: "/system/org/moveOrg",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
 /// 重置密码
 export const resetPassword = data => {
   return request({

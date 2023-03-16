@@ -119,6 +119,7 @@ import {
   loadOrgData,
   saveOrgData,
   changeOrgState,
+  moveOrg,
   resetPassword
 } from "../../api/module/system";
 import {createVNode, defineComponent, ref, watch} from 'vue';
@@ -249,6 +250,13 @@ export default defineComponent({
         event: this.moveOrg,
         render: function (record) {//超管用户不能移动
           return record.key !== 'ORG01' && record.key !== 'PSN01@ORG01';
+        }
+      },
+      {
+        label: "置顶层",
+        event: this.moveOrgTop,
+        render: function (record) {//超管用户不能移动
+          return record.key !== 'ORG01' && record.key !== 'PSN01@ORG01' && record.sorgkindid == 'ogn';
         }
       },
       {
@@ -390,6 +398,7 @@ export default defineComponent({
         label: '人员',
         value: 'psm'
       }],
+      currentRecord: ref({}),
       orgSelect: ref(null),
       orgSelectOk: this.orgSelectHandleOk
     }
@@ -465,6 +474,7 @@ export default defineComponent({
       }
     },
     editData(record) {
+      this.currentRecord = record;
       this.currentId = record.key;
       this.reloadForm(record.sorgkindid);
     },
@@ -495,15 +505,45 @@ export default defineComponent({
       this.visible = false;
     },
     moveOrg(record) {
+      this.currentRecord = record;
+      this.currentId = record.key;
       const orgSelect = this.$refs.orgSelect;
       orgSelect.loadTreeData();
       orgSelect.visible = true;
     },
     orgSelectHandleOk() {
+      const table = this.$refs.table;
       const orgSelect = this.$refs.orgSelect;
       const node = orgSelect.currentTreeNode;
-      console.log(node);
       orgSelect.visible = false;
+      moveOrg({orgid: this.currentId, toid: node.key}).then(res => {
+        if (res.code === 200) {
+          message.success(res.msg);
+          table.reload();
+        } else {
+          message.error(res.msg);
+        }
+      });
+    },
+    moveOrgTop(record) {
+      const table = this.$refs.table;
+      Modal.confirm({
+        title: '确认',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: '确认将【' + record.sname + '】移动到顶层目录吗？',
+        cancelText: '取消',
+        okText: '确认',
+        onOk() {
+          moveOrg({orgid: record.key, toid: ''}).then(res => {
+            if (res.code === 200) {
+              message.success(res.msg);
+              table.reload();
+            } else {
+              message.error(res.msg);
+            }
+          });
+        }
+      });
     },
     doChangeOrgState(record) {
       const table = this.$refs.table;

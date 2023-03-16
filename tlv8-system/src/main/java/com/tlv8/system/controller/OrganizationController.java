@@ -242,5 +242,52 @@ public class OrganizationController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping("/moveOrg")
+    public Object moveOrg(@RequestBody Map<String, String> param) {
+        String orgid = param.get("orgid");
+        String toid = param.get("toid");
+        SaOpOrg porg = saOpOrgService.selectByPrimaryKey(toid);
+        if (porg != null && !"psm".equalsIgnoreCase(porg.getSorgkindid())) {
+            SaOpOrg org = saOpOrgService.selectByPrimaryKey(orgid);
+            if (org != null) {
+                org.setSfid(porg.getSfid() + "/" + org.getSid() + "." + org.getSorgkindid());
+                org.setSfcode(porg.getSfcode() + "/" + org.getScode());
+                org.setSfname(porg.getSfname() + "/" + org.getSname());
+                org.setSlevel(porg.getSlevel() + 1);
+                org.setSparent(porg.getSid());
+                saOpOrgService.updateData(org);
+                updateChildOrgPath(org);
+                return AjaxResult.success("移动成功");
+            }
+        } else {
+            SaOpOrg org = saOpOrgService.selectByPrimaryKey(orgid);
+            if (org != null) {
+                org.setSfid("/" + org.getSid() + "." + org.getSorgkindid());
+                org.setSfcode("/" + org.getScode());
+                org.setSfname("/" + org.getSname());
+                org.setSlevel(1);
+                org.setSparent(null);
+                saOpOrgService.updateData(org);
+                updateChildOrgPath(org);
+                return AjaxResult.success("移动成功");
+            }
+            return AjaxResult.error("指定移动位置无效");
+        }
+        return AjaxResult.error("指定组织无效");
+    }
+
+    private void updateChildOrgPath(SaOpOrg porg) {
+        List<SaOpOrg> orgList = saOpOrgService.selectListByParentID(porg.getSid());
+        for (SaOpOrg org : orgList) {
+            org.setSfid(porg.getSfid() + "/" + org.getSid() + "." + org.getSorgkindid());
+            org.setSfcode(porg.getSfcode() + "/" + org.getScode());
+            org.setSfname(porg.getSfname() + "/" + org.getSname());
+            org.setSlevel(porg.getSlevel() + 1);
+            saOpOrgService.updateData(org);
+            updateChildOrgPath(org);
+        }
+    }
+
 
 }

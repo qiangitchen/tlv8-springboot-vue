@@ -68,7 +68,7 @@ export default defineComponent({
       required: false
     }
   },
-  data(props) {
+  data() {
     const dataList = [];
     const searchValue = ref('');
     const getParentKey = (key, tree) => {
