@@ -11,7 +11,7 @@ public class DataListParam {
     private String searchValue;
 
     private String dataOrder;
-    private List<Map<String, String>> columns = new ArrayList<>();
+    private List<String> columns = new ArrayList<>();
     private Map<String, String> pagination = new HashMap<>();
 
     public String getTableName() {
@@ -38,11 +38,11 @@ public class DataListParam {
         this.searchValue = searchValue;
     }
 
-    public List<Map<String, String>> getColumns() {
+    public List<String> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<Map<String, String>> columns) {
+    public void setColumns(List<String> columns) {
         this.columns = columns;
     }
 

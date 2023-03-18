@@ -1,8 +1,9 @@
 <template>
   <div id="table-dome">
-    <page-header title="查询表格" describe="表格查询的复杂示例"></page-header>
     <page-layout>
       <a-card>
+        <a-input-search v-model:value="searchValue" @keyup.enter.native="toFilterData" style="margin-bottom: 8px"
+                        placeholder="输入关键字搜索"/>
         <p-table
           ref="table"
           :fetch="fetch"
@@ -21,17 +22,65 @@
     </page-layout>
     <page-footer></page-footer>
   </div>
+  <a-modal
+    v-model:visible="visible"
+    title="添加/修改"
+    :confirm-loading="confirmLoading"
+  >
+    <a-form
+      ref="ruleForm"
+      :model="form"
+      :rules="rules"
+      :label-col="{ span: 5 }"
+      :wrapper-col="{ span: 18 }"
+    >
+      <a-form-item ref="sname" label="名称" name="sname">
+        <a-input v-model:value="form.sname"/>
+      </a-form-item>
+      <a-form-item ref="scode" label="编号" name="scode">
+        <a-input v-model:value="form.scode"/>
+      </a-form-item>
+      <a-form-item ref="scatalog" label="类型" name="scatalog">
+        <a-input v-model:value="form.scatalog"/>
+      </a-form-item>
+      <a-form-item ref="sdescription" label="备注" name="sdescription">
+        <a-input v-model:value="form.sdescription"/>
+      </a-form-item>
+      <a-form-item ref="ssequence" label="排序" name="ssequence">
+        <a-input v-model:value="form.ssequence" type="number"/>
+      </a-form-item>
+    </a-form>
+    <template #footer>
+      <a-button key="back" @click="handleCancel">取消</a-button>
+      <a-button key="submit" type="primary" :loading="loading" @click="onSubmit">提交</a-button>
+    </template>
+  </a-modal>
+  <a-drawer
+    :width="500"
+    title="角色权限"
+    :visible="drawerVisible"
+    @close="onClose"
+  >
+    <template #extra>
+      <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
+      <a-button type="primary" :loading="drawerLoading" @click="onPermission">提交</a-button>
+    </template>
+    <p>Some contents...</p>
+    <p>Some contents...</p>
+    <p>Some contents...</p>
+  </a-drawer>
 </template>
 <script>
-import {loadMenuData, loadMenuTree} from "../../api/module/system";
-import {createVNode, ref} from "vue";
-import {queryDataList, removeData, saveData} from "../../api/module/common";
+import {createVNode, ref, watch} from "vue";
+import {queryDataList, queryData, removeData, saveData} from "../../api/module/common";
 import {message, Modal} from "ant-design-vue";
 import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
 
 export default {
   data() {
     const table = ref(null);
+
+    const searchValue = ref('');
 
     /// 工具栏
     const toolbar = [
@@ -58,6 +107,8 @@ export default {
           tableName: "sa_oprole",
           keyField: "sid",
           dataOrder: "ssequence asc",
+          searchValue: this.searchValue,
+          columns: ["sname", "scode", "scatalog", "sdescription"],//快速查询的列
           pagination: param.pagination
         }).then(res => {
           console.log(res);
@@ -72,27 +123,33 @@ export default {
     /// 行操作
     const operate = [
       {
+        label: "权限",
+        event: this.permData
+      },
+      {
         label: "修改",
         event: this.editData
       },
       {
         label: "删除",
-        event: this.deleteData
+        event: this.deleteData,
+        render: function (record) {//超管角色不能删除
+          return record.sid !== 'RL01' && record.sid !== 'RL02' && record.sid !== 'RL02-doc';
+        }
       }
     ];
-    let parentId = ref('');
-    let currentId = ref('');
+    const currentId = ref('');
     const visible = ref(false);
     const confirmLoading = ref(false);
     const form = ref({});
     const rules = {
-      label: [
+      sname: [
         {
           required: true,
           message: "请输入名称",
           trigger: "blur"
         }],
-      code: [
+      scode: [
         {
           required: true,
           message: "请输入编号",
@@ -103,6 +160,7 @@ export default {
     const handleCancel = () => {
       visible.value = false;
     };
+
     /// 声明抛出
     return {
       pagination: {current: 1, pageSize: 20}, // 分页配置
@@ -111,28 +169,24 @@ export default {
       toolbar: toolbar, // 工具栏
       columns: columns, // 列配置
       operate: operate, // 行操作
-      parentId,
+      searchValue,
       currentId,
       visible,
       confirmLoading,
       form,
       rules,
-      displayOption: [{
-        label: '展示',
-        value: '',
-      }, {
-        label: '隐藏',
-        value: 'hide',
-      }, {
-        label: '一直展示',
-        value: 'solid',
-      }],
       scroll: {y: 240},
       handleCancel,
-      loading: false
+      loading: false,
+      drawerVisible: false,
+      drawerLoading: false
     };
   },
   methods: {
+    toFilterData() {
+      const table = this.$refs.table;
+      table.reload();
+    },
     onSubmit() {
       this.$refs.ruleForm
         .validate()
@@ -165,18 +219,20 @@ export default {
     },
     reloadForm() {
       this.form = {
-        label: "",
-        code: "",
-        process: "",
-        activity: "",
-        url: "",
-        display: "",
-        icon: "",
-        layuiicon: "",
-        sorts: 1,
-        pid: this.parentId
+        sid: this.currentId,
+        sname: "",
+        scode: "",
+        scatalog: "",
+        sdescription: "",
+        ssequence: "",
+        svalidstate: 1,
+        version: 0
       };
-      loadMenuData({id: this.currentId}).then(res => {
+      queryData({
+        tableName: "sa_oprole", keyField: "sid",
+        keyValue: this.currentId,
+        data: this.form
+      }).then(res => {
         if (res.data) {
           this.form = res.data;
         }
@@ -184,12 +240,11 @@ export default {
       });
     },
     addRoot() {
-      this.parentId = '';
       this.currentId = '';
       this.reloadForm();
     },
     editData(record) {
-      this.currentId = record.id;
+      this.currentId = record.sid;
       this.reloadForm();
     },
     deleteData(record) {
@@ -205,6 +260,7 @@ export default {
             tableName: "sa_oprole",
             keyField: "sid",
             keyValue: record.sid,
+            //删除角色时同时删除已授权的角色信息
             subDataList: [{tableName: 'sa_opauthorize', subField: 'sauthorizeroleid'}]
           }).then(res => {
             if (res.code === 200) {
@@ -216,6 +272,16 @@ export default {
           });
         }
       });
+    },
+    permData(record) {
+      this.drawerVisible = true;
+    },
+    onPermission() {
+      this.drawerLoading = true;
+    },
+    onClose() {
+      this.drawerVisible = false;
+      this.drawerLoading = false;
     }
   }
 };

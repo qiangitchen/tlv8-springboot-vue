@@ -216,7 +216,7 @@ public class DBUtilsController {
                 }
                 result = AjaxResult.success(json);
             } else {
-                result = AjaxResult.error("没有查询到指定的数据!");
+                result = AjaxResult.success("没有查询到指定的数据");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,14 +248,16 @@ public class DBUtilsController {
             String searchValue = param.getSearchValue();
             List<String> queryParam = new ArrayList<>();
             if (StringUtils.isNotEmpty(searchValue)) {
-                List<Map<String, String>> columns = param.getColumns();
+                List<String> columns = param.getColumns();
                 StringArray qa = new StringArray();
-                for (Map<String, String> field : columns) {
-                    qa.push(field.get("dataIndex") + " like ?");
+                for (String field : columns) {
+                    System.out.println(field);
+                    qa.push(field + " like ?");
                     queryParam.add("%" + searchValue + "%");
                 }
                 sql.WHERE(qa.join(" or "));
             }
+            System.out.println(sql);
             PreparedStatement ps1 = conn.prepareStatement("select count(*) as total from(" + sql.toString() + ")a");
             for (int i = 0; i < queryParam.size(); i++) {
                 ps1.setString(i + 1, queryParam.get(i));
@@ -277,6 +279,7 @@ public class DBUtilsController {
             JSONArray jsona = new JSONArray();
             while (rs.next()) {
                 JSONObject json = new JSONObject();
+                json.put(param.getKeyField(), rs.getString(param.getKeyField()));
                 ResultSetMetaData rsd = rs.getMetaData();
                 for (int i = 0; i < rsd.getColumnCount(); i++) {
                     String column = rsd.getColumnLabel(i + 1);
