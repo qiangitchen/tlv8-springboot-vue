@@ -218,6 +218,7 @@ CREATE INDEX idx_oprole_code on sa_oprole(scode);
 CREATE TABLE sa_oppermission (
   sid varchar(32) NOT NULL,
   spermissionroleid varchar(32) NOT NULL,
+  smenuid varchar(32) NOT NULL,
   sprocess varchar(1024) DEFAULT NULL,
   sactivityfname varchar(1024) DEFAULT NULL,
   sactivity varchar(1024) DEFAULT NULL,
@@ -232,6 +233,7 @@ CREATE TABLE sa_oppermission (
   PRIMARY KEY (sid)
 );
 CREATE INDEX idx_opperm_roleid on sa_oppermission(spermissionroleid);
+CREATE INDEX idx_opperm_smenuid on sa_oppermission(smenuid);
 CREATE INDEX idx_opperm_activity on sa_oppermission(sactivity);
 CREATE INDEX idx_opperm_process on sa_oppermission(sprocess);
 
@@ -426,20 +428,6 @@ CREATE TABLE sa_kvsequence (
 INSERT INTO sa_oporg VALUES ('ORG01', '管理员', 'TULIN', '', '/管理员', '/TULIN', '/ORG01.ogn', 'ogn', '1', null, '1', '', '', '', '', '', '', '', '16', '', '96');
 INSERT INTO sa_oporg VALUES ('PSN01@ORG01', 'system', 'SYSTEM', '', '/管理员/system', '/TULIN/SYSTEM', '/ORG01.ogn/PSN01@ORG01.psm', 'psm', '1', 'ORG01', '2', '', '', '', '', '', 'PSN01', 'nkLeaf', '15', '', '1');
 INSERT INTO sa_opperson VALUES ('PSN01', 'system', 'SYSTEM', '', '1', '管理员', 'C4CA4238A0B923820DCC509A6F75849B', '120', '2013-10-20', 'ORG01', '', '1', '1', '', '男', '1976-12-03', '2006-06-06', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '14769660886', '', '', '4', null, '', '', '', '', '', '', '','',null);
-INSERT INTO sa_oppermission VALUES ('3566316F52F84896ACE1EF9BF42018BE', 'RL01', '/SA/OPM/organization/organizationProcess', '/系统管理/组织权限/组织管理', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('5F62DE289C8648689D20D9370ACAE21C', 'RL01', '/SA/OPM/role/roleProcess', '/系统管理/组织权限/角色管理', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('6A02EEF862114421A0EC8BD3A4BD4222', 'RL01', '/SA/OPM/authorization/authorizationProcess', '/系统管理/组织权限/授权管理', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('C6914BAA2E84424C901DBF8FD95144D7', 'RL01', '/SA/OPM/management/managementProcess', '/系统管理/组织权限/业务管理权限', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('265569FC504443E1B134592E3B5FCC5C', 'RL01', '/SA/OPM/log/logProcess', '/系统管理/组织权限/组织机构日志', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('F2AF3284E2D6405E9990376C19C57D45', 'RL01', '/SA/OPM/agent/agentProcess', '/系统管理/组织权限/代理设置', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('38A312285E834995AFCAC32E2D50265A', 'RL01', '/SA/doc/docCenter/docCenterProcess', '/系统管理/文档/文档中心', 'docCenter', '', '', '', '0', '', null, '1', '0');
-INSERT INTO sa_oppermission VALUES ('A84780D2CEF64C5B9DE9947ECD13ED28', 'RL01', '/SA/doc/docSearch/docSearchProcess', '/系统管理/文档/文档检索', 'mainActivity', '', '', '', '0', '', null, '1', '0');
-INSERT INTO sa_oppermission VALUES ('182217CC50E84AB2A6EA3085A18BA621', 'RL01', '/SA/doc/docSetting/docSettingProcess', '/系统管理/文档/文档配置', 'mainActivity', '', '', '', '0', '', null, '1', '0');
-INSERT INTO sa_oppermission VALUES ('C8DC2295A8E00001B8DE85203AD016AE', 'RL01', '/SA/task/taskCenter/process', '/任务中心/任务列表', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('C8DC2295A9600001BBE919691C301C37', 'RL01', '/SA/process/monitor/process', '/任务中心/流程监控', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('C8DC2295A9E00001D89590F5198012BC', 'RL01', '/SA/task/unFlowmana/process', '/任务中心/任务处理', 'mainActivity', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('C8DC2295AA6000017BF83A6965004D50', 'RL01', '/flw/dwr/process', '/任务中心/流程设计', 'vml-dwr-editer', '', '', '', '0', '', null, '1', '1');
-INSERT INTO sa_oppermission VALUES ('C94EE90006D000013BDE12401F401700', 'RL01', '/SA/task/taskCenter/process', '/任务中心/系统提醒', 'reminActivity', null, null, '0', null, null, null, '1', '1');
 INSERT INTO sa_opauthorize VALUES('AHR01', 'PSN01@ORG01', '管理员', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', 'RL01', '超级管理员', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', '2009/11/3', 0, '0');
 
 INSERT INTO sa_opmenutree VALUES ('sysfun', '系统管理', 'SettingOutlined', 'SettingOutlined', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'system', 0);
