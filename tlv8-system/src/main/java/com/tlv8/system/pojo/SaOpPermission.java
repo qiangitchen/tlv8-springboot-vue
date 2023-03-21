@@ -9,13 +9,14 @@ package com.tlv8.system.pojo;
 public class SaOpPermission {
 	private String sid;// 主键
 	private String spermissionroleid;// 角色id
+	private String smenuid;// 菜单id
 	private String sprocess;// Process
 	private String sactivityfname;// 功能路径名称
 	private String sactivity;// 功能
 	private String sactionsnames;// 动作名称
 	private String sactions;// 动作
 	private String ssemanticdp;// 语义
-	private String spermissionkind;// 语义类别
+	private int spermissionkind;// 语义类别
 	private String sdescription;// 描述
 	private int ssequence;// 排序
 	private int svalidstate;// 使用状态{1,0,-1}
@@ -35,6 +36,14 @@ public class SaOpPermission {
 
 	public void setSpermissionroleid(String spermissionroleid) {
 		this.spermissionroleid = spermissionroleid;
+	}
+
+	public String getSmenuid() {
+		return smenuid;
+	}
+
+	public void setSmenuid(String smenuid) {
+		this.smenuid = smenuid;
 	}
 
 	public String getSprocess() {
@@ -85,11 +94,11 @@ public class SaOpPermission {
 		this.ssemanticdp = ssemanticdp;
 	}
 
-	public String getSpermissionkind() {
+	public int getSpermissionkind() {
 		return spermissionkind;
 	}
 
-	public void setSpermissionkind(String spermissionkind) {
+	public void setSpermissionkind(int spermissionkind) {
 		this.spermissionkind = spermissionkind;
 	}
 

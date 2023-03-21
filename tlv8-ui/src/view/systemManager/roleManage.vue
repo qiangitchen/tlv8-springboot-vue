@@ -2,8 +2,11 @@
   <div id="table-dome">
     <page-layout>
       <a-card>
-        <a-input-search v-model:value="searchValue" @keyup.enter.native="toFilterData" style="margin-bottom: 8px"
-                        placeholder="输入关键字搜索"/>
+        <a-input-search
+          v-model:value="searchValue"
+          @keyup.enter.native="toFilterData"
+          style="margin-bottom: 8px"
+          placeholder="输入关键字搜索"/>
         <p-table
           ref="table"
           :fetch="fetch"
@@ -56,25 +59,37 @@
     </template>
   </a-modal>
   <a-drawer
-    :width="500"
-    title="角色权限"
-    :visible="drawerVisible"
-    @close="onClose"
+    title="授权资源"
+    :width="800"
+    :visible="perVisible"
+    :destroy-on-close="true"
+    :show-pagination="false"
+    :body-style="{ paddingBottom: '80px' }"
+    :footer-style="{ textAlign: 'right' }"
+    @close="onPerClose"
   >
-    <template #extra>
-      <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
-      <a-button type="primary" :loading="drawerLoading" @click="onPermission">提交</a-button>
+    <a-table
+      size="middle"
+      :columns="perColumns"
+      :data-source="treeData"
+      :pagination="false"
+      :defaultExpandAllRows="true"
+      :defaultExpandedRowKeys="defaultExpandedRowKeys"
+      :row-selection="{ selectedRowKeys: selectedRowKeys, onSelect:onSelect,onSelectAll:onSelectAll }"
+      bordered>
+    </a-table>
+    <template #footer>
+      <a-button style="margin-right: 8px" @click="onPerClose">关闭</a-button>
+      <a-button type="primary" :loading="submitLoading" @click="onPerSubmit">保存</a-button>
     </template>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
   </a-drawer>
 </template>
 <script>
-import {createVNode, ref, watch} from "vue";
+import {createVNode, ref} from "vue";
 import {queryDataList, queryData, removeData, saveData} from "../../api/module/common";
 import {message, Modal} from "ant-design-vue";
 import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
+import {getPermissionsByRoleID, savePermissions, loadMenuTree} from "../../api/module/system";
 
 export default {
   data() {
@@ -124,7 +139,7 @@ export default {
     const operate = [
       {
         label: "权限",
-        event: this.permData
+        event: this.grantMenus
       },
       {
         label: "修改",
@@ -161,6 +176,30 @@ export default {
       visible.value = false;
     };
 
+    const perColumns = [
+      {title: "名称", dataIndex: "label", key: "label"},
+      {title: "路径", dataIndex: "url", key: "url"},
+      {title: "process", dataIndex: "process", key: "process"},
+      {title: "activity", dataIndex: "activity", key: "activity"}
+    ];
+
+    const treeData = ref([]);
+
+    const defaultExpandedRowKeys = [];
+
+    const childMenus = {};
+
+    loadMenuTree().then(res => {
+      treeData.value = res.data;
+      res.data.forEach(item => {
+        defaultExpandedRowKeys.push(item.key);
+        childMenus[item.key] = item.children;
+      });
+    });
+
+    const selectedRowKeys = [];
+    const uncheckRow = [];
+
     /// 声明抛出
     return {
       pagination: {current: 1, pageSize: 20}, // 分页配置
@@ -178,8 +217,17 @@ export default {
       scroll: {y: 240},
       handleCancel,
       loading: false,
+      perColumns,
+      treeData,
+      defaultExpandedRowKeys,
+      selectedRowKeys,
+      childMenus,
       drawerVisible: false,
-      drawerLoading: false
+      drawerLoading: false,
+      perVisible: false,
+      submitLoading: false,
+      perRoleId: '',
+      uncheckRow
     };
   },
   methods: {
@@ -273,15 +321,77 @@ export default {
         }
       });
     },
-    permData(record) {
-      this.drawerVisible = true;
+    grantMenus(record) {
+      this.selectedRowKeys = [];
+      this.perRoleId = record.sid;
+      getPermissionsByRoleID({roleid: record.sid}).then(res => {
+        let data = res.data;
+        if (data) {
+          data.forEach(item => {
+            this.selectedRowKeys.push(item.smenuid);
+          });
+        }
+        this.perVisible = true;
+      });
     },
-    onPermission() {
-      this.drawerLoading = true;
+    onSelect(record, selected, selectedRows, nativeEvent) {
+      let child = this.childMenus[record.key];
+      if (child) {
+        child.forEach(item => {
+          if (selected) {
+            this.selectedRowKeys.push(item.key);
+            this.uncheckRow.remove(item.key);
+          } else {
+            this.uncheckRow.push(item.key);
+            this.selectedRowKeys.remove(item.key);
+          }
+        });
+      }
+      if (selected) {
+        this.selectedRowKeys.push(record.key);
+        this.uncheckRow.remove(record.key);
+        if (record.pid) {
+          this.selectedRowKeys.push(record.pid);
+          this.uncheckRow.remove(record.pid);
+        }
+      } else {
+        this.selectedRowKeys.remove(record.key);
+        this.uncheckRow.push(record.key);
+        if (record.pid) {
+          this.uncheckRow.push(record.pid);
+          this.selectedRowKeys.remove(record.pid);
+        }
+      }
     },
-    onClose() {
-      this.drawerVisible = false;
-      this.drawerLoading = false;
+    onSelectAll(selected, selectedRows, changeRows) {
+      if (selected) {
+        selectedRows.forEach(record => {
+          this.selectedRowKeys.push(record.key);
+          this.uncheckRow.remove(record.key);
+        });
+      } else {
+        this.selectedRowKeys = [];
+        changeRows.forEach(record => {
+          this.uncheckRow.push(record.key);
+        });
+      }
+    },
+    onPerSubmit() {
+      this.submitLoading = true;
+      savePermissions({
+        roleid: this.perRoleId,
+        menus: this.selectedRowKeys.join(","),
+        remids: this.uncheckRow.join(",")
+      }).then(res => {
+        this.submitLoading = false;
+        message.success(res.msg);
+        this.perVisible = false;
+      }, error => {
+        this.submitLoading = false;
+      });
+    },
+    onPerClose() {
+      this.perVisible = false;
     }
   }
 };

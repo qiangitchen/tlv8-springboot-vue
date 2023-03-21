@@ -107,3 +107,26 @@ export const resetPassword = data => {
     method: 'post'
   })
 }
+
+/// 根据角色id获取菜单权限列表
+export const getPermissionsByRoleID = data => {
+  return request({
+    url: "/system/Role/getPermissionsByRoleID",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+export const savePermissions = data => {
+  return request({
+    url: "/system/Role/savePermissions",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}

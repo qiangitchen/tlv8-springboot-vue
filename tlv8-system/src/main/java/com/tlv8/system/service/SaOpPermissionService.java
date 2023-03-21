@@ -1,14 +1,10 @@
-package com.tlv8.system.mapper;
-
-import org.apache.ibatis.annotations.Mapper;
+package com.tlv8.system.service;
 
 import com.tlv8.system.pojo.SaOpPermission;
 
 import java.util.List;
-import java.util.Map;
 
-@Mapper
-public interface SaOpPermissionMapper {
+public interface SaOpPermissionService {
     /**
      * 根据主键获取数据对象
      *
@@ -17,7 +13,7 @@ public interface SaOpPermissionMapper {
      */
     SaOpPermission selectByPrimaryKey(String sid);
 
-    SaOpPermission selectByRoleMenu(Map<String, String> param);
+    SaOpPermission selectByRoleMenu(String spermissionroleid, String smenuid);
 
     /**
      * 根据角色id获取菜单授权列表

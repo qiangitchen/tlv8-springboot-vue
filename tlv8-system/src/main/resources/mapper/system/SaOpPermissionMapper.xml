@@ -4,6 +4,7 @@
 	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpPermission">
 		<id column="sid" property="sid" jdbcType="VARCHAR" />
 		<result column="spermissionroleid" property="spermissionroleid" jdbcType="VARCHAR" />
+		<result column="smenuid" property="smenuid" jdbcType="VARCHAR" />
 		<result column="sprocess" property="sprocess" jdbcType="VARCHAR" />
 		<result column="sactivityfname" property="sactivityfname" jdbcType="VARCHAR" />
 		<result column="sactivity" property="sactivity" jdbcType="VARCHAR" />
@@ -17,7 +18,7 @@
 		<result column="version" property="version" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		sid,spermissionroleid,sprocess,sactivityfname,sactivity,sactionsnames,sactions,ssemanticdp,spermissionkind,sdescription,ssequence,svalidstate,version
+		sid,spermissionroleid,smenuid,sprocess,sactivityfname,sactivity,sactionsnames,sactions,ssemanticdp,spermissionkind,sdescription,ssequence,svalidstate,version
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select 
@@ -25,11 +26,24 @@
 		from SA_OpPermission
 		where sid = #{sid,jdbcType=VARCHAR}
 	</select>
+	<select id="selectByRoleMenu" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from SA_OpPermission
+		where spermissionroleid = #{spermissionroleid,jdbcType=VARCHAR} and smenuid = #{smenuid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByRoleID" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SA_OpPermission
+		where spermissionroleid = #{spermissionroleid,jdbcType=VARCHAR}
+	</select>
 	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpPermission">
 		insert into  
 		 SA_OpPermission(<include refid="Base_Column_List" />) 
 			values( #{sid,jdbcType=VARCHAR},
 			 #{spermissionroleid,jdbcType=VARCHAR},
+			 #{smenuid,jdbcType=VARCHAR},
 			 #{sprocess,jdbcType=VARCHAR},
 			 #{sactivityfname,jdbcType=VARCHAR},
 			 #{sactivity,jdbcType=VARCHAR},
@@ -47,6 +61,7 @@
 		update 
 		SA_OpPermission 
 			set spermissionroleid = #{spermissionroleid,jdbcType=VARCHAR},
+			smenuid = #{smenuid,jdbcType=VARCHAR},
 			sprocess = #{sprocess,jdbcType=VARCHAR},
 			sactivityfname = #{sactivityfname,jdbcType=VARCHAR},
 			sactivity = #{sactivity,jdbcType=VARCHAR},

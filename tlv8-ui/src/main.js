@@ -28,5 +28,29 @@ Object.keys(antIcons).forEach(key => {
   app.component(key, antIcons[key])
 })
 
+Array.prototype.remove = function (dx) {
+  if (typeof dx === 'number') {
+    if (isNaN(dx) || dx > this.length) {
+      return false;
+    }
+    for (let i = 0, n = 0; i < this.length; i++) {
+      if (this[i] != this[dx]) {
+        this[n++] = this[i]
+      }
+    }
+    this.length -= 1;
+  } else {
+    if (this.indexOf(dx) < 0) {
+      return false;
+    }
+    for (let i = 0, n = 0; i < this.length; i++) {
+      if (this[i] !== dx) {
+        this[n++] = this[i]
+      }
+    }
+    this.length -= 1;
+  }
+};
+
 app.config.globalProperties.$antIcons = antIcons
 export default app
