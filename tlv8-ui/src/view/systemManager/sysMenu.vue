@@ -21,6 +21,7 @@
   <a-modal
     v-model:visible="visible"
     title="添加/修改"
+    :maskClosable="false"
     :confirm-loading="confirmLoading"
   >
     <a-form

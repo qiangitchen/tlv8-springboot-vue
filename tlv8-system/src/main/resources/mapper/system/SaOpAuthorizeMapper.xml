@@ -1,72 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tlv8.system.mapper.SaOpAuthorizeMapper">
-	<resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpAuthorize">
-		<id column="sid" property="sid" jdbcType="VARCHAR" />
-		<result column="sorgid" property="sorgid" jdbcType="VARCHAR" />
-		<result column="sorgname" property="sorgname" jdbcType="VARCHAR" />
-		<result column="sorgfid" property="sorgfid" jdbcType="VARCHAR" />
-		<result column="sorgfname" property="sorgfname" jdbcType="VARCHAR" />
-		<result column="smanageorgid" property="smanageorgid" jdbcType="VARCHAR" />
-		<result column="smanageorgname" property="smanageorgname" jdbcType="VARCHAR" />
-		<result column="smanageorgfid" property="smanageorgfid" jdbcType="VARCHAR" />
-		<result column="smanageorgfname" property="smanageorgfname" jdbcType="VARCHAR" />
-		<result column="smanagetypeid" property="smanagetypeid" jdbcType="VARCHAR" />
-		<result column="screatorfid" property="screatorfid" jdbcType="VARCHAR" />
-		<result column="screatorfname" property="screatorfname" jdbcType="VARCHAR" />
-		<result column="screatetime" property="screatetime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
-		<result column="version" property="version" jdbcType="INTEGER" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		sid,sorgid,sorgname,sorgfid,sorgfname,smanageorgid,smanageorgname,smanageorgfid,smanageorgfname,smanagetypeid,screatorfid,screatorfname,screatetime,version
-	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select 
-		<include refid="Base_Column_List" />
-		from SA_OpAuthorize
-		where sid = #{sid,jdbcType=VARCHAR}
-	</select>
-	<insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpAuthorize">
-		insert into  
-		 SA_OpAuthorize(<include refid="Base_Column_List" />) 
-			values( #{sid,jdbcType=VARCHAR},
-			 #{sorgid,jdbcType=VARCHAR},
-			 #{sorgname,jdbcType=VARCHAR},
-			 #{sorgfid,jdbcType=VARCHAR},
-			 #{sorgfname,jdbcType=VARCHAR},
-			 #{smanageorgid,jdbcType=VARCHAR},
-			 #{smanageorgname,jdbcType=VARCHAR},
-			 #{smanageorgfid,jdbcType=VARCHAR},
-			 #{smanageorgfname,jdbcType=VARCHAR},
-			 #{smanagetypeid,jdbcType=VARCHAR},
-			 #{screatorfid,jdbcType=VARCHAR},
-			 #{screatorfname,jdbcType=VARCHAR},
-			 #{screatetime,jdbcType=TIMESTAMP},
-			 #{version,jdbcType=INTEGER}
-			 )
-	</insert>
-	<update id="updateData" parameterType="com.tlv8.system.pojo.SaOpAuthorize">
-		update 
-		SA_OpAuthorize 
-			set sorgid = #{sorgid,jdbcType=VARCHAR},
-			sorgname = #{sorgname,jdbcType=VARCHAR},
-			sorgfid = #{sorgfid,jdbcType=VARCHAR},
-			sorgfname = #{sorgfname,jdbcType=VARCHAR},
-			smanageorgid = #{smanageorgid,jdbcType=VARCHAR},
-			smanageorgname = #{smanageorgname,jdbcType=VARCHAR},
-			smanageorgfid = #{smanageorgfid,jdbcType=VARCHAR},
-			smanageorgfname = #{smanageorgfname,jdbcType=VARCHAR},
-			smanagetypeid = #{smanagetypeid,jdbcType=VARCHAR},
-			screatorfid = #{screatorfid,jdbcType=VARCHAR},
-			screatorfname = #{screatorfname,jdbcType=VARCHAR},
-			screatetime = #{screatetime,jdbcType=TIMESTAMP},
-			version = #{version,jdbcType=INTEGER}
-		where sid = #{sid,jdbcType=VARCHAR}
-	</update>
-	<delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpAuthorize">
-		delete from SA_OpAuthorize where sid = #{sid,jdbcType=VARCHAR}
-	</delete>
-	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
-		delete from SA_OpAuthorize where sid = #{sid,jdbcType=VARCHAR}
-	</delete>
+    <resultMap id="BaseResultMap" type="com.tlv8.system.pojo.SaOpAuthorize">
+        <id column="sid" property="sid" jdbcType="VARCHAR"/>
+        <result column="sorgid" property="sorgid" jdbcType="VARCHAR"/>
+        <result column="sorgname" property="sorgname" jdbcType="VARCHAR"/>
+        <result column="sorgfid" property="sorgfid" jdbcType="VARCHAR"/>
+        <result column="sorgfname" property="sorgfname" jdbcType="VARCHAR"/>
+        <result column="sauthorizeroleid" property="sauthorizeroleid" jdbcType="VARCHAR"/>
+        <result column="sdescription" property="sdescription" jdbcType="VARCHAR"/>
+        <result column="screatorfid" property="screatorfid" jdbcType="VARCHAR"/>
+        <result column="screatorfname" property="screatorfname" jdbcType="VARCHAR"/>
+        <result column="screatetime" property="screatetime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result column="srolelevel" property="srolelevel" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid
+        ,sorgid,sorgname,sorgfid,sorgfname,sauthorizeroleid,sdescription,screatorfid,screatorfname,screatetime,srolelevel,version
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opauthorize
+        where sid = #{sid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByOrgID" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opauthorize
+        where sorgid = #{sorgid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByOrgRole" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opauthorize
+        where sorgid = #{sorgid,jdbcType=VARCHAR} and sauthorizeroleid = #{roleid,jdbcType=VARCHAR}
+    </select>
+    <insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpAuthorize">
+        insert into
+        sa_opauthorize(<include refid="Base_Column_List"/>)
+        values( #{sid,jdbcType=VARCHAR},
+        #{sorgid,jdbcType=VARCHAR},
+        #{sorgname,jdbcType=VARCHAR},
+        #{sorgfid,jdbcType=VARCHAR},
+        #{sorgfname,jdbcType=VARCHAR},
+        #{sauthorizeroleid,jdbcType=VARCHAR},
+        #{sdescription,jdbcType=VARCHAR},
+        #{screatorfid,jdbcType=VARCHAR},
+        #{screatorfname,jdbcType=VARCHAR},
+        #{screatetime,jdbcType=TIMESTAMP},
+        #{srolelevel,jdbcType=VARCHAR},
+        #{version,jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="updateData" parameterType="com.tlv8.system.pojo.SaOpAuthorize">
+        update
+            sa_opauthorize
+        set sorgid           = #{sorgid,jdbcType=VARCHAR},
+            sorgname         = #{sorgname,jdbcType=VARCHAR},
+            sorgfid          = #{sorgfid,jdbcType=VARCHAR},
+            sorgfname        = #{sorgfname,jdbcType=VARCHAR},
+            sauthorizeroleid = #{sauthorizeroleid,jdbcType=VARCHAR},
+            sdescription     = #{sdescription,jdbcType=VARCHAR},
+            screatorfid      = #{screatorfid,jdbcType=VARCHAR},
+            screatorfname    = #{screatorfname,jdbcType=VARCHAR},
+            screatetime      = #{screatetime,jdbcType=TIMESTAMP},
+            srolelevel       = #{srolelevel,jdbcType=VARCHAR},
+            version          = #{version,jdbcType=INTEGER}
+        where sid = #{sid,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteData" parameterType="com.tlv8.system.pojo.SaOpAuthorize">
+        delete
+        from sa_opauthorize
+        where sid = #{sid,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from sa_opauthorize
+        where sid = #{sid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

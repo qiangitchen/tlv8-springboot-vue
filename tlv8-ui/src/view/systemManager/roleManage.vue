@@ -6,7 +6,7 @@
           v-model:value="searchValue"
           @keyup.enter.native="toFilterData"
           style="margin-bottom: 8px"
-          placeholder="输入关键字搜索"/>
+          placeholder="输入关键字按回车搜索"/>
         <p-table
           ref="table"
           :fetch="fetch"
@@ -28,6 +28,7 @@
   <a-modal
     v-model:visible="visible"
     title="添加/修改"
+    :maskClosable="false"
     :confirm-loading="confirmLoading"
   >
     <a-form
@@ -61,6 +62,7 @@
   <a-drawer
     title="授权资源"
     :width="800"
+    :maskClosable="false"
     :visible="perVisible"
     :destroy-on-close="true"
     :show-pagination="false"
@@ -116,7 +118,6 @@ export default {
 
     /// 数据来源
     const fetch = async (param) => {
-      console.log(param);
       return new Promise((resolve) => {
         queryDataList({
           tableName: "sa_oprole",

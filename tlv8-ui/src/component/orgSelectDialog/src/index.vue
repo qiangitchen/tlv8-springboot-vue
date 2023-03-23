@@ -4,6 +4,7 @@
     v-model:visible="visible"
     title="组织机构选择"
     :confirm-loading="confirmLoading"
+    :maskClosable="false"
     @ok="handleOk"
   >
     <a-input-search v-model:value="searchValue" style="margin-bottom: 8px" placeholder="输入关键字搜索"/>

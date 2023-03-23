@@ -120,9 +120,46 @@ export const getPermissionsByRoleID = data => {
   })
 }
 
+//保存角色授权
 export const savePermissions = data => {
   return request({
     url: "/system/Role/savePermissions",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//根据orgId 获取授权信息
+export const loadAuthorizeByOrgID = data => {
+  return request({
+    url: "/system/Auth/loadAuthorizeByOrgID",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//保存授权信息
+export const saveAuthorize = data => {
+  return request({
+    url: "/system/Auth/saveAuthorize",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//删除授权信息
+export const removeAuthorizes = data => {
+  return request({
+    url: "/system/Auth/removeAuthorizes",
     headers: {
       isToken: true
     },
