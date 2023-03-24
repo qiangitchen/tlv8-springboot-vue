@@ -43,7 +43,7 @@ export const createRouteByList = menuList => {
  */
 export const setUserRouteComponent = routes => {
   routes.forEach(r => {
-    r.component = r.parent === "0" ? permissionRoutes.Layout : permissionRoutes[r.name]
+    r.component = (!r.parent || r.parent === "0" || r.parent === "" || r.parent === "null") ? permissionRoutes.Layout : permissionRoutes[r.name]
     if (r.children && r.children.length > 0) {
       setUserRouteComponent(r.children)
     }

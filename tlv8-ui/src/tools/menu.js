@@ -1,7 +1,7 @@
 /**
  * 菜单结构
- * 
- * @param list 菜单集合 
+ *
+ * @param list 菜单集合
  */
 export const toTree = list => {
     list.sort((a, b) => {
@@ -15,7 +15,7 @@ export const toTree = list => {
     }
     for (let i = 0; i < list.length; i++) {
         node = list[i];
-        if (node.parent != "0") {
+        if (node.parent && node.parent != "0" && node.parent != "" && node.parent != "null") {
             const children = list[map[node.parent]].children || []
             list[map[node.parent]].children = [...children, node]
         } else {
@@ -26,8 +26,8 @@ export const toTree = list => {
 }
 
 /**
- * 路由是否注册 
- * 
+ * 路由是否注册
+ *
  * @param routes 路由集合
  * @param currentPath 当前路由
  */

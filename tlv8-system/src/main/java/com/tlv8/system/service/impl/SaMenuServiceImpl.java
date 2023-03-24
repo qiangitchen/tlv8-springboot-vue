@@ -6,7 +6,9 @@ import com.tlv8.system.service.ISaMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SaMenuServiceImpl implements ISaMenuService {
@@ -14,34 +16,10 @@ public class SaMenuServiceImpl implements ISaMenuService {
     SaMenuMapper saMenuMapper;
 
     @Override
-    public List<SaMenu> selectList() {
-        return saMenuMapper.selectList();
+    public List<SaMenu> selectList(String sorgid, String sorgfid) {
+        Map<String, String> param = new HashMap<>();
+        param.put("sorgid", sorgid);
+        param.put("sorgfid", sorgfid);
+        return saMenuMapper.selectList(param);
     }
-
-
-    @Override
-    public SaMenu selectByPrimaryKey(String sid) {
-        return saMenuMapper.selectByPrimaryKey(sid);
-    }
-
-    @Override
-    public int insertData(SaMenu obj) {
-        return saMenuMapper.insertData(obj);
-    }
-
-    @Override
-    public int updateData(SaMenu obj) {
-        return saMenuMapper.updateData(obj);
-    }
-
-    @Override
-    public int deleteData(SaMenu obj) {
-        return saMenuMapper.deleteData(obj);
-    }
-
-    @Override
-    public int deleteDataByPrimaryKey(String sid) {
-        return saMenuMapper.deleteDataByPrimaryKey(sid);
-    }
-
 }

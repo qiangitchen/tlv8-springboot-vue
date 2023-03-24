@@ -13,7 +13,9 @@ public class SaMenuTree {
     private String icon64;// 大图标
     private String pid;// 父id
     private int sorts; // 序号
-    private String code;// 父id
+    private String code;// name
+
+    private String i18n;// 多语言编号
     private int version; // 序号
 
     public String getCode() {
@@ -118,6 +120,14 @@ public class SaMenuTree {
 
     public void setSorts(int sorts) {
         this.sorts = sorts;
+    }
+
+    public String getI18n() {
+        return i18n;
+    }
+
+    public void setI18n(String i18n) {
+        this.i18n = i18n;
     }
 
     public int getVersion() {

@@ -329,6 +329,7 @@ CREATE TABLE sa_opmenutree  (
   pid varchar(32)  DEFAULT NULL,
   sorts int DEFAULT NULL,
   code varchar(100),
+  i18n varchar(100),
   version int NULL DEFAULT 0,
   PRIMARY KEY (sid)
 );

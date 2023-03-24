@@ -15,11 +15,12 @@
         <result column="pid" property="pid" jdbcType="VARCHAR"/>
         <result column="sorts" property="sorts" jdbcType="INTEGER"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="i18n" property="i18n" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         sid
-        ,label,icon,layuiicon,url,process,activity,display,icon32,icon64,pid,sorts,code,version
+        ,label,icon,layuiicon,url,process,activity,display,icon32,icon64,pid,sorts,code,i18n,version
     </sql>
     <select id="selectList" resultMap="BaseResultMap">
         select
@@ -59,6 +60,7 @@
         #{pid,jdbcType=VARCHAR},
         #{sorts,jdbcType=INTEGER},
         #{code,jdbcType=VARCHAR},
+        #{i18n,jdbcType=VARCHAR},
         #{version,jdbcType=INTEGER}
         )
     </insert>
@@ -77,6 +79,7 @@
             pid       = #{pid,jdbcType=VARCHAR},
             sorts     = #{sorts,jdbcType=INTEGER},
             code      = #{code,jdbcType=VARCHAR},
+            i18n      = #{i18n,jdbcType=VARCHAR},
             version   = #{version,jdbcType=INTEGER}
         where sid = #{sid,jdbcType=VARCHAR}
     </update>

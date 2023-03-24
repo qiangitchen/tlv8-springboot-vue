@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.tlv8.system.bean.ContextBean;
+import com.tlv8.system.pojo.SaMenu;
 import com.tlv8.system.pojo.SaMenuTree;
+import com.tlv8.system.service.ISaMenuService;
 import com.tlv8.system.service.ISaMenuTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +31,12 @@ public class MenusController {
 
     @Autowired
     ISaMenuTreeService saMenuTreeService;
+
+    @Autowired
+    ISaMenuService saMenuService;
+
+    @Autowired
+    UserController userController;
 
     @RequestMapping("/Menu/loadMenuTree")
     @ResponseBody
@@ -73,8 +82,10 @@ public class MenusController {
     @RequestMapping("/User/getUserMenusArray")
     @ResponseBody
     public Object getUserMenusArray() {
-        List list = new ArrayList();
-        if (list.size() < 1) {
+        ContextBean context = userController.getContext();
+        List<SaMenu> list = saMenuService.selectList(context.getCurrentPersonID(), context.getCurrentPersonFullID());
+        System.out.println(list);
+        if (list.size() < 1 && "PSN01".equals(context.getCurrentPersonID())) {
             Resource resource = new ClassPathResource("menuList.json");
             try {
                 String menuList = FileAndString.FileToString(resource.getFile());

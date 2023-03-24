@@ -37,6 +37,9 @@
       <a-form-item ref="code" label="编号" name="code">
         <a-input v-model:value="form.code"/>
       </a-form-item>
+      <a-form-item ref="i18n" label="i18n" name="i18n">
+        <a-input v-model:value="form.i18n"/>
+      </a-form-item>
       <a-form-item ref="process" label="process" name="process">
         <a-input v-model:value="form.process"/>
       </a-form-item>
@@ -100,6 +103,7 @@ export default {
     const columns = [
       {title: "名称", dataIndex: "label", key: "label"},
       {title: "编号", dataIndex: "code", key: "code"},
+      {title: "i18n", dataIndex: "i18n", key: "i18n"},
       {title: "process", dataIndex: "process", key: "process"},
       {title: "activity", dataIndex: "activity", key: "activity"},
       {title: "路径", dataIndex: "url", key: "url"},
@@ -149,6 +153,13 @@ export default {
         {
           required: true,
           message: "请输入编号",
+          trigger: "blur"
+        }
+      ],
+      i18n: [
+        {
+          required: true,
+          message: "请输入多语言编号",
           trigger: "blur"
         }
       ]
@@ -220,6 +231,7 @@ export default {
       this.form = {
         label: "",
         code: "",
+        i18n: "",
         process: "",
         activity: "",
         url: "",
