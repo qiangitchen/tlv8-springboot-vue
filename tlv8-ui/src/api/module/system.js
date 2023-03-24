@@ -167,3 +167,38 @@ export const removeAuthorizes = data => {
     method: 'post'
   })
 }
+
+export const loadRecycle = data => {
+  return request({
+    url: "/system/org/loadRecycle",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//【回收站】恢复数据
+export const reCoverOrg = data => {
+  return request({
+    url: "/system/org/reCoverOrg",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//【回收站】清除数据
+export const clearOrg = data => {
+  return request({
+    url: "/system/org/clearOrg",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}

@@ -28,5 +28,6 @@ export default {
   "organization": "机构管理",
   "roleManage": "角色管理",
   "authorManage": "授权管理",
-  "manageMeant": "权限管理"
+  "manageMeant": "权限管理",
+  "recycle": "回收站"
 }

@@ -62,4 +62,13 @@ public class SaOpOrgServiceImpl implements ISaOpOrgService {
         return sSaOpOrgMapper.logicRecoveryByPrimaryKey(sid);
     }
 
+    @Override
+    public List<SaOpOrg> selectRecycleList() {
+        return sSaOpOrgMapper.selectRecycleList();
+    }
+
+    public List<SaOpOrg> selectAllByParentID(String parent) {
+        return sSaOpOrgMapper.selectAllByParentID(parent);
+    }
+
 }

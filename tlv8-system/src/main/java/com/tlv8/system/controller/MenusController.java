@@ -84,7 +84,6 @@ public class MenusController {
     public Object getUserMenusArray() {
         ContextBean context = userController.getContext();
         List<SaMenu> list = saMenuService.selectList(context.getCurrentPersonID(), context.getCurrentPersonFullID());
-        System.out.println(list);
         if (list.size() < 1 && "PSN01".equals(context.getCurrentPersonID())) {
             Resource resource = new ClassPathResource("menuList.json");
             try {

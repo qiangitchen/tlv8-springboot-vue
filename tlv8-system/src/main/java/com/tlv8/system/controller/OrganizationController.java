@@ -1,5 +1,8 @@
 package com.tlv8.system.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.common.utils.MD5Util;
@@ -44,10 +47,15 @@ public class OrganizationController {
             Map<String, Object> map = new HashMap<>();
             SaOpOrg org = root_list.get(i);
             map.put("key", org.getSid());
+            map.put("id", org.getSid());
             map.put("title", org.getSname());
+            map.put("name", org.getSname());
+            map.put("scode", org.getScode());
             map.put("icon", getIcon(org.getSorgkindid()));
             map.put("orgkind", org.getSorgkindid());
             map.put("sfid", org.getSfid());
+            map.put("sfcode", org.getSfcode());
+            map.put("sfname", org.getSfname());
             List<Map<String, Object>> child = loadChild(org.getSid());
             if (child.size() > 0) {
                 map.put("children", child);
@@ -64,10 +72,15 @@ public class OrganizationController {
             Map<String, Object> map = new HashMap<>();
             SaOpOrg org = datalist.get(i);
             map.put("key", org.getSid());
+            map.put("id", org.getSid());
             map.put("title", org.getSname());
+            map.put("name", org.getSname());
+            map.put("scode", org.getScode());
             map.put("icon", getIcon(org.getSorgkindid()));
             map.put("orgkind", org.getSorgkindid());
             map.put("sfid", org.getSfid());
+            map.put("sfcode", org.getSfcode());
+            map.put("sfname", org.getSfname());
             List<Map<String, Object>> child = loadChild(org.getSid());
             if (child.size() > 0) {
                 map.put("children", child);
@@ -286,6 +299,76 @@ public class OrganizationController {
             org.setSlevel(porg.getSlevel() + 1);
             saOpOrgService.updateData(org);
             updateChildOrgPath(org);
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/loadRecycle")
+    public Object loadRecycle() {
+        JSONArray jsona = new JSONArray();
+        List<SaOpOrg> dataList = saOpOrgService.selectRecycleList();
+        for (SaOpOrg org : dataList) {
+            JSONObject json = JSONObject.parseObject(JSON.toJSONString(org));
+            json.put("key", org.getSid());
+            json.put("id", org.getSid());
+            jsona.add(json);
+        }
+        return AjaxResult.success(jsona);
+    }
+
+    @ResponseBody
+    @RequestMapping("/reCoverOrg")
+    public Object reCoverOrg(@RequestBody Map<String, String> param) {
+        String[] orgids = param.get("orgids").split(",");
+        for (String orgid : orgids) {
+            SaOpOrg org = saOpOrgService.selectByPrimaryKey(orgid);
+            if (org != null) {
+                org.setSvalidstate(1);
+                if ("psm".equalsIgnoreCase(org.getSorgkindid())) {
+                    SaOpPerson person = saOpPersonService.selectByPrimaryKey(org.getSpersonid());
+                    if (person != null) {
+                        person.setSvalidstate(1);
+                        saOpPersonService.updateData(person);
+                    }
+                }
+                saOpOrgService.updateData(org);
+            }
+        }
+        return AjaxResult.success();
+    }
+
+    @ResponseBody
+    @RequestMapping("/clearOrg")
+    public Object clearOrg(@RequestBody Map<String, String> param) {
+        String[] orgids = param.get("orgids").split(",");
+        for (String orgid : orgids) {
+            SaOpOrg org = saOpOrgService.selectByPrimaryKey(orgid);
+            if (org != null) {
+                clearChild(org.getSid());
+                if ("psm".equalsIgnoreCase(org.getSorgkindid())) {
+                    SaOpPerson person = saOpPersonService.selectByPrimaryKey(org.getSpersonid());
+                    if (person != null) {
+                        saOpPersonService.deleteData(person);
+                    }
+                }
+                saOpOrgService.deleteData(org);
+            }
+        }
+        return AjaxResult.success();
+    }
+
+    private void clearChild(String pid) {
+        List<SaOpOrg> orgs = saOpOrgService.selectAllByParentID(pid);
+        for (SaOpOrg org : orgs) {
+            clearChild(org.getSid());
+            if ("psm".equalsIgnoreCase(org.getSorgkindid())) {
+                SaOpPerson person = saOpPersonService.selectByPrimaryKey(org.getSpersonid());
+                if (person != null) {
+                    saOpPersonService.deleteData(person);
+                }
+            }
+            saOpOrgService.deleteData(org);
         }
     }
 

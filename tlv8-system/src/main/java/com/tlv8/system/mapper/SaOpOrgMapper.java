@@ -25,10 +25,12 @@ public interface SaOpOrgMapper {
 
     /**
      * 根据父id获取数据列表
+     *
      * @param parent
      * @return
      */
     List<SaOpOrg> selectListByParentID(String parent);
+    List<SaOpOrg> selectAllByParentID(String parent);
 
     /**
      * 根据主键获取数据对象
@@ -82,8 +84,9 @@ public interface SaOpOrgMapper {
      * 逻辑恢复指定主键的数据
      *
      * @param sid
-     * @param state
      * @return
      */
     int logicRecoveryByPrimaryKey(String sid);
+
+    List<SaOpOrg> selectRecycleList();
 }

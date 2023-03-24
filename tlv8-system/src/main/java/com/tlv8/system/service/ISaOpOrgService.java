@@ -79,8 +79,11 @@ public interface ISaOpOrgService {
      * 逻辑恢复指定主键的数据
      *
      * @param sid
-     * @param state
      * @return
      */
     int logicRecoveryByPrimaryKey(String sid);
+
+    List<SaOpOrg> selectRecycleList();
+
+    List<SaOpOrg> selectAllByParentID(String parent);
 }

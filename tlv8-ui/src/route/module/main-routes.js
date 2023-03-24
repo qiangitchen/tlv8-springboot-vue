@@ -25,5 +25,6 @@ export default {
   'organization': () => import('@/view/systemManager/organization.vue'),
   'roleManage': () => import('@/view/systemManager/roleManage.vue'),
   'authorManage': () => import('@/view/systemManager/authorManage.vue'),
-  'manageMeant': () => import('@/view/systemManager/manageMeant.vue')
+  'manageMeant': () => import('@/view/systemManager/manageMeant.vue'),
+  'recycle': () => import('@/view/systemManager/recycle.vue')
 }
