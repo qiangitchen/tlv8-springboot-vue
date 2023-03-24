@@ -159,7 +159,6 @@ export default defineComponent({
     };
 
     const currentTreeId = ref('');
-    const currentId = ref('');
 
     /// 工具栏
     const toolbar = [
@@ -295,7 +294,24 @@ export default defineComponent({
       });
     },
     doDelete(record) {
-
+      const table = this.$refs.table;
+      Modal.confirm({
+        title: '确认',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: '确认删除【' + record.rname + '】吗？',
+        cancelText: '取消',
+        okText: '确认',
+        onOk() {
+          removeAuthorizes({aus: record.id}).then(res => {
+            if (res.code === 200) {
+              message.success(res.msg);
+              table.reload();
+            } else {
+              message.error(res.msg);
+            }
+          });
+        }
+      });
     },
     onSelectChange(selectedRowKeys) {
       //console.log('selectedRowKeys changed: ', selectedRowKeys);

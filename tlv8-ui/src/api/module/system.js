@@ -168,6 +168,42 @@ export const removeAuthorizes = data => {
   })
 }
 
+//加载管理权限列表信息
+export const loadManagement = data => {
+  return request({
+    url: "/system/manage/loadManagement",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//保存管理权限
+export const saveManagement = data => {
+  return request({
+    url: "/system/manage/saveManagement",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
+//删除管理权限
+export const deleteManagement = data => {
+  return request({
+    url: "/system/manage/deleteManagement",
+    headers: {
+      isToken: true
+    },
+    data: data,
+    method: 'post'
+  })
+}
+
 export const loadRecycle = data => {
   return request({
     url: "/system/org/loadRecycle",
