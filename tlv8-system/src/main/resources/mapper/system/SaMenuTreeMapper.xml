@@ -38,6 +38,12 @@
         from sa_opmenutree
         where sid = #{sid,jdbcType=VARCHAR}
     </select>
+    <select id="selectByPath" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opmenutree
+        where url = #{path,jdbcType=VARCHAR}
+    </select>
     <select id="selectByPID" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>

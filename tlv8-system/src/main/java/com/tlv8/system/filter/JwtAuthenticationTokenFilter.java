@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tlv8.system.action.WriteLog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,6 +25,9 @@ import cn.dev33.satoken.stp.StpUtil;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
+	@Autowired
+	WriteLog writeLog;
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
@@ -32,6 +37,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 		} else {
 			// 判断是否已登录
 			if (StpUtil.isLogin()) {
+				writeLog.writeLog(request);
 				chain.doFilter(request, response);
 			} else {
 				ServletUtils.renderString(response,

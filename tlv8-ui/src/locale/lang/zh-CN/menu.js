@@ -29,5 +29,6 @@ export default {
   "roleManage": "角色管理",
   "authorManage": "授权管理",
   "manageMeant": "权限管理",
+  "sysLog": "系统日志",
   "recycle": "回收站"
 }

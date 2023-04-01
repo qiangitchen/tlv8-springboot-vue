@@ -9,6 +9,8 @@ public interface ISaMenuTreeService {
     
     List<SaMenuTree> selectRootList();
 
+    List<SaMenuTree> selectByPath(String path);
+
     /**
      * 根据主键获取数据对象
      *

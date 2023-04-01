@@ -253,13 +253,11 @@ public class DBUtilsController {
                 List<String> columns = param.getColumns();
                 StringArray qa = new StringArray();
                 for (String field : columns) {
-                    System.out.println(field);
                     qa.push(field + " like ?");
                     queryParam.add("%" + searchValue + "%");
                 }
                 sql.WHERE(qa.join(" or "));
             }
-            System.out.println(sql);
             PreparedStatement ps1 = conn.prepareStatement("select count(*) as total from(" + sql.toString() + ")a");
             for (int i = 0; i < queryParam.size(); i++) {
                 ps1.setString(i + 1, queryParam.get(i));
@@ -272,6 +270,18 @@ public class DBUtilsController {
             if (StringUtils.isNotEmpty(param.getDataOrder())) {
                 sql.ORDER_BY(param.getDataOrder());
             }
+            Map<String, String> pagination = param.getPagination();
+            String pageNum = pagination.get("pageNum");
+            if (StringUtils.isBlank(pageNum)) {
+                pageNum = "1";
+            }
+            String pageSize = pagination.get("pageSize");
+            if (StringUtils.isBlank(pageSize)) {
+                pageSize = "10";
+            }
+            int startl = (Integer.valueOf(pageNum) - 1) * Integer.valueOf(pageSize);
+            sql.LIMIT(pageSize);
+            sql.OFFSET(startl);
             ps = conn.prepareStatement(sql.toString());
             for (int i = 0; i < queryParam.size(); i++) {
                 ps.setString(i + 1, queryParam.get(i));
@@ -292,6 +302,11 @@ public class DBUtilsController {
                 jsona.add(json);
             }
             data.put("total", total);
+            if (total > startl) {
+                data.put("pageNum", Integer.valueOf(pageNum));
+            } else {
+                data.put("pageNum", 1);//如果指定页超出总行数，则跳回第一页
+            }
             data.put("data", jsona);
             result = AjaxResult.success(data);
         } catch (Exception e) {
