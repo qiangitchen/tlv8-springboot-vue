@@ -156,19 +156,22 @@ public class DBUtilsController {
         PreparedStatement ps = null;
         try {
             conn = sqlSession.getConnection();
-            List<SubData> subDataList = param.getSubDataList();
-            for (SubData sdata : subDataList) {
-                SQL dels = new SQL().DELETE_FROM(sdata.getTableName());
-                dels.WHERE(sdata.getSubField() + "=?");
-                ps = conn.prepareStatement(dels.toString());
-                ps.setString(1, param.getKeyValue());
+            String[] rowids =  param.getKeyValue().split(",");
+            for(String rowid :rowids) {
+                List<SubData> subDataList = param.getSubDataList();
+                for (SubData sdata : subDataList) {
+                    SQL dels = new SQL().DELETE_FROM(sdata.getTableName());
+                    dels.WHERE(sdata.getSubField() + "=?");
+                    ps = conn.prepareStatement(dels.toString());
+                    ps.setString(1, rowid);
+                    ps.executeUpdate();
+                }
+                SQL del = new SQL().DELETE_FROM(param.getTableName());
+                del.WHERE(param.getKeyField() + "=?");
+                ps = conn.prepareStatement(del.toString());
+                ps.setString(1, rowid);
                 ps.executeUpdate();
             }
-            SQL del = new SQL().DELETE_FROM(param.getTableName());
-            del.WHERE(param.getKeyField() + "=?");
-            ps = conn.prepareStatement(del.toString());
-            ps.setString(1, param.getKeyValue());
-            ps.executeUpdate();
             sqlSession.commit(true);
             result = AjaxResult.success("操作成功");
         } catch (Exception e) {
