@@ -217,8 +217,6 @@ public class DBUtilsController {
                     String column = rsd.getColumnLabel(i + 1);
                     json.put(column, rs.getString(column));
                 }
-                json.put("key", rs.getString(param.getKeyField()));
-                json.put("id", rs.getString(param.getKeyField()));
                 result = AjaxResult.success(json);
             } else {
                 result = AjaxResult.success("没有查询到指定的数据");

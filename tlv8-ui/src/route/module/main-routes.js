@@ -27,5 +27,6 @@ export default {
   'authorManage': () => import('@/view/systemManager/authorManage.vue'),
   'manageMeant': () => import('@/view/systemManager/manageMeant.vue'),
   'sysLog': () => import('@/view/systemManager/sysLog.vue'),
-  'recycle': () => import('@/view/systemManager/recycle.vue')
+  'recycle': () => import('@/view/systemManager/recycle.vue'),
+  'docSetting': () => import('@/view/docCenter/docNameSpace.vue')
 }

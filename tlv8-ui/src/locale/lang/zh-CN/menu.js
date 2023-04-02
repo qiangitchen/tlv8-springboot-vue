@@ -30,5 +30,7 @@ export default {
   "authorManage": "授权管理",
   "manageMeant": "权限管理",
   "sysLog": "系统日志",
-  "recycle": "回收站"
+  "recycle": "回收站",
+  "docManage": "文档管理",
+  "docSetting":"文档配置"
 }
