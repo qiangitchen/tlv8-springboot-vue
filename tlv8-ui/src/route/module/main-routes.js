@@ -20,7 +20,6 @@ export default {
   'error-403': () => import('@/view/error/403.vue'),
   'error-404': () => import('@/view/error/404.vue'),
   'error-500': () => import('@/view/error/500.vue'),
-  'userInfo': () => import('@/view/systemManager/userInfo.vue'),
   'sysMenu': () => import('@/view/systemManager/sysMenu.vue'),
   'organization': () => import('@/view/systemManager/organization.vue'),
   'roleManage': () => import('@/view/systemManager/roleManage.vue'),
