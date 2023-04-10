@@ -3,6 +3,7 @@
 	<name>tlv8-ureport</name>
 	<comment></comment>
 	<projects>
+		<project>tlv8-common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

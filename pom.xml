@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <spring.boot.version>2.7.9</spring.boot.version>
+        <spring.boot.version>2.7.10</spring.boot.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <druid.version>1.2.8</druid.version>
         <swagger.version>3.0.0</swagger.version>
@@ -389,6 +389,13 @@
                 <version>${tlv8.version}</version>
             </dependency>
 
+            <!-- 流程引擎 -->
+            <dependency>
+                <groupId>com.tlv8</groupId>
+                <artifactId>tlv8-flow</artifactId>
+                <version>${tlv8.version}</version>
+            </dependency>
+            
             <!-- 服务器监控 -->
             <dependency>
                 <groupId>com.tlv8</groupId>

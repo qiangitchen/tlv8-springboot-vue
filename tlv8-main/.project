@@ -3,6 +3,13 @@
 	<name>tlv8-main</name>
 	<comment></comment>
 	<projects>
+		<project>tlv8-api</project>
+		<project>tlv8-common</project>
+		<project>tlv8-doc</project>
+		<project>tlv8-flow</project>
+		<project>tlv8-monitor</project>
+		<project>tlv8-system</project>
+		<project>tlv8-ureport</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -21,7 +21,6 @@ import com.tlv8.common.utils.ServletUtils;
 import com.tlv8.system.action.GetSysParams;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.bean.HttpBean;
-import com.tlv8.system.help.MessageResource;
 import com.tlv8.system.help.ResponseProcessor;
 import com.tlv8.system.help.UserResponse;
 import com.tlv8.system.help.enums.MsgStatus;

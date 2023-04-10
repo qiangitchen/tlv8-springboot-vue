@@ -1,0 +1,117 @@
+v\:* {
+	behavior: url(#default#VML)
+}
+
+* {
+	margin: 0, 0, 0, 0;
+	font-size: 11pt;
+}
+
+body {
+	margin: 0, 0, 0, 0;
+	font-size: 11pt;
+}
+
+#group {
+	/*position: absolute;
+	top: 0px;
+	left: 0px;*/
+	/*
+	height: 100%;
+	width: 100%;
+	*/
+	/*z-index: -1000;*/
+}
+
+#menu table {
+	font-size: 11px;
+	background-image: url(img/menubg.gif);
+	z-index: 1000;
+	height: 100%;
+}
+
+#menu td {
+	white-space: nowrap;
+}
+
+#movebar {
+	font-size: 11px;
+	z-index: 1000;
+	height: 30;
+	width: 8;
+	cursor: default;
+}
+
+#movebar div {
+	height: 30;
+	width: 8;
+	background-image: url(img/grid-blue-split.gif);
+}
+
+#menu img {
+	vertical-align: middle;
+	height: 16px;
+}
+
+#menu span {
+	vertical-align: bottom;
+	cursor: pointer;
+	padding-left: 3px;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-right: 5;
+}
+
+.x-form-field {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11pt;
+	font-size-adjust: none;
+	font-stretch: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: normal;
+	margin: 0;
+	border: 1px solid #B5B8C8;
+	padding: 1px 3px;
+	float: left;
+	width: 100%;
+	height: 25px;
+	display: inline-block;
+}
+
+.toolbar_line {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 2;
+}
+
+.elements{
+	width: 100%;
+	cursor: pointer;
+	margin: 0px auto;
+	padding: 0;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+.elements .nimg{
+	width: 20px;
+}
+
+.elements tr.active {
+	background-color:#dddddd;
+}
+
+.elements tr:hover{
+	background-color: #eeedff;
+}
+
+#help{
+	font-size: 12px;	
+}
+
+.btn{
+	margin-right: 5px;
+}
