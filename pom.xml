@@ -381,6 +381,13 @@
                 <artifactId>tlv8-doc</artifactId>
                 <version>${tlv8.version}</version>
             </dependency>
+            
+            <!-- 流程引擎 -->
+            <dependency>
+                <groupId>com.tlv8</groupId>
+                <artifactId>tlv8-flow</artifactId>
+                <version>${tlv8.version}</version>
+            </dependency>
 
             <!-- 报表模块 -->
             <dependency>
@@ -425,6 +432,7 @@
         <module>tlv8-system</module>
         <module>tlv8-ureport</module>
         <module>tlv8-doc</module>
+        <module>tlv8-flow</module>
         <module>tlv8-monitor</module>
         <module>tlv8-api</module>
         <module>tlv8-main</module>
