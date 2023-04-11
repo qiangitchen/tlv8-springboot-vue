@@ -3,9 +3,9 @@ spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: org.postgresql.Driver
-        url: jdbc:postgresql://dev.tlv8.com:5432/tlv8-vue
+        url: jdbc:postgresql://162.14.107.120:5432/aqpt
         username: postgres
-        password: Password
+        password: YNzajs!postgres
         # 初始连接数
         initialSize: 5
         # 最小连接池数量

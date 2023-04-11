@@ -5,7 +5,7 @@ import com.tlv8.flw.pojo.SaFlowdrawlg;
 import java.util.List;
 
 /**
- * Created by TLv8 IDE on 2023/04/10.
+ * Created by TLv8 IDE on 2023/04/11.
  */
 public interface SaFlowdrawlgService {
 
@@ -19,5 +19,5 @@ public interface SaFlowdrawlgService {
 	
 	int updateByPrimaryKey(SaFlowdrawlg row);
 	
-	SaFlowdrawlg selectByProcessId(String sprocessid);
+	SaFlowdrawlg selectBySprocessid(String sprocessid);
 }

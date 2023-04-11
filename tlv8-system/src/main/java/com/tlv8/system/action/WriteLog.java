@@ -33,7 +33,7 @@ public class WriteLog {
      */
     public void writeLog(HttpServletRequest request) {
         String sIP = IPUtils.getRemoteAddr(request);
-        String returnPath = getRefererPath(request);
+//        String returnPath = getRefererPath(request);
         String action = request.getParameter("action");
         if (StringUtils.isBlank(action)) {
             action = request.getRequestURI();

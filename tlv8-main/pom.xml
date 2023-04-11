@@ -36,18 +36,18 @@
 			<groupId>com.tlv8</groupId>
 			<artifactId>tlv8-doc</artifactId>
 		</dependency>
-
-		<!-- 报表模块 -->
-		<dependency>
-			<groupId>com.tlv8</groupId>
-			<artifactId>tlv8-ureport</artifactId>
-		</dependency>
 		
 		<!-- 流程引擎 -->
         <dependency>
             <groupId>com.tlv8</groupId>
             <artifactId>tlv8-flow</artifactId>
         </dependency>
+
+		<!-- 报表模块 -->
+		<dependency>
+			<groupId>com.tlv8</groupId>
+			<artifactId>tlv8-ureport</artifactId>
+		</dependency>
 
 		<!-- 服务器监控 -->
 		<dependency>

@@ -17,6 +17,13 @@
 
 	<dependencies>
 
+		<!-- JS解析包 -->
+		<dependency>
+		    <groupId>org.openjdk.nashorn</groupId>
+		    <artifactId>nashorn-core</artifactId>
+		    <version>15.4</version>
+		</dependency>
+		
 		<!-- 通用工具 -->
 		<dependency>
 			<groupId>com.tlv8</groupId>

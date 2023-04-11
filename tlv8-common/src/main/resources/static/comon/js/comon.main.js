@@ -1,4 +1,4 @@
-var cpath = "/api";
+var cpath = "/tlv8";
 /**
  * @name J$
  * @description 根据ID获取HTML的Element对象
@@ -334,8 +334,7 @@ function writeLog(ev, actionName, discription) {
         param.set("actionName", actionName ? actionName : "查看");
         param.set("srcPath", srcPath);
         param.set("discription", discription ? discription : "");
-        tlv8.XMLHttpRequest("WriteSystemLogAction", param, "post", true,
-            null, true);
+//        tlv8.XMLHttpRequest("WriteSystemLogAction", param, "post", true, null, true);
     } catch (e) {
     }
 }
@@ -3317,7 +3316,7 @@ tlv8.Context = {
         if (typeof result == "string") {
             result = window.eval("(" + result + ")");
         }
-        this.userInfo = window["eval"]("(" + result[0].data + ")");
+        this.userInfo = result;//window["eval"]("(" + result[0].data + ")");
     },
     checklogin: function () {
         if (!this.userInfo.personid || this.userInfo.personid == ""

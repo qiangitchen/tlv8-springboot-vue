@@ -20,7 +20,7 @@ import com.tlv8.api.pay.pojo.PaymentInfo;
 import com.tlv8.api.pay.wxpay.WeiXinReturnTanse;
 
 @Controller
-@RequestMapping("/pay/notify")
+@RequestMapping("/api/pay/notify")
 public class NotifyController {
 
 	/**

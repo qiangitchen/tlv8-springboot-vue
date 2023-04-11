@@ -9,37 +9,36 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
 /**
- * Created by TLv8 IDE on 2023/04/10.
+ * Created by TLv8 IDE on 2023/04/11.
  */
 @Service
 public class SaFlowdrawlgServiceImpl implements SaFlowdrawlgService {
-	@Autowired
-	private SaFlowdrawlgMapper saFlowdrawlgMapper;
-
-	public int deleteByPrimaryKey(String id) {
-		return saFlowdrawlgMapper.deleteByPrimaryKey(id);
-	}
-
-	public int insert(SaFlowdrawlg row) {
+    @Autowired
+    private SaFlowdrawlgMapper saFlowdrawlgMapper;
+    
+    public int deleteByPrimaryKey(String id){
+    	return saFlowdrawlgMapper.deleteByPrimaryKey(id);
+    }
+	
+	public int insert(SaFlowdrawlg row){
 		return saFlowdrawlgMapper.insert(row);
 	}
-
-	public SaFlowdrawlg selectByPrimaryKey(String id) {
+	
+	public SaFlowdrawlg selectByPrimaryKey(String id){
 		return saFlowdrawlgMapper.selectByPrimaryKey(id);
 	}
-
-	public List<SaFlowdrawlg> selectAll() {
+	
+	public List<SaFlowdrawlg> selectAll(){
 		return saFlowdrawlgMapper.selectAll();
 	}
-
-	public int updateByPrimaryKey(SaFlowdrawlg row) {
+	
+	public int updateByPrimaryKey(SaFlowdrawlg row){
 		return saFlowdrawlgMapper.updateByPrimaryKey(row);
 	}
-
-	public SaFlowdrawlg selectByProcessId(String sprocessid) {
-		return saFlowdrawlgMapper.selectByProcessId(sprocessid);
+	
+	public SaFlowdrawlg selectBySprocessid(String sprocessid) {
+		return saFlowdrawlgMapper.selectBySprocessid(sprocessid);
 	}
 
 }

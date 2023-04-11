@@ -1,7 +1,6 @@
 package com.tlv8.system.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,6 @@ import com.tlv8.common.utils.FileAndString;
 
 @Controller
 @RequestMapping("/system")
-@SuppressWarnings("rawtypes")
 public class MenusController {
 
     @Autowired

@@ -55,7 +55,7 @@ public class HttpClientUtil {
         return result;
     }
 
-    public static String httpPost(String url, Map paramMap, String code) {
+    public static String httpPost(String url, Map<String, Object> paramMap, String code) {
         logger.info("GetPage:" + url);
         String content = null;
         if (url == null || url.trim().length() == 0 || paramMap == null || paramMap.isEmpty())
@@ -69,7 +69,7 @@ public class HttpClientUtil {
         // httpClient.getHostConfiguration().setProxy("128.128.176.74", 808);
 
         PostMethod method = new PostMethod(url);
-        Iterator it = paramMap.keySet().iterator();
+        Iterator<String> it = paramMap.keySet().iterator();
 
         while (it.hasNext()) {
             String key = it.next() + "";
@@ -162,7 +162,7 @@ public class HttpClientUtil {
         return new String(data, charsetName);
     }
 
-    public static String httpPost(String url, Map paramMap) {
+    public static String httpPost(String url, Map<String, Object> paramMap) {
         // 编码：GB2312
         return HttpClientUtil.httpPost(url, paramMap, "GB2312");
     }

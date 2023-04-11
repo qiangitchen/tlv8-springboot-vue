@@ -3,7 +3,6 @@ package com.tlv8.api.pay.alipay.controller;
 import com.tlv8.api.pay.alipay.AliPay;
 import com.tlv8.api.pay.enums.PayType;
 import com.tlv8.api.pay.pojo.PaymentInfo;
-import com.tlv8.api.pay.wxpay.WeiXinPay;
 import com.tlv8.api.utils.ZxingBarCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

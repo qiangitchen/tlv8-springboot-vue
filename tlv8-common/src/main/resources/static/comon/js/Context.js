@@ -162,7 +162,7 @@ justep.Context = {
 		if (typeof result == "string") {
 			result = window.eval("(" + result + ")");
 		}
-		this.userInfo = window["eval"]("(" + result[0].data + ")");
+		this.userInfo = result;//window["eval"]("(" + result[0].data + ")");
 		if (this.userInfo.personid == "null" || this.userInfo.personid == "") {
 			try {
 				justepYnApp.reloadLoginPage("连接中断，请重新登录.");

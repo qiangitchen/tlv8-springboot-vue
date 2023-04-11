@@ -51,10 +51,10 @@ export default defineConfig({
     port: port,
     base: "./", //生产环境路径
     proxy: {
-      "^/api": {
+      "^/tlv8": {
         target: server,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, "")
+        rewrite: (path) => path.replace(/^\/tlv8/, "")
       }
     }
   },

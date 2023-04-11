@@ -53,9 +53,9 @@ $(function() {
 	var labelwidth = "40,40,120,120";
 	var datatype = "null,ro,ro,ro";// 设置字段类型
 	var dataAction = {
-		"queryAction" : "getPersonInfo",
-		"savAction" : "savePersonInfo",
-		"deleteAction" : "deletePersonInfo"
+		"queryAction" : "getGridAction",
+		"savAction" : "",
+		"deleteAction" : ""
 	};
 	// 创建grid
 	maingrid = new tlv8.createGrid($maingridview[0], labelid, labels,

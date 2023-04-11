@@ -15,7 +15,7 @@ import com.tlv8.api.pay.wxpay.WeiXinPay;
 import com.tlv8.api.utils.ZxingBarCode;
 
 @Controller
-@RequestMapping("/pay/wxpay")
+@RequestMapping("/api/pay/wxpay")
 public class WeiXinPayController {
 
     /**

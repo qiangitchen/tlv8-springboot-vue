@@ -8,7 +8,7 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 const service = axios.create({
   timeout: 6000,
   withCredentials: true,
-  baseURL: "/api"
+  baseURL: "/tlv8"
 });
 
 service.interceptors.request.use(config => {

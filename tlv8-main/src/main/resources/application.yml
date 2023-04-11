@@ -32,12 +32,6 @@ server:
       min-spare: 100
     background-processor-delay: 30
 
-# 日志配置
-logging:
-  level:
-    com.tlv8: debug
-    org.springframework: warn
-
 # Spring配置
 spring:
   # 资源信息
@@ -65,13 +59,13 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: dev.tlv8.com
+    host: 162.14.107.120
     # 端口，默认为6379
     port: 6379
     # 数据库索引
     database: 0
     # 密码
-    password: TLv8redisPassHJklttU97y
+    password: TLv8redisPassHJklttU97yza
     # 连接超时时间
     timeout: 10s
     lettuce:
@@ -93,12 +87,12 @@ sa-token:
     timeout: 2592000
     # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
     activity-timeout: -1
+    # token风格
+    token-style: random-32
     # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录) 
     is-concurrent: true
     # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token) 
     is-share: true
-    # token风格
-    token-style: uuid
     # 是否输出操作日志 
     is-log: false
     
@@ -110,25 +104,3 @@ mybatis:
     mapperLocations: classpath*:mapper/**/*Mapper.xml
     # 加载全局的配置文件
     configLocation: classpath:mybatis/mybatis-config.xml
-
-# PageHelper分页插件
-pagehelper: 
-  helperDialect: mysql
-  supportMethodsArguments: true
-  params: count=countSql 
-
-# Swagger配置
-swagger:
-  # 是否开启swagger
-  enabled: true
-  # 请求前缀
-  pathMapping: /dev-api
-
-# 防止XSS攻击
-xss: 
-  # 过滤开关
-  enabled: true
-  # 排除链接（多个用逗号分隔）
-  excludes: /system/notice
-  # 匹配链接
-  urlPatterns: /system/*,/monitor/*,/tool/*
