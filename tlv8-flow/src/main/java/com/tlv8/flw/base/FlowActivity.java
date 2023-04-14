@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.utils.CodeUtils;
+import com.tlv8.common.utils.StringUtils;
 import com.tlv8.flw.expression.BooleanExpression;
 
 /**
@@ -73,9 +74,8 @@ public class FlowActivity {
 					activityname = Acjson.getString("name");
 					urlname = Acjson.getString("name");
 					try {
-						if (!"".equals(Acjson.getString("property").trim())
-								&& !"null".equals(Acjson.getString("property"))
-								&& Acjson.getString("property") != null) {
+						String pstr = Acjson.getString("property");
+						if (StringUtils.isNotEmpty(pstr)) {
 							property = JSON.parseArray(Acjson.getString("property"));
 							for (int j = 0; j < property.size(); j++) {
 								JSONObject propJson = (JSONObject) property.get(j);
@@ -153,9 +153,8 @@ public class FlowActivity {
 					activityname = Acjson.getString("name");
 					urlname = Acjson.getString("name");
 					try {
-						if (!"".equals(Acjson.getString("property").trim())
-								&& !"null".equals(Acjson.getString("property"))
-								&& Acjson.getString("property") != null) {
+						String pstr = Acjson.getString("property");
+						if (StringUtils.isNotEmpty(pstr)) {
 							property = JSON.parseArray(Acjson.getString("property"));
 							for (int j = 0; j < property.size(); j++) {
 								JSONObject propJson = (JSONObject) property.get(j);
