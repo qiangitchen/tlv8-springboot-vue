@@ -2,6 +2,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.10</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
     <groupId>com.tlv8</groupId>
     <artifactId>tlv8</artifactId>
@@ -17,8 +24,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <spring.boot.version>2.7.10</spring.boot.version>
-        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <druid.version>1.2.8</druid.version>
         <swagger.version>3.0.0</swagger.version>
         <mysql-connector.version>8.0.32</mysql-connector.version>
@@ -59,29 +64,6 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
-
-            <!-- SpringBoot的依赖配置 -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            
-            <!--spring boot - webSocket-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-websocket</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring.boot.version}</version>
-                <scope>test</scope>
-            </dependency>
 
             <!-- Mysql驱动包 -->
             <dependency>
@@ -395,7 +377,7 @@
                 <artifactId>tlv8-ureport</artifactId>
                 <version>${tlv8.version}</version>
             </dependency>
-            
+
             <!-- 服务器监控 -->
             <dependency>
                 <groupId>com.tlv8</groupId>
@@ -409,11 +391,11 @@
                 <artifactId>tlv8-api</artifactId>
                 <version>${tlv8.version}</version>
             </dependency>
-
-            <!-- 主模块-启动模块 -->
+            
+            <!-- 静态资源 -->
             <dependency>
                 <groupId>com.tlv8</groupId>
-                <artifactId>tlv8-main</artifactId>
+                <artifactId>tlv8-static</artifactId>
                 <version>${tlv8.version}</version>
             </dependency>
 
@@ -425,9 +407,10 @@
         <module>tlv8-system</module>
         <module>tlv8-ureport</module>
         <module>tlv8-doc</module>
-        <module>tlv8-flow</module>
+		<module>tlv8-flow</module>
         <module>tlv8-monitor</module>
         <module>tlv8-api</module>
+        <module>tlv8-static</module>
         <module>tlv8-main</module>
     </modules>
 
@@ -436,7 +419,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

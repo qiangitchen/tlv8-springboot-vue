@@ -125,16 +125,27 @@ public class DBUtils {
 			String url = m.get("url");
 			res = url.toUpperCase().indexOf((":postgresql:").toUpperCase()) > 0;
 		} else {
-			SqlSession session = getSqlSession();
-			Connection conn = null;
-			try {
-				conn = session.getConnection();
-				String url = conn.getMetaData().getURL();
-				res = url.toUpperCase().indexOf((":postgresql:").toUpperCase()) > 0;
-			} catch (Exception e) {
-			} finally {
-				closeConn(session, conn, null, null);
-			}
+			res = IsPostgreSQL();
+		}
+		return res;
+	}
+
+	/**
+	 * 判断数据库类型PostgreSQL数据库
+	 * 
+	 * @return
+	 */
+	public static boolean IsPostgreSQL() {
+		boolean res = false;
+		SqlSession session = getSqlSession();
+		Connection conn = null;
+		try {
+			conn = session.getConnection();
+			String url = conn.getMetaData().getURL();
+			res = url.toUpperCase().indexOf((":postgresql:").toUpperCase()) > 0;
+		} catch (Exception e) {
+		} finally {
+			closeConn(session, conn, null, null);
 		}
 		return res;
 	}
@@ -153,16 +164,27 @@ public class DBUtils {
 			String url = m.get("url");
 			res = url.toUpperCase().indexOf((":dm:").toUpperCase()) > 0;
 		} else {
-			SqlSession session = getSqlSession();
-			Connection conn = null;
-			try {
-				conn = session.getConnection();
-				String url = conn.getMetaData().getURL();
-				res = url.toUpperCase().indexOf((":dm:").toUpperCase()) > 0;
-			} catch (Exception e) {
-			} finally {
-				closeConn(session, conn, null, null);
-			}
+			res = IsDMDB();
+		}
+		return res;
+	}
+
+	/**
+	 * 判断数据库类型达梦数据库
+	 * 
+	 * @return
+	 */
+	public static boolean IsDMDB() {
+		boolean res = false;
+		SqlSession session = getSqlSession();
+		Connection conn = null;
+		try {
+			conn = session.getConnection();
+			String url = conn.getMetaData().getURL();
+			res = url.toUpperCase().indexOf((":dm:").toUpperCase()) > 0;
+		} catch (Exception e) {
+		} finally {
+			closeConn(session, conn, null, null);
 		}
 		return res;
 	}
@@ -181,16 +203,27 @@ public class DBUtils {
 			String url = m.get("url");
 			res = url.toUpperCase().indexOf(("kingbase").toUpperCase()) > 0;
 		} else {
-			SqlSession session = getSqlSession();
-			Connection conn = null;
-			try {
-				conn = session.getConnection();
-				String url = conn.getMetaData().getURL();
-				res = url.toUpperCase().indexOf(("kingbase").toUpperCase()) > 0;
-			} catch (Exception e) {
-			} finally {
-				closeConn(session, conn, null, null);
-			}
+			res = IsKingDB();
+		}
+		return res;
+	}
+
+	/**
+	 * 判断数据库类型金仓数据库
+	 * 
+	 * @return
+	 */
+	public static boolean IsKingDB() {
+		boolean res = false;
+		SqlSession session = getSqlSession();
+		Connection conn = null;
+		try {
+			conn = session.getConnection();
+			String url = conn.getMetaData().getURL();
+			res = url.toUpperCase().indexOf(("kingbase").toUpperCase()) > 0;
+		} catch (Exception e) {
+		} finally {
+			closeConn(session, conn, null, null);
 		}
 		return res;
 	}
@@ -209,16 +242,27 @@ public class DBUtils {
 			String url = m.get("url");
 			res = url.toUpperCase().indexOf(("oracle").toUpperCase()) > 0;
 		} else {
-			SqlSession session = getSqlSession();
-			Connection conn = null;
-			try {
-				conn = session.getConnection();
-				String url = conn.getMetaData().getURL();
-				res = url.toUpperCase().indexOf(("oracle").toUpperCase()) > 0;
-			} catch (Exception e) {
-			} finally {
-				closeConn(session, conn, null, null);
-			}
+			res = IsOracleDB();
+		}
+		return res;
+	}
+
+	/**
+	 * 判断数据库类型ORACLE
+	 * 
+	 * @return
+	 */
+	public static boolean IsOracleDB() {
+		boolean res = false;
+		SqlSession session = getSqlSession();
+		Connection conn = null;
+		try {
+			conn = session.getConnection();
+			String url = conn.getMetaData().getURL();
+			res = url.toUpperCase().indexOf(("oracle").toUpperCase()) > 0;
+		} catch (Exception e) {
+		} finally {
+			closeConn(session, conn, null, null);
 		}
 		return res;
 	}
@@ -237,16 +281,27 @@ public class DBUtils {
 			String url = m.get("url");
 			res = url.toUpperCase().indexOf(("mysql").toUpperCase()) > 0;
 		} else {
-			SqlSession session = getSqlSession();
-			Connection conn = null;
-			try {
-				conn = session.getConnection();
-				String url = conn.getMetaData().getURL();
-				res = url.toUpperCase().indexOf(("mysql").toUpperCase()) > 0;
-			} catch (Exception e) {
-			} finally {
-				closeConn(session, conn, null, null);
-			}
+			res = IsMySQLDB();
+		}
+		return res;
+	}
+
+	/**
+	 * 判断数据库类型MYSQL
+	 * 
+	 * @return
+	 */
+	public static boolean IsMySQLDB() {
+		boolean res = false;
+		SqlSession session = getSqlSession();
+		Connection conn = null;
+		try {
+			conn = session.getConnection();
+			String url = conn.getMetaData().getURL();
+			res = url.toUpperCase().indexOf(("mysql").toUpperCase()) > 0;
+		} catch (Exception e) {
+		} finally {
+			closeConn(session, conn, null, null);
 		}
 		return res;
 	}
@@ -265,16 +320,27 @@ public class DBUtils {
 			String url = m.get("url");
 			res = url.toUpperCase().indexOf(("jtds").toUpperCase()) > 0;
 		} else {
-			SqlSession session = getSqlSession();
-			Connection conn = null;
-			try {
-				conn = session.getConnection();
-				String url = conn.getMetaData().getURL();
-				res = url.toUpperCase().indexOf(("jtds").toUpperCase()) > 0;
-			} catch (Exception e) {
-			} finally {
-				closeConn(session, conn, null, null);
-			}
+			res = IsMSSQLDB();
+		}
+		return res;
+	}
+
+	/**
+	 * 判断数据库类型SQL Server
+	 * 
+	 * @return
+	 */
+	public static boolean IsMSSQLDB() {
+		boolean res = false;
+		SqlSession session = getSqlSession();
+		Connection conn = null;
+		try {
+			conn = session.getConnection();
+			String url = conn.getMetaData().getURL();
+			res = url.toUpperCase().indexOf(("jtds").toUpperCase()) > 0;
+		} catch (Exception e) {
+		} finally {
+			closeConn(session, conn, null, null);
 		}
 		return res;
 	}
@@ -383,6 +449,102 @@ public class DBUtils {
 			throw new SQLException(e + ">>\n sql:" + sql);
 		} finally {
 			closeConn(session, aConn, qry, rs);
+		}
+		return li;
+	}
+
+	/**
+	 * 查询操作
+	 * 
+	 * @param sql
+	 * @param param
+	 * @return
+	 * @throws SQLException
+	 */
+	public static List<Map<String, String>> execQueryforList(String sql, List<Object> param) throws SQLException {
+		ResultSet rs = null;
+		ResultSetMetaData rsmd = null;
+		List li = new ArrayList();
+		SqlSession session = getSqlSession();
+		Connection aConn = session.getConnection();
+		PreparedStatement ps = null;
+		try {
+			ps = aConn.prepareStatement(sql);
+			if (param != null) {
+				for (int i = 0; i < param.size(); i++) {
+					ps.setObject(i + 1, param.get(i));
+				}
+			}
+			rs = ps.executeQuery();
+			rsmd = rs.getMetaData();
+			int size = rsmd.getColumnCount();
+			while (rs.next()) {
+				Map<String, String> sm = new HashMap<String, String>();
+				for (int i = 1; i <= size; i++) {
+					String cellType = rsmd.getColumnTypeName(i);
+					String columnName = rsmd.getColumnLabel(i);
+					if ("DATE".equals(cellType) || "DATETIME".equals(cellType) || "TIMESTAMP".equals(cellType)) {
+						try {
+							try {
+								SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								String v_l = format.format(format.parse(rs.getString(i)));
+								sm.put(columnName, v_l);
+							} catch (Exception e) {
+								try {
+									SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+									SimpleDateFormat nformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+									String v_l = nformat.format(format.parse(rs.getString(i)));
+									sm.put(columnName, v_l);
+								} catch (Exception er) {
+									SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+									String v_l = format.format(format.parse(rs.getString(i)));
+									sm.put(columnName, v_l);
+								}
+							}
+						} catch (Exception e) {
+							sm.put(columnName, "");
+						}
+					} else if ("BLOB".equals(cellType)) {
+						try {
+							sm.put(columnName, convertBlobToBase64String(rs.getBlob(i)));
+						} catch (Exception e) {
+							sm.put(columnName, null);
+							Sys.printMsg(e.toString());
+						}
+					} else if ("CLOB".equals(cellType)) {
+						Clob clob = rs.getClob(i);
+						String content = "";
+						if (clob != null) {
+							BufferedReader in = new BufferedReader(clob.getCharacterStream());
+							StringWriter out = new StringWriter();
+							int c;
+							try {
+								while ((c = in.read()) != -1) {
+									out.write(c);
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							content = out.toString();
+						}
+						sm.put(columnName, content);
+					} else if ("INTEGER".equals(cellType) || "INT".equals(cellType) || "LONG".equals(cellType)) {
+						sm.put(columnName, (rs.getString(i) == null) ? "" : String.valueOf(rs.getLong(i)));
+					} else if ("NUMBER".equals(cellType) || "FLOAT".equals(cellType) || "DECIMAL".equals(cellType)
+							|| "DOUBLE".equals(cellType)) {
+						sm.put(columnName, (rs.getString(i) == null) ? "" : NumberUtils.d2s(rs.getDouble(i)));
+					} else {
+						sm.put(columnName, (rs.getString(i) == null) ? "" : String.valueOf(rs.getString(i)));
+					}
+				}
+				li.add(sm);
+			}
+		} catch (SQLException e) {
+			Sys.printMsg(e.toString());
+			session.close();
+			throw new SQLException(e + ">>\n sql:" + sql);
+		} finally {
+			closeConn(session, aConn, ps, rs);
 		}
 		return li;
 	}
@@ -549,6 +711,7 @@ public class DBUtils {
 	 * @return String
 	 * @throws SQLException
 	 */
+	@Deprecated
 	public static String execUpdate(String dbkey, String sql, List<String> list) throws SQLException {
 		SqlSession session = getSession(dbkey);
 		Connection connection = null;
@@ -563,6 +726,37 @@ public class DBUtils {
 				}
 				boolean flag = ps.execute();
 				result = String.valueOf(flag);
+			}
+		} catch (Exception e) {
+			Sys.printErr(e);
+			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
+		} finally {
+			closeConn(session, connection, ps, null);
+		}
+		return result;
+	}
+
+	/**
+	 * 更新操作
+	 * 
+	 * @param sql
+	 * @param list
+	 * @return
+	 * @throws SQLException
+	 */
+	public static int execUpdate(String sql, List<Object> list) throws SQLException {
+		SqlSession session = getSqlSession();
+		Connection connection = null;
+		PreparedStatement ps = null;
+		int result = 0;
+		try {
+			connection = session.getConnection();
+			if (connection != null) {
+				ps = connection.prepareStatement(sql);
+				for (int i = 0; i < list.size(); i++) {
+					ps.setObject((i + 1), list.get(i));
+				}
+				result = ps.executeUpdate();
 			}
 		} catch (Exception e) {
 			Sys.printErr(e);

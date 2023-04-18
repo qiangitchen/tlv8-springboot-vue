@@ -97,4 +97,10 @@
     supdatorid, supdatorname, screatetime, supdatetime, fenabled, sfolderid, version
     from sa_flowdrawlg
   </select>
+  <select id="seachProcessByPath" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select sid, sprocessid, sprocessname, sdrawlg, sprocessacty, screatorid, screatorname, 
+    supdatorid, supdatorname, screatetime, supdatetime, fenabled, sfolderid, version
+    from sa_flowdrawlg
+    where sprocessacty like #{path,jdbcType=VARCHAR}
+  </select>
 </mapper>

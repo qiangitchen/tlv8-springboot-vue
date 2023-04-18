@@ -28,15 +28,17 @@ public class FlowDrawControler extends ActionSupport {
 
 	@Autowired
 	private BaseController baseController;
+	@Autowired
+	private FlowFile flowFile;
 
-	/*
-	 * @获取流程图
+	/**
+	 * 获取流程图
 	 */
 	@ResponseBody
 	@RequestMapping("/getFlowDrawAction")
 	public Object loadFlowDraw() {
 		try {
-			Map m = FlowFile.getFlowDraw(getSprocessid());// 获取流程图
+			Map m = flowFile.getFlowDraw(getSprocessid());// 获取流程图
 			sdrawlg = (String) m.get("SDRAWLG");
 			sprocessacty = (String) m.get("SPROCESSACTY");
 		} catch (Exception e) {
@@ -45,15 +47,15 @@ public class FlowDrawControler extends ActionSupport {
 		return this;
 	}
 
-	/*
-	 * @保存流程图
+	/**
+	 * 保存流程图
 	 */
 	@ResponseBody
 	@RequestMapping("/saveFlowDrawLGAction")
 	public Object saveFlowDrawLG() {
 		try {
 			ContextBean context = baseController.getContext();
-			FlowFile.saveFlowDraw(getSprocessid(), getSprocessname(), getSdrawlg(), getSprocessacty(), context);// 保存流程图
+			flowFile.saveFlowDraw(getSprocessid(), getSprocessname(), getSdrawlg(), getSprocessacty(), context);// 保存流程图
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

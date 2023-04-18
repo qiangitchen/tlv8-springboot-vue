@@ -20,4 +20,6 @@ public interface SaFlowdrawlgService {
 	int updateByPrimaryKey(SaFlowdrawlg row);
 	
 	SaFlowdrawlg selectBySprocessid(String sprocessid);
+	
+	List<SaFlowdrawlg> seachProcessByPath(String path);
 }

@@ -1,323 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
-	<item id="orgExeCutor" isParent="true" name="组织机构执行者函数">
-		<function pId="orgExeCutor" id="getOrgUnitHasActivity"
-			name="获取指定activity权限的组织单元"
-			param="process,activity,in-org,person-member"
-			paramvalue="getProcessID(),,,FALSE"
-			javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasActivity"
-			helper="getOrgUnitHasActivity&lt;br&gt;参数: &lt;br&gt;process: 过程标识,类型是字符串或SYMBOL,为空时表示当前process&lt;br&gt;activity: 活动标识,类型是字符串&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member: TRUE表示获取分配了权限的组织单元下的人员成员,FALSE表示只获取到分配了权限的组织单元&lt;br&gt;说明: 获取分配了activity权限的组织单元,或者这些组织单元下的所有人员成员,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasActivity('dept-code1', 'tartActivity', getCurrentDeptID(), TRUE)">
-		</function>
-		<function pId="orgExeCutor"
-			id="getOrgUnitHasActivityInterAgency" name="获取指定activity权限的组织单元(跨单位)"
-			param="process,activity,person-member"
-			paramvalue="getProcessID(),,FALSE"
-			javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasActivityInterAgency"
-			helper="getOrgUnitHasActivityInterAgency&lt;br&gt;参数: &lt;br&gt;process: 过程标识,类型是字符串或SYMBOL,为空时表示当前process&lt;br&gt;activity: 活动标识,类型是字符串&lt;br&gt;person-member: TRUE表示获取分配了权限的组织单元下的人员成员,FALSE表示只获取到分配了权限的组织单元&lt;br&gt;说明: 获取分配了activity权限的组织单元,或者这些组织单元下的所有人员成员,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasActivity('dept-code1', 'tartActivity', getCurrentDeptID(), TRUE)">
-		</function>
-		<function pId="orgExeCutor" id="getOrgUnitManager"
-			name="获取指定组织单元的管理者"
-			param="org,manage-type,clude-parent,in-org,person-member"
-			paramvalue=",,FALSE,,TRUE"
-			javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitManager"
-			helper="getOrgUnitManager &lt;br&gt;参数: &lt;br&gt;org: 组织的ID或FID,单值用字符串或SYMBOL,多值用逗号分隔&lt;br&gt;manage-type: 管理类型的CODE,空表示所有管理类型&lt;br&gt;clude-parent: FALSE表示直接取ORG上的管理者, TRUE表示ORG的父上的管理者也取&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member：FALSE表示只获取到org的管理者,TRUE表示获取到org的管理者的人员成员&lt;br&gt;说明: 获取指定组织单元的管理者,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitManager(getCurrentDeptID(), 'SYSTEM', TRUE, '', TRUE)&lt;br&gt;">
-		</function>
-		<function pId="orgExeCutor" id="getOrgUnitHasRoleByCode"
-			name="获取属于指定角色的组织单元" param="role-code,in-org,person-member"
-			paramvalue=",,TRUE"
-			javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasRoleByCode"
-			helper="getOrgUnitHasRoleByCode &lt;br&gt;参数: &lt;br&gt;role-code: 角色的CODE,单值用字符串,多值用cons函数组合&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member：是否取到人员成员&lt;br&gt;说明: 获取属于指定角色的组织单元,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasRoleByCode('system', '', TRUE)">
-		</function>
-		<function pId="orgExeCutor"
-			id="getOrgUnitHasRoleByCodeInterAgency" name="获取属于指定角色的组织单元(跨单位)"
-			param="role-code,person-member" paramvalue=",TRUE"
-			javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasRoleByCodeInterAgency"
-			helper="getOrgUnitHasRoleByCodeInterAgency &lt;br&gt;参数: &lt;br&gt;role-code: 角色的CODE,单值用字符串,多值用cons函数组合&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member：是否取到人员成员&lt;br&gt;说明: 获取属于指定角色的组织单元,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasRoleByCode('system', '', TRUE)">
-		</function>
-	</item>
-	<!-- 系统函数配置 -->
-	<item id="process" isParent="true" name="流程执行者函数">
-		<function pId="process" id="getActivityExecutor"
-			name="获取指定环节处理人" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutor"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutor &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutor('ROOT')&lt;br/&gt;getActivityExecutor('ALL')&lt;br/&gt;getActivityExecutor('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorFID"
-			name="获取指定环节处理人FID" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorFID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorFID('ROOT')&lt;br/&gt;getActivityExecutorFID('ALL')&lt;br/&gt;getActivityExecutorFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorOrg"
-			name="获取指定环节处理人所属组织" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorOrg"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorOrg &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorOrg('ROOT')&lt;br/&gt;getActivityExecutorOrg('ALL')&lt;br/&gt;getActivityExecutorOrg('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorOrgID"
-			name="获取指定环节处理人所属组织ID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorOrgID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorOrgID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorOrgFID('ROOT')&lt;br/&gt;getActivityExecutorOrgFID('ALL')&lt;br/&gt;getActivityExecutorOrgFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorOrgFID"
-			name="获取指定环节处理人所属组织FID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorOrgFID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorOrgFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorOrgFID('ROOT')&lt;br/&gt;getActivityExecutorOrgFID('ALL')&lt;br/&gt;getActivityExecutorOrgFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorDept"
-			name="获取指定环节处理人所属部门" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorDept"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorDept &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorDept('ROOT')&lt;br/&gt;getActivityExecutorDept('ALL')&lt;br/&gt;getActivityExecutorDept('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorDeptID"
-			name="获取指定环节处理人所属部门ID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorDeptID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorDeptID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorDeptFID('ROOT')&lt;br/&gt;getActivityExecutorDeptFID('ALL')&lt;br/&gt;getActivityExecutorDeptFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityExecutorDeptFID"
-			name="获取指定环节处理人所属部门FID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorDeptFID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorDeptFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorDeptFID('ROOT')&lt;br/&gt;getActivityExecutorDeptFID('ALL')&lt;br/&gt;getActivityExecutorDeptFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreator"
-			name="获取指定环节提交人" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreator"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreator &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreator('ROOT')&lt;br/&gt;getActivityCreator('ALL')&lt;br/&gt;getActivityCreator('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreatorFID"
-			name="获取指定环节提交人FID" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorFID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorFID('ROOT')&lt;br/&gt;getActivityCreatorFID('ALL')&lt;br/&gt;getActivityCreatorFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreatorOrg"
-			name="获取指定环节提交人所属组织" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorOrg"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorOrg &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorOrg('ROOT')&lt;br/&gt;getActivityCreatorOrg('ALL')&lt;br/&gt;getActivityCreatorOrg('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreatorOrgFID"
-			name="获取指定环节提交人所属组织FID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorOrgFID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorOrgFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorOrgFID('ROOT')&lt;br/&gt;getActivityCreatorOrgFID('ALL')&lt;br/&gt;getActivityCreatorOrgFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreatorDept"
-			name="获取指定环节提交人所属部门" param="flowID,activity" paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorDept"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorDept &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorDept('ROOT')&lt;br/&gt;getActivityCreatorDept('ALL')&lt;br/&gt;getActivityCreatorDept('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreatorDeptID"
-			name="获取指定环节提交人所属部门ID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorDeptID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorDeptFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorDeptFID('ROOT')&lt;br/&gt;getActivityCreatorDeptID('ALL')&lt;br/&gt;getActivityCreatorDeptFID('activity1,activity2')&lt;br/&gt; "></function>
-		<function pId="process" id="getActivityCreatorDeptFID"
-			name="获取指定环节提交人所属部门FID" param="flowID,activity"
-			paramvalue="getFlowID()"
-			javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorDeptFID"
-			helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorDeptFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorDeptFID('ROOT')&lt;br/&gt;getActivityCreatorDeptFID('ALL')&lt;br/&gt;getActivityCreatorDeptFID('activity1,activity2')&lt;br/&gt; "></function>
-	</item>
-	<!-- 系统函数配置 -->
-	<item id="orgUtils" isParent="true" name="组织机构一般函数">
-		<function pId="orgUtils" id="getCurrentPersonID"
-			name="获取当前人员ID"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPersonID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPersonCode"
-			name="获取当前人员Code"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPersonCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPersonName"
-			name="获取当前人员Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPersonName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonName()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPersonFID"
-			name="获取当前人员FID"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPersonFID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonFID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPersonFCode"
-			name="获取当前人员FCode"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPersonFCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonFCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPersonFName"
-			name="获取当前人员Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPersonFName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonFName()">
-		</function>
-		<!-- 岗位信息 -->
-		<function pId="orgUtils" id="getCurrentPosID"
-			name="获取当前人岗位ID" javacode="com.tlv8.flw.flwOrgUtils.getCurrentPosID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPosCode"
-			name="获取当前人岗位Code"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPosCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPosName"
-			name="获取当前人岗位Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPosName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosName()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPosFID"
-			name="获取当前人岗位FID"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPosFID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosFID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPosFCode"
-			name="获取当前人岗位FCode"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPosFCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosFCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentPosFName"
-			name="获取当前人岗位Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentPosFName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosFName()">
-		</function>
-		<!-- 部门信息 -->
-		<function pId="orgUtils" id="getCurrentDeptID"
-			name="获取当前人部门ID" javacode="com.tlv8.flw.flwOrgUtils.getCurrentDeptID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentDeptCode"
-			name="获取当前人部门Code"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentDeptCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentDeptName"
-			name="获取当前人部门Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentDeptName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptName()">
-		</function>
-		<function pId="orgUtils" id="getCurrentDeptFID"
-			name="获取当前人部门FID"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentDeptFID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptFID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentDeptFCode"
-			name="获取当前人部门FCode"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentDeptFCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptFCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentDeptFName"
-			name="获取当前人部门Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentDeptFName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptFName()">
-		</function>
-		<!-- 机构信息 -->
-		<function pId="orgUtils" id="getCurrentOgnID"
-			name="获取当前人机构ID" javacode="com.tlv8.flw.flwOrgUtils.getCurrentOgnID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOgnCode"
-			name="获取当前人机构Code"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOgnCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOgnName"
-			name="获取当前人机构Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOgnName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnName()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOgnFID"
-			name="获取当前人机构FID"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOgnFID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnFID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOgnFCode"
-			name="获取当前人机构FCode"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOgnFCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnFCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOgnFName"
-			name="获取当前人机构Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOgnFName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnFName()">
-		</function>
-		<!-- 组织信息 -->
-		<function pId="orgUtils" id="getCurrentOrgID"
-			name="获取当前人组织ID" javacode="com.tlv8.flw.flwOrgUtils.getCurrentOrgID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOrgCode"
-			name="获取当前人组织Code"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOrgCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOrgName"
-			name="获取当前人组织Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOrgName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgName()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOrgFID"
-			name="获取当前人组织FID"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOrgFID"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgFID()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOrgFCode"
-			name="获取当前人组织FCode"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOrgFCode"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgFCode()">
-		</function>
-		<function pId="orgUtils" id="getCurrentOrgFName"
-			name="获取当前人组织Name"
-			javacode="com.tlv8.flw.flwOrgUtils.getCurrentOrgFName"
-			helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgFName()">
-		</function>
-	</item>
-	<!-- 系统函数配置 -->
-	<item id="busiExp" isParent="true" name="业务功能">
-		<function pId="busiExp" id="getRelationValueString"
-			name="获取表中字段的值"
-			param="concept,individual,condition,orderRelation,returnRelation,dbkey"
-			paramvalue=",getProcesssData1()"
-			javacode="com.tlv8.flw.expression.BusinessExpression.getRelationValueString"
-			helper="说明： 根据传入参数从数据库中获取字符串值，此函数可嵌套用来查从表数据&lt;br/&gt;参数说明：&lt;br/&gt;concept【必填】： 表(视图)名称&lt;br/&gt;individual【必填】： 主键的值 fID/sID 流程单据主键 如 ：getProcesssData1()&lt;br/&gt;condition【可选】： 过虑条件， 例如：fName='system'; &lt;br/&gt;orderRelation【可选】： 用来作排序的字段&lt;br/&gt;returnRelation【必填】： 要取哪个字段的值.&lt;br/&gt;dbkey【必填】：数据库连接标志。">
-		</function>
-		<function pId="busiExp" id="electChoice" name="空值选择"
-			param="value1,value2" paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.electChoice"
-			helper="说明： 如果value1存在取value1否则取value2">
-		</function>
-		<function pId="busiExp" id="isNull" name="是否为空"
-			param="values" paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.isNull"
-			helper="说明： 判断是否为空">
-		</function>
-		<function pId="busiExp" id="concat" name="字符串连接"
-			param="values" paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.concat"
-			helper="说明： 多个字符串连接，多个参数">
-		</function>
-		<function pId="busiExp" id="upper" name="字符串转大写"
-			param="value" paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.upper"
-			helper="说明： 把字符串转成大写字符">
-		</function>
-		<function pId="busiExp" id="lower" name="字符串转小写"
-			param="value" paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.lower"
-			helper="说明： 把字符串转成小写字符">
-		</function>
-		<function pId="busiExp" id="trim" name="字符串去空格" param="value"
-			paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.trim"
-			helper="说明： 字符串去空格">
-		</function>
-		<function pId="busiExp" id="isContain" name="是否包含"
-			param="str1,str2" paramvalue=""
-			javacode="com.tlv8.flw.expression.CommonalityFunction.isContain"
-			helper="说明： 判断字符串str1中是否包含str2">
-		</function>
-	</item>
-	<item id="others" isParent="true" name="其他">
-		<function pId="others" id="getSupplieridActivity"
-			name="获取供应商对应的采购员" param="supplycede" paramvalue=""
-			javacode="com.tlv8.flw.other.getActivitySupplyId.getSupplyerActivity"
-			helper="根据当前供应商获取对应的采购员 ">
-		</function>
-		<function pId="others" id="judgeIsNotSypplyerActivity"
-			name="判断是否是采购员" param="" paramvalue=""
-			javacode="com.tlv8.flw.other.judgeIsNotSypplyer.judgeIsNotSypplyerActivity"
-			helper="根据当前登录者判断是否是采购员 ">
-		</function>
-		<function pId="others" id="locateCustomerOperator"
-			name="获取当前客户的业务员" param="customid" paramvalue=""
-			javacode="com.tlv8.flw.other.locateCustomerOperatorname.locateCustomerOperator"
-			helper="说明：根据当前客户的ID获得其业务员 &lt;br/&gt;参数说明：&lt;br/&gt;customid【必填】：客户的ID">
-		</function>
-	</item>
+
+<root> 
+  <item id="orgExeCutor" isParent="true" name="组织机构执行者函数"> 
+    <function pId="orgExeCutor" id="getOrgUnitHasActivity" name="获取指定activity权限的组织单元" param="process,activity,in-org,person-member" paramvalue="getProcessID(),,,FALSE" javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasActivity" helper="getOrgUnitHasActivity&lt;br&gt;参数: &lt;br&gt;proces 过程标识,类型是字符串或SYMBOL,为空时表示当前process&lt;br&gt;activity: 活动标识,类型是字符串&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member: TRUE表示获取分配了权限的组织单元下的人员成员,FALSE表示只获取到分配了权限的组织单元&lt;br&gt;说明: 获取分配了activity权限的组织单元,或者这些组织单元下的所有人员成员,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasActivity('dept-code1', 'tartActivity', getCurrentDeptID(), TRUE)"></function>  
+    <function pId="orgExeCutor" id="getOrgUnitHasActivityInterAgency" name="获取指定activity权限的组织单元(跨单位)" param="process,activity,person-member" paramvalue="getProcessID(),,FALSE" javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasActivityInterAgency" helper="getOrgUnitHasActivityInterAgency&lt;br&gt;参数: &lt;br&gt;proces 过程标识,类型是字符串或SYMBOL,为空时表示当前process&lt;br&gt;activity: 活动标识,类型是字符串&lt;br&gt;person-member: TRUE表示获取分配了权限的组织单元下的人员成员,FALSE表示只获取到分配了权限的组织单元&lt;br&gt;说明: 获取分配了activity权限的组织单元,或者这些组织单元下的所有人员成员,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasActivity('dept-code1', 'tartActivity', getCurrentDeptID(), TRUE)"></function>  
+    <function pId="orgExeCutor" id="getOrgUnitManager" name="获取指定组织单元的管理者" param="org,manage-type,clude-parent,in-org,person-member" paramvalue=",,FALSE,,TRUE" javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitManager" helper="getOrgUnitManager &lt;br&gt;参数: &lt;br&gt;org: 组织的ID或FID,单值用字符串或SYMBOL,多值用逗号分隔&lt;br&gt;manage-type: 管理类型的CODE,空表示所有管理类型&lt;br&gt;clude-parent: FALSE表示直接取ORG上的管理者, TRUE表示ORG的父上的管理者也取&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member：FALSE表示只获取到org的管理者,TRUE表示获取到org的管理者的人员成员&lt;br&gt;说明: 获取指定组织单元的管理者,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitManager(getCurrentDeptID(), 'SYSTEM', TRUE, '', TRUE)&lt;br&gt;"></function>  
+    <function pId="orgExeCutor" id="getOrgUnitHasRoleByCode" name="获取属于指定角色的组织单元" param="role-code,in-org,person-member" paramvalue=",,TRUE" javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasRoleByCode" helper="getOrgUnitHasRoleByCode &lt;br&gt;参数: &lt;br&gt;role-code: 角色的CODE,单值用字符串,多值用cons函数组合&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member：是否取到人员成员&lt;br&gt;说明: 获取属于指定角色的组织单元,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasRoleByCode('system', '', TRUE)"></function>  
+    <function pId="orgExeCutor" id="getOrgUnitHasRoleByCodeInterAgency" name="获取属于指定角色的组织单元(跨单位)" param="role-code,person-member" paramvalue=",TRUE" javacode="com.tlv8.flw.expression.OrgExecutorExpression.getOrgUnitHasRoleByCodeInterAgency" helper="getOrgUnitHasRoleByCodeInterAgency &lt;br&gt;参数: &lt;br&gt;role-code: 角色的CODE,单值用字符串,多值用cons函数组合&lt;br&gt;in-org: 返回值必须在指定组织范围内,值是组织的ID或FID,单值用字符串,多值用cons函数组合&lt;br&gt;person-member：是否取到人员成员&lt;br&gt;说明: 获取属于指定角色的组织单元,可直接当作执行者返回&lt;br&gt;例子: &lt;br&gt;getOrgUnitHasRoleByCode('system', '', TRUE)"></function> 
+  </item>  
+  <!-- 系统函数配置 -->  
+  <item id="process" isParent="true" name="流程执行者函数"> 
+    <function pId="process" id="getActivityExecutor" name="获取指定环节处理人" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutor" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutor &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutor('ROOT')&lt;br/&gt;getActivityExecutor('ALL')&lt;br/&gt;getActivityExecutor('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorFID" name="获取指定环节处理人FID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorFID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorFID('ROOT')&lt;br/&gt;getActivityExecutorFID('ALL')&lt;br/&gt;getActivityExecutorFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorOrg" name="获取指定环节处理人所属组织" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorOrg" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorOrg &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorOrg('ROOT')&lt;br/&gt;getActivityExecutorOrg('ALL')&lt;br/&gt;getActivityExecutorOrg('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorOrgID" name="获取指定环节处理人所属组织ID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorOrgID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorOrgID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorOrgFID('ROOT')&lt;br/&gt;getActivityExecutorOrgFID('ALL')&lt;br/&gt;getActivityExecutorOrgFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorOrgFID" name="获取指定环节处理人所属组织FID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorOrgFID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorOrgFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorOrgFID('ROOT')&lt;br/&gt;getActivityExecutorOrgFID('ALL')&lt;br/&gt;getActivityExecutorOrgFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorDept" name="获取指定环节处理人所属部门" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorDept" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorDept &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorDept('ROOT')&lt;br/&gt;getActivityExecutorDept('ALL')&lt;br/&gt;getActivityExecutorDept('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorDeptID" name="获取指定环节处理人所属部门ID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorDeptID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorDeptID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorDeptFID('ROOT')&lt;br/&gt;getActivityExecutorDeptFID('ALL')&lt;br/&gt;getActivityExecutorDeptFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityExecutorDeptFID" name="获取指定环节处理人所属部门FID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityExecutorDeptFID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityExecutorDeptFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityExecutorDeptFID('ROOT')&lt;br/&gt;getActivityExecutorDeptFID('ALL')&lt;br/&gt;getActivityExecutorDeptFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreator" name="获取指定环节提交人" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreator" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreator &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的处理人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreator('ROOT')&lt;br/&gt;getActivityCreator('ALL')&lt;br/&gt;getActivityCreator('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreatorFID" name="获取指定环节提交人FID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorFID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorFID('ROOT')&lt;br/&gt;getActivityCreatorFID('ALL')&lt;br/&gt;getActivityCreatorFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreatorOrg" name="获取指定环节提交人所属组织" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorOrg" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorOrg &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorOrg('ROOT')&lt;br/&gt;getActivityCreatorOrg('ALL')&lt;br/&gt;getActivityCreatorOrg('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreatorOrgFID" name="获取指定环节提交人所属组织FID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorOrgFID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorOrgFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorOrgFID('ROOT')&lt;br/&gt;getActivityCreatorOrgFID('ALL')&lt;br/&gt;getActivityCreatorOrgFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreatorDept" name="获取指定环节提交人所属部门" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorDept" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorDept &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorDept('ROOT')&lt;br/&gt;getActivityCreatorDept('ALL')&lt;br/&gt;getActivityCreatorDept('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreatorDeptID" name="获取指定环节提交人所属部门ID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorDeptID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorDeptFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorDeptFID('ROOT')&lt;br/&gt;getActivityCreatorDeptID('ALL')&lt;br/&gt;getActivityCreatorDeptFID('activity1,activity2')&lt;br/&gt; "></function>  
+    <function pId="process" id="getActivityCreatorDeptFID" name="获取指定环节提交人所属部门FID" param="flowID,activity" paramvalue="getFlowID()" javacode="com.tlv8.flw.expression.ProcessExpression.getActivityCreatorDeptFID" helper="flowID值为当前流程标识,默认为:getFlowID()&lt;br/&gt;getActivityCreatorDeptFID &lt;br/&gt; 参数: &lt;br/&gt;activity: 可以直接传activity标识,单值用字符串，多值用逗号分隔， ROOT表示首环节,值为ALL时表示所有环节 说明: 获取指定环节的提交人,可直接当作执行者返回&lt;br/&gt;例子: &lt;br/&gt;getActivityCreatorDeptFID('ROOT')&lt;br/&gt;getActivityCreatorDeptFID('ALL')&lt;br/&gt;getActivityCreatorDeptFID('activity1,activity2')&lt;br/&gt; "></function> 
+  </item>  
+  <!-- 系统函数配置 -->  
+  <item id="orgUtils" isParent="true" name="组织机构一般函数"> 
+    <function pId="orgUtils" id="getCurrentPersonID" name="获取当前人员ID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPersonID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonID()"></function>  
+    <function pId="orgUtils" id="getCurrentPersonCode" name="获取当前人员Code" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPersonCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonCode()"></function>  
+    <function pId="orgUtils" id="getCurrentPersonName" name="获取当前人员Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPersonName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonName()"></function>  
+    <function pId="orgUtils" id="getCurrentPersonFID" name="获取当前人员FID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPersonFID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonFID()"></function>  
+    <function pId="orgUtils" id="getCurrentPersonFCode" name="获取当前人员FCode" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPersonFCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonFCode()"></function>  
+    <function pId="orgUtils" id="getCurrentPersonFName" name="获取当前人员Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPersonFName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPersonFName()"></function>  
+    <!-- 岗位信息 -->  
+    <function pId="orgUtils" id="getCurrentPosID" name="获取当前人岗位ID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPosID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosID()"></function>  
+    <function pId="orgUtils" id="getCurrentPosCode" name="获取当前人岗位Code" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPosCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosCode()"></function>  
+    <function pId="orgUtils" id="getCurrentPosName" name="获取当前人岗位Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPosName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosName()"></function>  
+    <function pId="orgUtils" id="getCurrentPosFID" name="获取当前人岗位FID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPosFID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosFID()"></function>  
+    <function pId="orgUtils" id="getCurrentPosFCode" name="获取当前人岗位FCode" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPosFCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosFCode()"></function>  
+    <function pId="orgUtils" id="getCurrentPosFName" name="获取当前人岗位Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentPosFName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentPosFName()"></function>  
+    <!-- 部门信息 -->  
+    <function pId="orgUtils" id="getCurrentDeptID" name="获取当前人部门ID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentDeptID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptID()"></function>  
+    <function pId="orgUtils" id="getCurrentDeptCode" name="获取当前人部门Code" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentDeptCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptCode()"></function>  
+    <function pId="orgUtils" id="getCurrentDeptName" name="获取当前人部门Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentDeptName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptName()"></function>  
+    <function pId="orgUtils" id="getCurrentDeptFID" name="获取当前人部门FID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentDeptFID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptFID()"></function>  
+    <function pId="orgUtils" id="getCurrentDeptFCode" name="获取当前人部门FCode" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentDeptFCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptFCode()"></function>  
+    <function pId="orgUtils" id="getCurrentDeptFName" name="获取当前人部门Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentDeptFName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentDeptFName()"></function>  
+    <!-- 机构信息 -->  
+    <function pId="orgUtils" id="getCurrentOgnID" name="获取当前人机构ID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOgnID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnID()"></function>  
+    <function pId="orgUtils" id="getCurrentOgnCode" name="获取当前人机构Code" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOgnCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnCode()"></function>  
+    <function pId="orgUtils" id="getCurrentOgnName" name="获取当前人机构Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOgnName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnName()"></function>  
+    <function pId="orgUtils" id="getCurrentOgnFID" name="获取当前人机构FID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOgnFID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnFID()"></function>  
+    <function pId="orgUtils" id="getCurrentOgnFCode" name="获取当前人机构FCode" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOgnFCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnFCode()"></function>  
+    <function pId="orgUtils" id="getCurrentOgnFName" name="获取当前人机构Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOgnFName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOgnFName()"></function>  
+    <!-- 组织信息 -->  
+    <function pId="orgUtils" id="getCurrentOrgID" name="获取当前人组织ID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOrgID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgID()"></function>  
+    <function pId="orgUtils" id="getCurrentOrgCode" name="获取当前人组织Code" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOrgCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgCode()"></function>  
+    <function pId="orgUtils" id="getCurrentOrgName" name="获取当前人组织Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOrgName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgName()"></function>  
+    <function pId="orgUtils" id="getCurrentOrgFID" name="获取当前人组织FID" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOrgFID" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgFID()"></function>  
+    <function pId="orgUtils" id="getCurrentOrgFCode" name="获取当前人组织FCode" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOrgFCode" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgFCode()"></function>  
+    <function pId="orgUtils" id="getCurrentOrgFName" name="获取当前人组织Name" javacode="com.tlv8.flw.expression.FlwOrgUtils.getCurrentOrgFName" helper="说明: 获取当前人的ID，当前人是指拥有当前Process/Activity/Action权限的人，&lt;br/&gt;可能为当前登录着，或者当前登录着代理的人。&lt;br/&gt;例子: getCurrentOrgFName()"></function> 
+  </item>  
+  <!-- 系统函数配置 -->  
+  <item id="busiExp" isParent="true" name="业务功能"> 
+    <function pId="busiExp" id="getRelationValueString" name="获取表中字段的值" param="concept,individual,condition,orderRelation,returnRelation,dbkey" paramvalue=",getProcesssData1(),,,,spring" javacode="com.tlv8.flw.expression.BusinessExpression.getRelationValueString" helper="说明： 根据传入参数从数据库中获取字符串值，此函数可嵌套用来查从表数据&lt;br/&gt;参数说明：&lt;br/&gt;concept【必填】： 表(视图)名称&lt;br/&gt;individual【必填】： 主键的值 fID/sID 流程单据主键 如 ：getProcesssData1()&lt;br/&gt;condition【可选】： 过虑条件， 例如：fName='system'; &lt;br/&gt;orderRelation【可选】： 用来作排序的字段&lt;br/&gt;returnRelation【必填】： 要取哪个字段的值.&lt;br/&gt;dbkey【必填】：数据库连接标志。"></function>  
+    <function pId="busiExp" id="electChoice" name="空值选择" param="value1,value2" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.electChoice" helper="说明： 如果value1存在取value1否则取value2"></function>  
+    <function pId="busiExp" id="isNull" name="是否为空" param="values" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.isNull" helper="说明： 判断是否为空"></function>  
+    <function pId="busiExp" id="concat" name="字符串连接" param="values" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.concat" helper="说明： 多个字符串连接，多个参数"></function>  
+    <function pId="busiExp" id="upper" name="字符串转大写" param="value" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.upper" helper="说明： 把字符串转成大写字符"></function>  
+    <function pId="busiExp" id="lower" name="字符串转小写" param="value" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.lower" helper="说明： 把字符串转成小写字符"></function>  
+    <function pId="busiExp" id="trim" name="字符串去空格" param="value" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.trim" helper="说明： 字符串去空格"></function>  
+    <function pId="busiExp" id="isContain" name="是否包含" param="str1,str2" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.isContain" helper="说明： 判断字符串str1中是否包含str2"></function> 
+  </item>  
+  <item id="others" isParent="true" name="其他"> 
+    <function pId="others" id="getSupplieridActivity" name="获取供应商对应的采购员" param="supplycede" paramvalue="" javacode="com.tlv8.flw.other.getActivitySupplyId.getSupplyerActivity" helper="根据当前供应商获取对应的采购员 "></function>  
+    <function pId="others" id="judgeIsNotSypplyerActivity" name="判断是否是采购员" param="" paramvalue="" javacode="com.tlv8.flw.other.judgeIsNotSypplyer.judgeIsNotSypplyerActivity" helper="根据当前登录者判断是否是采购员 "></function>  
+    <function pId="others" id="locateCustomerOperator" name="获取当前客户的业务员" param="customid" paramvalue="" javacode="com.tlv8.flw.other.locateCustomerOperatorname.locateCustomerOperator" helper="说明：根据当前客户的ID获得其业务员 &lt;br/&gt;参数说明：&lt;br/&gt;customid【必填】：客户的ID"></function> 
+  </item> 
 </root>

@@ -14,6 +14,8 @@
         <result column="shidden" property="hidden" jdbcType="INTEGER"/>
         <result column="sstatus" property="status" jdbcType="INTEGER"/>
         <result column="si18n" property="i18n" jdbcType="VARCHAR"/>
+        <result column="process" property="process" jdbcType="VARCHAR"/>
+        <result column="activity" property="activity" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="selectList" resultMap="BaseResultMap" parameterType="java.util.Map">
         select m.sid                                                              as sid,
@@ -24,10 +26,12 @@
                m.layuiicon                                                        as sicon,
                m.label                                                            as stitle,
                m.sorts                                                            as ssort,
-               ''                                                                 as slink,
+               m.url                                                              as slink,
                case when m.display = 'hide' then 1 else 0 end                     as shidden,
                1                                                                  as sstatus,
-               m.i18n                                                             as si18n
+               m.i18n                                                             as si18n,
+               m.process 														  as process,
+               m.activity                                                         as activity
         from sa_opmenutree m
         where m.sid in (select p.smenuid
                         from SA_OpPermission p

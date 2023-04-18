@@ -32,7 +32,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		String patex = request.getRequestURI();
-		if (isLoginPage(patex) || isIgnore(patex)) {
+		if (isLoginPage(patex) || isIgnore(patex) || isSource(patex)) {
 			chain.doFilter(request, response);
 		} else {
 			// 判断是否已登录
@@ -40,8 +40,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 				writeLog.writeLog(request);
 				chain.doFilter(request, response);
 			} else {
-				ServletUtils.renderString(response,
-						JSON.toJSONString(AjaxResult.error(HttpStatus.UNAUTHORIZED, "请先登录")));
+				if (isWebPage(patex)) {
+					response.sendRedirect("/portal/login.html");
+				} else {
+					ServletUtils.renderString(response,
+							JSON.toJSONString(AjaxResult.error(HttpStatus.UNAUTHORIZED, "请先登录")));
+				}
 			}
 		}
 	}
@@ -49,16 +53,44 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	/**
 	 * 判断是否为登录-检查登录
 	 */
-	private boolean isLoginPage(String patex) {
-		boolean isre = patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
+	protected boolean isLoginPage(String patex) {
+		return patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
 				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
-				|| patex.contains("/logout") || patex.contains("/MD5logout");
-		return isre;
+				|| patex.contains("/logout") || patex.contains("/MD5logout") || "/".equals(patex);
 	}
 
-	private boolean isIgnore(String patex) {
-		boolean isre = patex.contains("/favicon.ico") || patex.contains("/DocServer/") || patex.contains("/ureport/");
-		return isre;
+	/**
+	 * 忽略的资源
+	 * 
+	 * @param patex
+	 * @return boolean
+	 */
+	protected boolean isIgnore(String patex) {
+		return patex.contains("/favicon.ico") || patex.contains("/DocServer/");
+	}
+
+	/**
+	 * 可以直接访问的静态资源
+	 * 
+	 * @param patex
+	 * @return boolean
+	 */
+	protected boolean isSource(String patex) {
+		String pp = patex.toLowerCase();
+		return pp.endsWith(".js") || pp.endsWith(".css") || pp.endsWith(".jpg") || pp.endsWith(".jpeg")
+				|| pp.endsWith(".png") || pp.endsWith(".gif") || pp.endsWith(".woff2") || pp.endsWith(".cab")
+				|| pp.endsWith(".swf") || pp.endsWith(".svg");
+	}
+
+	/**
+	 * 判断访问的是否问静态网页
+	 * 
+	 * @param patex
+	 * @return
+	 */
+	protected boolean isWebPage(String patex) {
+		String pp = patex.toLowerCase();
+		return pp.endsWith(".html") || pp.endsWith(".htm") || pp.endsWith(".xhtml");
 	}
 
 }

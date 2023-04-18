@@ -18,6 +18,8 @@ public class SaMenu {
     private boolean hidden;
     private boolean status;
     private String i18n;
+    private String process;
+    private String activity;
 
     public void setId(String id) {
         this.id = id;
@@ -114,4 +116,20 @@ public class SaMenu {
     public String getI18n() {
         return i18n;
     }
+
+	public String getProcess() {
+		return process;
+	}
+
+	public void setProcess(String process) {
+		this.process = process;
+	}
+
+	public String getActivity() {
+		return activity;
+	}
+
+	public void setActivity(String activity) {
+		this.activity = activity;
+	}
 }

@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.utils.CodeUtils;
 import com.tlv8.common.utils.StringUtils;
+import com.tlv8.common.utils.spring.SpringUtils;
 import com.tlv8.flw.expression.BooleanExpression;
 
 /**
@@ -45,13 +46,16 @@ public class FlowActivity {
 	private String transeRole;
 	private String outquery;
 
+	FlowFile flowFile;
+
 	/**
 	 * 构造方法
 	 * 
 	 * @ActivityID type均可
 	 */
 	public FlowActivity(String ProcessID, String ActivityID) {
-		Map actMap = FlowFile.getFlowDraw(ProcessID);
+		this.flowFile = SpringUtils.getBean(FlowFile.class);
+		Map actMap = flowFile.getFlowDraw(ProcessID);
 		if (actMap.isEmpty()) {
 			new Exception("未找到ProcessID='" + ProcessID + "' 对应的流程信息!").printStackTrace();
 		}
@@ -74,8 +78,8 @@ public class FlowActivity {
 					activityname = Acjson.getString("name");
 					urlname = Acjson.getString("name");
 					try {
-						String pstr = Acjson.getString("property");
-						if (StringUtils.isNotEmpty(pstr)) {
+						String propertystr = Acjson.getString("property");
+						if (StringUtils.isNotEmpty(propertystr)) {
 							property = JSON.parseArray(Acjson.getString("property"));
 							for (int j = 0; j < property.size(); j++) {
 								JSONObject propJson = (JSONObject) property.get(j);
@@ -134,6 +138,7 @@ public class FlowActivity {
 	}
 
 	public FlowActivity(Map actMap, String ProcessID, String ActivityID) {
+		this.flowFile = SpringUtils.getBean(FlowFile.class);
 		processID = ProcessID;
 		processName = (String) actMap.get("SPROCESSNAME");
 		processActy = (String) actMap.get("SPROCESSACTY");
@@ -153,8 +158,8 @@ public class FlowActivity {
 					activityname = Acjson.getString("name");
 					urlname = Acjson.getString("name");
 					try {
-						String pstr = Acjson.getString("property");
-						if (StringUtils.isNotEmpty(pstr)) {
+						String propertystr = Acjson.getString("property");
+						if (StringUtils.isNotEmpty(propertystr)) {
 							property = JSON.parseArray(Acjson.getString("property"));
 							for (int j = 0; j < property.size(); j++) {
 								JSONObject propJson = (JSONObject) property.get(j);

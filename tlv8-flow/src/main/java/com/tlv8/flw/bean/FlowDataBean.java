@@ -8,13 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tlv8.flw.helper.FlowBaseHelper;
+import com.tlv8.common.action.ActionSupport;
 
 /**
+ * 流程处理需要的基础字段
+ * 
  * @author ChenQian
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class FlowDataBean extends FlowBaseHelper {
+public class FlowDataBean extends ActionSupport {
 	protected String processID;// 流程标识
 	protected String processName;// 流程名称
 	protected String flowID;// 当前流程标识

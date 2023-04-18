@@ -13,7 +13,7 @@ import cn.dev33.satoken.SaManager;
  *
  */
 @SpringBootApplication
-@ImportResource("ureport-console-context.xml")
+@ImportResource("classpath:ureport-console-context.xml")
 public class TLv8Application {
 	public static void main(String[] args) {
 		SpringApplication.run(TLv8Application.class, args);

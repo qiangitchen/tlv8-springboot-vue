@@ -37,11 +37,10 @@ public class ExecutorGroupFilter {
 	 * @param orgids
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	public static String filterSubOgn(String orgids, ContextBean context) {
 		StringArray pps = new StringArray();
 		String ognfid = context.getCurrentOgnFullID();
-		SqlSession session = DBUtils.getSession("system");
+		SqlSession session = DBUtils.getSqlSession();
 		Connection conn = null;
 		try {
 			conn = session.getConnection();

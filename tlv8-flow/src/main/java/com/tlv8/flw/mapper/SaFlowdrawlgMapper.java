@@ -50,4 +50,11 @@ public interface SaFlowdrawlgMapper {
      * @return
      */
     SaFlowdrawlg selectBySprocessid(String sprocessid);
+    
+    /**
+     * 根据页面地址查找流程图
+     * @param path
+     * @return
+     */
+    List<SaFlowdrawlg> seachProcessByPath(String path);
 }

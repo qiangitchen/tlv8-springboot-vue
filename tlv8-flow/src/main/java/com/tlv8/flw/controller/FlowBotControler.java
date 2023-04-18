@@ -15,6 +15,7 @@ import com.tlv8.flw.base.TaskData;
 import com.tlv8.flw.bean.FlowBotBean;
 import com.tlv8.flw.bean.FlowBotXBean;
 import com.tlv8.flw.bean.FlowDataBean;
+import com.tlv8.flw.helper.FlowBaseHelper;
 import com.tlv8.flw.pojo.SaFlowdrawlg;
 import com.tlv8.flw.service.SaFlowdrawlgService;
 
@@ -25,6 +26,11 @@ import com.tlv8.flw.service.SaFlowdrawlgService;
 @Scope("prototype")
 public class FlowBotControler extends FlowDataBean {
 	Data data = new Data();
+	
+	@Autowired
+	FlowBaseHelper flowBaseHelper;
+	@Autowired
+	TaskData taskData;
 
 	@Autowired
 	private SaFlowdrawlgService saFlowdrawlgService;
@@ -37,7 +43,7 @@ public class FlowBotControler extends FlowDataBean {
 		this.data = data;
 	}
 
-	/*
+	/**
 	 * 加载波特图
 	 */
 	@ResponseBody
@@ -55,7 +61,7 @@ public class FlowBotControler extends FlowDataBean {
 		return this;
 	}
 
-	/*
+	/**
 	 * 加载波特图X
 	 */
 	@ResponseBody
@@ -73,16 +79,16 @@ public class FlowBotControler extends FlowDataBean {
 		return this;
 	}
 
-	/*
+	/**
 	 * 加载流程图
 	 */
 	@ResponseBody
 	@RequestMapping("/flowloadIocusAction")
 	public Object loadIocus() {
 		try {
-			processID = TaskData.getProcessID(flowID);
+			processID = taskData.getProcessID(flowID);
 			if (processID == null || "".equals(processID)) {
-				processID = FlowControler.seachProcessID(currentUrl, request);
+				processID = flowBaseHelper.seachProcessID(currentUrl, request);
 			}
 			SaFlowdrawlg flowdraw = saFlowdrawlgService.selectBySprocessid(processID);
 			Map<String, String> reD = new HashMap<String, String>();
@@ -99,7 +105,7 @@ public class FlowBotControler extends FlowDataBean {
 		return this;
 	}
 
-	/*
+	/**
 	 * 加载流程图
 	 */
 	@ResponseBody
@@ -121,14 +127,14 @@ public class FlowBotControler extends FlowDataBean {
 		return this;
 	}
 
-	/*
+	/**
 	 * 检测流程是否已经结束
 	 */
 	@ResponseBody
 	@RequestMapping("/flowcheckfinishAction")
 	public Object checkfinish() {
 		try {
-			boolean isfinish = TaskData.checkisfinished(flowID);
+			boolean isfinish = taskData.checkisfinished(flowID);
 			data.setData(String.valueOf(isfinish));
 			data.setFlag("true");
 		} catch (Exception e) {

@@ -32,5 +32,7 @@ export default {
   "sysLog": "系统日志",
   "recycle": "回收站",
   "docManage": "文档管理",
-  "docSetting":"文档配置"
+  "docSetting":"文档配置",
+  "flowManager":"流程管理",
+  "flowDesigner":"流程设计",
 }

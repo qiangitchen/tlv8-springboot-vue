@@ -1,3 +1,4 @@
+Application Name: ${tlv8.name}
 Application Version: ${tlv8.version}
 Spring Boot Version: ${spring-boot.version}
 ////////////////////////////////////////////////////////////////////

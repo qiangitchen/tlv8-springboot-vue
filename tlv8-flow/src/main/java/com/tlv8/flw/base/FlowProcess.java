@@ -7,17 +7,20 @@ import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.tlv8.common.utils.spring.SpringUtils;
 
 @SuppressWarnings({ "rawtypes" })
 public class FlowProcess {
-
+	FlowFile flowFile;
+	
 	private Map actMap;
 	private String processID;
 	private String processName;
 	private String processActy;
 
 	public FlowProcess(String processID) {
-		this.actMap = FlowFile.getFlowDraw(processID);
+		this.flowFile = SpringUtils.getBean(FlowFile.class);
+		this.actMap = flowFile.getFlowDraw(processID);
 		this.processID = processID;
 		this.processName = (String) actMap.get("SPROCESSNAME");
 		this.processActy = (String) actMap.get("SPROCESSACTY");
