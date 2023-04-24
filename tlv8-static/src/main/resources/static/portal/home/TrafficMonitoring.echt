@@ -44,7 +44,7 @@
   </chart>
   <script>
   	function loadNetstateInfo(){
-  		$.get('/tlv8/monitor/NetInterfaceStat', function (data) {
+  		$.get('../../monitor/NetInterfaceStat', function (data) {
   			 if(typeof data.data == "string"){
   			 	data = window.eval("("+data.data+")");
   			 }

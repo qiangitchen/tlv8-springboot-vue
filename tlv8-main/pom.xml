@@ -44,10 +44,16 @@
 			<artifactId>tlv8-system</artifactId>
 		</dependency>
 
-		<!-- 文件存储模块 -->
+		<!-- 文档服务 -->
 		<dependency>
 			<groupId>com.tlv8</groupId>
-			<artifactId>tlv8-doc</artifactId>
+			<artifactId>tlv8-doc-server</artifactId>
+		</dependency>
+		
+		<!-- 文件存取 -->
+		<dependency>
+			<groupId>com.tlv8</groupId>
+			<artifactId>tlv8-doc-client</artifactId>
 		</dependency>
 		
 		<!-- 流程引擎 -->

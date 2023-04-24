@@ -43,7 +43,7 @@ spring:
   # 文件上传
   servlet:
      multipart:
-       enabled: false
+       enabled: true
        # 单个文件大小
        max-file-size:  100MB
        # 设置总上传的文件大小
@@ -59,13 +59,13 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: 162.14.107.120
+    host: dev.tlv8.com
     # 端口，默认为6379
     port: 6379
     # 数据库索引
     database: 0
     # 密码
-    password: TLv8redisPassHJklttU97yza
+    password: TLv8redisPassHJklttU97y
     # 连接超时时间
     timeout: 10s
     lettuce:

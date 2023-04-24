@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.10</version>
+        <version>2.7.11</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -357,12 +357,19 @@
                 <version>${tlv8.version}</version>
             </dependency>
 
-            <!-- 文件存储模块 -->
+            <!-- 文档服务 -->
             <dependency>
                 <groupId>com.tlv8</groupId>
-                <artifactId>tlv8-doc</artifactId>
+                <artifactId>tlv8-doc-server</artifactId>
                 <version>${tlv8.version}</version>
             </dependency>
+            
+            <!-- 文件存取 -->
+			<dependency>
+				<groupId>com.tlv8</groupId>
+				<artifactId>tlv8-doc-client</artifactId>
+				<version>${tlv8.version}</version>
+			</dependency>
             
             <!-- 流程引擎 -->
             <dependency>
@@ -406,7 +413,8 @@
         <module>tlv8-common</module>
         <module>tlv8-system</module>
         <module>tlv8-ureport</module>
-        <module>tlv8-doc</module>
+        <module>tlv8-doc-server</module>
+        <module>tlv8-doc-client</module>
 		<module>tlv8-flow</module>
         <module>tlv8-monitor</module>
         <module>tlv8-api</module>

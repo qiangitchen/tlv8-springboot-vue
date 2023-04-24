@@ -4,7 +4,7 @@ function loadTopTip() {
 		type : "post",
 		async : true,
 		dataType : "json",
-		url : "/tlv8/getWaitTaskAction",//待办任务
+		url : "../../getWaitTaskAction",//待办任务
 		success : function(result, textStatus) {
 			if (result.count) {
 				$("#taskCount").text(result.count);
@@ -19,7 +19,7 @@ function loadTopTip() {
 		type : "post",
 		async : true,
 		dataType : "json",
-		url : "/tlv8/getPortalNotesAction",//通知
+		url : "../../getPortalNotesAction",//通知
 		success : function(result, textStatus) {
 			var news = result.data;
 			if (typeof news.data == "string") {
@@ -37,7 +37,7 @@ function loadTopTip() {
 		type : "post",
 		async : true,
 		dataType : "json",
-		url : "/tlv8/loadNewsAction",//新闻
+		url : "../../loadNewsAction",//新闻
 		success : function(result, textStatus) {
 			var news = result.data;
 			if (typeof news.data == "string") {
@@ -55,7 +55,7 @@ function loadTopTip() {
 		type : "post",
 		async : true,
 		dataType : "json",
-		url : "/tlv8/getPortalBofoAction",//发帖
+		url : "../../getPortalBofoAction",//发帖
 		success : function(result, textStatus) {
 			var news = result.data;
 			if (typeof news.data == "string") {
@@ -79,7 +79,7 @@ function refreshMonitorInfo(){
 			type : "post",
 			async : true,
 			dataType : "json",
-			url : "/tlv8/monitor/CPUPerc",
+			url : "../../monitor/CPUPerc",
 			success : function(data, textStatus) {
 				try {
 					data = data.data;
@@ -104,7 +104,7 @@ function refreshMonitorInfo(){
 			type : "post",
 			async : true,
 			dataType : "json",
-			url : "/tlv8/monitor/MemoryInfo",
+			url : "../../monitor/MemoryInfo",
 			success : function(data, textStatus) {
 				try {
 					data = data.data;

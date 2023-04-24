@@ -64,6 +64,24 @@ public class ActionSupport {
 		return re;
 	}
 
+	protected ResponseEntity<byte[]> getViewByteResponseEntity(InputStream inpbs, MediaType mediaType, String userAgent,
+			String filename) {
+		ByteArrayOutputStream outs = new ByteArrayOutputStream();
+		try {
+			int bytesRead;
+			while ((bytesRead = inpbs.read()) != -1) {
+				outs.write(bytesRead);
+			}
+			outs.flush();
+			outs.close();
+			inpbs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ResponseEntity<byte[]> re = getViewByteResponseEntity(outs, mediaType, filename, filename);
+		return re;
+	}
+
 	protected ResponseEntity<byte[]> getByteResponseEntity(ByteArrayOutputStream outs, MediaType mediaType,
 			String userAgent, String filename) {
 		// ok表示http请求中状态码200
@@ -78,7 +96,30 @@ public class ActionSupport {
 			if (userAgent.indexOf("MSIE") > 0) {
 				builder.header("Content-Disposition", "attachment; filename=" + filename);
 			} else {
-				builder.header("Content-Disposition", "attacher; filename*=UTF-8''" + filename);
+				builder.header("Content-Disposition", "attachment; filename*=UTF-8''" + filename);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ResponseEntity<byte[]> re = builder.body(outs.toByteArray());
+		return re;
+	}
+
+	protected ResponseEntity<byte[]> getViewByteResponseEntity(ByteArrayOutputStream outs, MediaType mediaType,
+			String userAgent, String filename) {
+		// ok表示http请求中状态码200
+		BodyBuilder builder = ResponseEntity.ok();
+		try {
+			// 内容长度
+			builder.contentLength(outs.size());
+			builder.contentType(mediaType);
+			// 使用URLEncoding.decode对文件名进行解码
+			filename = URLEncoder.encode(filename, "UTF-8");
+			// 根据浏览器类型，决定处理方式
+			if (userAgent.indexOf("MSIE") > 0) {
+				builder.header("Content-Disposition", "inline; filename=" + filename);
+			} else {
+				builder.header("Content-Disposition", "inline; filename*=UTF-8''" + filename);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,6 +143,29 @@ public class ActionSupport {
 				builder.header("Content-Disposition", "attachment; filename=" + filename);
 			} else {
 				builder.header("Content-Disposition", "attacher; filename*=UTF-8''" + filename);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ResponseEntity<byte[]> re = builder.body(FileUtils.readFileToByteArray(file));
+		return re;
+	}
+
+	protected ResponseEntity<byte[]> getViewByteResponseEntity(File file, MediaType mediaType, String userAgent,
+			String filename) throws IOException {
+		// ok表示http请求中状态码200
+		BodyBuilder builder = ResponseEntity.ok();
+		try {
+			// 内容长度
+			builder.contentLength(file.length());
+			builder.contentType(mediaType);
+			// 使用URLEncoding.decode对文件名进行解码
+			filename = URLEncoder.encode(filename, "UTF-8");
+			// 根据浏览器类型，决定处理方式
+			if (userAgent.indexOf("MSIE") > 0) {
+				builder.header("Content-Disposition", "inline; filename=" + filename);
+			} else {
+				builder.header("Content-Disposition", "inline; filename*=UTF-8''" + filename);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
