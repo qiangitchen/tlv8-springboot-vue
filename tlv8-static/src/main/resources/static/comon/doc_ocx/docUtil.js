@@ -196,9 +196,9 @@ tlv8.Doc = {
 			r = window.eval("("+r+")");
 		}
 		if (r.flag == "false") {
-			alert("juestp.Doc.getdocServerAction失败,请确认文档服务配置是否正确！"
+			alert("tlv8.Doc.getdocServerAction失败,请确认文档服务配置是否正确！"
 					+ r.message);
-			throw new Error("juestp.Doc.getdocServerAction失败,请确认文档服务配置是否正确！"
+			throw new Error("tlv8.Doc.getdocServerAction失败,请确认文档服务配置是否正确！"
 					+ r.message);
 		} else {
 			res = r.data;
@@ -264,7 +264,7 @@ tlv8.Doc = {
 		if (response.data.flag == "true") {
 			return response.data.data;
 		} else {
-			alert("juestp.Doc.getAuthList失败！");
+			alert("tlv8.Doc.getAuthList失败！");
 		}
 	},
 	queryNameSpaces : function() {
@@ -275,7 +275,7 @@ tlv8.Doc = {
 		var resQN = tlv8.XMLHttpRequest("dispatchOptAction", sendParam,
 				"POST", false, null);
 		if (resQN.data.flag == "false") {
-			alert("juestp.Doc.queryNameSpaces失败！");
+			alert("tlv8.Doc.queryNameSpaces失败！");
 		}
 		var nameSpaces = resQN.data.data;
 		if (typeof (nameSpaces) == "string") {
@@ -319,7 +319,7 @@ tlv8.Doc = {
 			var response = tlv8.XMLHttpRequest("queryLinkDefineMap",
 					param, "POST", false, null);
 			if (response.data.flag == "false") {
-				alert("juestp.Doc.queryDefine失败！");
+				alert("tlv8.Doc.queryDefine失败！");
 			}
 			linkAll = response.data.data;
 			this.attmentLinkDefines = linkAll;
@@ -353,7 +353,7 @@ tlv8.Doc = {
 		if (response.data.flag == "true") {
 			return response.data.data;
 		} else {
-			alert("juestp.Doc.queryLinkedDir失败！");
+			alert("tlv8.Doc.queryLinkedDir失败！");
 		}
 	},
 
@@ -377,7 +377,7 @@ tlv8.Doc = {
 		if (response.data.flag == "true") {
 			return response.data.data;
 		} else {
-			alert("juestp.Doc.queryLinkedDoc失败！");
+			alert("tlv8.Doc.queryLinkedDoc失败！");
 		}
 	},
 	/**
@@ -418,13 +418,13 @@ tlv8.Doc = {
 		var response = tlv8.XMLHttpRequest("queryDocAction", sendParam,
 				"POST", false, null);
 		if (response.data.flag == "false") {
-			throw new Error("juestp.Doc.queryDoc失败！");
+			throw new Error("tlv8.Doc.queryDoc失败！");
 		}
 		var rows = eval("(" + response.data.data + ")");
 		/* 返回单行数据 */
 		if (single == "single") {
 			if (rows.length != 1) {
-				alert("juestp.Doc.queryDoc失败！");
+				alert("tlv8.Doc.queryDoc失败！");
 			}
 			return rows[0];
 		}
@@ -558,7 +558,7 @@ tlv8.Doc = {
 		response = tlv8.XMLHttpRequest("addAccessRecordAction", sendParam,
 				"POST", false, null);
 		if (response.data.flag == "false") {
-			alert("juestp.Doc.addAccessRecord失败！");
+			alert("tlv8.Doc.addAccessRecord失败！");
 		}
 	},
 	createElement : function(changeLog, name, value) {
@@ -579,7 +579,7 @@ tlv8.Doc = {
 			var createSucess = response.data.data;
 			return createSucess;
 		} else {
-			alert("juestp.Doc.createVersion失败！");
+			alert("tlv8.Doc.createVersion失败！");
 		}
 	},
 	deleteVersion : function(docPath, fileID, LogID, docVersion) {
@@ -592,7 +592,7 @@ tlv8.Doc = {
 		var response = tlv8.XMLHttpRequest("deleteVersionAction",
 				sendParam, "POST", false, null);
 		if (response.data.flag == "false") {
-			alert("juestp.Doc.deleteVersion失败！");
+			alert("tlv8.Doc.deleteVersion失败！");
 		}
 	},
 	createVersionFromJsonStr : function(billID, jsonStr) {
@@ -608,7 +608,7 @@ tlv8.Doc = {
 		if (response.data.flag == "true") {
 			return true;
 		} else {
-			alert("juestp.Doc.createVersionFromJsonStr失败！");
+			alert("tlv8.Doc.createVersionFromJsonStr失败！");
 		}
 	},
 	lockDoc : function(sDocID) {
@@ -625,7 +625,7 @@ tlv8.Doc = {
 			}
 			return true;
 		} else {
-			alert("juestp.Doc.lockDoc失败！");
+			alert("tlv8.Doc.lockDoc失败！");
 		}
 	},
 	unLockDoc : function(sDocID) {
@@ -642,7 +642,7 @@ tlv8.Doc = {
 			}
 			return true;
 		} else {
-			alert("juestp.Doc.unLockDoc失败！");
+			alert("tlv8.Doc.unLockDoc失败！");
 		}
 	},
 	/**
@@ -696,11 +696,11 @@ tlv8.Doc = {
 			var res = tlv8.XMLHttpRequest("queryCommentFileContent",
 					sendParam, "POST", false, null);
 		} catch (e) {
-			alert("juestp.Doc.browseFileComment失败,查询修订内容失败！");
+			alert("tlv8.Doc.browseFileComment失败,查询修订内容失败！");
 		}
 
 		if (res.data.flag == "false") {
-			alert("juestp.Doc.browseFileComment失败,查询修订内容失败！");
+			alert("tlv8.Doc.browseFileComment失败,查询修订内容失败！");
 		}
 		var v = res.data.data;
 		return v;
@@ -724,7 +724,7 @@ tlv8.Doc = {
 			return;
 		}
 		if ('.doc.docx.xls.xlsx.ppt.pptx.mpp.vsd.dps.wps.et.'.indexOf(String(/\.[^\.]+$/.exec(docName)) + '.') >= 0) {
-			window.open(cpath+"/comon/doc_ocx/tangerOffice/officeediter.jsp?fileID="
+			window.open(cpath+"/doc_ocx/officeediter?fileID="
 							+ fileID + "&fileName=" + J_u_encode(docName) + "&option=view");
 		}else if(".pdf.".indexOf(String(/\.[^\.]+$/.exec(docName))+ '.') >= 0){
 			window.open(cpath+"/comon/pdfViewer/vform.html?fileid="+fileID+"&filename="+docName);
@@ -982,7 +982,7 @@ tlv8.Doc = {
 			response = window.eval("("+response+")");
 		}
 		if (response.flag == "false") {
-			alert("juestp.Doc.queryDocCache失败！");
+			alert("tlv8.Doc.queryDocCache失败！");
 		}
 
 		var fileinfo = response.data;
@@ -1001,7 +1001,7 @@ tlv8.Doc = {
 			response = window.eval("("+response+")");
 		}
 		if (response.flag == "false") {
-			alert("juestp.Doc.queryDocInfoById失败！");
+			alert("tlv8.Doc.queryDocInfoById失败！");
 		}
 		var fileinfo = response.data;
 		if (typeof fileinfo == 'string') {
@@ -1025,7 +1025,7 @@ tlv8.Doc = {
 			response = window.eval("("+response+")");
 		}
 		if (response.flag == "false") {
-			throw new Error("juestp.Doc.syncCustomFileds失败！");
+			throw new Error("tlv8.Doc.syncCustomFileds失败！");
 		}
 
 	},

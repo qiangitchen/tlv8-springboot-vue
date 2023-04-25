@@ -16,6 +16,11 @@
     </description>
 
 	<dependencies>
+		<!-- velocity代码生成使用模板 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
 
 		<!-- 通用工具 -->
 		<dependency>
@@ -27,6 +32,12 @@
 		<dependency>
 			<groupId>com.tlv8</groupId>
 			<artifactId>tlv8-system</artifactId>
+		</dependency>
+		
+		<!--文件存取 - 文档服务客户端 -->
+		<dependency>
+			<groupId>com.tlv8</groupId>
+			 <artifactId>tlv8-doc-client</artifactId>
 		</dependency>
 
 	</dependencies>

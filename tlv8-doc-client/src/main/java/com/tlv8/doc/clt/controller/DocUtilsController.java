@@ -20,12 +20,6 @@ public class DocUtilsController {
 	@Autowired
 	private SaDocnamespaceService saDocnamespaceService;
 
-	/**
-	 * 获取文档服务访问地址
-	 * 
-	 * @param urlPattern 文件路径
-	 * @return
-	 */
 	@ResponseBody
 	@RequestMapping("/queryHostAction")
 	public Object queryHostAction(String urlPattern) {

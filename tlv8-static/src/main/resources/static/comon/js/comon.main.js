@@ -5521,7 +5521,7 @@ tlv8.fileComponent = function (div, data, cellname, docPath, canupload,
                     + div.id
                     + "_titleItem\" title='"
                     + filenames[i]
-                    + "' onclick='justep.Doc.browseDocByID(\""
+                    + "' onclick='tlv8.Doc.browseDocByID(\""
                     + fileID
                     + "\",\""
                     + filenames[i]
@@ -5604,7 +5604,7 @@ tlv8.trangereditfile = function (fileID, fileName, docPath, dbkey,
     	layui.layer.alert("不支持非Office文件编辑");
         return;
     }
-    var edurl = "/comon/doc_ocx/tangerOffice/officeediter.jsp?fileID="
+    var edurl = cpath+"/doc_ocx/officeediter?fileID="
         + fileID + "&fileName=" + J_u_encode(fileName) + "&dbkey="
         + dbkey + "&tablename=" + tablename + "&billid=" + billid
         + "&cellname=" + cellname + "&callerName="

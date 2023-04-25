@@ -3,6 +3,8 @@
 	<name>tlv8-static</name>
 	<comment></comment>
 	<projects>
+		<project>tlv8-common</project>
+		<project>tlv8-doc-client</project>
 		<project>tlv8-system</project>
 	</projects>
 	<buildSpec>

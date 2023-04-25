@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="itemhtml">
+	<head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    	<title>WPS-Plugin For Linux</title>
+    	<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Cache-Control" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<link type="text/css" rel="stylesheet" href="${contextPath}/resources/bootstrap/css/bootstrap.min.css"/> 
+		<link type="text/css" rel="stylesheet" href="${contextPath}/resources/layui/css/layui.css"/>
+		<link rel="stylesheet" type="text/css"href="${contextPath}/resources/layui/layuiadmin/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="${contextPath}/comon/doc_ocx/wps/wps.css"/>
+		<script language="JavaScript" src="${contextPath}/comon/js/jquery/jquery.min.js"></script>
+		<script language="JavaScript" src="${contextPath}/comon/js/comon.main.js"></script>
+		<script type="text/javascript" src="${contextPath}/resources/bootstrap/js/bootstrap.min.js"></script> 
+		<script type="text/javascript" src="${contextPath}/resources/layui/layui.js"></script>
+		<script language="JavaScript" src="${contextPath}/comon/doc_ocx/wps/dpsfileediter.js"></script>
+		<script type="text/javascript">
+			function colseWindow(){
+				try{
+					app.close();
+					obj.Application.Quit();
+				}catch (e) {
+				}
+				if("${option}" != "view") {
+					try{
+						def_callBackFun("");
+						tlv8.portal.closeWindow();
+					}catch (e) {
+					}
+				}
+				if("${option}" != "view") {
+					try{
+						tlv8.portal.closeWindow();
+					}catch (e) {
+						window.opener = null;
+						window.open('', '_self');
+						window.close();
+					}
+				}
+			}
+			function saveToServer() {
+				try{
+					var aa = app.saveURL_s("${comiturl}","${fileName}");
+					if(aa==true){
+						layui.layer.msg("保存成功.");
+					}else{
+						layui.layer.alert("保存失败！");
+					}
+				}catch (e) {
+					layui.layer.alert(e.message);
+				}
+			}
+			var template = "${loadurl}";
+			var username = "${loginName}";
+		</script>
+    </head>
+    <body onLoad="InitFrame();" style="overflow: hidden;" id="demobody">
+    	<div class="layui-row layui-col-space10" id="divLayout_bar">
+    		<div class="layui-btn-container">
+    			<button class="layui-btn layui-btn-xs" onclick="showRevision0()"><i class="layui-icon layui-icon-search"></i>显示痕迹</button>
+				<button type="button" class="layui-btn layui-btn-xs" onclick="showRevision2()"><i class="layui-icon layui-icon-menu-fill"></i>隐藏痕迹</button>
+				<button type="button" class="layui-btn layui-btn-xs layui-btn-normal" onclick="saveAs()"><i class="layui-icon layui-icon-export"></i>另存为</button>
+				<button type="button" class="layui-btn layui-btn-xs layui-btn-warm" onclick="printwps()"><i class="layui-icon layui-icon-print"></i>打印</button>
+				<button type="button" class="layui-btn layui-btn-xs layui-btn-disabled"><i class="layui-icon layui-icon-list"></i>套红</button>
+				<button type="button" class="layui-btn layui-btn-xs layui-btn-normal" onclick="saveToServer()"><i class="layui-icon layui-icon-ok"></i>保存到服务器</button>
+				<button type="button" class="layui-btn layui-btn-xs layui-btn-danger" onclick="colseWindow()"><i class="layui-icon layui-icon-close"></i>关闭</button>
+    		</div>
+    	</div>
+    	<div id="iframediv">
+			<div id="wps"></div>
+    	</div>
+    	<script type="text/javascript">
+	    	if("${option}" == "view") {
+	    		$("#divLayout_bar").remove();
+	    	}
+	   </script>
+    </body>
+</html>

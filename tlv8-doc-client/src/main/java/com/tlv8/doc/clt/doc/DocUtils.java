@@ -3,6 +3,7 @@ package com.tlv8.doc.clt.doc;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.Date;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -137,12 +138,16 @@ public class DocUtils {
 		}
 	}
 
-	public static String getBizSecureParams() throws Exception {
-		InetAddress localhost = InetAddress.getLocalHost();
-		String ipStr = localhost.getHostAddress();
-		DesUtils des = new DesUtils();
-		String key = des.encrypt(ipStr);
-		return "bizAddress=" + key;
+	public static String getBizSecureParams() {
+		try {
+			DesUtils des = new DesUtils();
+			InetAddress localhost = InetAddress.getLocalHost();
+			String ipStr = localhost.getHostAddress();
+			String key = des.encrypt(ipStr);
+			return "bizAddress=" + key;
+		} catch (Exception e) {
+		}
+		return "bizAddress=" + new Date().getTime();
 	}
 
 }

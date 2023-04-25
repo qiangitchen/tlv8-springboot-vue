@@ -16,7 +16,7 @@ if (!$.jpolite.Data)
 				dataType : "json",
 				success : function(redata, textStatus) {
 					var rdata = redata[0];
-					var bdata = rdata.data;
+					var bdata = rdata.data||{};
 					if(typeof bdata=='string'){
 						bdata = JSON.parse(bdata);
 					}
@@ -345,5 +345,69 @@ var displayActionMessage = function() {
 };
 
 tlv8.showOnlineList = function(obj) {
-	//弃用
+	$("#onlineBox").remove();
+	var xx = $(obj).offset().left;
+	var yy = $(obj).offset().top;
+	var onlinebox = $("<div id='onlineBox'></div>");
+	onlinebox.css("position", "absolute");
+	onlinebox.css("z-index", "9999");
+	onlinebox.css("overflow", "hidden");
+	onlinebox.width(20);
+	onlinebox.height(50);
+	onlinebox.css("left", (xx - onlinebox.width() + 28) + "px");
+	onlinebox.css("top", (yy - onlinebox.height() - 40) + "px");
+	$(document.body).append(onlinebox);
+	var titleline = $("<div><span style='margin-left:5px;'>在线人员信息</span></div>");
+	titleline.css("width", "100%");
+	titleline.css("height", "25px");
+	onlinebox.append(titleline);
+	var closebtn = $("<a href='javascript:void(0);'>x</a>");
+	closebtn.css("float", "right");
+	closebtn.css("height", "25px");
+	closebtn.css("line-height", "25px");
+	closebtn.css("margin-right", "10px");
+	closebtn.attr("title", "关闭");
+	titleline.append(closebtn);
+	closebtn.click(function() {
+		var curmer1 = setInterval(function() {
+			var ww = onlinebox.width();
+			var hh = onlinebox.height();
+			var ll = parseInt(onlinebox.css("left"));
+			var tt = parseInt(onlinebox.css("top"));
+			if (ww > 20 && hh > 50) {
+				onlinebox.width(ww - 20);
+				onlinebox.height(hh - 50);
+				onlinebox.css("left", (ll + 20) + "px");
+				onlinebox.css("top", (tt + 50) + "px");
+			} else {
+				clearInterval(curmer1);
+				$("#onlineboxframe").remove();
+				$("#onlineBox").remove();
+			}
+		}, 20);
+	});
+	var boxcontent = $("<div></div>");
+	boxcontent.css("width", "98%");
+	boxcontent.css("height", "433px");
+	boxcontent.css("background", "#fff");
+	boxcontent.css("margin-left", "2px");
+	onlinebox.append(boxcontent);
+	var url = '/tlv8/portal2/online/mainActivity.html';
+	boxcontent.html("<iframe frameborder='0' id='onlineboxframe'"
+			+ "style='width:100%;height:100%;border:0px;' src='" + url
+			+ "'></iframe>");
+	var curmer = setInterval(function() {
+		var ww = onlinebox.width();
+		var hh = onlinebox.height();
+		var ll = parseInt(onlinebox.css("left"));
+		var tt = parseInt(onlinebox.css("top"));
+		if (ww < 200 && hh < 500) {
+			onlinebox.width(ww + 20);
+			onlinebox.height(hh + 50);
+			onlinebox.css("left", (ll - 20) + "px");
+			onlinebox.css("top", (tt - 50) + "px");
+		} else {
+			clearInterval(curmer);
+		}
+	}, 20);
 };
