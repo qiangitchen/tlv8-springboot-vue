@@ -28,5 +28,6 @@ export default {
   'sysLog': () => import('@/view/systemManager/sysLog.vue'),
   'recycle': () => import('@/view/systemManager/recycle.vue'),
   'docSetting': () => import('@/view/docCenter/docNameSpace.vue'),
+  'docCenter': () => import('@/view/docCenter/docCenter.vue'),
   'flowDesigner': () => import('@/view/flow/flowDesigner.vue'),
 }

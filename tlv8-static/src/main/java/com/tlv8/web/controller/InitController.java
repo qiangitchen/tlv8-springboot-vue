@@ -19,6 +19,12 @@ import com.tlv8.system.pojo.SaMenu;
 import com.tlv8.system.service.ISaMenuService;
 import com.tlv8.system.utils.ContextUtils;
 
+/**
+ * 门户配置
+ * 
+ * @author 陈乾
+ *
+ */
 @Controller
 @RequestMapping("/portal")
 public class InitController {
@@ -34,7 +40,7 @@ public class InitController {
 		hmap.put("href", "home/console.html");
 		res.put("homeInfo", hmap);
 		Map<String, Object> logmap = new HashMap<String, Object>();
-		logmap.put("title", "TLv8 平台");
+		logmap.put("title", "智慧监居");
 		logmap.put("image", "images/logo.png");
 		logmap.put("href", "");
 		res.put("logoInfo", logmap);

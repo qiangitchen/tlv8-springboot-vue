@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.utils.ContextUtils;
 
+/**
+ * 首页跳转
+ * 
+ * @author 陈乾
+ *
+ */
 @Controller
 public class IndexController {
 
@@ -19,7 +25,7 @@ public class IndexController {
 		ContextBean contextbean = ContextUtils.getContext();
 		if (contextbean != null && contextbean.isLogin()) {
 			response.sendRedirect("portal/login.html");
-		}else {
+		} else {
 			response.sendRedirect("portal/index.html");
 		}
 	}

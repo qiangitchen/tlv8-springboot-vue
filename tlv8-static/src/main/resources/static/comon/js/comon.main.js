@@ -496,8 +496,7 @@ tlv8.Deleteaction = function (actionName, post, callBack, rowid, data, ays) {
  * @param ays
  * @returns {JSON}
  */
-tlv8.saveAction = function (actionName, post, callBack, data, allreturn,
-                            ays) {
+tlv8.saveAction = function (actionName, post, callBack, data, allreturn, ays) {
     if (!data || data == "") {
         return;
     }
@@ -548,176 +547,38 @@ tlv8.strToXML = function (str) {
 };
 
 /**
- * @name tlv8.sqlQueryAction
- * @function
- * @description 执行sql查询动作
- * @param dbkey
- * @param sql
- * @param callBack
- * @param ayn
- * @returns {object}
+ * @description 执行sql查询动作【已弃用】
  */
 tlv8.sqlQueryAction = function (dbkey, sql, callBack, ayn) {
-    var type = getOs();
-    var rsultData = function (r) {
-        this.r = r;
-        this.data = r.data;
-        this.getNode = function (tag) {
-            var s = "";
-            if (tag == "data") {
-                s = r.data.data;
-            } else if (tag == "flag") {
-                s = r.data.flag;
-            } else {
-                s = r.data.message;
-            }
-            return s;
-        };
-        this.getCount = function () {
-            var txt = r.data.data;
-            var xmlDoc = tlv8.strToXML(txt);
-            return (type == "MSIE") ? xmlDoc.getElementsByTagName("count")[0].childNodes[0].nodeValue
-                : xmlDoc.getElementsByTagName("count")[0].childNodes
-                    .item(0).textContent;
-        };
-        this.getColumns = function () {
-            var txt = r.data.data;
-            var xmlDoc = tlv8.strToXML(txt);
-            return (type == "MSIE") ? xmlDoc.getElementsByTagName("columns")[0].childNodes[0].nodeValue
-                : xmlDoc.getElementsByTagName("columns")[0].childNodes
-                    .item(0).textContent;
-        };
-        this.getValueByName = function (columnName) {
-            if (this.getCount() == 0) {
-                return "";
-            }
-            var txt = r.data.data;
-            var xmlDoc = tlv8.strToXML(txt);
-            var redata = (type == "MSIE") ? xmlDoc.getElementsByTagName("rows")
-                    .item(0).text
-                : xmlDoc.getElementsByTagName("rows").item(0).textContent;
-            try {
-                redata = redata.replaceAll("&amp;", "&");
-                redata = trim(redata);
-            } catch (e) {
-            }
-            var $dval = (redata && redata != "") ? redata.split(";") : [];
-            var colums = this.getColumns();
-            var colum = colums.split(",");
-            var index = 0;
-            var have = false;
-            for (var i = 0; i < colum.length; i++) {
-                if (colum[i].toUpperCase() == columnName.toUpperCase()) {
-                    index = i;
-                    have = true;
-                    break;
-                }
-            }
-            if (have == false) {
-            	layui.layer.alert("指定的列名无效，请注意大小写！");
-                return false;
-            }
-            return $dval[index];
-        };
-        this.getDatas = function () {
-            var $dval = r.data.data;
-            if (!$dval || $dval == "")
-                return [""];
-            var xmldata = tlv8.strToXML($dval);
-            if (!xmldata)
-                return [""];
-            try {
-                var datas = (type == "MSIE") ? xmldata.getElementsByTagName(
-                    "rows").item(0).text : xmldata.getElementsByTagName(
-                    "rows").item(0).textContent;
-                datas = datas.replaceAll("&amp;", "&");
-            } catch (e) {
-            }
-            if (!datas)
-                return [""];
-            var $dval = datas.split(";");
-            return $dval;
-        };
-    };
-    ayn = (ayn == true) ? true : false;
-    var param = new tlv8.RequestParam();
-    param.set("dbkey", CryptoJS.AESEncrypt(dbkey));
-    param.set("querys", CryptoJS.AESEncrypt(sql));
-    var recallback = function (r) {
-        if (r.data.flag == "false") {
-        	layui.layer.alert(r.data.message);
-        }
-        if (callBack) {
-            var res = new rsultData(r);
-            callBack(res);
-        }
-    };
-    var result = tlv8.XMLHttpRequest("sqlQueryAction", param, "POST", ayn,
-        recallback);
-    if (ayn == false) {
-        var res = new rsultData(result);
-        return res;
-    }
+	throw new Error('方法已弃用!');
 };
 
 /**
- * @name tlv8.sqlQueryActionforJson
- * @function
- * @description 执行sql查询动作
- * @param dbkey
- * @param sql
- * @param callBack
- * @param ayn
- * @returns {JSON}
+ * @description 执行sql查询动作【已弃用】
  */
 tlv8.sqlQueryActionforJson = function (dbkey, sql, callBack, ayn) {
-    ayn = (ayn == true) ? true : false;
-    var param = new tlv8.RequestParam();
-    param.set("dbkey", CryptoJS.AESEncrypt(dbkey));
-    param.set("querys", CryptoJS.AESEncrypt(sql));
-    var recallback = function (r) {
-        if (r.data.flag == "false") {
-        	layui.layer.alert(r.data.message);
-            return;
-        }
-        if (callBack) {
-            var reData = (r.data.data) ? (eval("(" + r.data.data + ")")) : [];
-            r.data.data = reData;
-            callBack(r.data);
-        }
-    };
-    var r = tlv8.XMLHttpRequest("sqlQueryActionforJson", param, "POST",
-        ayn, recallback);
-    if (ayn == false) {
-        var rvl = r.data.data;
-        rvl = rvl.replaceAll("\n", "").replaceAll("\r", "");
-        var reData = (r.data.data) ? (eval("(" + rvl + ")")) : [];
-        r.data.data = reData;
-        return r.data;
-    }
+	throw new Error('方法已弃用!');
 };
 
 /**
  * @description 执行sql更新动作【已弃用】
  */
 tlv8.sqlUpdateAction = function (dbkey, sql, callBack, ayn) {
-    throw new "方法弃用!";
+	throw new Error('方法已弃用!');
 };
 
 /**
  * @description 【已弃用】
  */
-tlv8.callProcedureAction = function (dbkey, ProduceName, Param, callBack,
-                                     ayn) {
-    throw new "方法弃用!";
+tlv8.callProcedureAction = function (dbkey, ProduceName, Param, callBack, ayn) {
+	throw new Error('方法已弃用!');
 };
 
 /**
  * @description 【已弃用】
  */
-tlv8.callFunctionAction = function (dbkey, ProduceName, Param, callBack,
-                                    ayn) {
-    throw new "方法弃用!";
+tlv8.callFunctionAction = function (dbkey, ProduceName, Param, callBack, ayn) {
+	throw new Error('方法已弃用!');
 };
 
 /*
@@ -4539,7 +4400,8 @@ tlv8.CheckBox = function (div, item, splithtmlarray) {
     var divnid = checkboxcompid + "_compent";
     var check = "<input id='"
         + checkboxcompid
-        + "' name='" + checkboxcompid + "' style='display:none;' onpropertychange='document.getElementById(\""
+        + "' name='" + checkboxcompid + "' style='display:none;' "
+        + " onpropertychange='document.getElementById(\""
         + divnid + "\").Check.initData(this)'/>";
     div.innerHTML = check;
     var Check = {
@@ -4594,11 +4456,13 @@ tlv8.CheckBox = function (div, item, splithtmlarray) {
     if (div.disabled)
         disabled = "disabled=true";
     for (k in set) {
-        div.innerHTML += "<input type='checkbox' name='" + item.get(set[k])
-            + "' value='" + set[k]
-            + "' onclick='document.getElementById(\"" + divnid
-            + "\").Check.boxcheck(this)' " + disabled
-            + "/><a style='font-size:12px'>" + item.get(set[k]) + "</a>";
+        div.innerHTML += "<input type='checkbox' lay-ignore value='" + set[k]
+            + "' onclick='document.getElementById(\"" + divnid + "\").Check.boxcheck(this)' " 
+            + disabled
+            + " style='width:16px;height:16px;float:left;'>"
+            + "<span style='font-size:14px;padding: 0 10px;float:left;'>" 
+            + item.get(set[k]) 
+            + "</span>";
         if (splithtmlarray && splithtmlarray.length == set.length
             && k < set.length - 1) {
             try {
