@@ -110,7 +110,7 @@ public class SaDocnode implements Serializable {
      *
      * @mbg.generated Wed Apr 19 15:03:33 CST 2023
      */
-    private Date screatetime;
+    private Date screatetime = new Date();
 
     /**
      *

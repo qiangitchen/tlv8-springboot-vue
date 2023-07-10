@@ -23,7 +23,7 @@ import org.dom4j.io.SAXReader;
 import com.tlv8.doc.clt.pojo.SaDocnode;
 
 /**
- * 
+ * 文档对象抽象
  */
 public class AbstractDoc extends SaDocnode {
 	private static final long serialVersionUID = 5265471957103685278L;
@@ -33,10 +33,6 @@ public class AbstractDoc extends SaDocnode {
 
 	public AbstractDoc(DocDBHelper docDBHelper) {
 		this.docDBHelper = docDBHelper;
-	}
-
-	protected String getHost() {
-		return docDBHelper.queryDocHost();
 	}
 
 	private void upload(String host, Part[] parts) throws Exception {
@@ -82,11 +78,11 @@ public class AbstractDoc extends SaDocnode {
 	}
 
 	public void upload(boolean isHttps, InputStream inputStream) throws Exception {
-		upload(getHost(), inputStream);
+		upload(docDBHelper.getHost(), inputStream);
 	}
 
 	public void upload(boolean isHttps, File file) throws Exception {
-		upload(getHost(), file);
+		upload(docDBHelper.getHost(), file);
 	}
 
 	private class InputStreamPartSource implements PartSource {
@@ -129,7 +125,7 @@ public class AbstractDoc extends SaDocnode {
 		sb.append("<data>");
 		sb.append(createChangeLogItem());
 		sb.append("</data>");
-		String host = docDBHelper.queryDocHost();
+		String host = docDBHelper.getHost();
 		String url = host + "/repository/file/cache/commit";
 		Document result = DocUtils.excutePostAction(url, new ByteArrayInputStream(sb.toString().getBytes("UTF-8")));
 		List itemList = result.selectNodes("//item");
@@ -156,7 +152,7 @@ public class AbstractDoc extends SaDocnode {
 	/**
 	 * 创建修改参数
 	 * 
-	 * @return
+	 * @return StringBuffer
 	 */
 	public StringBuffer createChangeLogItem() {
 		StringBuffer result = new StringBuffer();
@@ -196,7 +192,7 @@ public class AbstractDoc extends SaDocnode {
 	/**
 	 * 创建删除参数
 	 * 
-	 * @return
+	 * @return StringBuffer
 	 */
 	public StringBuffer createDeleteLogItem() {
 		StringBuffer result = new StringBuffer();

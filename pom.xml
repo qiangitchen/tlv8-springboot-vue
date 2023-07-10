@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.11</version>
+		<version>2.7.13</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -26,7 +26,7 @@
 		<java.version>11</java.version>
 		<druid.version>1.2.18</druid.version>
 		<swagger.version>3.0.0</swagger.version>
-		<mysql-connector.version>8.0.32</mysql-connector.version>
+		<mysql-connector.version>8.0.33</mysql-connector.version>
 		<postgresql-connector.version>42.5.4</postgresql-connector.version>
 		<mybatis-plus.version>3.5.3.1</mybatis-plus.version>
 		<servlet.version>4.0.1</servlet.version>
@@ -67,10 +67,10 @@
 
 			<!-- Mysql驱动包 -->
 			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${mysql-connector.version}</version>
-			</dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
 
 			<!-- PostgreSQL驱动包 -->
 			<dependency>

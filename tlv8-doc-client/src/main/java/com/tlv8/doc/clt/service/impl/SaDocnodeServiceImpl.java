@@ -40,5 +40,13 @@ public class SaDocnodeServiceImpl implements SaDocnodeService {
 	public List<SaDocnode> selectByDocpath(String docpath){
 		return saDocnodeMapper.selectByDocpath(docpath);
 	}
+	
+	public List<SaDocnode> selectByDocDisplayPath(String docpath){
+		return saDocnodeMapper.selectByDocDisplayPath(docpath);
+	}
+	
+	public SaDocnode selectByFileID(String fileID) {
+		return saDocnodeMapper.selectByFileID(fileID);
+	}
 
 }

@@ -19,6 +19,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class DocUtils {
+	/**
+	 * 注册https证书
+	 * 
+	 * @param url
+	 */
 	protected static void registHttps(String url) {
 		if ("https".equals(url.substring(0, url.indexOf(":")))) {
 			@SuppressWarnings("deprecation")
@@ -27,6 +32,14 @@ public class DocUtils {
 		}
 	}
 
+	/**
+	 * 执行POST请求
+	 * 
+	 * @param url
+	 * @param param
+	 * @return {@link Document}
+	 * @throws Exception
+	 */
 	public static Document excutePostAction(String url, InputStream param) throws Exception {
 		registHttps(url);
 		// System.out.println("test0:"+url);
@@ -71,6 +84,17 @@ public class DocUtils {
 		return null;
 	}
 
+	/**
+	 * 保持文档状态
+	 * 
+	 * @param host
+	 * @param docPath
+	 * @param kind
+	 * @param fileID
+	 * @param cacheName
+	 * @param isHttps
+	 * @throws Exception
+	 */
 	public static void saveDocFlag(String host, String docPath, String kind, String fileID, String cacheName,
 			Boolean isHttps) throws Exception {
 		String url = host + "/repository/file/cache/commit";
@@ -89,7 +113,6 @@ public class DocUtils {
 			sb.append("</cache-name>");
 			sb.append("</item></data>");
 			Document result = excutePostAction(url, new ByteArrayInputStream(sb.toString().getBytes("UTF-8")));
-			System.out.println(result.asXML());
 			if (!"true".equals(result.selectSingleNode("//flag").getText())) {
 				throw new DocRTException("DocServer flagCommit error ", new Exception());
 			}

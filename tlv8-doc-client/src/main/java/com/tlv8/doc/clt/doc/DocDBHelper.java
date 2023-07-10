@@ -1,5 +1,6 @@
 package com.tlv8.doc.clt.doc;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class DocDBHelper {
 			for (int n = 2; n < docDirs.length; n++) {
 				String dir = docDirs[n];
 				pdirpath += "/" + dir;
-				List<SaDocnode> pdi = saDocnodeService.selectByDocpath(pdirpath);
+				List<SaDocnode> pdi = saDocnodeService.selectByDocDisplayPath(pdirpath);
 				if (pdi.size() > 0) {
 					SaDocnode dc = pdi.get(0);
 					dirID = dc.getSid();
@@ -95,6 +96,7 @@ public class DocDBHelper {
 		saDocnode.setScreatorfid(context.getCurrentPersonFullID());
 		saDocnode.setScreatorname(context.getCurrentPersonName());
 		saDocnode.setScreatordeptname(context.getCurrentDeptName());
+		saDocnode.setScreatetime(new Date());
 		saDocnode.setSeditorfid(context.getCurrentPersonFullID());
 		saDocnode.setSeditorname(context.getCurrentPersonName());
 		saDocnode.setSeditordeptname(context.getCurrentDeptName());
@@ -106,12 +108,54 @@ public class DocDBHelper {
 	}
 
 	/**
-	 * DocServer 访问地址
+	 * DocServer 访问地址(用于文件查看下载相关的服务地址)
 	 * 
 	 * @return String
 	 */
 	public String queryDocHost() {
 		return saDocnamespaceService.selectAll().get(0).getSurl();
+	}
+
+	/**
+	 * 获取文档服务地址IP
+	 * 
+	 * @return String
+	 */
+	public String queryDocHostIP() {
+		return saDocnamespaceService.selectAll().get(0).getShost();
+	}
+
+	/**
+	 * 获取文档服务地址端口
+	 * 
+	 * @return String
+	 */
+	public Integer queryDocHostPort() {
+		return saDocnamespaceService.selectAll().get(0).getSport();
+	}
+
+	/**
+	 * 获取文档服务配置isHttps
+	 * 
+	 * @return Boolean
+	 */
+	public Boolean queryDocHostIsHttps() {
+		String isHttps = saDocnamespaceService.selectAll().get(0).getShtths();
+		return Boolean.valueOf(isHttps);
+	}
+
+	/**
+	 * 获取主机地址(用于上传相关的服务地址)
+	 * 
+	 * @return String
+	 */
+	public String getHost() {
+		String host = queryDocHostIP();
+		Integer port = queryDocHostPort();
+		Boolean isHttps = queryDocHostIsHttps();
+		String url = isHttps ? "https" : "http" + "://";
+		url += host + ":" + port + "/DocServer";
+		return url;
 	}
 
 }

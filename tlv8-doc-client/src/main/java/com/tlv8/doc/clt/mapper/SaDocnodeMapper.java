@@ -45,4 +45,8 @@ public interface SaDocnodeMapper {
     int updateByPrimaryKey(SaDocnode row);
     
     List<SaDocnode> selectByDocpath(String docpath);
+    
+    List<SaDocnode> selectByDocDisplayPath(String docpath);
+
+	SaDocnode selectByFileID(String fileID);
 }
