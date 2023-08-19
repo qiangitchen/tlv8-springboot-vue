@@ -18,9 +18,9 @@ public class SaOpPermission {
 	private String ssemanticdp;// 语义
 	private int spermissionkind;// 语义类别
 	private String sdescription;// 描述
-	private int ssequence;// 排序
-	private int svalidstate;// 使用状态{1,0,-1}
-	private int version; // 版本号
+	private int ssequence=1;// 排序
+	private int svalidstate=1;// 使用状态{1,0,-1}
+	private int version=0; // 版本号
 
 	public String getSid() {
 		return sid;

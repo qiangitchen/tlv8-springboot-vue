@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.tlv8.common.utils.StringUtils;
 @Controller
 @Scope("prototype")
 public class JqueryOrgTreeAction extends ActionSupport {
+	private static final Logger logger = Logger.getLogger(JqueryOrgTreeAction.class);
 
 	private String orgKind;
 
@@ -33,7 +35,8 @@ public class JqueryOrgTreeAction extends ActionSupport {
 		this.orgKind = getDecode(orgKind);
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json; charset=utf-8");
-		SQL queySql = new SQL().SELECT("SID,SCODE,SNAME").FROM("SA_OPORG").WHERE("SORGKINDID=?");
+		SQL queySql = new SQL().SELECT("SID,SCODE,SNAME");
+		queySql.FROM("SA_OPORG").WHERE("SORGKINDID=?");
 		if (StringUtils.isNotEmpty(rootFilter)) {
 			queySql.WHERE(rootFilter);
 		}
@@ -57,6 +60,7 @@ public class JqueryOrgTreeAction extends ActionSupport {
 				jsonar.add(json);
 			}
 		} catch (Exception e) {
+			logger.error(e);
 		} finally {
 			DBUtils.closeConn(session, conn, ps, rs);
 		}
@@ -86,6 +90,7 @@ public class JqueryOrgTreeAction extends ActionSupport {
 			}
 			pjob.put("children", jsonar);
 		} catch (Exception e) {
+			logger.error(e);
 		} finally {
 			try {
 				DBUtils.closeConn(null, ps, rs);

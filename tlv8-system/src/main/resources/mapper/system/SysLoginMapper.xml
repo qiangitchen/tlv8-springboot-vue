@@ -45,7 +45,8 @@
     </select>
 
     <select id="getInfoByCASN" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select p.sName                                                                 USERNAME,
+        select p.sid,
+        	   p.sName                                                                 USERNAME,
                p.sID                                                                   PERSONID,
                p.sName                                                                 PERSONNAME,
                p.sCode                                                                 PERSONCODE,
@@ -67,7 +68,8 @@
     </select>
 
     <select id="getInfoBySignm" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select p.sName                                                                 USERNAME,
+        select p.sid,
+        	   p.sName                                                                 USERNAME,
                p.sID                                                                   PERSONID,
                p.sName                                                                 PERSONNAME,
                p.sCode                                                                 PERSONCODE,
@@ -89,7 +91,8 @@
     </select>
     
     <select id="getInfoByPersonId" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select p.sName                                                                 USERNAME,
+        select p.sid,
+        	   p.sName                                                                 USERNAME,
                p.sID                                                                   PERSONID,
                p.sName                                                                 PERSONNAME,
                p.sCode                                                                 PERSONCODE,

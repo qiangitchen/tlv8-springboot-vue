@@ -1,5 +1,7 @@
 package com.tlv8.system.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.tlv8.system.pojo.SaOpManagetype;
@@ -45,5 +47,7 @@ public interface SaOpManagetypeMapper {
 	 * @return
 	 */
 	int deleteDataByPrimaryKey(String sid);
+	
+	List<SaOpManagetype> selectAll();
 
 }

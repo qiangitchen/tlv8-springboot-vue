@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单配置</title>
+    <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css"> 
+  	<link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css"> 
+    <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="../../resources/layui/css/layui.css" media="all">
+    <style>
+        .layui-btn:not(.layui-btn-lg ):not(.layui-btn-sm):not(.layui-btn-xs) {
+            height: 34px;
+            line-height: 34px;
+            padding: 0 8px;
+        }
+    </style>
+    <script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script> 
+    <script type="text/javascript" src="../../comon/js/comon.main.js"></script> 
+    <script type="text/javascript" src="../../resources/jquery-easyui/jquery.easyui.min.js"></script> 
+  	<script type="text/javascript" src="../../resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script> 
+  	<script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
+    <script src="../../resources/layui/layui.js" charset="utf-8"></script>
+</head>
+<body style="overflow: hidden;">
+<div class="layui-fluid"> 
+    <div class="layuimini-main">
+        <div>
+            <button type="button" onclick="addRoot()" class="btn btn-primary" style="margin-right:15px;"><i class="glyphicon glyphicon-plus" ></i>&nbsp;新增</button>
+            <div class="layui-btn-group">
+                <button class="layui-btn" id="btn-expand">全部展开</button>
+                <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+            </div>
+        </div>
+    </div>
+	<div class="layuimini-container">
+		<table id="munu-table" class="layui-table" lay-filter="munu-table"></table>
+	</div>
+	<form id="mainform" style="display: none;">
+		<input name="label" id="label" type="text">
+		<input name="url" id="url" type="text">
+		<input name="process" id="process" type="text">
+		<input name="activity" id="activity" type="text">
+		<input name="pid" id="pid" type="text">
+	</form>
+</div>
+<!-- 操作列 -->
+<script type="text/html" id="auth-state">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">新增目录</a>
+    <a class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" lay-event="editFolder">编辑目录</a>
+    <a class="layui-btn layui-btn-xs" lay-event="addFun">新增功能</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">修改功能</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../../resources/layui-lib/lay-config.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'treetable'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var treetable = layui.treetable;
+
+        // 渲染表格
+        layer.load(2);
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: "",
+            height: 'full-45',
+            treeIdName: 'sid',
+            treePidName: 'pid',
+            elem: '#munu-table',
+            url: cpath+'/menu/loadFunctionTree',
+            page: false,
+            cols: [[
+                {type: 'numbers',title:"序号"},
+                //{field: 'sorts', width: 50, align: 'center', title: '序号'},
+                {field: 'label', minWidth: 180, title: '名称'},
+                {
+                    field: 'isMenu', width: 80, align: 'center', templet: function (d) {
+                        if (d.isMenu) {
+                            return '<span class="layui-badge layui-bg-gray">菜单</span>';
+                        }
+                        if (!d.pid || d.pid == "" || d.url=="") {
+                            return '<span class="layui-badge layui-bg-blue">目录</span>';
+                        } else {
+                            return '<span class="layui-badge-rim">菜单</span>';
+                        }
+                    }, title: '类型'
+                },
+                {field: 'code', width: 130, title: '编号'},
+                {field: 'icon', width: 120, title: '图标'},
+                {field: 'layuiIcon', width: 120, title: '样式图标'},
+                {field: 'url', title: '路径'},
+                {field: 'process', title: 'process'},
+                {field: 'activity', width: 120, title: 'activity'},
+                {field: 'display', width: 70, title: '展示'},
+                {templet: '#auth-state', width: 380, align: 'center', title: '操作'}
+            ]],
+            done: function () {
+                layer.closeAll('loading');
+                treetable.foldAll('#munu-table');
+            }
+        });
+
+        $('#btn-expand').click(function () {
+        	//console.log(treetable)
+            treetable.expandAll('#munu-table');
+        });
+
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#munu-table');
+        });
+
+        //监听工具条
+        table.on('tool(munu-table)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            var layEvent = obj.event;
+
+            if (layEvent === 'add') {
+                add(data.id);
+            }else if (layEvent === 'addFun') {
+            	if(!data.isMenu){
+                	addFun(data.id);
+                }else{
+                	layer.alert("不能在功能菜单下增加子菜单~");
+                }
+            }else if (layEvent === 'del') {
+                del(data.id);
+            }else if (layEvent === 'editFolder') {
+                updateFolder(data.id);
+            } else if (layEvent === 'edit') {
+                update(data.id);
+            }
+        });
+    });
+    function load(){
+	    setTimeout(function(){
+	    	window.location.reload();
+	    },500);
+    }
+    function addRoot() {
+		tlv8.portal.dailog.openDailog("新增根目录", "/SA/functionTree/editFolder.html",
+			650, 650, load);
+	}
+	
+	function add(id) {
+		tlv8.portal.dailog.openDailog("新增子目录",
+				"/SA/functionTree/editFolder.html?pid=" + id, 650, 650, load);
+	}
+	function updateFolder(id) {
+		tlv8.portal.dailog.openDailog("编辑目录", "/SA/functionTree/editFolder.html?rowid="
+			+ id, 650, 650, load);
+	}
+	var data = new tlv8.Data();
+	data.setDbkey("system");
+	data.setTable("sa_opmenutree");
+	data.setFormId("mainform");
+	data.setCascade("sa_opmenutree:pid");
+	function addFun(id) {
+		/*
+		tlv8.portal.dailog.openDailog("添加功能页", "/SA/functionTree/selectPages.html",
+				800, 700, function(re) {
+					data.setRowId(new UUID().toString());
+					data.setValueByName("pid", id);
+					data.setValueByName("label", re.name);
+					data.setValueByName("url", re.path);
+					data.setValueByName("process", re.process);
+					data.setValueByName("activity", re.activity);
+					data.saveData();
+					load();
+				});
+		*/
+		tlv8.portal.dailog.openDailog("添加功能", "/SA/functionTree/editInfo.html?pid="
+			+ id, 640, 768, load);
+	}
+	function del(id) {
+		data.setRowId(id);
+		layui.layer.confirm("数据删除不可回复，确认删除吗？",function(){
+			layui.layer.closeAll();
+			data.deleteData(false);
+			load();
+		});
+	}
+	function update(id) {
+		tlv8.portal.dailog.openDailog("编辑", "/SA/functionTree/editInfo.html?rowid="
+			+ id, 640, 768, load);
+	}
+</script>
+</body>
+</html>

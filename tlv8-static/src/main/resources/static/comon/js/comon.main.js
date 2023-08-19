@@ -337,7 +337,8 @@ function writeLog(ev, actionName, discription) {
         param.set("actionName", actionName ? actionName : "查看");
         param.set("srcPath", srcPath);
         param.set("discription", discription ? discription : "");
-// tlv8.XMLHttpRequest("WriteSystemLogAction", param, "post", true, null, true);
+        // tlv8.XMLHttpRequest("WriteSystemLogAction", param, "post", true,
+		// null, true);
     } catch (e) {
     }
 }
@@ -4656,29 +4657,17 @@ tlv8.dowloadfile = function (fileID, filename) {
     	layui.layer.alert("下载失败!");
     return;
 };
-tlv8.deletefile = function (fileID, filename, dbkey, tablename, cellname,
-                            rowid, callback) {
+tlv8.deletefile = function (fileID, filename, dbkey, tablename, cellname, rowid, callback) {
     if (!fileID || fileID == "" || !filename)
         return;
     if (confirm("确定删除文件'" + filename + "'吗？")) {
-        var url = cpath + "deleteFileAction?fileID=" + fileID;
-        url += "&filename=" + J_u_encode(filename);
-        url += "&dbkey=" + dbkey;
-        url += "&tablename=" + tablename;
-        url += "&cellname=" + cellname;
-        url += "&rowid=" + rowid;
-        var xmlHttp = tlv8.xmlHttp();
-        xmlHttp.onreadystatechange = function () {
-            if (xmlHttp.readyState == 4) {
-                if (xmlHttp.status == 200) {
-                    var r = eval('(' + xmlHttp.responseText + ')');
-                    if (callback)
-                        callback(r);
-                }
-            }
-        };
-        xmlHttp.open("post", url, true);
-        xmlHttp.send(null);
+    	var param = new tlv8.RequestParam();
+    	param.set("fileID", fileID);
+        param.set("dbkey", dbkey);
+        param.set("tablename", tablename);
+        param.set("cellname", cellname);
+        param.set("rowid", rowid);
+        tlv8.XMLHttpRequest("utils/deleteFileAction", param, "POST", true, callback);
     }
 };
 
@@ -5326,11 +5315,13 @@ tlv8.fileComponent = function (div, data, cellname, docPath, canupload,
         var tablename = data.table;
         var rowid = data.rowid;
         var sID = (dbkey == "system" || !dbkey) ? "SID" : "fID";
-        var random = Math.random();
-        var sql = "select " + cellname + " FILECOMPE from " + tablename
-            + " where " + sID + " = '" + rowid + "' and " + random + "="
-            + random;
-        var r = tlv8.sqlQueryActionforJson(dbkey, sql);
+        var param = new tlv8.RequestParam();
+        param.set("dbkey", dbkey);
+        param.set("tablename", tablename);
+        param.set("cellname", cellname);
+        param.set("keyfield", sID);
+        param.set("rowid", rowid);
+        var r = tlv8.XMLHttpRequest("loadAttachmentInformation", param, "POST", false);
         var dilelist = [];
         var transeJson = function (str) {
             str = str.toString().replaceAll(":", ":\"");
@@ -5343,8 +5334,7 @@ tlv8.fileComponent = function (div, data, cellname, docPath, canupload,
         };
         try {
             if (r.data != "") {
-                var datas = r.data[0];
-                datas = datas.FILECOMPE;
+                var datas = r.data;
                 if ("null" == datas) {
                     datas = "";
                 }
@@ -5547,16 +5537,33 @@ tlv8.createVersion = function (docID, fileID, docName, docPath) {
     justep.Doc.createVersion(docID);
 };
 tlv8.getDocIdByFileId = function (fileID) {
-    var r = tlv8.sqlQueryAction("system",
-        "select SID from sa_docnode where (sfileid='" + fileID + "')");
-    if (r.getCount() > 0) {
-        return r.getValueByName("SID");
+    var param = new tlv8.RequestParam();
+    param.set("fileID", fileID);
+    var r = tlv8.XMLHttpRequest("getDocIdByFileId", param, "POST", false);
+    if(r.flag){
+    	return r.data.sid;
     }
 };
-/*
+
+/**
  * 图片组件
+ * 
+ * @param div
+ *            {Element}
+ * @param data
+ *            {tlv8.Data}
+ * @param cellname
+ *            {String} 字段名
+ * @param canEdit
+ *            {bool} 是否可上传和删除
+ * @param save2doc
+ *            {bool} 保存到文档服务
+ * @param isPhotograph
+ *            {bool} 是否拍照
+ * @param camerainfo
+ *            {String} 拍照摄像头信息（如果为空则调用本地默认摄像头）
  */
-tlv8.picComponent = function (div, data, cellname, canEdit) {
+tlv8.picComponent = function (div, data, cellname, canEdit, save2doc, isPhotograph, camerainfo) {
     if (!div || !data || !cellname) {
         mAlert("tlv8.picComponent：参数无效");
         return;
@@ -5576,13 +5583,18 @@ tlv8.picComponent = function (div, data, cellname, canEdit) {
             return;
         }
         var url = $dpimgpath.replace("/image", "");
-        url += "picCompant/Pic-read.jsp?dbkey=" + dbkey + "&tablename="
+        if(save2doc){
+        	url += "picCompant/docPicRead";
+        }else{
+        	url += "picCompant/Pic-read";
+        }
+        url += "?dbkey=" + dbkey + "&tablename="
             + tablename + "&cellname=" + cellname + "&fID=" + rowid
             + "&Temp=" + new UUID().toString();
         var image = "<img src='" + url + "' style='width:" + div.clientWidth
             + ";height:" + div.clientHeight + ";'/>";
-        bsPIC = true;
         div.innerHTML = image;
+        bsPIC = true;
     };
     div.lookPIC = lookPIC;
     var picBorder = function () {
@@ -5611,9 +5623,11 @@ tlv8.picComponent = function (div, data, cellname, canEdit) {
         var dataTable = "<table id='"
             + div.id
             + "_table' style='width:100%;height:100%;z-index:999;'><tr><td colspan='3'></td></tr><tr style='width:100%;height:20px;align:right;'><td></td>";
-        dataTable += "<td style='width:20px;'><a href='javascript:void(0)' style='color:#eee;' onclick='document.getElementById(\""
-            + div.id
-            + "\").uploadPIC()'><img src='"
+        dataTable += "<td style='width:20px;'><a href='javascript:void(0)' style='color:#eee;' ";
+		dataTable += " onclick='document.getElementById(\""
+	        + div.id
+	        + "\").uploadPIC()'";
+        dataTable += "><img src='"
             + $CompPath
             + "pic/edit.gif' title='上传图片' style='width:18px;'/></a></td>";
         dataTable += "<td style='width:20px;'><a href='javascript:void(0)' style='color:#eee;' onclick='document.getElementById(\""
@@ -5642,11 +5656,31 @@ tlv8.picComponent = function (div, data, cellname, canEdit) {
         var dbkey = data.dbkay ? data.dbkay : "system";
         var tablename = data.table;
         var rowid = data.saveData();
-        // if (!rowid || rowid == "") {
-        // alert("请先保存数据！");
-        // return;
-        // }
-        var url = "/comon/picCompant/Imag-upload.jsp";
+        if (!rowid || rowid == "") {
+        	layui.layer.alert("请先保存数据！");
+        	return;
+        }
+        if(isPhotograph){
+        	try{
+        		var jpa = {
+					dbkay:data.dbkay,
+					rowid:rowid,
+					tablename:tablename,
+					cellname:cellname
+			    };
+        		var spa = JSON.stringify(jpa);
+        		console.log(spa);
+        		window.top.photograph(spa, camerainfo||"");
+        		lookPIC();
+        	}catch (e) {
+        		layui.layer.alert("请用客户端操作~");
+        	}
+        	return;
+        }
+        var url = "/comon/picCompant/Imag-upload.html";
+        if(save2doc){
+        	url = "/comon/picCompant/Imag-upload2.html";
+        }
         url += "?dbkey=" + dbkey;
         url += "&tablename=" + tablename;
         url += "&cellname=" + cellname;
@@ -5666,7 +5700,8 @@ tlv8.picComponent = function (div, data, cellname, canEdit) {
         if (!rowid || rowid == "") {
             return;
         }
-        if (confirm("确定删除图片吗？")) {
+        var lidx = layui.layer.confirm("确定删除图片吗？", function(){
+        	layui.layer.close(lidx);
             var dbkey = data.dbkay ? data.dbkay : "system";
             var tablename = data.table;
             var rowid = data.rowid;
@@ -5690,7 +5725,7 @@ tlv8.picComponent = function (div, data, cellname, canEdit) {
             };
             xmlHttp.open("post", url, true);
             xmlHttp.send(null);
-        }
+        });
     };
     div.deletePIC = deletePIC;
     $(div).css("overflow", "hidden");

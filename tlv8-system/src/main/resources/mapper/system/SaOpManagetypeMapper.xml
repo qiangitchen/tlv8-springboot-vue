@@ -55,4 +55,9 @@
 	<delete id="deleteDataByPrimaryKey" parameterType="java.lang.String">
 		delete from SA_OpManagetype where sid = #{sid,jdbcType=VARCHAR}
 	</delete>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from SA_OpManagetype order by sleadernumber
+	</select>
 </mapper>

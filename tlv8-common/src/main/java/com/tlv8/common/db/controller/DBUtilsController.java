@@ -249,6 +249,12 @@ public class DBUtilsController {
 			conn = sqlSession.getConnection();
 			SQL sql = new SQL().SELECT("*");
 			sql.FROM(param.getTableName());
+			Map<String, String> eqParam = param.getEqParam();
+			if(!eqParam.isEmpty()) {
+				for(String k: eqParam.keySet()) {
+					sql.WHERE(k + "= '" + eqParam.get(k) + "'");
+				}
+			}
 			String searchValue = param.getSearchValue();
 			List<String> queryParam = new ArrayList<>();
 			if (StringUtils.isNotEmpty(searchValue)) {

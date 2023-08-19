@@ -7,7 +7,9 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +19,18 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.utils.StringArray;
 
+/**
+ * jtree关键字搜索
+ * 
+ * @author 陈乾
+ *
+ */
 @Controller
 @Scope("prototype")
 public class QuickTreeAction extends ActionSupport {
+	private static final Logger logger = Logger.getLogger(QuickTreeAction.class);
 	private String quicktext;
 	private String cloums;
 	private String quickCells;
@@ -40,7 +50,6 @@ public class QuickTreeAction extends ActionSupport {
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 	public String exeQuickAction() {
-		String sql = "";
 		String[] pamms = this.quicktext.split(",");
 		String id = pamms[0].toString();
 		String name = pamms[1].toString();
@@ -58,12 +67,15 @@ public class QuickTreeAction extends ActionSupport {
 		ResultSet rs = null;
 		try {
 			conn = session.getConnection();
-			String queryRoot = "select " + path + " from " + tableName + " where " + rootFilter;
+			SQL queryRootSql = new SQL();
+			queryRootSql.SELECT(path);
+			queryRootSql.FROM(tableName);
+			queryRootSql.WHERE(rootFilter);
 			if (filter != null && !"".equals(filter.trim())) {
-				queryRoot += " and (" + filter + ")";
+				queryRootSql.WHERE(filter);
 			}
 			stm = conn.createStatement();
-			rs = stm.executeQuery(queryRoot);
+			rs = stm.executeQuery(queryRootSql.toString());
 			int i = 0;
 			while (rs.next()) {
 				if (i > 0) {
@@ -73,30 +85,42 @@ public class QuickTreeAction extends ActionSupport {
 				i++;
 			}
 		} catch (Exception e) {
+			logger.error(e);
 		} finally {
 			DBUtils.closeConn(null, null, stm, rs);
 		}
-		sql = "select " + id + "," + parent + "," + name + "," + this.cloums + " from " + tableName + " where (upper("
-				+ name + ") like upper('%" + text + "%') or " + id + " = '" + text + "' ";
+		SQL sql = new SQL();
+		sql.SELECT(id);
+		sql.SELECT(parent);
+		sql.SELECT(name);
+		sql.SELECT(cloums);
+		if (path != null && !"".endsWith(path) && cloums.indexOf(path) < 0) {
+			sql.SELECT(path);
+		}
+		sql.FROM(tableName);
+		StringArray owhere = new StringArray();
+		owhere.push("upper(" + name + ") like upper('%" + text + "%')");
+		owhere.push(id + " = '" + text + "'");
 		if (quickCells != null && !"".equals(quickCells)) {
 			String[] filcell = quickCells.split(",");
 			for (int i = 0; i < filcell.length; i++) {
 				if (!filcell[i].toUpperCase().equals(id.toUpperCase())) {
-					sql += " or upper(" + filcell[i] + ") like upper('%" + text + "%')";
+					owhere.push("upper(" + filcell[i] + ") like upper('%" + text + "%')");
 				}
 			}
 		}
-		sql += ")";
+		sql.WHERE("(" + owhere.join(" or ") + ")");
 		if (!"".equals(rootpath)) {
-			sql += " and (" + rootpath + ")";
+			sql.WHERE(rootpath);
 		}
 		if (filter != null && !"".equals(filter.trim())) {
-			sql += " and (" + filter + ")";
+			sql.WHERE(filter);
 		}
+		logger.debug(sql);
 		try {
 			JSONArray jsonArray = new JSONArray();
 			stm = conn.createStatement();
-			rs = stm.executeQuery(sql);
+			rs = stm.executeQuery(sql.toString());
 			ResultSetMetaData rsmd = rs.getMetaData();
 			while (rs.next()) {
 				Map item = new HashMap();
@@ -114,6 +138,7 @@ public class QuickTreeAction extends ActionSupport {
 			}
 			this.jsonResult = jsonArray.toString();
 		} catch (Exception e) {
+			logger.error(e);
 			e.printStackTrace();
 		} finally {
 			DBUtils.closeConn(session, conn, stm, rs);

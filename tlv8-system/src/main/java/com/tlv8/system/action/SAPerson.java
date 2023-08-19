@@ -19,6 +19,20 @@ public class SAPerson {
 
     @Autowired
     ISysLoginService iSysLoginService;
+    
+    /**
+     * 更新CA证书
+     *
+     * @param personid
+     * @param sn
+     */
+    public void addCASN(String personid, String sn) {
+        SaOpPerson person = personservice.selectByPrimaryKey(personid);
+        if (person != null) {
+            person.setFcasn(sn);
+            personservice.updateData(person);
+        }
+    }
 
     /**
      * 更新签名

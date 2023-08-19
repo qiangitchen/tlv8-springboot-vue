@@ -57,32 +57,36 @@ public class DBUtils {
 	private static final Logger logger = Logger.getLogger(DBUtils.class);
 
 	static {
-		String path = DBUtils.class.getClassLoader().getResource("").getFile();
-		File folder = new File(path);
-		String[] cfgname = folder.list(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.endsWith(cfgext);
-			}
-		});
-		for (int i = 0; i < cfgname.length; i++) {
-			try {
-				String key = cfgname[i].replace(cfgext, "");
-				Reader reader = Resources.getResourceAsReader(cfgname[i]);
-				SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader);
-				dbsource.put(key, sessionFactory);
-				SAXReader saxreader = new SAXReader();
-				Document document = saxreader.read(Resources.getResourceAsReader(cfgname[i]));
-				List<Element> pps = document.getRootElement().element("environments").element("environment")
-						.element("dataSource").elements("property");
-				Map<String, String> prpt = new HashMap<String, String>();
-				for (int p = 0; p < pps.size(); p++) {
-					Element pel = pps.get(p);
-					prpt.put(pel.attributeValue("name"), pel.attributeValue("value"));
+		try {
+			String path = DBUtils.class.getClassLoader().getResource("").getFile();
+			File folder = new File(path);
+			String[] cfgname = folder.list(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					return name.endsWith(cfgext);
 				}
-				dbconfig.put(key, prpt);
-			} catch (Exception e) {
-				e.printStackTrace();
+			});
+			for (int i = 0; i < cfgname.length; i++) {
+				try {
+					String key = cfgname[i].replace(cfgext, "");
+					Reader reader = Resources.getResourceAsReader(cfgname[i]);
+					SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader);
+					dbsource.put(key, sessionFactory);
+					SAXReader saxreader = new SAXReader();
+					Document document = saxreader.read(Resources.getResourceAsReader(cfgname[i]));
+					List<Element> pps = document.getRootElement().element("environments").element("environment")
+							.element("dataSource").elements("property");
+					Map<String, String> prpt = new HashMap<String, String>();
+					for (int p = 0; p < pps.size(); p++) {
+						Element pel = pps.get(p);
+						prpt.put(pel.attributeValue("name"), pel.attributeValue("value"));
+					}
+					dbconfig.put(key, prpt);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 
@@ -1089,7 +1093,7 @@ public class DBUtils {
 			logger.error(e);
 			throw e;
 		} finally {
-			closeConn(session, null, ps, rs);
+			closeConn(null, null, ps, rs);
 		}
 		return rlist;
 	}

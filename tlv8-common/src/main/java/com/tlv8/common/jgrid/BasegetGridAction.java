@@ -237,35 +237,35 @@ public class BasegetGridAction extends ActionSupport {
 
 		if (DBUtils.IsOracleDB(dbkay) || DBUtils.IsDMDB(dbkay)) {
 			sql = "select fID,Cucolumns from(select a.*,rownum my_num from(select fID,selectcolumns from " + table
-					+ " where 1=1 " + " param)a where rownum <= endrow) t where t.my_num> startrow";
+					+ " where 1=1 " + " grid_query_param)a where rownum <= endrow) t where t.my_num> startrow";
 		} else if (DBUtils.IsMySQLDB(dbkay)) {
 			sql = "select fID,Cucolumns from(select fID,selectcolumns from " + table
-					+ " where fID is not null param limit startrow,endrow)a";
+					+ " where fID is not null grid_query_param limit startrow,endrow)a";
 		} else if (DBUtils.IsPostgreSQL(dbkay)) {
 			sql = "select fID,Cucolumns from(select fID,selectcolumns from " + table
-					+ " where fID is not null param limit endrow OFFSET startrow)a";
+					+ " where fID is not null grid_query_param limit endrow OFFSET startrow)a";
 		} else {
 			sql = "select fID,Cucolumns from (select fID,selectcolumns from " + table
 					+ " where fID in (select top endrow fID from " + table + " where 1=1 "
-					+ " param) and fID not in (select top startrow fID from " + table + " where 1=1 " + " param)) a";
+					+ " grid_query_param) and fID not in (select top startrow fID from " + table + " where 1=1 " + " grid_query_param)) a";
 		}
-		String sql_count = "select count(*) ALLPAGE from " + table + " where 1=1 param";
+		String sql_count = "select count(*) ALLPAGE from " + table + " where 1=1 grid_query_param";
 //		if (DBUtils.IsMySQLDB(dbkay)) {
-//			sql_count = "select count(*) ALLPAGE from " + table + " t where 1=1 param";
+//			sql_count = "select count(*) ALLPAGE from " + table + " t where 1=1 grid_query_param";
 //		}
 		int startrow = (page == 0) ? 0 : (page - 1) * row;
 		int endrow = (page == 0) ? (startrow + row) : (startrow + row);
 		String filter = where;
-		String param = (filter != null && !("").equals(filter)) ? " and (" + filter + ")" : "";
-		param += (billid != null && !"".equals(billid)) ? "fbillid='" + billid + "'" : "";
+		String grid_query_param = (filter != null && !("").equals(filter)) ? " and (" + filter + ")" : "";
+		grid_query_param += (billid != null && !"".equals(billid)) ? "fbillid='" + billid + "'" : "";
 		if (!DBUtils.IsOracleDB(dbkay) && !DBUtils.IsDMDB(dbkay) && !DBUtils.IsMySQLDB(dbkay)) {
-			param = param.replace("||", "+");// SQLServer连接符用+号
+			grid_query_param = grid_query_param.replace("||", "+");// SQLServer连接符用+号
 		}
-		String countparam = param;
+		String countparam = grid_query_param;
 		if (!"".equals(orderby) && orderby != null) {
-			param += " order by " + orderby + ", fID asc";
+			grid_query_param += " order by " + orderby + ", fID asc";
 		} else {
-			param += " order by fID asc";
+			grid_query_param += " order by fID asc";
 		}
 		if ("".equals(columns.trim()) || columns == null) {
 			return "";
@@ -278,8 +278,8 @@ public class BasegetGridAction extends ActionSupport {
 		}
 		sql = sql.replace("Cucolumns", columns);
 		sql = sql.replace("selectcolumns", selectcolumns);
-		sql = sql.replace("param", param);
-		sql_count = sql_count.replace("param", countparam);
+		sql = sql.replace("grid_query_param", grid_query_param);
+		sql_count = sql_count.replace("grid_query_param", countparam);
 		sql_count = sql_count.replace("Cucolumns", columns);
 		if (dbkay == null || "".equals(dbkay))
 			dbkay = "system";
@@ -382,34 +382,34 @@ public class BasegetGridAction extends ActionSupport {
 		}
 		if (DBUtils.IsOracleDB(dbkay) || DBUtils.IsDMDB(dbkay)) {
 			sql = "select fID," + columns + " from(select a.*,rownum my_num from(select *from (" + lSQL + inwhere + " "
-					+ rSQL + ") where 1=1 param )a where rownum <= endrow ) t where t.my_num> startrow";
+					+ rSQL + ") where 1=1 grid_query_param )a where rownum <= endrow ) t where t.my_num> startrow";
 		} else if (DBUtils.IsMySQLDB(dbkay)) {
 			sql = "select fID," + columns + " from(" + lSQL + inwhere + " " + rSQL
-					+ ") where fID is not null param limit startrow,endrow";
+					+ ") where fID is not null grid_query_param limit startrow,endrow";
 		} else {
 			sql = "select fID," + columns + " from (select * from (" + lSQL + inwhere + " " + rSQL
 					+ ") where fID in (select top endrow fID from (" + lSQL + inwhere + " " + rSQL + ") where 1=1 "
-					+ " param) and fID not in (select top startrow fID from (" + lSQL + inwhere + " " + rSQL
-					+ ") where 1=1 " + " param)";
+					+ " grid_query_param) and fID not in (select top startrow fID from (" + lSQL + inwhere + " " + rSQL
+					+ ") where 1=1 " + " grid_query_param)";
 		}
-		String sql_count = "select count(*) ALLPAGE from (" + insql + ") where 1 =1 param";
+		String sql_count = "select count(*) ALLPAGE from (" + insql + ") where 1 =1 grid_query_param";
 		int startrow = (page == 0) ? 0 : (page - 1) * row;
 		int endrow = (page == 0) ? (startrow + row) : (startrow + row);
 		if (DBUtils.IsMySQLDB(dbkay))
 			endrow = row;
 		String filter = where;
 		// System.out.println(filter);
-		String param = (filter != null && !("").equals(filter)) ? " and (" + filter + ")" : "";
-		param += (billid != null && !"".equals(billid)) ? "fbillid='" + billid + "'" : "";
+		String grid_query_param = (filter != null && !("").equals(filter)) ? " and (" + filter + ")" : "";
+		grid_query_param += (billid != null && !"".equals(billid)) ? "fbillid='" + billid + "'" : "";
 		if (!"".equals(orderby) && orderby != null) {
-			param += " order by " + orderby + ", fID asc";
+			grid_query_param += " order by " + orderby + ", fID asc";
 		} else {
-			param += " order by fID asc";
+			grid_query_param += " order by fID asc";
 		}
-		// System.out.println(param);
-		sql = sql.replace("param", param);
+		// System.out.println(grid_query_param);
+		sql = sql.replace("grid_query_param", grid_query_param);
 		// System.out.println(sql);
-		sql_count = sql_count.replace("param", param);
+		sql_count = sql_count.replace("grid_query_param", grid_query_param);
 		if ("system".equals(dbkay)) {
 			sql = sql.replaceAll("fID", "sID");
 			sql_count = sql_count.replaceAll("fID", "sID");

@@ -3,7 +3,7 @@ spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: org.postgresql.Driver
-        url: postgresql://dev.tlv8.com:5432/tlv8-vue
+        url: jdbc:postgresql://dev.tlv8.com:5432/tlv8-vue
         username: postgres
         password: Password
         # 初始连接数

@@ -1,0 +1,34 @@
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/layui/css/layui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css"> 
+  <script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script> 
+  <script type="text/javascript" src="../../comon/js/comon.main.js"></script> 
+  <script type="text/javascript" src="../../comon/My97DatePicker/WdatePicker.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/jquery.easyui.min.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script> 
+  <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
+  <script type="text/javascript" src="../../resources/layui/layui.js"></script> 
+  <script type="text/javascript" src="selectPages.js"></script> 
+ </head> 
+ <body style="overflow: hidden;" onload="initDocumentPage();"> 
+  <div class="easyui-layout" fit="true"> 
+   <div data-options="region:'north',split:false" style="height:50px; overflow: hidden; padding: 4px;"> 
+   	<form class="layui-form" action="">
+   		 <div class="layui-form-item">
+		    <label class="layui-form-label"><span style="color: red">*</span>功能名称</label>
+		    <div class="layui-input-block">
+		      <input type="text" id="title" name="title" required  lay-verify="required" placeholder="请输入功能名称" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+   	</form>
+   </div>
+   <div data-options="region:'center',border:false"> 
+   		<ul id="tt" class="easyui-tree"></ul>
+   </div> 
+  </div>  
+ </body>
+</html>

@@ -54,9 +54,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	 * 判断是否为登录-检查登录
 	 */
 	protected boolean isLoginPage(String patex) {
-		return patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/sCALogin")
-				|| patex.contains("/Sessionlogin") || patex.contains("/captchaimage") || patex.contains("/check")
-				|| patex.contains("/logout") || patex.contains("/MD5logout") || "/".equals(patex);
+		return patex.contains("/login") || patex.contains("/MD5login") || patex.contains("/CALogin")
+				|| patex.contains("/sCALogin") || patex.contains("/Sessionlogin") || patex.contains("/captchaimage")
+				|| patex.contains("/check") || patex.contains("/logout") || patex.contains("/devLogin")
+				|| patex.contains("/MD5logout") || "/".equals(patex) || patex.contains("/DocServer");
 	}
 
 	/**
@@ -66,7 +67,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	 * @return boolean
 	 */
 	protected boolean isIgnore(String patex) {
-		return patex.contains("/favicon.ico") || patex.contains("/DocServer/");
+		return patex.contains("/favicon.ico") || patex.contains("/DocServer/") || patex.endsWith("/WeiXinPayNotify")
+				|| patex.endsWith("/WeiXinRefundNotify") || patex.endsWith("/AliPayNotify");
 	}
 
 	/**

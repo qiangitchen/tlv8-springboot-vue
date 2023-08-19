@@ -21,8 +21,8 @@ import com.tlv8.flw.pojo.SaFlowdrawlg;
 import com.tlv8.flw.pojo.SaTask;
 import com.tlv8.flw.service.SaFlowdrawlgService;
 import com.tlv8.flw.service.SaTaskService;
-import com.tlv8.system.base.BaseController;
 import com.tlv8.system.bean.ContextBean;
+import com.tlv8.system.controller.UserController;
 import com.tlv8.system.utils.OrgUtils;
 
 /**
@@ -35,7 +35,7 @@ public class FlowBaseHelper {
 	@Autowired
 	HttpServletRequest request;
 	@Autowired
-	BaseController baseController;
+	UserController userController;
 	@Autowired
 	SaFlowdrawlgService saFlowdrawlgService;
 	@Autowired
@@ -83,7 +83,7 @@ public class FlowBaseHelper {
 	public String startflow(String processID, String sData1) throws Exception {
 		String result = "";
 		try {
-			ContextBean context = baseController.getContext();
+			ContextBean context = userController.getContext();
 			String processName = new FlowActivity(processID, "start").getProcessName();
 			result = taskData.startFlow(processID, processName, sData1, context);
 		} catch (Exception e) {
@@ -101,7 +101,7 @@ public class FlowBaseHelper {
 	 * @throws Exception
 	 */
 	public SaTask start(String processID, String sData1) throws Exception {
-		ContextBean context = baseController.getContext();
+		ContextBean context = userController.getContext();
 		String flowID = startflow(processID, sData1);
 		List<OrgUtils> ePersonList = new ArrayList<OrgUtils>();
 		ePersonList.add(new OrgUtils(context));
@@ -128,7 +128,7 @@ public class FlowBaseHelper {
 		if (ePersonList.size() == 0)
 			throw new Exception("未指定执行人，流转失败！");
 		try {
-			ContextBean context = baseController.getContext();
+			ContextBean context = userController.getContext();
 			String processID = taskData.getCurrentProcessID(taskID);
 			String Activity = taskData.getCurrentActivity(taskID);
 			if (processID != null) {
@@ -162,7 +162,7 @@ public class FlowBaseHelper {
 		String flowID = task.getSflowid();
 		String sdata1 = task.getSdata1();
 		List<FlowActivity> aftAList = flwA.getAfterActivity(flowID, taskID, sdata1, request);
-		ContextBean context = baseController.getContext();
+		ContextBean context = userController.getContext();
 		List<OrgUtils> ePersonList = new ArrayList<OrgUtils>();
 		if (aftAList.size() == 1 && "end".equals(aftAList.get(0).getType())
 				&& (!"together".equals(flwA.getGrapModle()) || !"merge".equals(flwA.getGrapWay()))) {
@@ -329,7 +329,7 @@ public class FlowBaseHelper {
 	public String flowback(String flowID, String taskID) throws Exception {
 		String result = "";
 		try {
-			ContextBean context = baseController.getContext();
+			ContextBean context = userController.getContext();
 			SaTask task = saTaskService.selectByPrimaryKey(taskID);
 			String processID = task.getSprocess();
 			String curActivity = task.getSactivity();
@@ -402,7 +402,7 @@ public class FlowBaseHelper {
 	public String flowforward(String flowID, String taskID, List<OrgUtils> epersonlist) throws Exception {
 		String result = "";
 		try {
-			ContextBean context = baseController.getContext();
+			ContextBean context = userController.getContext();
 			SaTask task = saTaskService.selectByPrimaryKey(taskID);
 			String processID = task.getSprocess();
 			String Activity = task.getSactivity();

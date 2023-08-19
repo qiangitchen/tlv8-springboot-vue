@@ -1,5 +1,7 @@
 package com.tlv8.system.service;
 
+import java.util.List;
+
 import com.tlv8.system.pojo.SaOpManagetype;
 
 public interface ISaOpManagetypeService {
@@ -10,7 +12,7 @@ public interface ISaOpManagetypeService {
 	 * @return
 	 */
 	SaOpManagetype selectByPrimaryKey(String sid);
-
+	
 	/**
 	 * 插入数据到数据库
 	 * 
@@ -42,5 +44,7 @@ public interface ISaOpManagetypeService {
 	 * @return
 	 */
 	int deleteDataByPrimaryKey(String sid);
+	
+	List<SaOpManagetype> selectAll();
 
 }

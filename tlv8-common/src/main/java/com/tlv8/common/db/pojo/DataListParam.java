@@ -13,6 +13,7 @@ public class DataListParam {
     private String dataOrder;
     private List<String> columns = new ArrayList<>();
     private Map<String, String> pagination = new HashMap<>();
+    private Map<String, String> eqParam = new HashMap<>();
 
     public String getTableName() {
         return tableName;
@@ -61,4 +62,12 @@ public class DataListParam {
     public void setDataOrder(String dataOrder) {
         this.dataOrder = dataOrder;
     }
+
+	public Map<String, String> getEqParam() {
+		return eqParam;
+	}
+
+	public void setEqParam(Map<String, String> eqParam) {
+		this.eqParam = eqParam;
+	}
 }

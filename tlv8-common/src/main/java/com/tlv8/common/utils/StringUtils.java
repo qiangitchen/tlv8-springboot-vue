@@ -112,6 +112,15 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	public static boolean isNotEmpty(String str) {
 		return !isEmpty(str);
 	}
+	
+	/**
+	 * 判断一个对象是否为空
+	 * @param object
+	 * @return
+	 */
+	public static boolean isEmpty(Object object) {
+		return isNull(object) || NULLSTR.equals(object.toString().trim());
+	}
 
 	/**
 	 * * 判断一个对象是否为空

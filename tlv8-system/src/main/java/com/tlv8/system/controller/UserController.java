@@ -231,9 +231,12 @@ public class UserController extends BaseController {
 			initOnline.execute(contextBean, token);
 			writeLoginLog.write(contextBean.getCurrentUserID(), username, IPUtils.getRemoteAddr(this.request), password,
 					this.request);
-			String signm = p("signm");
+			String signm = rqparams.get("signm");
 			if ((signm != null) && (!"".equals(signm)))
 				saPerson.addSign(contextBean.getCurrentPersonID(), signm);
+			String sn = rqparams.get("padsn");
+			if ((sn != null) && (!"".equals(sn)))
+				saPerson.addCASN(contextBean.getCurrentPersonID(), sn);
 		} catch (Exception e) {
 			success = false;
 			msg = e.getMessage();
@@ -244,11 +247,61 @@ public class UserController extends BaseController {
 			contextBean.initLogoutContext(this.request);
 		}
 		res.put("code", HttpStatus.SUCCESS);
+		res.put("state", success);
 		res.put("message", r(msg));
 		res.put("mobilestatus", mobilestatus);
 		res.put("hxname", hxname);
 		res.put("token", token);
+		res.put("tokenName", StpUtil.getTokenName());
+		res.put("tokenValue", StpUtil.getTokenValue());
 		res.put("result", contextBean);
+		return res;
+	}
+	
+	@ResponseBody
+	@RequestMapping({ "/CALogin" })
+	public Object calogin(@RequestBody Map<String, String> rqparams) {
+		Map<String, Object> res = new HashMap<String, Object>();
+		ContextBean contextBean = getContext();
+		contextBean.setLocale("zh_CN");
+		String serverURL = Configuration.getUIServerURL(null);
+		contextBean.setUIServerURL(serverURL);
+		String msg = "";
+		String token = "";
+		clearHttpClient();
+		String sn = rqparams.get("sn");
+		boolean success = false;
+		try {
+			SysLogin sysLogin = login.CAdoLogin(sn);
+			HashMap<String, String> params = getSysParams(this.request, sysLogin);
+			contextBean.initLoginContext(this.request, params);
+			contextBean.setUsername((String) params.get("username"));
+			contextBean.setIsAgent(false);
+			contextBean.setIsNTLogin(false);
+			contextBean.setLoginDate(p("loginDate"));
+			contextBean.setIp(IPUtils.getRemoteAddr(this.request));
+			StpUtil.login(contextBean.getPersonID());
+			token = StpUtil.getTokenValue();
+			redisCache.setCacheObject(token, contextBean);
+			success = true;
+			writeLoginLog.write(contextBean.getCurrentUserID(), (String) params.get("username"),
+					IPUtils.getRemoteAddr(this.request), "", this.request);
+		} catch (Exception e) {
+			success = false;
+			msg = e.getMessage();
+			e.printStackTrace();
+		}
+		if (!success) {
+			clearHttpClient();
+			contextBean.initLogoutContext(this.request);
+		}
+		//renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\",\"token\":\"" + token + "\"}");
+		res.put("code", HttpStatus.SUCCESS);
+		res.put("state", success);
+		res.put("message", r(msg));
+		res.put("tokenName", StpUtil.getTokenName());
+		res.put("tokenValue", StpUtil.getTokenValue());
+		//res.put("result", contextBean);
 		return res;
 	}
 

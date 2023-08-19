@@ -99,4 +99,10 @@
         from sa_opmenutree
         where sid = #{id,jdbcType=VARCHAR}
     </delete>
+    <select id="selectByProcessActivity" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from sa_opmenutree
+        where process = #{process,jdbcType=VARCHAR} and activity = #{activity,jdbcType=VARCHAR} limit 1
+    </select>
 </mapper>

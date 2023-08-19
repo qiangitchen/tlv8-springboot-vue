@@ -1,6 +1,21 @@
 package com.tlv8.doc.controller.handlers;
 
-import com.tlv8.common.action.ActionSupport;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.tlv8.common.utils.OfficeUtils;
 import com.tlv8.doc.controller.utils.ExcelToPDFUtils;
 import com.tlv8.doc.controller.utils.MimeUtils;
 import com.tlv8.doc.controller.utils.PdfConverUtil;
@@ -11,22 +26,6 @@ import com.tlv8.doc.generator.pojo.DocDocument;
 import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.MimeType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 /**
  * 以pdf格式查看文件
  * 
@@ -35,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/DocServer/repository")
-public class FileViewHtmlHandler extends ActionSupport {
+public class FileViewHtmlHandler {
 	@Autowired
 	DocDocPathService docDocPathService;
 	@Autowired
@@ -45,10 +44,11 @@ public class FileViewHtmlHandler extends ActionSupport {
 		return "/file/viewhtml/*/*/*";
 	}
 
+	@ResponseBody
 	@RequestMapping("/file/viewhtml/{fileID}/{fVersion}/*")
-	public ResponseEntity<byte[]> handleRequest(HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse, @PathVariable("fileID") String fileID,
-			@PathVariable("fVersion") String fVersion, @RequestHeader("User-Agent") String userAgent) throws Exception {
+	public void handleRequest(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse,
+			@PathVariable("fileID") String fileID, @PathVariable("fVersion") String fVersion,
+			@RequestHeader("User-Agent") String userAgent) throws Exception {
 		DocDocPath dpath = null;
 		if ("last".equals(fVersion)) {
 			dpath = docDocPathService.getDocDocPathByFileID(fileID);
@@ -67,7 +67,7 @@ public class FileViewHtmlHandler extends ActionSupport {
 		String DocType = "text/html";
 		String extnm = doc.getFExtName();
 		boolean istr = true;
-		if (!isOffice(extnm)) {
+		if (!OfficeUtils.isOffice(extnm)) {
 			istr = false;
 			try {
 				DocType = MimeUtils.guessMimeTypeFromExtension(doc.getFExtName().replace(".", ""));
@@ -81,6 +81,13 @@ public class FileViewHtmlHandler extends ActionSupport {
 			// 1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
 			paramHttpServletResponse.setContentType(DocType);
 			String formFileName = doc.getFDocName();
+			// 针对IE或者以IE为内核的浏览器：
+			if (userAgent != null && (userAgent.contains("MSIE") || userAgent.contains("Trident"))) {
+				formFileName = java.net.URLEncoder.encode(formFileName, "UTF-8");
+			} else {
+				// 非IE浏览器的处理：
+				formFileName = new String(formFileName.getBytes("UTF-8"), "ISO-8859-1");
+			}
 			if (istr) {
 				formFileName = formFileName.replace(doc.getFExtName(), ".html");
 			}
@@ -117,15 +124,21 @@ public class FileViewHtmlHandler extends ActionSupport {
 				} catch (Exception e) {
 				}
 				paramHttpServletResponse.sendRedirect("/DocServer/" + fileurl);
-				return null;
+				return;
 			} else {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ServletOutputStream out = paramHttpServletResponse.getOutputStream();
 				byte[] arrayOfByte = new byte[2048];
-				int i;
-				while ((i = inputStream.read(arrayOfByte)) != -1)
-					out.write(arrayOfByte, 0, i);
-				return getByteResponseEntity(out, MediaType.asMediaType(MimeType.valueOf(DocType)), userAgent,
-						formFileName);
+				try {
+					int i;
+					while ((i = inputStream.read(arrayOfByte)) != -1)
+						out.write(arrayOfByte, 0, i);
+				} catch (Exception we) {
+				} finally {
+					try {
+						out.close(); // 关闭输出流
+					} catch (Exception e) {
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,13 +147,6 @@ public class FileViewHtmlHandler extends ActionSupport {
 				inputStream.close(); // 关闭输入流
 			}
 		}
-		return null;
-	}
-
-	protected boolean isOffice(String extnm) {
-		return (".doc".equals(extnm) || ".docx".equals(extnm) || ".ppt".equals(extnm) || ".pptx".equals(extnm)
-				|| ".xls".equals(extnm) || ".xlsx".equals(extnm) || ".wps".equals(extnm) || ".dotm".equals(extnm)
-				|| ".dps".equals(extnm) || ".et".equals(extnm) || ".pdf".equals(extnm));
 	}
 
 }

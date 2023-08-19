@@ -1,6 +1,7 @@
 package com.tlv8.system.pojo;
 
 public class SysLogin {
+	private String sid;
     private String username;
     private String personid;
     private String personname;
@@ -145,4 +146,12 @@ public class SysLogin {
     public void setSvalidstate(String svalidstate) {
         this.svalidstate = svalidstate;
     }
+
+	public String getSid() {
+		return sid;
+	}
+
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
 }

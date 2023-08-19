@@ -42,6 +42,6 @@
                                    , '%')
                                   or #{sorgfid,jdbcType=VARCHAR} like concat(a.sorgfid
                                    , '%')))
-        order by m.pid, m.sorts
+        order by m.sorts
     </select>
 </mapper>

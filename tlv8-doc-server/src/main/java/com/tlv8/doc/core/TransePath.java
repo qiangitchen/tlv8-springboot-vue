@@ -4,7 +4,7 @@ import com.tlv8.common.utils.MD5Util;
 
 public class TransePath {
 	// 文档服务文件位置"data/doc"
-	private static String baseDocPath = "E:/TuLin1.0_All/TuLinv8_win64/data/doc";
+	private static String baseDocPath = "/app/tlv8server/data/doc";
 
 	// 提供设置方法，方便系统初始化
 	public static void setBaseDocPath(String baseDocPath) {

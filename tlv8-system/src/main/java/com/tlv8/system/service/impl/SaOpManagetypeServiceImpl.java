@@ -1,5 +1,7 @@
 package com.tlv8.system.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,10 @@ public class SaOpManagetypeServiceImpl implements ISaOpManagetypeService {
 	@Override
 	public int deleteDataByPrimaryKey(String sid) {
 		return saOpManagetypeMapper.deleteDataByPrimaryKey(sid);
+	}
+	
+	public List<SaOpManagetype> selectAll(){
+		return saOpManagetypeMapper.selectAll();
 	}
 
 }

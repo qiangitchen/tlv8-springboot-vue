@@ -55,6 +55,7 @@ public class Login {
 	}
 
 	public SysLogin CAdoLogin(String sn) throws Exception {
+		//System.out.println("sn:"+sn);
 		SysLogin sysLogin = iSysLoginService.getInfoByCASN(sn);
 		if (sysLogin != null) {
 			if ("-1".equals(sysLogin.getSvalidstate())) {

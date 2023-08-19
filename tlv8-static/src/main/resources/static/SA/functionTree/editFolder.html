@@ -1,0 +1,98 @@
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/layui/css/layui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css"> 
+  <script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script> 
+  <script type="text/javascript" src="../../comon/js/comon.main.js"></script> 
+  <script type="text/javascript" src="../../comon/My97DatePicker/WdatePicker.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/jquery.easyui.min.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script> 
+  <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
+  <script type="text/javascript" src="../../resources/layui/layui.js"></script> 
+  <script type="text/javascript" src="editFolder.js"></script> 
+ </head> 
+ <body style="overflow: hidden;" onload="initDocumentPage();"> 
+  <div class="easyui-layout" fit="true"> 
+   <div data-options="region:'north',split:false" style="height:40px; overflow: hidden; padding: 4px;"> 
+    <table> 
+     <tbody>
+      <tr> 
+       <td> 
+        <div id="stander_bar" insertAction="dataInsert()" saveAction="dataSave()" refreshAction="dataRefresh()" deleteAction="dataDeleted()" style="margin-left: 1px;"> 
+        </div> </td> 
+      </tr> 
+     </tbody>
+    </table> 
+   </div> 
+   <div data-options="region:'center',border:false"> 
+    <div class="layui-fluid"> 
+     <div class="layui-card"> 
+      <div class="layui-card-body"> 
+       <form id="MAIN_DATA_FORM" class="layui-form"> 
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">名称<font color="red">*</font></label>
+			    <div class="layui-input-block">
+			      <input type="text" id="label" name="label" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">编号<font color="red">*</font></label>
+			    <div class="layui-input-block">
+			      <input type="text" id="code" name="code" required  lay-verify="required" placeholder="请输入编号" autocomplete="off" class="layui-input">
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">图标</label>
+			    <div class="layui-input-block">
+			      <input type="text" id="icon" name="icon" class="layui-input">
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">样式图标</label>
+			    <div class="layui-input-block">
+			      <input type="text" id="layuiIcon" name="layuiIcon" class="layui-input">
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">展示</label>
+			    <div class="layui-input-block">
+			      <select id="display" name="display" class="layui-input">
+		           	<option></option>
+		           	<option>solid</option>
+		           	<option>hide</option>
+		           </select>
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">小图</label>
+			    <div class="layui-input-block">
+			      <input type="text" id="icon32" name="icon32" class="layui-input">
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">大图标</label>
+			    <div class="layui-input-block">
+			      <input type="text" id="icon64" name="icon64" class="layui-input">
+			    </div>
+		  </div>
+	      <div class="layui-form-item">
+			    <label class="layui-form-label">排序</label>
+			    <div class="layui-input-block">
+			      <input type="number" id="sorts" name="sorts" class="layui-input">
+			    </div>
+		  </div>
+	      <div style="display: none;"> 
+	         <button id="mainfsub" class="layui-btn" lay-submit lay-filter="mainform">立即提交</button> 
+	         <button type="reset" class="layui-btn layui-btn-primary">重置</button> 
+	      </div> 
+       </form> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

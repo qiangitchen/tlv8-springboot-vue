@@ -27,7 +27,7 @@ public class SystemController {
 	 */
 	@RequestMapping("/sysMenu")
 	public void sysMenu(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.sendRedirect("/SA/system/sysMenu/mainActivity.html");
+		response.sendRedirect("/SA/functionTree/menu.html");
 	}
 
 	/**

@@ -167,7 +167,7 @@ function seaTreeItem(data) {
 }
 
 function afGridrefresh(r) {
-	console.log(r);
+	//console.log(r);
 }
 
 var currenttreeNode = null;
