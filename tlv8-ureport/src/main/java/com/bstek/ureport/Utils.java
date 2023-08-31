@@ -26,7 +26,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.utils.spring.SpringUtils;
+
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -238,7 +241,7 @@ public class Utils implements ApplicationContextAware {
 					public Connection getConnection() {
 						try {
 							return DBUtils.getAppConn(k);
-						}catch (Exception e){
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						return null;
@@ -247,6 +250,27 @@ public class Utils implements ApplicationContextAware {
 				});
 			}
 		} catch (Exception e) {
+		}
+		//spring 数据源
+		SqlSessionFactory sqlSessionFactory = SpringUtils.getBean(SqlSessionFactory.class);
+		if (sqlSessionFactory != null) {
+			buildinDatasources.add(new BuildinDatasource() {
+				@Override
+				public String name() {
+					return "spring";
+				}
+
+				@Override
+				public Connection getConnection() {
+					try {
+						return sqlSessionFactory.openSession().getConnection();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+
+			});
 		}
 		imageProviders = new ArrayList<ImageProvider>();
 		imageProviders.addAll(applicationContext.getBeansOfType(ImageProvider.class).values());
