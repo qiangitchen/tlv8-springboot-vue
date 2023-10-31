@@ -25,12 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tlv8.common.utils.spring.SpringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -54,7 +56,7 @@ public class DBUtils {
 
 	private static final Map<Connection, SqlSession> openedconn = new HashMap<Connection, SqlSession>();
 
-	private static final Logger logger = Logger.getLogger(DBUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(DBUtils.class);
 
 	static {
 		try {
@@ -982,12 +984,10 @@ public class DBUtils {
 		ResultSet rs = null;
 		try {
 			conn = session.getConnection();
-			logger.debug(sql);
 			ps = conn.prepareStatement(sql);
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i + 1, params.get(i));
 			}
-			logger.debug(params);
 			rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int cns = rsmd.getColumnCount();
@@ -998,9 +998,8 @@ public class DBUtils {
 				}
 				rlist.add(map);
 			}
-			logger.debug(rlist);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			throw e;
 		}
 		return rlist;
@@ -1044,10 +1043,9 @@ public class DBUtils {
 		SqlSession session = getSession(dbname);
 		List<Map<String, String>> rlist = new ArrayList<Map<String, String>>();
 		try {
-			logger.debug(dbname);
 			rlist = selectStringList(session, sql, params);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			throw e;
 		} finally {
 			closeConn(session, null, null, null);
@@ -1070,14 +1068,12 @@ public class DBUtils {
 		ResultSet rs = null;
 		try {
 			conn = session.getConnection();
-			logger.debug(sql);
 			ps = conn.prepareStatement(sql);
 			if (params != null) {
 				for (int i = 0; i < params.size(); i++) {
 					ps.setObject(i + 1, params.get(i));
 				}
 			}
-			logger.debug(params);
 			rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int cns = rsmd.getColumnCount();
@@ -1088,9 +1084,8 @@ public class DBUtils {
 				}
 				rlist.add(map);
 			}
-			logger.debug(rlist);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			throw e;
 		} finally {
 			closeConn(null, null, ps, rs);
@@ -1113,14 +1108,11 @@ public class DBUtils {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			logger.debug(dbname);
 			conn = session.getConnection();
-			logger.debug(sql);
 			ps = conn.prepareStatement(sql);
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i + 1, params.get(i));
 			}
-			logger.debug(params);
 			rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int cns = rsmd.getColumnCount();
@@ -1131,9 +1123,8 @@ public class DBUtils {
 				}
 				rlist.add(map);
 			}
-			logger.debug(rlist);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			e.printStackTrace();
 		} finally {
 			closeConn(session, conn, ps, rs);
@@ -1291,11 +1282,10 @@ public class DBUtils {
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i + 1, params.get(i));
 			}
-			logger.debug(params);
 			r = ps.executeUpdate();
 			conn.commit();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
 			closeConn(session, conn, ps, null);
@@ -1322,10 +1312,9 @@ public class DBUtils {
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i + 1, params.get(i));
 			}
-			logger.debug(params);
 			r = ps.executeUpdate();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		}
 		return r;

@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
@@ -32,7 +34,7 @@ import com.tlv8.common.utils.StringArray;
  * 公用保存
  */
 public class BaseSaveAction extends ActionSupport {
-	private static Logger log = Logger.getLogger(BaseSaveAction.class);
+	private static Logger log = LoggerFactory.getLogger(BaseSaveAction.class);
 	protected String dbkay = "";
 	protected String table = "";
 	protected String cells = "";

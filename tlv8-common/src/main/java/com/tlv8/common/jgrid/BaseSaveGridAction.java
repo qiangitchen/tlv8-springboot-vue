@@ -18,11 +18,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.naming.NamingException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.alibaba.fastjson.JSON;
@@ -40,7 +42,7 @@ import com.tlv8.common.utils.StringArray;
  * 
  */
 public class BaseSaveGridAction extends ActionSupport {
-	private static Logger log = Logger.getLogger(BaseSaveGridAction.class);
+	private static Logger log = LoggerFactory.getLogger(BaseSaveGridAction.class);
 	protected String dbkay = "";
 	protected String table = "";
 	protected String cells = "";

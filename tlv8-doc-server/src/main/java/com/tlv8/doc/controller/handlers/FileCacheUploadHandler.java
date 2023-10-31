@@ -2,10 +2,12 @@ package com.tlv8.doc.controller.handlers;
 
 import java.io.PrintWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ import com.tlv8.doc.core.io.centent.FileIOContent;
 @Controller
 @RequestMapping("/DocServer/repository")
 public class FileCacheUploadHandler {
-	protected Logger requestErrorLogger = Logger.getLogger(getClass());
+	protected Logger requestErrorLogger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	FileUploadData fileUploadData;
@@ -38,7 +40,7 @@ public class FileCacheUploadHandler {
 						.append(String.format("<file mediatype=\"%s\" file-name=\"%s\" fileSize=\"%s\"></file>",
 								rdoc.getFileType(), rdoc.getFileID(), rdoc.getFileSize() + ""));
 			} catch (Exception localException) {
-				this.requestErrorLogger.error(localException);
+				requestErrorLogger.error(localException.toString());
 				localStringBuilder.append("<flag>false</flag>");
 				localStringBuilder.append("<message>");
 				localStringBuilder.append("upload fileCache  failure");

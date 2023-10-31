@@ -6,11 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,7 @@ import com.tlv8.common.utils.StringUtils;
 @Controller
 @Scope("prototype")
 public class JqueryOrgTreeAction extends ActionSupport {
-	private static final Logger logger = Logger.getLogger(JqueryOrgTreeAction.class);
+	private static final Logger logger = LoggerFactory.getLogger(JqueryOrgTreeAction.class);
 
 	private String orgKind;
 
@@ -60,7 +62,7 @@ public class JqueryOrgTreeAction extends ActionSupport {
 				jsonar.add(json);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 		} finally {
 			DBUtils.closeConn(session, conn, ps, rs);
 		}
@@ -90,7 +92,7 @@ public class JqueryOrgTreeAction extends ActionSupport {
 			}
 			pjob.put("children", jsonar);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 		} finally {
 			try {
 				DBUtils.closeConn(null, ps, rs);

@@ -7,8 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ import com.tlv8.common.db.DBUtils;
 @Controller
 @Scope("prototype")
 public class AppendPersonMembers extends ActionSupport {
-	Logger logger = Logger.getLogger(getClass());
+	Logger logger = LoggerFactory.getLogger(getClass());
 	private String personIds;
 	private String orgId;
 	private Data data;
@@ -107,7 +109,7 @@ public class AppendPersonMembers extends ActionSupport {
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
-			logger.error(e);
+			logger.error(e.toString());
 			e.printStackTrace();
 		} finally {
 			DBUtils.closeConn(session, conn, ps, rs);

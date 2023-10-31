@@ -7,9 +7,11 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,7 @@ import com.tlv8.common.utils.StringArray;
 @Controller
 @Scope("prototype")
 public class QuickTreeAction extends ActionSupport {
-	private static final Logger logger = Logger.getLogger(QuickTreeAction.class);
+	private static final Logger logger = LoggerFactory.getLogger(QuickTreeAction.class);
 	private String quicktext;
 	private String cloums;
 	private String quickCells;
@@ -85,7 +87,7 @@ public class QuickTreeAction extends ActionSupport {
 				i++;
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 		} finally {
 			DBUtils.closeConn(null, null, stm, rs);
 		}
@@ -116,7 +118,6 @@ public class QuickTreeAction extends ActionSupport {
 		if (filter != null && !"".equals(filter.trim())) {
 			sql.WHERE(filter);
 		}
-		logger.debug(sql);
 		try {
 			JSONArray jsonArray = new JSONArray();
 			stm = conn.createStatement();
@@ -138,7 +139,7 @@ public class QuickTreeAction extends ActionSupport {
 			}
 			this.jsonResult = jsonArray.toString();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			e.printStackTrace();
 		} finally {
 			DBUtils.closeConn(session, conn, stm, rs);

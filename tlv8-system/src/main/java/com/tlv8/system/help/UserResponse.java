@@ -3,7 +3,8 @@ package com.tlv8.system.help;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -16,7 +17,7 @@ import cn.dev33.satoken.stp.StpUtil;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UserResponse {
-	private static final Logger logger = Logger.getLogger(UserResponse.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserResponse.class);
 	private final ArrayList<JSONObject> jsonList = new ArrayList();
 
 	private RedisCache redisCache;
@@ -35,7 +36,7 @@ public class UserResponse {
 			if ((data != null) && (data != ""))
 				json.put("data", data);
 		} catch (Exception e) {
-			logger.debug(e);
+			logger.debug(e.toString());
 		}
 		return json;
 	}

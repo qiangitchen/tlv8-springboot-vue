@@ -11,11 +11,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.naming.NamingException;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +38,7 @@ import com.tlv8.common.db.DBUtils;
 @Controller
 @Scope("prototype")
 public class TreeSelectAction extends ActionSupport {
-	private static final Logger logger = Logger.getLogger(TreeSelectAction.class);
+	private static final Logger logger = LoggerFactory.getLogger(TreeSelectAction.class);
 	private String currenid;
 	private String quicktext;
 	private String params;
@@ -131,7 +133,6 @@ public class TreeSelectAction extends ActionSupport {
 			if ((this.orderby != null) && (!"".equals(this.orderby))) {
 				sql.ORDER_BY(orderby);
 			}
-			logger.debug(sql);
 			SqlSession session = DBUtils.getSession(databaseName);
 			Connection conn = null;
 			Statement stm = null;
@@ -175,7 +176,7 @@ public class TreeSelectAction extends ActionSupport {
 			}
 			this.jsonResult = jsonArray.toString();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.toString());
 			e.printStackTrace();
 		}
 

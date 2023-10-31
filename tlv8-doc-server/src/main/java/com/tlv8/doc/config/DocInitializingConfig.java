@@ -2,7 +2,9 @@ package com.tlv8.doc.config;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,7 @@ import com.tlv8.doc.lucene.LuceneService;
  */
 @Component
 public class DocInitializingConfig implements InitializingBean {
-	protected final Logger infolog = Logger.getLogger(getClass());
+	protected final Logger infolog = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
