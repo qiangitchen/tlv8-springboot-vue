@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.13</version>
+		<version>2.7.18</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>com.tlv8</groupId>
 	<artifactId>tlv8</artifactId>
-	<version>3.0.0</version>
+	<version>3.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>tlv8</name>
@@ -20,7 +20,7 @@
 	<description>TLv8 平台</description>
 
 	<properties>
-		<tlv8.version>3.0.0</tlv8.version>
+		<tlv8.version>3.1.0</tlv8.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
