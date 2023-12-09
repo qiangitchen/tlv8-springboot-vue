@@ -294,7 +294,7 @@ tlv8.Doc = {
 	},
 	getDocServerByDocPath : function(fullPath) {
 		if (!fullPath) {
-			alert("justep.Doc.getDocServerByDocPath Error : 文档信息全路径不正确");
+			alert("tlv8.Doc.getDocServerByDocPath Error : 文档信息全路径不正确");
 			return;
 		}
 		fullPath = fullPath.substring(1);
@@ -872,8 +872,8 @@ tlv8.Doc = {
 
 	openOfficeDialog : function(docExtDivID, docExtObjID, OVP,
 			afterOfficeViewerDialogSelect, caller) {
-		justep.Doc.afterOfficeViewerDialogSelect = afterOfficeViewerDialogSelect;
-		justep.Doc.caller = caller;
+		tlv8.Doc.afterOfficeViewerDialogSelect = afterOfficeViewerDialogSelect;
+		tlv8.Doc.caller = caller;
 		if (!document.getElementById(docExtObjID)) {
 			var docExtDiv = document.getElementById(docExtDivID);
 			docExtDiv.outerHTML = '<object id="'
@@ -885,7 +885,7 @@ tlv8.Doc = {
 					+ ' style="display:none;" >'
 					+ '</object><SCRIPT LANGUAGE=javascript FOR='
 					+ docExtObjID
-					+ ' EVENT=OnExcuteJS(id,param)> justep.Doc.execOfficeAction(id,param);</SCRIPT>';
+					+ ' EVENT=OnExcuteJS(id,param)> tlv8.Doc.execOfficeAction(id,param);</SCRIPT>';
 		}
 		var docOcx = document.getElementById(docExtObjID);
 		OVP.filename = escape(OVP.filename);
@@ -1030,7 +1030,7 @@ tlv8.Doc = {
 
 	},
 	commitDocCache : function(docID, changeLog) {
-		var node = justep.Doc.evalChangeLog(changeLog, docID);
+		var node = tlv8.Doc.evalChangeLog(changeLog, docID);
 
 		var sendParam = new tlv8.RequestParam();
 		sendParam.set('changeLog', JSON.stringify(node));
