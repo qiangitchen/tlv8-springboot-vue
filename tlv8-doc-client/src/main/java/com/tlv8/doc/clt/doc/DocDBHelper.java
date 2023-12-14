@@ -153,7 +153,7 @@ public class DocDBHelper {
 		String host = queryDocHostIP();
 		Integer port = queryDocHostPort();
 		Boolean isHttps = queryDocHostIsHttps();
-		String url = isHttps ? "https" : "http" + "://";
+		String url = (isHttps ? "https" : "http") + "://";
 		url += host + ":" + port + "/DocServer";
 		return url;
 	}
