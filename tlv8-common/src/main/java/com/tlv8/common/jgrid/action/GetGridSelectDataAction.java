@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSON;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.StringArray;
 
 /**
@@ -55,7 +56,7 @@ public class GetGridSelectDataAction extends ActionSupport {
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	@SuppressWarnings("deprecation")

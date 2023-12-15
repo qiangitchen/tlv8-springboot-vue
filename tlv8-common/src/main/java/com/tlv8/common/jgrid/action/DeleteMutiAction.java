@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.domain.AjaxResult;
 
 /**
  * 多行删除
+ * 
  * @author chenqian
  */
 @Controller
@@ -38,7 +40,7 @@ public class DeleteMutiAction extends ActionSupport {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteMutiAction", produces = "application/json;charset=UTF-8",method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteMutiAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	@Override
 	public Object execute() throws Exception {
 		String r = "";
@@ -80,7 +82,7 @@ public class DeleteMutiAction extends ActionSupport {
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	public String deleteBillData(String sql) throws SQLException, NamingException, Exception {
