@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
 import com.tlv8.common.data.BaseSaveAction;
+import com.tlv8.common.domain.AjaxResult;
 
 /**
  * @author ChenQian
@@ -50,7 +51,7 @@ public class SaveAction extends BaseSaveAction {
 		data.setPage(page);
 		data.setAllpage(allpage);
 		data.setRowid(rowid);
-		return this;
+		return AjaxResult.success(data);
 	}
 
 }

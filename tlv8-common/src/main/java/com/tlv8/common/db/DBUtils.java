@@ -39,7 +39,6 @@ import org.dom4j.io.SAXReader;
 
 import com.tlv8.common.base.Sys;
 import com.tlv8.common.db.dao.UtilsDao;
-import com.tlv8.common.utils.NumberUtils;
 
 /**
  * 数据库操作基础类
@@ -442,7 +441,7 @@ public class DBUtils {
 						sm.put(columnName, (rs.getString(i) == null) ? "" : String.valueOf(rs.getLong(i)));
 					} else if ("NUMBER".equals(cellType) || "FLOAT".equals(cellType) || "DECIMAL".equals(cellType)
 							|| "DOUBLE".equals(cellType)) {
-						sm.put(columnName, (rs.getString(i) == null) ? "" : NumberUtils.d2s(rs.getDouble(i)));
+						sm.put(columnName, (rs.getString(i) == null) ? "" : rs.getBigDecimal(i).toString());
 					} else {
 						sm.put(columnName, (rs.getString(i) == null) ? "" : String.valueOf(rs.getString(i)));
 					}
@@ -538,7 +537,7 @@ public class DBUtils {
 						sm.put(columnName, (rs.getString(i) == null) ? "" : String.valueOf(rs.getLong(i)));
 					} else if ("NUMBER".equals(cellType) || "FLOAT".equals(cellType) || "DECIMAL".equals(cellType)
 							|| "DOUBLE".equals(cellType)) {
-						sm.put(columnName, (rs.getString(i) == null) ? "" : NumberUtils.d2s(rs.getDouble(i)));
+						sm.put(columnName, (rs.getString(i) == null) ? "" : rs.getBigDecimal(i).toString());
 					} else {
 						sm.put(columnName, (rs.getString(i) == null) ? "" : String.valueOf(rs.getString(i)));
 					}
