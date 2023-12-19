@@ -11,14 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tlv8.common.utils.doc.MimeUtils;
 import com.tlv8.doc.clt.doc.AbstractDoc;
 import com.tlv8.doc.clt.doc.Doc;
 import com.tlv8.doc.clt.doc.DocDBHelper;
 import com.tlv8.doc.clt.doc.DocUtils;
 import com.tlv8.doc.clt.doc.Docs;
+import com.tlv8.doc.clt.obj.DocUploadRes;
 import com.tlv8.doc.clt.pojo.SaDocnode;
 import com.tlv8.doc.clt.service.SaDocnodeService;
-import com.tlv8.doc.clt.utils.MimeUtils;
 
 @Component
 public class DocClient {
@@ -37,8 +38,7 @@ public class DocClient {
 	 * @return Map
 	 * @throws Exception
 	 */
-	public Map<String, Object> uploadFile(MultipartFile file, String docPath) throws Exception {
-		Map<String, Object> res = new HashMap<>();
+	public DocUploadRes uploadFile(MultipartFile file, String docPath) throws Exception {
 		if (docPath == null || "".equals(docPath)) {
 			docPath = "/root";
 		} else {
@@ -64,10 +64,8 @@ public class DocClient {
 		SaDocnode docnode = saDocnodeService.selectByPrimaryKey(docID);
 		docnode.setSfileid(fileID);
 		saDocnodeService.updateByPrimaryKey(docnode);
-		res.put("fileID", fileID);
-		res.put("filename", doc.getSdocname());
-		res.put("filesize", doc.getSsize());
-		res.put("md5", DigestUtils.md5Hex(file.getBytes()));
+		DocUploadRes res = new DocUploadRes(doc);
+		res.setMd5(DigestUtils.md5Hex(file.getBytes()));
 		return res;
 	}
 
@@ -80,8 +78,8 @@ public class DocClient {
 	 * @throws Exception
 	 */
 	public JSONObject uploadFileJson(MultipartFile file, String docPath) throws Exception {
-		Map<String, Object> res = uploadFile(file, docPath);
-		JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(res));
+		DocUploadRes res = uploadFile(file, docPath);
+		JSONObject json = res.toJson();
 		return json;
 	}
 

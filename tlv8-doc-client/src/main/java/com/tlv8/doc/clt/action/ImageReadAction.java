@@ -21,10 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.tlv8.common.db.DBUtils;
-import com.tlv8.doc.clt.utils.DocSvrUtils;
+import com.tlv8.common.utils.doc.DocSvrUtils;
 import com.tlv8.system.utils.ContextUtils;
 
 @Controller
@@ -49,15 +48,7 @@ public class ImageReadAction {
 			rs = st.executeQuery(showImage);
 			if (rs.next()) {
 				String fileinfo = rs.getString(1);
-				JSONArray jsona = new JSONArray();
-				try {
-					jsona = JSON.parseArray(fileinfo);
-				} catch (Exception e) {
-					try {
-						jsona = JSON.parseArray(transeJson(fileinfo));
-					} catch (Exception er) {
-					}
-				}
+				JSONArray jsona = DocSvrUtils.transeInfo(fileinfo);
 				if (jsona != null && !jsona.isEmpty()) {
 					String fileID = jsona.getJSONObject(0).getString("fileID");
 					response.setContentType("image/jpeg");
@@ -73,15 +64,6 @@ public class ImageReadAction {
 		}
 	}
 
-	public static String transeJson(String str) {
-		str = str.replace(":", ":\"");
-		str = str.replace(",", "\",");
-		str = str.replace("}", "\"}");
-		str = str.replace("}{", "},{");
-		str = str.replace(";", "\",");
-		return str;
-	};
-
 	/**
 	 * 读取图片{图片字段读取}
 	 * 
@@ -94,16 +76,21 @@ public class ImageReadAction {
 		String dbkey = request.getParameter("dbkey");
 		String keyCell = ("system".equals(dbkey)) ? "sID" : "fID";
 		String cellname = request.getParameter("cellname");
-		String showImage = "select " + cellname + " from " + request.getParameter("tablename") + " " + " where "
-				+ keyCell + "='" + request.getParameter("fID").trim() + "' ";
+		String tablename = request.getParameter("tablename");
+		String fid = request.getParameter("fID").trim();
+		SQL sql = new SQL();
+		sql.SELECT(cellname);
+		sql.FROM(tablename);
+		sql.WHERE(keyCell + "=?");
 		SqlSession sqlsession = DBUtils.getSqlSession();
 		Connection conn = null;
-		Statement st = null;
+		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			conn = sqlsession.getConnection();
-			st = conn.createStatement();
-			rs = st.executeQuery(showImage);
+			ps = conn.prepareStatement(sql.toString());
+			ps.setString(1, fid);
+			rs = ps.executeQuery();
 			if (rs.next()) {
 				Blob blob = (Blob) rs.getBlob(1);
 				long size = blob.length();
@@ -116,7 +103,7 @@ public class ImageReadAction {
 		} catch (Exception e) {
 			// e.printStackTrace();
 		} finally {
-			DBUtils.closeConn(sqlsession, conn, st, rs);
+			DBUtils.closeConn(sqlsession, conn, ps, rs);
 		}
 	}
 

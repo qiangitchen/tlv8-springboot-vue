@@ -1,4 +1,4 @@
-package com.tlv8.doc.clt.utils;
+package com.tlv8.common.utils.doc;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.tlv8.doc.clt.utils;
+package com.tlv8.common.utils.doc;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 
 import com.alibaba.fastjson.JSON;
@@ -29,7 +30,7 @@ public class DocSvrUtils {
 	 * @return
 	 */
 	public static JSONArray transeInfo(String celltext) {
-		JSONArray json = new JSONArray();
+		JSONArray json = null;
 		try {
 			json = JSON.parseArray(celltext);
 		} catch (Exception e) {
@@ -37,6 +38,9 @@ public class DocSvrUtils {
 				json = JSON.parseArray(transeJson(celltext));
 			} catch (Exception e1) {
 			}
+		}
+		if (json == null) {
+			json = new JSONArray();
 		}
 		return json;
 	}
@@ -57,7 +61,10 @@ public class DocSvrUtils {
 	}
 
 	public static String getDocServerUrl() {
-		String docHostSql = "select SURL from SA_DOCNAMESPACE where SID = 'defaultDocNameSpace'";
+		SQL sql = new SQL();
+		sql.SELECT("SURL");
+		sql.FROM("SA_DOCNAMESPACE");
+		sql.WHERE("SID = 'defaultDocNameSpace'");
 		String docHost = "";
 		SqlSession session = DBUtils.getSqlSession();
 		Connection conn = null;
@@ -65,7 +72,7 @@ public class DocSvrUtils {
 		ResultSet rs = null;
 		try {
 			conn = session.getConnection();
-			ps = conn.prepareStatement(docHostSql);
+			ps = conn.prepareStatement(sql.toString());
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				docHost = rs.getString("SURL");

@@ -17,7 +17,7 @@
  * along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tlv8.doc.clt.utils;
+package com.tlv8.common.utils.doc;
 
 import java.io.File;
 import java.io.FileInputStream;
