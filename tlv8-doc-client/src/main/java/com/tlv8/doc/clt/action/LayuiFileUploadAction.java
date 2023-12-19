@@ -38,62 +38,64 @@ public class LayuiFileUploadAction {
 	@RequestMapping(value = "/layuiFileUploadAction", method = RequestMethod.POST)
 	public Object execute(@RequestParam("file") MultipartFile file, String docPath, String dbkey, String rowid,
 			String tablename, String cellname) throws Exception {
-		JSONObject res = new JSONObject();
-		if (docPath == null || "".equals(docPath)) {
-			docPath = "/root";
-		} else {
-			try {
-				docPath = URLDecoder.decode(docPath, "UTF-8");
-			} catch (Exception e) {
-			}
-		}
-		try {
-			DocUploadRes docres = docClient.uploadFile(file, docPath);
-			if (rowid != null && !"".equals(rowid) && !"undefined".equals(rowid)) {
-				String keyfield = "fid";
-				if ("system".equals(dbkey)) {
-					keyfield = "sid";
-				}
-				SQL query = new SQL().SELECT(cellname).FROM(tablename).WHERE(keyfield + "=?");
-				SQL upsql = new SQL().UPDATE(tablename).SET(cellname + "=?").WHERE(keyfield + "=?");
-				SqlSession session = DBUtils.getSqlSession();
-				Connection conn = null;
-				PreparedStatement ps = null;
-				PreparedStatement ps1 = null;
-				ResultSet rs = null;
+		synchronized (tablename + cellname + rowid) {
+			JSONObject res = new JSONObject();
+			if (docPath == null || "".equals(docPath)) {
+				docPath = "/root";
+			} else {
 				try {
-					conn = session.getConnection();
-					JSONArray jsona = new JSONArray();
-					ps1 = conn.prepareStatement(query.toString());
-					ps1.setString(1, rowid);
-					rs = ps1.executeQuery();
-					if (rs.next()) {
-						String fileinfo = rs.getString(1);
-						jsona = DocSvrUtils.transeInfo(fileinfo);
-					}
-					jsona.add(docres.toJson());
-					ps = conn.prepareStatement(upsql.toString());
-					ps.setString(1, jsona.toString());
-					ps.setString(2, rowid);
-					ps.executeUpdate();
-					session.commit(true);
+					docPath = URLDecoder.decode(docPath, "UTF-8");
 				} catch (Exception e) {
-					session.rollback(true);
-					e.printStackTrace();
-				} finally {
-					DBUtils.closeConn(null, null, ps1, rs);
-					DBUtils.closeConn(session, conn, ps, null);
 				}
 			}
-			res.put("code", 0);
-			res.put("fileID", docres.getFileID());
-			res.put("msg", "上传成功！");
-		} catch (Exception e) {
-			res.put("code", -1);
-			res.put("msg", "上传失败！");
-			e.printStackTrace();
+			try {
+				DocUploadRes docres = docClient.uploadFile(file, docPath);
+				if (rowid != null && !"".equals(rowid) && !"undefined".equals(rowid)) {
+					String keyfield = "fid";
+					if ("system".equals(dbkey)) {
+						keyfield = "sid";
+					}
+					SQL query = new SQL().SELECT(cellname).FROM(tablename).WHERE(keyfield + "=?");
+					SQL upsql = new SQL().UPDATE(tablename).SET(cellname + "=?").WHERE(keyfield + "=?");
+					SqlSession session = DBUtils.getSqlSession();
+					Connection conn = null;
+					PreparedStatement ps = null;
+					PreparedStatement ps1 = null;
+					ResultSet rs = null;
+					try {
+						conn = session.getConnection();
+						JSONArray jsona = new JSONArray();
+						ps1 = conn.prepareStatement(query.toString());
+						ps1.setString(1, rowid);
+						rs = ps1.executeQuery();
+						if (rs.next()) {
+							String fileinfo = rs.getString(1);
+							jsona = DocSvrUtils.transeInfo(fileinfo);
+						}
+						jsona.add(docres.toJson());
+						ps = conn.prepareStatement(upsql.toString());
+						ps.setString(1, jsona.toString());
+						ps.setString(2, rowid);
+						ps.executeUpdate();
+						session.commit(true);
+					} catch (Exception e) {
+						session.rollback(true);
+						e.printStackTrace();
+					} finally {
+						DBUtils.closeConn(null, null, ps1, rs);
+						DBUtils.closeConn(session, conn, ps, null);
+					}
+				}
+				res.put("code", 0);
+				res.put("fileID", docres.getFileID());
+				res.put("msg", "上传成功！");
+			} catch (Exception e) {
+				res.put("code", -1);
+				res.put("msg", "上传失败！");
+				e.printStackTrace();
+			}
+			return res;
 		}
-		return res;
 	}
 
 }

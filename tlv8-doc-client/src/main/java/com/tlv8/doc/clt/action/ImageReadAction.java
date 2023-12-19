@@ -10,7 +10,6 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,16 +35,21 @@ public class ImageReadAction {
 		String dbkey = request.getParameter("dbkey");
 		String keyCell = ("system".equals(dbkey)) ? "sID" : "fID";
 		String cellname = request.getParameter("cellname");
-		String showImage = "select " + cellname + " from " + request.getParameter("tablename") + " " + " where "
-				+ keyCell + "='" + request.getParameter("fID").trim() + "' ";
+		String tablename = request.getParameter("tablename");
+		String fID = request.getParameter("fID").trim();
+		SQL sql = new SQL();
+		sql.SELECT(cellname);
+		sql.FROM(tablename);
+		sql.WHERE(keyCell + "=?");
 		SqlSession sqlsession = DBUtils.getSqlSession();
 		Connection conn = null;
-		Statement st = null;
+		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			conn = sqlsession.getConnection();
-			st = conn.createStatement();
-			rs = st.executeQuery(showImage);
+			ps = conn.prepareStatement(sql.toString());
+			ps.setString(1, fID);
+			rs = ps.executeQuery();
 			if (rs.next()) {
 				String fileinfo = rs.getString(1);
 				JSONArray jsona = DocSvrUtils.transeInfo(fileinfo);
@@ -60,7 +64,7 @@ public class ImageReadAction {
 		} catch (Exception e) {
 			// e.printStackTrace();
 		} finally {
-			DBUtils.closeConn(sqlsession, conn, st, rs);
+			DBUtils.closeConn(sqlsession, conn, ps, rs);
 		}
 	}
 
