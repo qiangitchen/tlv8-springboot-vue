@@ -208,9 +208,6 @@ tlv8.Doc = {
 			alert('您没有相应操作的权限');
 			throw new Error('您没有相应操作的权限');
 		}
-		if (!docUrl.indexOf(window.location.protocol) < 1) {
-			docUrl = getHost() + docUrl;
-		}
 		return docUrl + "&" + this.getBSessionIDParam();
 	},
 	getBSessionIDParam : function() {
@@ -889,8 +886,7 @@ tlv8.Doc = {
 		}
 		var docOcx = document.getElementById(docExtObjID);
 		OVP.filename = escape(OVP.filename);
-		docOcx.OpenWebForm(getHost()
-				+ "/comon/doc_ocx/office/officeViewerDialog.html",
+		docOcx.OpenWebForm("/comon/doc_ocx/office/officeViewerDialog.html",
 				unescape(OV.JSON.stringify(OVP)));
 	},
 	docInfoDialog : null,
