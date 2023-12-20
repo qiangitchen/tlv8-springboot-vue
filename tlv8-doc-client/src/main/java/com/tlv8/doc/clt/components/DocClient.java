@@ -92,18 +92,23 @@ public class DocClient {
 	 * @return {@link Map}
 	 * @throws Exception
 	 */
-	private Map<String, String> upLoadFiletoDaisy(String DocPath, String DocName, InputStream file) throws Exception {
-		AbstractDoc doca = new AbstractDoc(docDBHelper);
-		doca.setSdocpath(DocPath);
-		doca.setSdocname(DocName);
-		doca.upload(false, file);
-		DocUtils.saveDocFlag(docDBHelper.getHost(), DocPath, doca.getSkind(), doca.getScachename(),
-				doca.getScachename(), false);
+	private Map<String, String> upLoadFiletoDaisy(String DocPath, String DocName, InputStream inputstream)
+			throws Exception {
 		Map<String, String> rem = new HashMap<>();
-		rem.put("Kind", doca.getSkind());
-		rem.put("cacheName", doca.getScachename());
-		rem.put("Size", String.valueOf(doca.getSsize()));
-		rem.put("sDocName", DocName);
+		try {
+			AbstractDoc doca = new AbstractDoc(docDBHelper);
+			doca.setSdocpath(DocPath);
+			doca.setSdocname(DocName);
+			doca.upload(false, inputstream);
+			DocUtils.saveDocFlag(docDBHelper.getHost(), DocPath, doca.getSkind(), doca.getScachename(),
+					doca.getScachename(), false);
+			rem.put("Kind", doca.getSkind());
+			rem.put("cacheName", doca.getScachename());
+			rem.put("Size", String.valueOf(doca.getSsize()));
+			rem.put("sDocName", DocName);
+		} finally {
+			inputstream.close();
+		}
 		return rem;
 	}
 }
