@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.domain.AjaxResult;
 
 /**
  * @author ChenQain
@@ -89,7 +90,7 @@ public class savePermitionAction extends ActionSupport {
 		data.setMessage(m);
 		data.setPage(page);
 		data.setAllpage(allpage);
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	@SuppressWarnings("deprecation")

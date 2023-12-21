@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.tlv8.common.base.Data;
+import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.flw.base.TaskData;
 import com.tlv8.flw.bean.FlowBotBean;
 import com.tlv8.flw.bean.FlowBotXBean;
@@ -58,7 +59,7 @@ public class FlowBotControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			System.out.println(e.toString());
 		}
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class FlowBotControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			System.out.println(e.toString());
 		}
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class FlowBotControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	/**
@@ -124,7 +125,7 @@ public class FlowBotControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	/**
@@ -142,7 +143,7 @@ public class FlowBotControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return this;
+		return AjaxResult.success(data);
 	}
 
 }

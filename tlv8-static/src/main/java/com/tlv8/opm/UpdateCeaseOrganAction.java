@@ -13,6 +13,7 @@ import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.base.Sys;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.system.utils.ContextUtils;
 
 /**
@@ -33,7 +34,7 @@ public class UpdateCeaseOrganAction extends ActionSupport {
 		if (userid == null || "".equals(userid)) {
 			data.setFlag("timeout");
 			Sys.packErrMsg("未登录或登录已超时，不允许操作!");
-			return this;
+			return AjaxResult.success(data);
 		}
 		String r = "true";
 		String m = "success";
@@ -49,7 +50,7 @@ public class UpdateCeaseOrganAction extends ActionSupport {
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
-		return this;
+		return AjaxResult.success(data);
 	}
 
 	public String exeUpdateCeaseOrgAction() throws SQLException {
