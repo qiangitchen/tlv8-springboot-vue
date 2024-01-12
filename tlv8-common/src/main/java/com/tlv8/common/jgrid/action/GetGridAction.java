@@ -2,7 +2,7 @@ package com.tlv8.common.jgrid.action;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
@@ -10,9 +10,9 @@ import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.jgrid.BasegetGridAction;
 
 /**
+ * 公用查询（grid） 支持Oracle、 SQL Server、 MySQL
+ * 
  * @author ChenQian
- * @create 2011-11-11
- * @see 公用查询（grid） 支持Oracle、 SQL Server、 MySQL
  */
 @Controller
 @Scope("prototype")
@@ -27,7 +27,7 @@ public class GetGridAction extends BasegetGridAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/getGridAction", produces = "application/json;charset=UTF-8")
+	@PostMapping(value = "/getGridAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		data = new Data();
 		String r = "true";

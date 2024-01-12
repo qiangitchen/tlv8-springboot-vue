@@ -2,8 +2,7 @@ package com.tlv8.common.data.action;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
@@ -11,9 +10,9 @@ import com.tlv8.common.data.BaseDeleteAction;
 import com.tlv8.common.domain.AjaxResult;
 
 /**
+ * 公用删除动作
+ * 
  * @author ChenQian
- * @create 2011-11-10
- * @see 公用删除动作
  */
 @Controller
 @Scope("prototype")
@@ -28,7 +27,7 @@ public class DeleteAction extends BaseDeleteAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@PostMapping(value = "/deleteAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		data = new Data();
 		String r = "";

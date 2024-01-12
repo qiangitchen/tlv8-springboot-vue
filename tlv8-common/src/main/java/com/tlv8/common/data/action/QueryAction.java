@@ -2,7 +2,7 @@ package com.tlv8.common.data.action;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
@@ -10,8 +10,9 @@ import com.tlv8.common.data.BaseQueryAction;
 import com.tlv8.common.domain.AjaxResult;
 
 /**
+ * 用于公共查询动作(针对单行数据)
+ * 
  * @author ChenQian
- * @category 用于公共查询动作(针对单行数据)
  */
 @Controller
 @Scope("prototype")
@@ -26,7 +27,7 @@ public class QueryAction extends BaseQueryAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/queryAction", produces = "application/json;charset=UTF-8")
+	@PostMapping(value = "/queryAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		data = new Data();
 		String r = "true";

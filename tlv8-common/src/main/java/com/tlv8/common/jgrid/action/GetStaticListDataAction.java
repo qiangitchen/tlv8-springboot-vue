@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
@@ -31,7 +31,7 @@ public class GetStaticListDataAction extends ActionSupport {
 	private String jsondata;
 
 	@ResponseBody
-	@RequestMapping(value = "/getStaticListDataAction", produces = "application/json;charset=UTF-8")
+	@PostMapping(value = "/getStaticListDataAction", produces = "application/json;charset=UTF-8")
 	@SuppressWarnings("deprecation")
 	public Object execute() throws Exception {
 		String sql = "select " + relations + " from " + table;

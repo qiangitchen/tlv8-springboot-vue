@@ -18,7 +18,7 @@ import javax.naming.NamingException;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -39,7 +39,7 @@ public class GetGridSelectDataAction extends ActionSupport {
 	private String sql = null;
 
 	@ResponseBody
-	@RequestMapping(value = "/getGridSelectDataAction", produces = "application/json;charset=UTF-8")
+	@PostMapping(value = "/getGridSelectDataAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		data = new Data();
 		String r = "true";

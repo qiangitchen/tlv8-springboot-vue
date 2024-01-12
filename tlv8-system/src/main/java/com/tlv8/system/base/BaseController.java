@@ -176,7 +176,7 @@ public class BaseController {
 		return executeMethodAsDocument("BusinessServer", method);
 	}
 
-	protected HashMap<String, String> getSysParams(HttpServletRequest req, SysLogin sysLogin) {
+	public HashMap<String, String> getSysParams(HttpServletRequest req, SysLogin sysLogin) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		try {
 			map = sysParams.getSysParamsFunc(sysLogin);

@@ -298,7 +298,6 @@ Jtree.prototype.quickPosition = function(text) {
 				: "";
 		var quickCells = this.setting.isquickPosition.quickCells ? this.setting.isquickPosition.quickCells
 				: "";
-		var param = new tlv8.RequestParam();
 		var quicktext = this.Jtreeid
 				+ ","
 				+ this.Jtreename
@@ -315,10 +314,20 @@ Jtree.prototype.quickPosition = function(text) {
 				+ ","
 				+ (this.param.cell.rootFilter ? this.param.cell.rootFilter : "")
 				+ "," + (this.param.cell.filter ? this.param.cell.filter : "");
-		param.set("quicktext", quicktext);
-		param.set("quickCells", quickCells);
-		param.set("cloums", this.Jtreeother);
-		action = (action.startWith(cpath) ? action : (cpath + "/" + action));
+		action = (action.startWith(cpath)?action:(cpath+"/"+action));
+		var actionName = action;
+        var query = "";
+        if(actionName.indexOf("?") > 0){
+        	query = actionName.substring(actionName.indexOf("?")+1);
+        	actionName = actionName.substring(0,actionName.indexOf("?"));
+        }else{
+        	query = "t=1";
+        }
+        query += "&quicktext=" + quicktext;
+        query += "&quickCells=" + quickCells;
+        query += "&cloums=" + this.Jtreeother;
+		var param = new tlv8.RequestParam();
+		param.set("query", CryptoJS.AESEncrypt(query));
 		var nodes = (this.setting.async.enable) ? (eval(tlv8.XMLHttpRequest(
 				action, param, "post", false, null).jsonResult)) : this.zNodes;
 		qNode = nodes;
@@ -372,12 +381,20 @@ Jtree.prototype.refreshJtree = function(panle, afcalback) {
 			+ (this.param.cell.rootFilter ? this.param.cell.rootFilter : "")
 			+ "\",\"filter\":\""
 			+ (this.param.cell.filter ? this.param.cell.filter : "") + "\"}";
+	action = (action.startWith(cpath)?action:(cpath+"/"+action));
+	var actionName = action;
+    var query = "";
+    if(actionName.indexOf("?") > 0){
+    	query = actionName.substring(actionName.indexOf("?")+1);
+    	actionName = actionName.substring(0,actionName.indexOf("?"));
+    }else{
+    	query = "t=1";
+    }
+    query += "&params=" + str;
+    query += "&orderby=" + (this.param.cell.orderby ? this.param.cell.orderby : "");
 	var pamstens = new tlv8.RequestParam();
-	pamstens.set("params", str);
-	pamstens.set("orderby", this.param.cell.orderby ? this.param.cell.orderby
-			: "");
+	pamstens.set("query", CryptoJS.AESEncrypt(query));
 	var Jtree_Ext = this;
-	action = (action.startWith(cpath) ? action : (cpath + "/" + action));
 	tlv8.XMLHttpRequest(action, pamstens, "post", true, function(data) {
 		var zNodes = data.jsonResult;
 		if (typeof zNodes == "string") {

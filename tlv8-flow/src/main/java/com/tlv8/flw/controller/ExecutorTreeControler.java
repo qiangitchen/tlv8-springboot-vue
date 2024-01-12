@@ -14,7 +14,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -26,9 +26,9 @@ import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.utils.ContextUtils;
 
 /**
+ * 获取流程执行人机构树
+ * 
  * @author ChenQian
- * @date 2012-6-8
- * @see 获取流程执行人机构树
  */
 @Controller
 @Scope("prototype")
@@ -46,8 +46,7 @@ public class ExecutorTreeControler extends ActionSupport {
 	}
 
 	@ResponseBody
-	@RequestMapping("/getExecutorTree")
-	@Override
+	@PostMapping("/getExecutorTree")
 	public Object execute() throws Exception {
 		try {
 			data.setData(findOrgInfo());

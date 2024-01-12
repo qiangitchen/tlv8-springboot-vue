@@ -6,6 +6,12 @@ import org.springframework.context.annotation.Configuration;
 
 import com.bstek.ureport.console.UReportServlet;
 
+/**
+ * 报表服务相关配置-ureport
+ * 
+ * @author chenqian
+ *
+ */
 @Configuration
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ServletConfig {

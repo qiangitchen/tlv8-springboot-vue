@@ -6,15 +6,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.action.ActionSupport;
+import com.tlv8.common.utils.AesEncryptUtil;
 import com.tlv8.flw.base.FlowFile;
 import com.tlv8.system.base.BaseController;
 import com.tlv8.system.bean.ContextBean;
 
 /**
+ * 流程图加载和保存-编辑控制
+ * 
  * @author ChenQian
  */
 @Controller
@@ -35,7 +39,7 @@ public class FlowDrawControler extends ActionSupport {
 	 * 获取流程图
 	 */
 	@ResponseBody
-	@RequestMapping("/getFlowDrawAction")
+	@PostMapping("/getFlowDrawAction")
 	public Object loadFlowDraw() {
 		try {
 			Map m = flowFile.getFlowDraw(getSprocessid());// 获取流程图
@@ -44,14 +48,17 @@ public class FlowDrawControler extends ActionSupport {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return this;
+		JSONObject json = new JSONObject();
+		json.put("sprocessid", sprocessid);
+		json.put("sprocessname", sprocessname);
+		return json;
 	}
 
 	/**
 	 * 保存流程图
 	 */
 	@ResponseBody
-	@RequestMapping("/saveFlowDrawLGAction")
+	@PostMapping("/saveFlowDrawLGAction")
 	public Object saveFlowDrawLG() {
 		try {
 			ContextBean context = baseController.getContext();
@@ -59,14 +66,16 @@ public class FlowDrawControler extends ActionSupport {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return this;
+		JSONObject json = new JSONObject();
+		json.put("sprocessid", sprocessid);
+		json.put("sprocessname", sprocessname);
+		return json;
 	}
 
 	public void setSprocessid(String sprocessid) {
 		try {
 			this.sprocessid = URLDecoder.decode(sprocessid, "UTF-8");
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -78,7 +87,6 @@ public class FlowDrawControler extends ActionSupport {
 		try {
 			this.sprocessname = URLDecoder.decode(sprocessname, "UTF-8");
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -90,8 +98,8 @@ public class FlowDrawControler extends ActionSupport {
 		try {
 			this.sdrawlg = URLDecoder.decode(sdrawlg, "UTF-8");
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		this.sdrawlg = AesEncryptUtil.desEncrypt(this.sdrawlg);
 	}
 
 	public String getSdrawlg() {
@@ -106,7 +114,7 @@ public class FlowDrawControler extends ActionSupport {
 		try {
 			this.sprocessacty = URLDecoder.decode(sprocessacty, "UTF-8");
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		this.sprocessacty = AesEncryptUtil.desEncrypt(this.sprocessacty);
 	}
 }
