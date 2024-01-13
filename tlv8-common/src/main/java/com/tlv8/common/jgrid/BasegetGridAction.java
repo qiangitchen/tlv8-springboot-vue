@@ -11,6 +11,7 @@ import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.AesEncryptUtil;
+import com.tlv8.common.utils.CodeUtils;
 import com.tlv8.common.utils.StringArray;
 
 /**
@@ -53,12 +54,9 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setWhere(String where) {
-		try {
-			this.where = URLDecoder.decode(where, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.where = CodeUtils.getDoubleDecode(where);
 		this.where = AesEncryptUtil.desEncrypt(this.where);
+		this.where = CodeUtils.getDoubleDecode(this.where);
 	}
 
 	public String getWhere() {

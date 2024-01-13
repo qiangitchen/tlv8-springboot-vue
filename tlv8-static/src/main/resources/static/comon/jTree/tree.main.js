@@ -327,7 +327,7 @@ Jtree.prototype.quickPosition = function(text) {
         query += "&quickCells=" + quickCells;
         query += "&cloums=" + this.Jtreeother;
 		var param = new tlv8.RequestParam();
-		param.set("query", CryptoJS.AESEncrypt(query));
+		param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 		var nodes = (this.setting.async.enable) ? (eval(tlv8.XMLHttpRequest(
 				action, param, "post", false, null).jsonResult)) : this.zNodes;
 		qNode = nodes;
@@ -393,7 +393,7 @@ Jtree.prototype.refreshJtree = function(panle, afcalback) {
     query += "&params=" + str;
     query += "&orderby=" + (this.param.cell.orderby ? this.param.cell.orderby : "");
 	var pamstens = new tlv8.RequestParam();
-	pamstens.set("query", CryptoJS.AESEncrypt(query));
+	pamstens.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var Jtree_Ext = this;
 	tlv8.XMLHttpRequest(action, pamstens, "post", true, function(data) {
 		var zNodes = data.jsonResult;

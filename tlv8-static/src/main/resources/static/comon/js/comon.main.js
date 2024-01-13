@@ -434,8 +434,8 @@ tlv8.Queryaction = function (actionName, post, callBack, data, where, ays) {
     query += "&relation="+relation;
     query += "&orderby="+orderby;
     var param = new tlv8.RequestParam();
-    param.set("where", CryptoJS.AESEncrypt(where));
-    param.set("query", CryptoJS.AESEncrypt(query));
+    param.set("where", CryptoJS.AESEncrypt(J_u_encode(where)));
+    param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
     var isay = (ays == false) ? ays : true;
     var rscallBack = function (r) {
         if (callBack)
@@ -482,7 +482,7 @@ tlv8.Deleteaction = function (actionName, post, callBack, rowid, data, ays) {
     query += "&rowid="+rowid;
     query += "&cascade="+Cascade;
     var param = new tlv8.RequestParam();
-    param.set("query", CryptoJS.AESEncrypt(query));
+    param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
     var isay = (ays == false) ? ays : true;
     var rscallBack = function (r) {
         if (callBack)
@@ -527,7 +527,7 @@ tlv8.saveAction = function (actionName, post, callBack, data, allreturn, ays) {
     query += "&table="+table;
     query += "&cells="+cells;
     var param = new tlv8.RequestParam();
-    param.set("query", CryptoJS.AESEncrypt(query));
+    param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
     var ays_true = (ays == false) ? ays : true;
     var rscallBack = function (r) {
         if (callBack && allreturn)
