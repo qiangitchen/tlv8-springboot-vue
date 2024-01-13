@@ -208,14 +208,21 @@ Jtree.prototype.init = function(treebody, setting, param) {
 		action = param.action;
 	}
 	// alert(action);
-
-	var pams = new tlv8.RequestParam();
-	pams.set("params", str);
-	pams.set("orderby", param.cell.orderby ? param.cell.orderby : "");
-	$("#" + treebody).html(
-			"<img src='" + cpath + "/comon/css/zTreeStyle/img/loading.gif'/>");
-	action = (action.startWith(cpath) ? action : (cpath + "/" + action));
+	action = (action.startWith(cpath)?action:(cpath+"/"+action));
 	setting.async.url = action;
+	// alert(action);
+	var actionName = action;
+    var query = "";
+    if(actionName.indexOf("?") > 0){
+    	query = actionName.substring(actionName.indexOf("?")+1);
+    	actionName = actionName.substring(0,actionName.indexOf("?"));
+    }else{
+    	query = "t=1";
+    }
+    query += "&params=" + str;
+    query += "&orderby=" + (param.cell.orderby ? param.cell.orderby : "");
+	var pams = new tlv8.RequestParam();
+	pams.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	tlv8.XMLHttpRequest(action, pams, "post", false, function(data) {
 		try {
 			var zNodes = data.jsonResult;
