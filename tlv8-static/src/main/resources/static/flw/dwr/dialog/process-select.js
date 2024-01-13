@@ -31,7 +31,7 @@ var setting = {
 	},
 	async : {
 		enable : true,
-		url : "/TreeSelectAction",
+		url : "TreeSelectAction",
 		autoParam : [ "id=currenid" ],
 		type : "post"
 	},
