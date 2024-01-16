@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
 import com.tlv8.common.data.BaseQueryAction;
-import com.tlv8.common.domain.AjaxResult;
 
 /**
  * 用于公共查询动作(针对单行数据)
@@ -46,6 +45,6 @@ public class QueryAction extends BaseQueryAction {
 		data.setMessage(m);
 		data.setTable(table);
 		data.setRelation(relation);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 }

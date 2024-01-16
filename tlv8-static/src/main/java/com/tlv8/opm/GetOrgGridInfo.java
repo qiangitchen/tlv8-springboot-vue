@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.jgrid.BasegetGridAction;
 
 /**
@@ -47,6 +46,6 @@ public class GetOrgGridInfo extends BasegetGridAction {
 		data.setPage(page);
 		data.setAllpage(allpage);
 		data.setGridid(gridid);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 }

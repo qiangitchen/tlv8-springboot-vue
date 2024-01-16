@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.StringArray;
 
 /**
@@ -53,7 +52,7 @@ public class ResetOrgDataAction extends ActionSupport {
 			data.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	public void setRowid(String rowid) {

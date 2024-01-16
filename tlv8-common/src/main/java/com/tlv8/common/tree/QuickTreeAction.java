@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.utils.AesEncryptUtil;
 import com.tlv8.common.utils.StringArray;
 
 /**
@@ -44,7 +45,7 @@ public class QuickTreeAction extends ActionSupport {
 	public Object execute() throws Exception {
 		exeQuickAction();
 		JSONObject json = new JSONObject();
-		json.put("jsonResult", jsonResult);
+		json.put("jsonResult", AesEncryptUtil.encrypt(jsonResult));
 		return json;
 	}
 

@@ -146,9 +146,9 @@ Jtree.prototype.init = function(treebody, setting, param) {
 				+ $dpimgpath
 				+ "toolbar/search.gif' title='查询' style='font-size:12px'/></a></td></tr>";
 		var streeheight = $("#" + treebody).parent().height() - 30;
-		if (streeheight > 0) {
+		if(streeheight > 0){
 			streeheight = streeheight + "px";
-		} else {
+		}else{
 			streeheight = "100%";
 		}
 		treeHTML += "<tr><td colspan='2' valign='top'>"
@@ -223,21 +223,26 @@ Jtree.prototype.init = function(treebody, setting, param) {
     query += "&orderby=" + (param.cell.orderby ? param.cell.orderby : "");
 	var pams = new tlv8.RequestParam();
 	pams.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
-	tlv8.XMLHttpRequest(action, pams, "post", false, function(data) {
+	$("#" + treebody).html(
+			"<img src='"+cpath+"/comon/css/zTreeStyle/img/loading.gif'/>");
+	tlv8.XMLHttpRequest(actionName, pams, "post", false, function(data) {
 		try {
 			var zNodes = data.jsonResult;
-			if (typeof zNodes == "string") {
-				zNodes = window.eval("(" + zNodes + ")");
+			try{
+				zNodes = CryptoJS.AESDecrypt(zNodes);
+            }catch (e) {
+			}
+			if(typeof zNodes == "string"){
+				zNodes = window.eval("("+zNodes+")");
 			}
 			exeJtree.zNodes = zNodes;
 			exeJtree.setting = setting;// Jtree.tree.getSetting();
 			document.getElementById(treebody).Jtree = exeJtree;
 			document.getElementById(treebody).setting = setting;
 			document.getElementById(treebody).param = param;
-			exeJtree.tree = $.fn.zTree.init($("#" + treebody), setting, zNodes,
-					param);
+			exeJtree.tree = $.fn.zTree.init($("#" + treebody), setting, zNodes, param);
 		} catch (e) {
-			// console.log(e);
+			//console.log(e);
 		}
 	});
 };
@@ -258,7 +263,7 @@ function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
 			+ param.cell.databaseName);
 	pm.set("rowid", rowid);
 	pm.set("torowid", torowid);
-	tlv8.XMLHttpRequest(cpath + "/JtreeDropAction", pm, "post", true, null);
+	tlv8.XMLHttpRequest(cpath+"/JtreeDropAction", pm, "post", true, null);
 	return true;
 
 }
@@ -335,8 +340,12 @@ Jtree.prototype.quickPosition = function(text) {
         query += "&cloums=" + this.Jtreeother;
 		var param = new tlv8.RequestParam();
 		param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
-		var nodes = (this.setting.async.enable) ? (eval(tlv8.XMLHttpRequest(
-				action, param, "post", false, null).jsonResult)) : this.zNodes;
+		var jsonResult  = tlv8.XMLHttpRequest(actionName, param, "post", false, null).jsonResult;
+		try{
+			jsonResult = CryptoJS.AESDecrypt(jsonResult);
+        }catch (e) {
+		}
+		var nodes = (this.setting.async.enable) ? (eval(jsonResult)) : this.zNodes;
 		qNode = nodes;
 		if (qNode.length < 1) {
 			alert("未找到[" + text + "]对应的内容!");
@@ -402,10 +411,14 @@ Jtree.prototype.refreshJtree = function(panle, afcalback) {
 	var pamstens = new tlv8.RequestParam();
 	pamstens.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var Jtree_Ext = this;
-	tlv8.XMLHttpRequest(action, pamstens, "post", true, function(data) {
+	tlv8.XMLHttpRequest(actionName, pamstens, "post", true, function(data) {
 		var zNodes = data.jsonResult;
-		if (typeof zNodes == "string") {
-			zNodes = window.eval("(" + zNodes + ")");
+		try{
+			zNodes = CryptoJS.AESDecrypt(zNodes);
+        }catch (e) {
+		}
+		if(typeof zNodes == "string"){
+			zNodes = window.eval("("+zNodes+")");
 		}
 		$.fn.zTree.init($("#" + panle), Jtree_Ext.setting, zNodes,
 				Jtree_Ext.param);
@@ -414,4 +427,28 @@ Jtree.prototype.refreshJtree = function(panle, afcalback) {
 			afcalback(zNodes);
 		}
 	});
+};
+
+Jtree.prototype.expandLevel = function(level) {
+	var nodes = this.getNodes();
+	for (var i = 0; i < nodes.length; i++) {
+		var snode = nodes[i];
+		this.tree.expandNode(snode, true);
+		if (level > 1) {
+			level = level - 1;
+			this.expandChild(snode.id, level);
+		}
+	}
+};
+
+Jtree.prototype.expandChild = function(pid, level) {
+	var nodes = this.tree.getNodeByTId(pid).children || [];
+	for (var i = 0; i < nodes.length; i++) {
+		var snode = nodes[i];
+		this.tree.expandNode(snode, true);
+		if (level > 1) {
+			level = level - 1;
+			this.expandChild(snode.id, level);
+		}
+	}
 };

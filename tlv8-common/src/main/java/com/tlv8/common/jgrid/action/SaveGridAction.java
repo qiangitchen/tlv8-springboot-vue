@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.jgrid.BaseSaveGridAction;
 
 /**
@@ -45,7 +44,7 @@ public class SaveGridAction extends BaseSaveGridAction {
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 }
