@@ -146,9 +146,9 @@ Jtree.prototype.init = function(treebody, setting, param) {
 				+ $dpimgpath
 				+ "toolbar/search.gif' title='查询' style='font-size:12px'/></a></td></tr>";
 		var streeheight = $("#" + treebody).parent().height() - 30;
-		if (streeheight > 0) {
+		if(streeheight > 0){
 			streeheight = streeheight + "px";
-		} else {
+		}else{
 			streeheight = "100%";
 		}
 		treeHTML += "<tr><td colspan='2' valign='top'>"
@@ -208,29 +208,41 @@ Jtree.prototype.init = function(treebody, setting, param) {
 		action = param.action;
 	}
 	// alert(action);
-
-	var pams = new tlv8.RequestParam();
-	pams.set("params", str);
-	pams.set("orderby", param.cell.orderby ? param.cell.orderby : "");
-	$("#" + treebody).html(
-			"<img src='" + cpath + "/comon/css/zTreeStyle/img/loading.gif'/>");
-	action = (action.startWith(cpath) ? action : (cpath + "/" + action));
+	action = (action.startWith(cpath)?action:(cpath+"/"+action));
 	setting.async.url = action;
-	tlv8.XMLHttpRequest(action, pams, "post", false, function(data) {
+	// alert(action);
+	var actionName = action;
+    var query = "";
+    if(actionName.indexOf("?") > 0){
+    	query = actionName.substring(actionName.indexOf("?")+1);
+    	actionName = actionName.substring(0,actionName.indexOf("?"));
+    }else{
+    	query = "t=1";
+    }
+    query += "&params=" + str;
+    query += "&orderby=" + (param.cell.orderby ? param.cell.orderby : "");
+	var pams = new tlv8.RequestParam();
+	pams.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
+	$("#" + treebody).html(
+			"<img src='"+cpath+"/comon/css/zTreeStyle/img/loading.gif'/>");
+	tlv8.XMLHttpRequest(actionName, pams, "post", false, function(data) {
 		try {
 			var zNodes = data.jsonResult;
-			if (typeof zNodes == "string") {
-				zNodes = window.eval("(" + zNodes + ")");
+			try{
+				zNodes = CryptoJS.AESDecrypt(zNodes);
+            }catch (e) {
+			}
+			if(typeof zNodes == "string"){
+				zNodes = window.eval("("+zNodes+")");
 			}
 			exeJtree.zNodes = zNodes;
 			exeJtree.setting = setting;// Jtree.tree.getSetting();
 			document.getElementById(treebody).Jtree = exeJtree;
 			document.getElementById(treebody).setting = setting;
 			document.getElementById(treebody).param = param;
-			exeJtree.tree = $.fn.zTree.init($("#" + treebody), setting, zNodes,
-					param);
+			exeJtree.tree = $.fn.zTree.init($("#" + treebody), setting, zNodes, param);
 		} catch (e) {
-			// console.log(e);
+			//console.log(e);
 		}
 	});
 };
@@ -251,7 +263,7 @@ function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
 			+ param.cell.databaseName);
 	pm.set("rowid", rowid);
 	pm.set("torowid", torowid);
-	tlv8.XMLHttpRequest(cpath + "/JtreeDropAction", pm, "post", true, null);
+	tlv8.XMLHttpRequest(cpath+"/JtreeDropAction", pm, "post", true, null);
 	return true;
 
 }
@@ -298,7 +310,6 @@ Jtree.prototype.quickPosition = function(text) {
 				: "";
 		var quickCells = this.setting.isquickPosition.quickCells ? this.setting.isquickPosition.quickCells
 				: "";
-		var param = new tlv8.RequestParam();
 		var quicktext = this.Jtreeid
 				+ ","
 				+ this.Jtreename
@@ -315,12 +326,26 @@ Jtree.prototype.quickPosition = function(text) {
 				+ ","
 				+ (this.param.cell.rootFilter ? this.param.cell.rootFilter : "")
 				+ "," + (this.param.cell.filter ? this.param.cell.filter : "");
-		param.set("quicktext", quicktext);
-		param.set("quickCells", quickCells);
-		param.set("cloums", this.Jtreeother);
-		action = (action.startWith(cpath) ? action : (cpath + "/" + action));
-		var nodes = (this.setting.async.enable) ? (eval(tlv8.XMLHttpRequest(
-				action, param, "post", false, null).jsonResult)) : this.zNodes;
+		action = (action.startWith(cpath)?action:(cpath+"/"+action));
+		var actionName = action;
+        var query = "";
+        if(actionName.indexOf("?") > 0){
+        	query = actionName.substring(actionName.indexOf("?")+1);
+        	actionName = actionName.substring(0,actionName.indexOf("?"));
+        }else{
+        	query = "t=1";
+        }
+        query += "&quicktext=" + quicktext;
+        query += "&quickCells=" + quickCells;
+        query += "&cloums=" + this.Jtreeother;
+		var param = new tlv8.RequestParam();
+		param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
+		var jsonResult  = tlv8.XMLHttpRequest(actionName, param, "post", false, null).jsonResult;
+		try{
+			jsonResult = CryptoJS.AESDecrypt(jsonResult);
+        }catch (e) {
+		}
+		var nodes = (this.setting.async.enable) ? (eval(jsonResult)) : this.zNodes;
 		qNode = nodes;
 		if (qNode.length < 1) {
 			alert("未找到[" + text + "]对应的内容!");
@@ -372,16 +397,28 @@ Jtree.prototype.refreshJtree = function(panle, afcalback) {
 			+ (this.param.cell.rootFilter ? this.param.cell.rootFilter : "")
 			+ "\",\"filter\":\""
 			+ (this.param.cell.filter ? this.param.cell.filter : "") + "\"}";
+	action = (action.startWith(cpath)?action:(cpath+"/"+action));
+	var actionName = action;
+    var query = "";
+    if(actionName.indexOf("?") > 0){
+    	query = actionName.substring(actionName.indexOf("?")+1);
+    	actionName = actionName.substring(0,actionName.indexOf("?"));
+    }else{
+    	query = "t=1";
+    }
+    query += "&params=" + str;
+    query += "&orderby=" + (this.param.cell.orderby ? this.param.cell.orderby : "");
 	var pamstens = new tlv8.RequestParam();
-	pamstens.set("params", str);
-	pamstens.set("orderby", this.param.cell.orderby ? this.param.cell.orderby
-			: "");
+	pamstens.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var Jtree_Ext = this;
-	action = (action.startWith(cpath) ? action : (cpath + "/" + action));
-	tlv8.XMLHttpRequest(action, pamstens, "post", true, function(data) {
+	tlv8.XMLHttpRequest(actionName, pamstens, "post", true, function(data) {
 		var zNodes = data.jsonResult;
-		if (typeof zNodes == "string") {
-			zNodes = window.eval("(" + zNodes + ")");
+		try{
+			zNodes = CryptoJS.AESDecrypt(zNodes);
+        }catch (e) {
+		}
+		if(typeof zNodes == "string"){
+			zNodes = window.eval("("+zNodes+")");
 		}
 		$.fn.zTree.init($("#" + panle), Jtree_Ext.setting, zNodes,
 				Jtree_Ext.param);
@@ -390,4 +427,28 @@ Jtree.prototype.refreshJtree = function(panle, afcalback) {
 			afcalback(zNodes);
 		}
 	});
+};
+
+Jtree.prototype.expandLevel = function(level) {
+	var nodes = this.getNodes();
+	for (var i = 0; i < nodes.length; i++) {
+		var snode = nodes[i];
+		this.tree.expandNode(snode, true);
+		if (level > 1) {
+			level = level - 1;
+			this.expandChild(snode.id, level);
+		}
+	}
+};
+
+Jtree.prototype.expandChild = function(pid, level) {
+	var nodes = this.tree.getNodeByTId(pid).children || [];
+	for (var i = 0; i < nodes.length; i++) {
+		var snode = nodes[i];
+		this.tree.expandNode(snode, true);
+		if (level > 1) {
+			level = level - 1;
+			this.expandChild(snode.id, level);
+		}
+	}
 };

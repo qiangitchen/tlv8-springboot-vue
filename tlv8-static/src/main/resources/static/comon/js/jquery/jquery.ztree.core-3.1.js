@@ -1068,7 +1068,7 @@
 				url : tools.apply(setting.async.url, [ setting.treeId, node ],
 						setting.async.url),
 				async : false,
-				data : tmpParam,
+				data : "query=" + J_u_encode(CryptoJS.AESEncrypt(J_u_encode(tmpParam))),
 				dataType : setting.async.dataType,
 				success : function(msg) {
 					var newNodes = [];
@@ -1077,7 +1077,12 @@
 							newNodes = [];
 						} else if (typeof msg == "string") {
 							newNodes = eval("(" + msg + ")");
-							newNodes = eval(newNodes.jsonResult);
+							newNodes = newNodes.jsonResult;
+							try{
+								newNodes = CryptoJS.AESDecrypt(newNodes);
+			                }catch (e) {
+							}
+							newNodes = eval(newNodes);
 						} else {
 							newNodes = msg;
 						}

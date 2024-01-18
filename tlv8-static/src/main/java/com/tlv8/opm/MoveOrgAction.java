@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.opm.org.OrgchildsFullpathUpdate;
 
 /**
@@ -32,7 +31,6 @@ public class MoveOrgAction extends ActionSupport {
 	private String rowid;
 	private String orgID;
 	private String dbkey;
-	private String sql;
 
 	public Data getdata() {
 		return this.data;
@@ -122,7 +120,7 @@ public class MoveOrgAction extends ActionSupport {
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	public void setDbkey(String dbkey) {
@@ -131,18 +129,6 @@ public class MoveOrgAction extends ActionSupport {
 
 	public String getDbkey() {
 		return dbkey;
-	}
-
-	public void setSql(String sql) {
-		try {
-			this.sql = URLDecoder.decode(sql, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String getSql() {
-		return sql;
 	}
 
 	public void setRowid(String rowid) {

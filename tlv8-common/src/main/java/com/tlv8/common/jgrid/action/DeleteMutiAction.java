@@ -8,14 +8,12 @@ import javax.naming.NamingException;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
-import com.tlv8.common.domain.AjaxResult;
 
 /**
  * 多行删除
@@ -40,8 +38,7 @@ public class DeleteMutiAction extends ActionSupport {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteMutiAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	@Override
+	@PostMapping(value = "/deleteMutiAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		String r = "";
 		String m = "success";
@@ -82,7 +79,7 @@ public class DeleteMutiAction extends ActionSupport {
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	public String deleteBillData(String sql) throws SQLException, NamingException, Exception {

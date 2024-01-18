@@ -6,15 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.jgrid.BasegetGridAction;
 
 /**
  * 组织管理回收站数据查询
  * 
  * @author 陈乾
- * 
- * @update 2021-04-01
  */
 @Controller
 @Scope("prototype")
@@ -51,6 +48,6 @@ public class GetOrgrecycledInfo extends BasegetGridAction {
 		data.setPage(page);
 		data.setAllpage(allpage);
 		data.setGridid(gridid);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 }

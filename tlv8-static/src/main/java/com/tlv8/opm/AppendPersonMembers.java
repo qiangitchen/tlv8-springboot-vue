@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
-import com.tlv8.common.domain.AjaxResult;
 
 /**
  * 分配人员
@@ -115,7 +114,7 @@ public class AppendPersonMembers extends ActionSupport {
 		} finally {
 			DBUtils.closeConn(session, conn, ps, rs);
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	public void setPersonIds(String personIds) {

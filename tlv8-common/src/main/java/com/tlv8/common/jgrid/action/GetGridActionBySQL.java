@@ -2,11 +2,10 @@ package com.tlv8.common.jgrid.action;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.jgrid.BasegetGridAction;
 
 /**
@@ -25,7 +24,7 @@ public class GetGridActionBySQL extends BasegetGridAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/getGridActionBySQL", produces = "application/json;charset=UTF-8")
+	@PostMapping(value = "/getGridActionBySQL", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		data = new Data();
 		String r = "true";
@@ -47,7 +46,7 @@ public class GetGridActionBySQL extends BasegetGridAction {
 		data.setPage(page);
 		data.setAllpage(allpage);
 		data.setGridid(gridid);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 }

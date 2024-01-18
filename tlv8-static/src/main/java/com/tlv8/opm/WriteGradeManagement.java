@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.utils.ContextUtils;
@@ -30,7 +29,7 @@ import com.tlv8.system.utils.ContextUtils;
  */
 @Controller
 @Scope("prototype")
-public class WriteGradeManagement extends ActionSupport{
+public class WriteGradeManagement extends ActionSupport {
 	private String orgid;
 	private String orgids;
 	private Data data = new Data();
@@ -94,7 +93,7 @@ public class WriteGradeManagement extends ActionSupport{
 		} finally {
 			DBUtils.closeConn(session, conn, null, null);
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	public void setOrgid(String orgid) {

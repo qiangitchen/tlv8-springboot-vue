@@ -18,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.alibaba.fastjson.JSON;
+import com.tlv8.common.domain.AjaxResult;
+import com.tlv8.common.utils.AesEncryptUtil;
+
 @Scope("prototype")
 public class ActionSupport {
 	@Autowired
@@ -36,6 +40,32 @@ public class ActionSupport {
 		return this;
 	}
 
+	/**
+	 * 返回成功数据
+	 * 
+	 * @param data
+	 * @return
+	 */
+	protected Object success(Object data) {
+		String endata = "";
+		if (data instanceof String) {
+			endata = (String) data;
+		} else {
+			endata = JSON.toJSONString(data);
+		}
+		try {
+			endata = AesEncryptUtil.encrypt(endata);
+		} catch (Exception e) {
+		}
+		return AjaxResult.success("操作成功", endata);
+	}
+
+	/**
+	 * UTF-8解码
+	 * 
+	 * @param str
+	 * @return
+	 */
 	protected String getDecode(String str) {
 		try {
 			return URLDecoder.decode(str, "UTF-8");
@@ -44,6 +74,16 @@ public class ActionSupport {
 		if (str != null)
 			return str;
 		return "";
+	}
+
+	/**
+	 * 两次UTF-8解码
+	 * 
+	 * @param str
+	 * @return
+	 */
+	protected String getDoubleDecode(String str) {
+		return getDecode(getDecode(str));
 	}
 
 	protected ResponseEntity<byte[]> getByteResponseEntity(InputStream inpbs, MediaType mediaType, String userAgent,
@@ -173,5 +213,5 @@ public class ActionSupport {
 		ResponseEntity<byte[]> re = builder.body(FileUtils.readFileToByteArray(file));
 		return re;
 	}
-	
+
 }

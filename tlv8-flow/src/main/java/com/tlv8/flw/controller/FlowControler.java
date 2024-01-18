@@ -60,7 +60,7 @@ public class FlowControler extends FlowDataBean {
 			if (processID == null) {
 				data.setFlag("false");
 				data.setMessage("启动流程失败！找不到" + srcPath + "对应的流程图。");
-				return AjaxResult.success(data);
+				return success(data);
 			}
 			SaTask task = flowBaseHelper.start(processID, sdata1);
 			flowID = task.getSflowid();
@@ -72,7 +72,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class FlowControler extends FlowDataBean {
 				start();
 			}
 			if ("".equals(taskID) || taskID == null || "undefined".equals(taskID)) {
-				return AjaxResult.success(data);
+				return success(data);
 			}
 			// 如果前端已经指定执行环节 并且 已经选择执行人
 			if (!"".equals(afterActivity) && afterActivity != null && epersonids != null && !"".equals(epersonids)) {
@@ -116,7 +116,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class FlowControler extends FlowDataBean {
 			data.setMessage(e.toString());
 			e.printStackTrace();
 		}
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 	public void setSrcPath(String srcPath) {

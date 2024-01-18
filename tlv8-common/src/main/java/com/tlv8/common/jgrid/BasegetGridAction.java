@@ -11,6 +11,7 @@ import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.AesEncryptUtil;
+import com.tlv8.common.utils.CodeUtils;
 import com.tlv8.common.utils.StringArray;
 
 /**
@@ -53,12 +54,9 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setWhere(String where) {
-		try {
-			this.where = URLDecoder.decode(where, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.where = CodeUtils.getDoubleDecode(where);
 		this.where = AesEncryptUtil.desEncrypt(this.where);
+		this.where = CodeUtils.getDoubleDecode(this.where);
 	}
 
 	public String getWhere() {
@@ -318,7 +316,8 @@ public class BasegetGridAction extends ActionSupport {
 			}
 			result = Grid.createGridBysql(dbkay, sql, ismaster, isshowindex, startrow + 1, gridid);
 		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
+			e.printStackTrace();
+			throw new SQLException("数据查询失败~");
 		} catch (NamingException ne) {
 			throw new NamingException(ne.getMessage());
 		}
@@ -435,7 +434,8 @@ public class BasegetGridAction extends ActionSupport {
 			// System.out.println(sql);
 			result = Grid.createGridBysql(dbkay, sql, ismaster, isshowindex, startrow + 1, gridid);// (dbkey,sql，是否多选，是否序号，开始行数)
 		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());
+			e.printStackTrace();
+			throw new SQLException("数据查询失败~");
 		} catch (NamingException ne) {
 			throw new NamingException(ne.getMessage());
 		}

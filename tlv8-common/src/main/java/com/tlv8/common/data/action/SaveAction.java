@@ -2,17 +2,16 @@ package com.tlv8.common.data.action;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
 import com.tlv8.common.data.BaseSaveAction;
-import com.tlv8.common.domain.AjaxResult;
 
 /**
+ * 用于公共保存动作
+ * 
  * @author ChenQian
- * @d 用于公共保存动作
  */
 @Controller
 @Scope("prototype")
@@ -31,7 +30,7 @@ public class SaveAction extends BaseSaveAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/saveAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@PostMapping(value = "/saveAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
 		data = new Data();
 		String r = "";
@@ -51,7 +50,7 @@ public class SaveAction extends BaseSaveAction {
 		data.setPage(page);
 		data.setAllpage(allpage);
 		data.setRowid(rowid);
-		return AjaxResult.success(data);
+		return success(data);
 	}
 
 }
