@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.base.Data;
-import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.flw.base.FlowActivity;
 import com.tlv8.flw.base.TaskData;
 import com.tlv8.flw.bean.FlowDataBean;
@@ -22,8 +21,9 @@ import com.tlv8.system.base.BaseController;
 import com.tlv8.system.utils.OrgUtils;
 
 /**
+ * 流程通用操作接口
+ * 
  * @author ChenQian
- * @see 流程通用操作接口
  */
 @Controller
 @Scope("prototype")

@@ -20,13 +20,13 @@ import com.tlv8.flw.pojo.SaFlowdrawlg;
 import com.tlv8.flw.service.SaFlowdrawlgService;
 
 /**
- * @author ChenQian @category
+ * @author ChenQian
  */
 @Controller
 @Scope("prototype")
 public class FlowBotControler extends FlowDataBean {
 	Data data = new Data();
-	
+
 	@Autowired
 	FlowBaseHelper flowBaseHelper;
 	@Autowired
