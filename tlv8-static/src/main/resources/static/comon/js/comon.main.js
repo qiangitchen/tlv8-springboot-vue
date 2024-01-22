@@ -202,12 +202,12 @@ tlv8.XMLHttpRequest = function (actionName, param, post, ayn, callBack,
             data: params,
             // dataType : "json",
             success: function (result, textStatus) {
+            	hideModelState();
                 rs = result;
                 try {
                     rs = window.eval("(" + rs + ")");
                 } catch (e) {
                 }
-                hideModelState();
                 try {
                     if (rs.data.flag == "timeout") {
                         window.top.sessionTimeout();
