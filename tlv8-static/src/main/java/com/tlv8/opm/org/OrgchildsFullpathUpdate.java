@@ -18,7 +18,7 @@ public class OrgchildsFullpathUpdate {
 	public static void upOrgpath(SqlSession session, String parent) {
 		String qySql = "select SID from SA_OPOrg where sparent = '" + parent + "'";
 		try {
-			List<Map<String, String>> chd = DBUtils.selectStringList(session, qySql);
+			List<Map<String, String>> chd = DBUtils.selectStringList(session, qySql, true);
 			for (int i = 0; i < chd.size(); i++) {
 				String orgid = chd.get(i).get("SID");
 				Connection conn = null;
@@ -87,7 +87,7 @@ public class OrgchildsFullpathUpdate {
 	public static void upAutherPermOrgpaths(SqlSession session, String parent) {
 		String qySql = "select SID from SA_OPOrg where sparent = '" + parent + "'";
 		try {
-			List<Map<String, String>> chd = DBUtils.selectStringList(session, qySql);
+			List<Map<String, String>> chd = DBUtils.selectStringList(session, qySql, true);
 			for (int i = 0; i < chd.size(); i++) {
 				String orgid = chd.get(i).get("SID");
 				upAutherPermOrgpath(session, orgid, orgid);

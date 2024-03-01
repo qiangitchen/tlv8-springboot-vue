@@ -88,6 +88,9 @@ public class FlowControler extends FlowDataBean {
 			if ("".equals(taskID) || taskID == null || "undefined".equals(taskID)) {
 				return success(data);
 			}
+			if (processID == null || "".equals(processID)) {
+				processID = taskData.getCurrentProcessID(taskID);
+			}
 			// 如果前端已经指定执行环节 并且 已经选择执行人
 			if (!"".equals(afterActivity) && afterActivity != null && epersonids != null && !"".equals(epersonids)) {
 				List<FlowActivity> aftAList = new ArrayList<FlowActivity>();

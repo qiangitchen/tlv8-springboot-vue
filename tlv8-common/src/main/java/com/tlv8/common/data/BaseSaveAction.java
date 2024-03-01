@@ -92,7 +92,7 @@ public class BaseSaveAction extends ActionSupport {
 		if (cell.containsKey("ROWID")) {
 			String fID = cell.get("ROWID");
 			String SreachSql = "select VERSION from " + getTable() + " where " + perkey + " = '" + fID + "'";
-			List<Map<String, String>> list = DBUtils.selectStringList(session, SreachSql);
+			List<Map<String, String>> list = DBUtils.selectStringList(session, SreachSql, true);
 			if (list.size() > 0) {
 				isNew = false;
 				String version = list.get(0).get("VERSION");

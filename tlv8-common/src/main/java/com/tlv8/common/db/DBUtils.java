@@ -377,6 +377,21 @@ public class DBUtils {
 	 * @see java.util.List
 	 */
 	public static List<Map<String, String>> execQueryforList(String key, String sql) throws SQLException {
+		return execQueryforList(key, sql, false);
+	}
+
+	/**
+	 * 查询操作JDBC
+	 *
+	 * @param key
+	 * @param sql
+	 * @param upperColumnName 是否将返回的字段名转为大写
+	 * @return List
+	 * @throws SQLException
+	 * @see java.util.List
+	 */
+	public static List<Map<String, String>> execQueryforList(String key, String sql, boolean upperColumnName)
+			throws SQLException {
 		ResultSet rs = null;
 		ResultSetMetaData rsmd = null;
 		List li = new ArrayList();
@@ -392,6 +407,9 @@ public class DBUtils {
 				for (int i = 1; i <= size; i++) {
 					String cellType = rsmd.getColumnTypeName(i);
 					String columnName = rsmd.getColumnLabel(i);
+					if (upperColumnName) {
+						columnName = columnName.toUpperCase();
+					}
 					if ("DATE".equals(cellType) || "DATETIME".equals(cellType) || "TIMESTAMP".equals(cellType)) {
 						try {
 							try {
@@ -1013,7 +1031,20 @@ public class DBUtils {
 	 * @throws Exception
 	 */
 	public static List<Map<String, String>> selectStringList(String dbname, String sql) throws Exception {
-		return selectStringList(dbname, sql, null);
+		return selectStringList(dbname, sql, false);
+	}
+
+	/**
+	 * 查询数据 -字段内容返回String类型
+	 *
+	 * @param dbname
+	 * @param sql
+	 * @return List&lt;Map&lt;String, Object&gt;&gt;
+	 * @throws Exception
+	 */
+	public static List<Map<String, String>> selectStringList(String dbname, String sql, boolean upperColumnName)
+			throws Exception {
+		return selectStringList(dbname, sql, null, upperColumnName);
 	}
 
 	/**
@@ -1024,8 +1055,9 @@ public class DBUtils {
 	 * @return List&lt;Map&lt;String, String&gt;&gt;
 	 * @throws Exception
 	 */
-	public static List<Map<String, String>> selectStringList(SqlSession session, String sql) throws Exception {
-		return selectStringList(session, sql, null);
+	public static List<Map<String, String>> selectStringList(SqlSession session, String sql, boolean upperColumnName)
+			throws Exception {
+		return selectStringList(session, sql, null, upperColumnName);
 	}
 
 	/**
@@ -1037,12 +1069,12 @@ public class DBUtils {
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
 	 * @throws Exception
 	 */
-	public static List<Map<String, String>> selectStringList(String dbname, String sql, List<Object> params)
-			throws Exception {
+	public static List<Map<String, String>> selectStringList(String dbname, String sql, List<Object> params,
+			boolean upperColumnName) throws Exception {
 		SqlSession session = getSession(dbname);
 		List<Map<String, String>> rlist = new ArrayList<Map<String, String>>();
 		try {
-			rlist = selectStringList(session, sql, params);
+			rlist = selectStringList(session, sql, params, upperColumnName);
 		} catch (Exception e) {
 			logger.error(e.toString());
 			throw e;
@@ -1059,8 +1091,8 @@ public class DBUtils {
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
 	 * @throws Exception
 	 */
-	public static List<Map<String, String>> selectStringList(SqlSession session, String sql, List<Object> params)
-			throws Exception {
+	public static List<Map<String, String>> selectStringList(SqlSession session, String sql, List<Object> params,
+			boolean upperColumnName) throws Exception {
 		List<Map<String, String>> rlist = new ArrayList<Map<String, String>>();
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -1079,7 +1111,11 @@ public class DBUtils {
 			while (rs.next()) {
 				Map<String, String> map = new HashMap<String, String>();
 				for (int n = 1; n <= cns; n++) {
-					map.put(rsmd.getColumnLabel(n), rs.getString(n));
+					String colname = rsmd.getColumnLabel(n);
+					if (upperColumnName) {
+						colname = colname.toUpperCase();
+					}
+					map.put(colname, rs.getString(n));
 				}
 				rlist.add(map);
 			}
@@ -1100,7 +1136,8 @@ public class DBUtils {
 	 * @param params
 	 * @return List&lt;Map&lt;String, Object&gt;&gt;
 	 */
-	public static List<Map<String, Object>> selectList(String dbname, String sql, List<Object> params) {
+	public static List<Map<String, Object>> selectList(String dbname, String sql, List<Object> params,
+			boolean upperColumnName) {
 		SqlSession session = getSession(dbname);
 		List<Map<String, Object>> rlist = new ArrayList<Map<String, Object>>();
 		Connection conn = null;
@@ -1118,7 +1155,11 @@ public class DBUtils {
 			while (rs.next()) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				for (int n = 1; n <= cns; n++) {
-					map.put(rsmd.getColumnLabel(n), rs.getObject(n));
+					String colname = rsmd.getColumnLabel(n);
+					if (upperColumnName) {
+						colname = colname.toUpperCase();
+					}
+					map.put(colname, rs.getObject(n));
 				}
 				rlist.add(map);
 			}

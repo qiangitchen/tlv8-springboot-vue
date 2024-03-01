@@ -238,7 +238,7 @@ public class FlowBaseHelper {
 					excutorGroupfilters += " and SFID like '" + context.getCurrentOgnFullID() + "%'";
 					SQL sql = new SQL().SELECT("SID").FROM("SA_OPORG").WHERE("SORGKINDID='psm'");
 					sql.WHERE("(" + excutorGroupfilters + ")");
-					List<Map<String, String>> reList = DBUtils.execQueryforList("system", sql.toString());
+					List<Map<String, String>> reList = DBUtils.execQueryforList("system", sql.toString(), true);
 					for (int i = 0; i < reList.size(); i++) {
 						epersonids.push(reList.get(i).get("SID"));
 					}

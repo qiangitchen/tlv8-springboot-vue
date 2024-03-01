@@ -39,7 +39,7 @@ public class FlowBotXBean {
 					+ "where SSTATUSID != 'tesExecuting' and SACTIVITY !=' ' and SFLOWID='" + flowID
 					+ "' order by SCREATETIME";
 		}
-		List<Map<String, String>> rslist = DBUtils.execQueryforList("system", sql);
+		List<Map<String, String>> rslist = DBUtils.execQueryforList("system", sql, true);
 		if (rslist.size() > 0) {
 			redata = new ArrayList<FlowBotXBean>();
 			for (int i = 0; i < rslist.size(); i++) {
@@ -67,7 +67,7 @@ public class FlowBotXBean {
 				botbean.setExecutetime((String) m.get("SEXECUTETIME"));
 				sql = "select SID from SA_TASK where SPARENTID = '" + m.get("SID").toString() + "' and SFLOWID='"
 						+ flowID + "'";
-				List<Map<String, String>> ns = DBUtils.execQueryforList("system", sql);
+				List<Map<String, String>> ns = DBUtils.execQueryforList("system", sql, true);
 				List<String> anext = new ArrayList<String>();
 				for (int j = 0; j < ns.size(); j++) {
 					anext.add(ns.get(j).get("SID").toString());

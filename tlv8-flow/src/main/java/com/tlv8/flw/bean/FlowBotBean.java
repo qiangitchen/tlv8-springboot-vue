@@ -37,7 +37,7 @@ public class FlowBotBean {
 					+ "' order by SCREATETIME";
 		}
 		// Sys.printMsg(sql);
-		List<Map<String, String>> rslist = DBUtils.execQueryforList("system", sql);
+		List<Map<String, String>> rslist = DBUtils.execQueryforList("system", sql, true);
 		if (rslist.size() > 0) {
 			botdata = new ArrayList<FlowBotBean>();
 			for (int i = 0; i < rslist.size(); i++) {

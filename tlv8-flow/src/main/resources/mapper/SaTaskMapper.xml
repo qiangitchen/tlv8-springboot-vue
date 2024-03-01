@@ -231,12 +231,16 @@
   </select>
   <update id="cancelOtherTask" parameterType="java.util.Map">
   	update sa_task set sstatusid='tesCanceled' ,sstatusname='已取消',sexecutetime=now(),sAFinishTime=now(), version=version+1
-  	 where (SID != #{taskID,jdbcType=VARCHAR} and SPARENTID = #{ptaskID,jdbcType=VARCHAR}) 
-  	  and (SACTIVITY = #{beforeActivity,jdbcType=VARCHAR} and SFLOWID = #{flowID,jdbcType=VARCHAR} and SSTATUSID = 'tesReady')
+  	 where (SID != #{taskID,jdbcType=VARCHAR} 
+  	  and SPARENTID = #{ptaskID,jdbcType=VARCHAR}) 
+  	  and (SACTIVITY = #{beforeActivity,jdbcType=VARCHAR} 
+  	  	and SFLOWID = #{flowID,jdbcType=VARCHAR} 
+  	  	and SSTATUSID = 'tesReady')
   </update>
   <update id="accomplishFlow" parameterType="java.lang.String">
-  	update sa_task set sstatusid='tesFinished' ,sstatusname='已完成',sexecutetime=now(), version=version+1 where SFLOWID = #{flowID,jdbcType=VARCHAR}
-  	 and and (SSTATUSID = 'tesReady' or SSTATUSID = 'tesExecuting')
+  	update sa_task set sstatusid='tesFinished' ,sstatusname='已完成',sexecutetime=now(), version=version+1 
+  	where SFLOWID = #{flowID,jdbcType=VARCHAR}
+  	  and (SSTATUSID = 'tesReady' or SSTATUSID = 'tesExecuting')
   </update>
   <select id="selectByFlowID" parameterType="java.lang.String" resultMap="BaseResultMap">
     select sid, sparentid, sname, scontent, sremark, sflowid, stypeid, stypename, sprocess, 
@@ -260,8 +264,10 @@
     sepersoncode, seposid, seposcode, seposname, sedeptcode, seogncode, sefid, sdata1, 
     sdata2, sdata3, sdata4, scfname, sefname, version
     from sa_task
-    where sflowid = #{flowID,jdbcType=VARCHAR} and sactivity = #{activity,jdbcType=VARCHAR} 
-      and SSTATUSID = 'tesFinished' order by SCREATETIME desc
+    where sflowid = #{flowID,jdbcType=VARCHAR} 
+      and sactivity = #{activity,jdbcType=VARCHAR} 
+      and SSTATUSID = 'tesFinished' 
+      order by SCREATETIME desc
   </select>
   <select id="selectActivityOtherTask" parameterType="java.util.Map" resultMap="BaseResultMap">
     select sid, sparentid, sname, scontent, sremark, sflowid, stypeid, stypename, sprocess, 
@@ -273,7 +279,10 @@
     sepersoncode, seposid, seposcode, seposname, sedeptcode, seogncode, sefid, sdata1, 
     sdata2, sdata3, sdata4, scfname, sefname, version
     from sa_task
-    where sflowid = #{flowID,jdbcType=VARCHAR} and sactivity = #{activity,jdbcType=VARCHAR} and SID != #{taskID,jdbcType=VARCHAR} 
-      and SSTATUSID = #{statusid,jdbcType=VARCHAR} order by SCREATETIME desc
+    where sflowid = #{flowID,jdbcType=VARCHAR} 
+      and sactivity = #{activity,jdbcType=VARCHAR} 
+      and SID != #{taskID,jdbcType=VARCHAR} 
+      and SSTATUSID = #{statusid,jdbcType=VARCHAR} 
+      order by SCREATETIME desc
   </select>
 </mapper>

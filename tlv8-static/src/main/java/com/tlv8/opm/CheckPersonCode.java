@@ -26,7 +26,7 @@ public class CheckPersonCode extends ActionSupport{
 		List<Object> params = new ArrayList<Object>();
 		params.add(value);
 		params.add(id);
-		List<Map<String, String>> li = DBUtils.selectStringList("system", sql, params);
+		List<Map<String, String>> li = DBUtils.selectStringList("system", sql, params, true);
 		count = li.size();
 		return this;
 	}

@@ -18,7 +18,7 @@ public class FlowFolderTree {
 		List list = new ArrayList();
 		String sql = String.format(get_folder_sql, " and (SPARENT is null or SPARENT = '')");
 		try {
-			list = DBUtils.execQueryforList("system", sql);
+			list = DBUtils.execQueryforList("system", sql, true);
 		} catch (SQLException e) {
 			throw new Exception(e.toString()+":" +sql);
 		}
@@ -33,7 +33,7 @@ public class FlowFolderTree {
 		String sql = String.format(get_folder_sql, " and SPARENT = '" + parent
 				+ "'");
 		try {
-			list = DBUtils.execQueryforList("system", sql);
+			list = DBUtils.execQueryforList("system", sql, true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

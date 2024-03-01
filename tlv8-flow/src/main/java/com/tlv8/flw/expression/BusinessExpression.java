@@ -41,7 +41,7 @@ public class BusinessExpression {
 		try {
 			List<Object> param = new ArrayList<>();
 			param.add(individual);
-			List<Map<String, String>> list = DBUtils.selectStringList(dbkey, qsql.toString(), param);
+			List<Map<String, String>> list = DBUtils.selectStringList(dbkey, qsql.toString(), param, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = String.valueOf(m.get(returnRelation.toUpperCase()));

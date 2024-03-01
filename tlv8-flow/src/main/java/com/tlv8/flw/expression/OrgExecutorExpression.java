@@ -47,7 +47,7 @@ public class OrgExecutorExpression {
 			sql += " and (SORGID like '%@%')";
 		}
 		try {
-			List<Map<String, String>> list = com.tlv8.common.db.DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = com.tlv8.common.db.DBUtils.execQueryforList("system", sql, true);
 			for (int i = 0; i < list.size(); i++) {
 				Map m = list.get(i);
 				if (i > 0)
@@ -79,7 +79,7 @@ public class OrgExecutorExpression {
 			sql += " and (SORGID like '%@%')";
 		}
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			for (int i = 0; i < list.size(); i++) {
 				Map m = list.get(i);
 				if (i > 0)
@@ -118,7 +118,7 @@ public class OrgExecutorExpression {
 			sql += " and SMANAGETYPEID in (select SID from SA_OPMANAGETYPE where SCODE = '" + manageType + "') ";
 		}
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			for (int i = 0; i < list.size(); i++) {
 				Map m = list.get(i);
 				if (i > 0)
@@ -153,7 +153,7 @@ public class OrgExecutorExpression {
 					+ "%' and EXISTS(select a.SORGID from SA_OPAUTHORIZE a where a.SAUTHORIZEROLEID "
 					+ " in (select r.SID from SA_OPROLE r where r.SCODE='" + roleCode
 					+ "') and o.SFID like concat(a.SORGFID,'%'))";
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			for (int i = 0; i < list.size(); i++) {
 				Map m = list.get(i);
 				if (i > 0)
@@ -165,7 +165,7 @@ public class OrgExecutorExpression {
 				sql = "select SID from " + org_table + " o where EXISTS(select SFID from " + org_table
 						+ " o1 where SID in (" + orgUnit
 						+ ") and o.SFID like concat(o1.SFID,'%')) and SORGKINDID = 'psm'";
-				list = DBUtils.execQueryforList("system", sql);
+				list = DBUtils.execQueryforList("system", sql, true);
 				for (int i = 0; i < list.size(); i++) {
 					Map m = list.get(i);
 					if (i > 0)
@@ -196,7 +196,7 @@ public class OrgExecutorExpression {
 		String sql = "select SORGID from SA_OPAUTHORIZE where SAUTHORIZEROLEID in (select SID from SA_OPROLE where SCODE='"
 				+ roleCode + "')";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			for (int i = 0; i < list.size(); i++) {
 				Map m = list.get(i);
 				if (i > 0)
@@ -208,7 +208,7 @@ public class OrgExecutorExpression {
 				sql = "select SID from " + org_table + " o where EXISTS(select SFID from " + org_table
 						+ " o1 where SID in (" + orgUnit
 						+ ") and o.SFID like concat(o1.SFID,'%')) and SORGKINDID = 'psm'";
-				list = DBUtils.execQueryforList("system", sql);
+				list = DBUtils.execQueryforList("system", sql, true);
 				for (int i = 0; i < list.size(); i++) {
 					Map m = list.get(i);
 					if (i > 0)

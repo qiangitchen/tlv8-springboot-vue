@@ -42,7 +42,7 @@ public class SetMemberOrgAction extends ActionSupport {
 		try {
 			conn = session.getConnection();
 			List<Map<String, String>> list = DBUtils.selectStringList(session,
-					"select SPERSONID,SPARENT from SA_OPOrg where SID = '" + rowid + "' and SORGKINDID = 'psm'");
+					"select SPERSONID,SPARENT from SA_OPOrg where SID = '" + rowid + "' and SORGKINDID = 'psm'", true);
 			if (list.size() > 0) {
 				String personid = list.get(0).get("SPERSONID");
 				String orgID = list.get(0).get("SPARENT");

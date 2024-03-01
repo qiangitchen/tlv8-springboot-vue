@@ -94,7 +94,7 @@ public class BaseSaveGridAction extends ActionSupport {
 				}
 				boolean isNew = true;
 				String SreachSql = "select VERSION from " + getTable() + " where " + skey + " = '" + key + "'";
-				List<Map<String, String>> list = DBUtils.selectStringList(session, SreachSql);
+				List<Map<String, String>> list = DBUtils.selectStringList(session, SreachSql, true);
 				if (list.size() > 0) {
 					isNew = false;
 					String version = list.get(0).get("VERSION");

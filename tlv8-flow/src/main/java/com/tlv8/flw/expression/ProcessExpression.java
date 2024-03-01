@@ -19,7 +19,7 @@ public class ProcessExpression {
 		String sql = "select SEPERSONNAME from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SEPERSONNAME");
@@ -40,7 +40,7 @@ public class ProcessExpression {
 		String sql = "select SEFID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SEFID");
@@ -61,7 +61,7 @@ public class ProcessExpression {
 		String sql = "select SEOGNNAME from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SEOGNNAME");
@@ -82,7 +82,7 @@ public class ProcessExpression {
 		String sql = "select SEOGNID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SEOGNID");
@@ -103,13 +103,13 @@ public class ProcessExpression {
 		String sql = "select SEOGNID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = "'" + m.get("SEOGNID") + "'";
 				if (!"".equals(result)) {
 					sql = "select SFID from SA_OPORG where SID in (" + result + ")";
-					list = DBUtils.execQueryforList("system", sql);
+					list = DBUtils.execQueryforList("system", sql, true);
 					if (list.size() > 0) {
 						Map ms = list.get(0);
 						result = (String) ms.get("SFID");
@@ -132,7 +132,7 @@ public class ProcessExpression {
 		String sql = "select SEDEPTNAME from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SEDEPTNAME");
@@ -153,7 +153,7 @@ public class ProcessExpression {
 		String sql = "select SEDEPTID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "'  order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SEDEPTID");
@@ -174,13 +174,13 @@ public class ProcessExpression {
 		String sql = "select SEDEPTID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "'  order by SCREATETIME desc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = "'" + m.get("SEDEPTID") + "'";
 				if (!"".equals(result)) {
 					sql = "select SFID from SA_OPORG where SID in (" + result + ")";
-					list = DBUtils.execQueryforList("system", sql);
+					list = DBUtils.execQueryforList("system", sql, true);
 					if (list.size() > 0) {
 						Map ms = list.get(0);
 						result += ms.get("SFID");
@@ -203,7 +203,7 @@ public class ProcessExpression {
 		String sql = "select SCPERSONNAME from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SCPERSONNAME");
@@ -224,7 +224,7 @@ public class ProcessExpression {
 		String sql = "select SCFID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SCFID");
@@ -245,7 +245,7 @@ public class ProcessExpression {
 		String sql = "select SCOGNNAME from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SCOGNNAME");
@@ -266,7 +266,7 @@ public class ProcessExpression {
 		String sql = "select SCOGNID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = "'" + m.get("SCOGNID") + "'";
@@ -295,7 +295,7 @@ public class ProcessExpression {
 		String sql = "select SCDEPTNAME from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SCDEPTNAME");
@@ -316,7 +316,7 @@ public class ProcessExpression {
 		String sql = "select SCDEPTID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = (String) m.get("SCDEPTID");
@@ -337,14 +337,14 @@ public class ProcessExpression {
 		String sql = "select SCDEPTID from SA_TASK where SFLOWID = '" + flowID + "' and SACTIVITY = '" + activity
 				+ "' order by SCREATETIME asc";
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql);
+			List<Map<String, String>> list = DBUtils.execQueryforList("system", sql, true);
 			if (list.size() > 0) {
 				Map m = list.get(0);
 				result = "'" + m.get("SCDEPTID") + "'";
 			}
 			if (!"".equals(result)) {
 				sql = "select SFID from SA_OPORG where SID in (" + result + ")";
-				list = DBUtils.execQueryforList("system", sql);
+				list = DBUtils.execQueryforList("system", sql, true);
 				if (list.size() > 0) {
 					Map m = list.get(0);
 					result = (String) m.get("SFID");

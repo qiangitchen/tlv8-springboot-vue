@@ -14,7 +14,7 @@ import com.tlv8.common.db.DBUtils;
 
 @Controller
 @Scope("prototype")
-public class CheckPersonMobilePhone extends ActionSupport{
+public class CheckPersonMobilePhone extends ActionSupport {
 	private int count;
 	private String value;
 	private String id;
@@ -26,7 +26,7 @@ public class CheckPersonMobilePhone extends ActionSupport{
 		List<Object> params = new ArrayList<Object>();
 		params.add(value);
 		params.add(id);
-		List<Map<String, String>> li = DBUtils.selectStringList("system", sql, params);
+		List<Map<String, String>> li = DBUtils.selectStringList("system", sql, params, true);
 		count = li.size();
 		return this;
 	}

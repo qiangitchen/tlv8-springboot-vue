@@ -56,7 +56,7 @@ public class MoveOrgAction extends ActionSupport {
 		boolean isperson = false;
 		SqlSession session = DBUtils.getSession("system");
 		Connection conn = session.getConnection();
-		List<Map<String, String>> list = DBUtils.selectStringList(session, querypsm);
+		List<Map<String, String>> list = DBUtils.selectStringList(session, querypsm, true);
 		if (list.size() > 0) {
 			personid = list.get(0).get("SPERSONID");
 			neworgid = personid + "@" + orgID;

@@ -88,9 +88,9 @@ public class TaskData {
 		}
 		// processName = act.getActivityname() + ":" + processName;// 任务标题
 		String activitylabel = act.getsActivityLabel();
-		if ((activitylabel == null) || ("".equals(activitylabel)))
+		if ((activitylabel == null) || ("".equals(activitylabel))) {
 			processName = act.getActivityname() + ":" + act.getProcessName();
-		else {
+		}else {
 			activitylabel = activitylabel.replaceAll("getProcessID\\(\\)", flowID);
 			activitylabel = activitylabel.replaceAll("getTaskID\\(\\)", taskID);
 			activitylabel = activitylabel.replaceAll("getProcesssData1\\(\\)", sData1);
