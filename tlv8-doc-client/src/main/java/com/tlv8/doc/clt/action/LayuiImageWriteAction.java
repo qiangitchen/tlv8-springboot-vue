@@ -114,6 +114,7 @@ public class LayuiImageWriteAction {
 			PreparedStatement pstmt = null;
 			try {
 				conn = session.getConnection();
+				conn.setAutoCommit(false);
 				InputStream fin = file.getInputStream();
 				String keyfiled = ("system".equals(dbkey)) ? "sID" : "fID";
 				SQL sql = new SQL();

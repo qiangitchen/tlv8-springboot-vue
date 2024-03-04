@@ -6427,7 +6427,7 @@ tlv8.loadOption = function (viewID, sData1) {
             writpsm = '<img src="data:image/png;base64,' + psign + '" style="height:30px;">&nbsp;&nbsp;';
         } else {
             var picID = redata[i].SID;
-            var url = cpath + "/comon/picCompant/Pic-read.jsp?dbkey=system"
+            var url = cpath + "/comon/picCompant/Pic-read?dbkey=system"
                 + "&tablename=SA_HANDWR_SIGNATURE&cellname=SHSPIC&fID=" + picID
                 + "&Temp=" + new UUID().toString();
             var image = "<img src='" + url + "' style='height:30px;'>&nbsp;&nbsp;";

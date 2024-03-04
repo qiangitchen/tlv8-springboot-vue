@@ -1,6 +1,6 @@
 package com.tlv8.flw.action;
 
-import java.sql.Blob;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,8 +67,8 @@ public class LoadAuditOpinionAction extends ActionSupport {
 			ps.setString(1, personid);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				Blob blob = (Blob) rs.getBlob(1);
-				long size = blob.length();
+				InputStream ins =  rs.getBinaryStream(1);
+				long size = ins.available();
 				if (size > 10) {
 					sid = personid;
 				}

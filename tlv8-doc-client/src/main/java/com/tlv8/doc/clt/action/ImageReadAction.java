@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,16 +95,15 @@ public class ImageReadAction {
 			ps.setString(1, fid);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				Blob blob = (Blob) rs.getBlob(1);
-				long size = blob.length();
-				byte[] bs = blob.getBytes(1, (int) size);
+				InputStream ins = rs.getBinaryStream(1);
+				byte[] bs = ins.readAllBytes();
 				response.setContentType("image/jpeg");
 				OutputStream outs = response.getOutputStream();
 				outs.write(bs);
 				outs.flush();
 			}
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		} finally {
 			DBUtils.closeConn(sqlsession, conn, ps, rs);
 		}
@@ -142,10 +140,10 @@ public class ImageReadAction {
 			ps.setString(1, psmid);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				Blob blob = (Blob) rs.getBlob(1);
-				long size = blob.length();
+				InputStream ins = rs.getBinaryStream(1);
+				long size = ins.available();
 				if (size > 0) {
-					byte[] bs = blob.getBytes(1, (int) size);
+					byte[] bs = ins.readAllBytes();
 					OutputStream outs = response.getOutputStream();
 					outs.write(bs);
 					outs.flush();
