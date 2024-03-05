@@ -1314,9 +1314,12 @@ public class DBUtils {
 		int r = -1;
 		Connection conn = null;
 		PreparedStatement ps = null;
+		boolean aucommit = false;
 		try {
 			logger.debug(dbname);
 			conn = session.getConnection();
+			aucommit = conn.getAutoCommit();
+			conn.setAutoCommit(false);
 			logger.debug(sql);
 			ps = conn.prepareStatement(sql);
 			for (int i = 0; i < params.size(); i++) {
@@ -1328,6 +1331,7 @@ public class DBUtils {
 			logger.error(e.toString());
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
+			conn.setAutoCommit(aucommit);
 			closeConn(session, conn, ps, null);
 		}
 		return r;
