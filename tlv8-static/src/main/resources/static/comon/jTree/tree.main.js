@@ -179,7 +179,7 @@ Jtree.prototype.init = function(treebody, setting, param) {
 			autoParam : null
 		}
 	};
-	var action = cpath + "/" + "TreeSelectAction";
+	var action = "TreeSelectAction";
 	// 提取构建树的字段
 	this.Jtreeid = param.cell.id;
 	this.Jtreename = param.cell.name;
@@ -201,13 +201,11 @@ Jtree.prototype.init = function(treebody, setting, param) {
 		alert("param:不能为空!");
 		return;
 	} else if (setting.async.enable) {
-		setting.async.url = cpath + "/" + setting.async.url;
 		action = setting.async.url;
 		// sql=param.sql;
 	} else if (param && typeof param == "object" && param.action) {
 		action = param.action;
 	}
-	// alert(action);
 	action = (action.startWith(cpath)?action:(cpath+"/"+action));
 	setting.async.url = action;
 	// alert(action);
@@ -275,7 +273,7 @@ function zTreeBeforeRemove(treeId, treeNode) {
 			+ param.cell.parent + "," + param.cell.tableName + ","
 			+ param.cell.databaseName);
 	delpm.set("rowid", treeNode.id);
-	tlv8.XMLHttpRequest(cpath + "/JtreeDropAction", delpm, "post", true, null);
+	tlv8.XMLHttpRequest(cpath+"/JtreeDropAction", delpm, "post", true, null);
 }
 // 点击编辑按钮后的操作
 
@@ -286,8 +284,7 @@ function zTreeOnRename(event, treeId, treeNode) {
 			+ param.cell.tableName + "," + param.cell.databaseName);
 	updatename.set("rowid", treeNode.id);
 	updatename.set("upname", treeNode.name);
-	tlv8.XMLHttpRequest(cpath + "/JtreeDropAction", updatename, "post", true,
-			null);
+	tlv8.XMLHttpRequest(cpath+"/JtreeDropAction", updatename, "post", true, null);
 }
 
 // end
