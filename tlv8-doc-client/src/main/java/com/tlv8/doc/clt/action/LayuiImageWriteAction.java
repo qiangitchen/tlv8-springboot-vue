@@ -112,8 +112,10 @@ public class LayuiImageWriteAction {
 			SqlSession session = DBUtils.getSqlSession();
 			Connection conn = null;
 			PreparedStatement pstmt = null;
+			boolean aucommit = false;
 			try {
 				conn = session.getConnection();
+				aucommit = conn.getAutoCommit();
 				conn.setAutoCommit(false);
 				InputStream fin = file.getInputStream();
 				String keyfiled = ("system".equals(dbkey)) ? "sID" : "fID";
@@ -140,6 +142,7 @@ public class LayuiImageWriteAction {
 				res.put("msg", "错误:" + e.toString());
 				e.printStackTrace();
 			} finally {
+				conn.setAutoCommit(aucommit);
 				DBUtils.closeConn(session, conn, pstmt, null);
 			}
 			return res;
