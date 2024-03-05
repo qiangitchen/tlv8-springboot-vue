@@ -87,6 +87,9 @@ public class ContextBean implements Serializable {
 	private String currentOrgID;
 	private String loginID;
 	private String locale;
+	private String age = "";
+	private String sex = "";
+	private String head = "";
 
 	private String getLocalFix(HttpServletRequest request, String path) {
 		String[] s = request.getRequestURL().toString().split("/");
@@ -613,6 +616,30 @@ public class ContextBean implements Serializable {
 
 	public void setLoginID(String loginID) {
 		this.loginID = loginID;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getHead() {
+		return head;
+	}
+
+	public void setHead(String head) {
+		this.head = head;
 	}
 
 }

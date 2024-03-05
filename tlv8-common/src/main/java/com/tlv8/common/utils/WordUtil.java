@@ -75,7 +75,11 @@ public class WordUtil {
 					Matcher m = compile.matcher(rtext);
 					if (m.find()) {
 						String key = m.group();
-						run.setText(rtext.replace(key, textMap.get(getKey(key))), 0);
+						String val = textMap.get(getKey(key));
+						if (val == null) {
+							val = "";
+						}
+						run.setText(rtext.replace(key, val), 0);
 					}
 				}
 			}
@@ -125,6 +129,18 @@ public class WordUtil {
 	public static void changeText(InputStream ins, Map<String, String> textMap, OutputStream ous) throws IOException {
 		XWPFDocument document = changeText(ins, textMap);
 		document.write(ous);
+	}
+
+	/**
+	 * 生成空的Word
+	 * 
+	 * @param ous
+	 * @throws IOException
+	 */
+	public static void createEmpty(OutputStream ous) throws IOException {
+		XWPFDocument document = new XWPFDocument();
+		document.write(ous);
+		document.close();
 	}
 
 }

@@ -3,7 +3,6 @@ package com.tlv8.system.resource;
 import java.util.Locale;
 
 public abstract class MessageResourceReader {
-
 	public abstract void load(String paramString);
 
 	public abstract String getProperty(String paramString, Locale paramLocale);

@@ -86,4 +86,6 @@ public interface ISaOpOrgService {
     List<SaOpOrg> selectRecycleList();
 
     List<SaOpOrg> selectAllByParentID(String parent);
+    
+    SaOpOrg selectByParentIdPersonId(String parent, String personid);
 }

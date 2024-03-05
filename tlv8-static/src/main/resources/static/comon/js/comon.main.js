@@ -2869,6 +2869,23 @@ function setTab(n) {
 tlv8.Context = {
     userInfo: {},
     /**
+     * 获取当前用户角色列表
+     * @returns []
+     */
+    getAllRoles : function() {
+		var result = justep.yn.XMLHttpRequest("system/Role/getAllRolesAction", null,
+				"post", false);
+		if (result.flag == "false") {
+			return [];
+		} else {
+			var data = result.data;
+			if (typeof data == "string") {
+				data = window.eval("(" + data + ")");
+			}
+			return data;
+		}
+	},
+    /**
 	 * @name tlv8.Context.getPath
 	 * @function
 	 * @description 当前系统路径
@@ -4771,7 +4788,7 @@ UUID.rand = function (max) {
 };
 tlv8.ExcelImp = function (dbkey, table, relation, confirmXmlName, callback) {
     var srcPath = tlv8.getRequestURI();
-    var url = "/comon/report/import-compent.jsp";
+    var url = "/comon/report/import-compent.html";
     url += "?srcPath=" + srcPath;
     url += "&dbkey=" + dbkey;
     url += "&table=" + table;
@@ -4782,7 +4799,7 @@ tlv8.ExcelImp = function (dbkey, table, relation, confirmXmlName, callback) {
 };
 tlv8.ExcelExp = function (dbkey, table, relation, labels, where, orderby) {
     var srcPath = tlv8.getRequestURI();
-    var url = "/comon/report/export-compent.jsp";
+    var url = "/comon/report/export-compent.html";
     var params = {
         dbkey: dbkey,
         table: table,

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.tlv8.system.pojo.SaOpOrg;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SaOpOrgMapper {
@@ -89,4 +90,6 @@ public interface SaOpOrgMapper {
     int logicRecoveryByPrimaryKey(String sid);
 
     List<SaOpOrg> selectRecycleList();
+    
+    SaOpOrg selectByParentIdPersonId(Map<String, String> param);
 }

@@ -77,10 +77,9 @@ public class UserController extends BaseController {
 		String onceFunc = rqparams.get("onceFunc");
 		String mode = rqparams.get("mode");
 		String ip = rqparams.get("ip");
-
 		String msg = "";
 		String token = "";
-
+		Sys.printMsg(username + ":登录系统");
 		boolean isAgent = ((agent != null) && (!agent.equals("")));
 		boolean isNTLogin = ((mode != null) && (mode.equals("nt")));
 		if ((isNTLogin) && ((ip == null) || (ip.equals("")))) {
@@ -349,8 +348,9 @@ public class UserController extends BaseController {
 	public void logout() throws IOException, DocumentException {
 		ContextBean contextBean = getContext();
 		Sys.printMsg("用户：" + contextBean.getPersonName() + " 退出系统.");
-		StpUtil.logout(contextBean.getPersonID());
 		contextBean.initLogoutContext(this.request);
+		redisCache.deleteObject(StpUtil.getTokenValue());
+		StpUtil.logout(contextBean.getPersonID());
 		renderData(Boolean.valueOf(true));
 	}
 
@@ -359,8 +359,9 @@ public class UserController extends BaseController {
 	public void MD5logout() throws IOException, DocumentException {
 		ContextBean contextBean = getContext();
 		Sys.printMsg("用户：" + contextBean.getPersonName() + " 退出系统.");
-		StpUtil.logout(contextBean.getPersonID());
 		contextBean.initLogoutContext(this.request);
+		redisCache.deleteObject(StpUtil.getTokenValue());
+		StpUtil.logout(contextBean.getPersonID());
 		renderData(Boolean.valueOf(true));
 	}
 

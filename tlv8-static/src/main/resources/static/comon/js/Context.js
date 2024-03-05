@@ -3,10 +3,10 @@ if (!justep)
 justep.Context = {
 	userInfo : {},
 	getAllRoles : function() {
-		var result = justep.yn.XMLHttpRequest("getAllRolesAction", null,
+		var result = justep.yn.XMLHttpRequest("system/Role/getAllRolesAction", null,
 				"post", false);
 		if (result.flag == "false") {
-			alert(result.message);
+			return [];
 		} else {
 			var data = result.data;
 			if (typeof data == "string") {

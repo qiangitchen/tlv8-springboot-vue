@@ -68,7 +68,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	 */
 	protected boolean isIgnore(String patex) {
 		return patex.contains("/favicon.ico") || patex.contains("/DocServer/") || patex.endsWith("/WeiXinPayNotify")
-				|| patex.endsWith("/WeiXinRefundNotify") || patex.endsWith("/AliPayNotify");
+				|| patex.endsWith("/WeiXinRefundNotify") || patex.endsWith("/AliPayNotify") || patex.contains("/yyZX")
+				|| patex.contains("/getHXXL") || patex.contains("/tv/") || patex.contains("/ai_alarm")
+				|| patex.contains("/camera/capture/");
 	}
 
 	/**

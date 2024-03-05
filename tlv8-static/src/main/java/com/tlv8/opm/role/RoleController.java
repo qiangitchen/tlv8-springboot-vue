@@ -85,10 +85,7 @@ public class RoleController {
 						np.setSactivityfname(smenu.getLabel());
 						saOpPermissionService.insertData(np);
 					} else {
-						SaOpPermission pmenu = saOpPermissionService.selectByRoleMenu(roleid, smenu.getSid());
-						if (pmenu != null) {
-							saOpPermissionService.deleteData(pmenu);
-						}
+						saOpPermissionService.deleteByRoleMenu(roleid, smenu.getSid());
 					}
 				}
 			}
