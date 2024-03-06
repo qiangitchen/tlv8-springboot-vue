@@ -103,4 +103,10 @@
     from sa_flowdrawlg
     where sprocessacty like #{path,jdbcType=VARCHAR}
   </select>
+  <select id="selectByFolderID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select sid, sprocessid, sprocessname, sdrawlg, sprocessacty, screatorid, screatorname, 
+    supdatorid, supdatorname, screatetime, supdatetime, fenabled, sfolderid, version
+    from sa_flowdrawlg
+     where sfolderid like #{sfolderid,jdbcType=VARCHAR}
+  </select>
 </mapper>

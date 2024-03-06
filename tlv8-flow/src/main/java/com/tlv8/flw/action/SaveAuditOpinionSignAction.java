@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,7 @@ import com.tlv8.system.utils.ContextUtils;
 @Controller
 @Scope("prototype")
 public class SaveAuditOpinionSignAction extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(SaveAuditOpinionSignAction.class);
 	private String dbkey;
 	private String audittable;
 	private String billidRe;
@@ -57,7 +60,7 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 	}
 
 	@Autowired
-	TaskData TaskData;
+	TaskData taskData;
 
 	@ResponseBody
 	@RequestMapping("/SaveAuditOpinionSignAction")
@@ -74,8 +77,8 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 			String currentpsnid = context.getCurrentPersonID();
 			String currentpsnname = context.getCurrentPersonName();
 			try {
-				String processID = TaskData.getCurrentProcessID(this.taskID);
-				String Activity = TaskData.getCurrentActivity(this.taskID);
+				String processID = taskData.getCurrentProcessID(this.taskID);
+				String Activity = taskData.getCurrentActivity(this.taskID);
 				FlowActivity flwA = new FlowActivity(processID, Activity);
 				FNODEID = flwA.getActivity();
 				FNODENAME = flwA.getActivityname();
@@ -153,7 +156,7 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 			this.data.setFlag("false");
 			this.data.setMessage(e.toString());
 			session.rollback(true);
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally {
 			DBUtils.closeConn(session, conn, null, null);
 		}

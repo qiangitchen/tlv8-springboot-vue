@@ -90,7 +90,7 @@ function initExpTree() {
 	var r = tlv8.XMLHttpRequest("GetExpressionTreeAction", param, "post",
 			true, function(r) {
 				try {
-					zNodes = r.data;
+					zNodes = r.data.data;
 					folderTree = $.fn.zTree.init($("#FlowFoldertreeNode"),
 							setting, zNodes);
 				} catch (e) {

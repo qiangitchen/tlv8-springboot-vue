@@ -3,6 +3,8 @@ package com.tlv8.flw.action;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import com.tlv8.system.utils.ContextUtils;
 @Controller
 @Scope("prototype")
 public class OpenTaskAction extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(OpenTaskAction.class);
 	private String flowID;
 	private String taskID;
 	private String executor;
@@ -30,7 +33,7 @@ public class OpenTaskAction extends ActionSupport {
 	}
 
 	@Autowired
-	TaskData TaskData;
+	TaskData taskData;
 
 	/**
 	 * 打开任务
@@ -43,7 +46,7 @@ public class OpenTaskAction extends ActionSupport {
 			if (executor == null || "".equals(executor) || "undefined".equals(executor)) {
 				executor = ContextUtils.getContext().getCurrentPersonID();
 			}
-			Map<String, String> m = TaskData.getTaskInfor(taskID, executor);
+			Map<String, String> m = taskData.getTaskInfor(taskID, executor);
 			if (m != null) {
 				flowID = m.get("flowID");
 				data.setFlag("true");
@@ -68,6 +71,7 @@ public class OpenTaskAction extends ActionSupport {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
+			logger.error(e.toString());
 		}
 		return success(data);
 	}

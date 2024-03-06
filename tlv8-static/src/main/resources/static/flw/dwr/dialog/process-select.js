@@ -92,14 +92,15 @@ function addHoverDom(treeId, treeNode) {
 			var newSIDPATH = treeNode.SIDPATH + "/" + newid;
 			var newSCODEPATH = treeNode.SCODEPATH + "/" + newCode;
 			var newSNAMEPATH = treeNode.SNAMEPATH + "/" + newName;
+			var query = "id=" + newid;
+			query += "&pid=" + treeNode.id;
+			query += "&scode=" + newCode;
+			query += "&name=" + newName;
+			query += "&sidpath=" + newSIDPATH;
+			query += "&scodepath=" + newSCODEPATH;
+			query += "&snamepath=" + newSNAMEPATH;
 			var param = new tlv8.RequestParam();
-			param.set("id", newid);
-			param.set("pid", treeNode.id);
-			param.set("scode", newCode);
-			param.set("name", newName);
-			param.set("sidpath", newSIDPATH);
-			param.set("scodepath", newSCODEPATH);
-			param.set("snamepath", newSNAMEPATH);
+			param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 			var r = tlv8.XMLHttpRequest("insertflwFolderAction", param, "post",
 					true, null);
 			zTree.addNodes(treeNode, {
@@ -138,12 +139,13 @@ function afterEditName(event, treeId, treeNode) {
 	var pathnames = treeNode.SNAMEPATH.split("/");
 	pathnames[pathnames.length - 1] = treeNode.name;
 	treeNode.SPROCESSNAME = treeNode.name;
+	var query = "id=" + treeNode.id;
+	query += "&name=" + treeNode.name;
+	query += "&sprocessid=" + treeNode.SPROCESSID;
+	query += "&sprocessname=" + treeNode.SPROCESSNAME;
+	query += "&snamepath=" + pathnames.join("/");
 	var param = new tlv8.RequestParam();
-	param.set("id", treeNode.id);
-	param.set("name", treeNode.name);
-	param.set("sprocessid", treeNode.SPROCESSID);
-	param.set("sprocessname", treeNode.SPROCESSNAME);
-	param.set("snamepath", pathnames.join("/"));
+	param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var r = tlv8.XMLHttpRequest("editflwFolderAction", param, "post", true,
 			null);
 }
@@ -158,14 +160,19 @@ function beforeRemove(treeId, treeNode) {
 	return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
 }
 function onRemove(e, treeId, treeNode) {
+	var query = "id=" + treeNode.id;
+	query += "&name=" + treeNode.name;
+	query += "&sidpath=" + treeNode.SIDPATH;
+	query += "&sprocessid=" + treeNode.SPROCESSID;
 	var param = new tlv8.RequestParam();
-	param.set("id", treeNode.id);
-	param.set("name", treeNode.name);
-	param.set("sidpath", treeNode.SIDPATH);
-	param.set("sprocessid", treeNode.SPROCESSID);
+	param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var r = tlv8.XMLHttpRequest("deleteflwFolderAction", param, "post", true,
 			function() {
-				clear_draw_board();
+				if (r.data.flag == "true") {
+					clear_draw_board();
+				} else {
+					layui.layer.alert(r.data.message);
+				}
 			});
 }
 
@@ -247,7 +254,7 @@ function onselectedGrid(event) {
 	var status = event.getValueByName("FENABLED", event.CurrentRowId);
 	if (status == "1") {
 		$("#" + chanegEnable + '_img').attr('src',
-				 "../../../comon/image/toolbar/disable.png");
+				"../../../comon/image/toolbar/disable.png");
 		event.settoolbar(true, "readonly", true, "readonly");
 		event.setrowState(event.CurrentRowId, "readonly");
 	} else {

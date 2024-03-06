@@ -3,6 +3,8 @@ package com.tlv8.flw.action;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import com.tlv8.flw.helper.ExpressionTreeHelper;
 @Controller
 @Scope("prototype")
 public class GetExpressionTree extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(GetExpressionTree.class);
 
 	@ResponseBody
 	@RequestMapping("GetExpressionTreeAction")
@@ -29,9 +32,9 @@ public class GetExpressionTree extends ActionSupport {
 		} catch (Exception e) {
 			data.put("flag", "false");
 			data.put("message", e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
-		return data;
+		return success(data);
 	}
 
 }

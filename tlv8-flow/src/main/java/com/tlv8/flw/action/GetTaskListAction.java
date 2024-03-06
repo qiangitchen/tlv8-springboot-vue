@@ -3,6 +3,8 @@ package com.tlv8.flw.action;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import com.tlv8.system.utils.ContextUtils;
 @Controller
 @Scope("prototype")
 public class GetTaskListAction extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(GetTaskListAction.class);
 	private String psmId;
 	Data data = new Data();
 
@@ -110,7 +113,7 @@ public class GetTaskListAction extends ActionSupport {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}

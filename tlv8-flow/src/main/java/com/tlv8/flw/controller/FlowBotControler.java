@@ -3,6 +3,8 @@ package com.tlv8.flw.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import com.tlv8.flw.service.SaFlowdrawlgService;
 @Controller
 @Scope("prototype")
 public class FlowBotControler extends FlowDataBean {
+	private static final Logger logger = LoggerFactory.getLogger(FlowBotControler.class);
 	Data data = new Data();
 
 	@Autowired
@@ -56,7 +59,7 @@ public class FlowBotControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			System.out.println(e.toString());
+			logger.info(e.toString());
 		}
 		return success(data);
 	}
@@ -74,7 +77,7 @@ public class FlowBotControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			System.out.println(e.toString());
+			logger.info(e.toString());
 		}
 		return success(data);
 	}
@@ -100,7 +103,7 @@ public class FlowBotControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -122,7 +125,7 @@ public class FlowBotControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -140,7 +143,7 @@ public class FlowBotControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}

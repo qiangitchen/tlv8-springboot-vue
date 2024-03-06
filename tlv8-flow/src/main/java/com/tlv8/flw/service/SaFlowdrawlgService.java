@@ -22,4 +22,6 @@ public interface SaFlowdrawlgService {
 	SaFlowdrawlg selectBySprocessid(String sprocessid);
 	
 	List<SaFlowdrawlg> seachProcessByPath(String path);
+	
+	List<SaFlowdrawlg> selectByFolderID(String sfolderid);
 }

@@ -57,4 +57,11 @@ public interface SaFlowdrawlgMapper {
      * @return
      */
     List<SaFlowdrawlg> seachProcessByPath(String path);
+    
+    /**
+     * 根据目录ID查找流程图
+     * @param sfolderid
+     * @return
+     */
+    List<SaFlowdrawlg> selectByFolderID(String sfolderid);
 }

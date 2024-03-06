@@ -12,6 +12,8 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,7 @@ import com.tlv8.system.utils.ContextUtils;
 @Scope("prototype")
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ExecutorTreeControler extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(ExecutorTreeControler.class);
 	private Data data = new Data();
 	private String filter = null;
 
@@ -53,7 +56,7 @@ public class ExecutorTreeControler extends ActionSupport {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -107,7 +110,7 @@ public class ExecutorTreeControler extends ActionSupport {
 				orgLi.add(m);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally {
 			DBUtils.closeConn(session, conn, ps, rs);
 		}

@@ -68,8 +68,8 @@
     -->
     select sid, sprocessid, sprocessname, scode, sname, sparent, sidpath, snamepath, 
     scodepath, version
-    from sa_flowfolder
-    where sid = #{sid,jdbcType=VARCHAR}
+    from sa_flowfolder 
+     where sid = #{sid,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     <!--
@@ -80,5 +80,11 @@
     select sid, sprocessid, sprocessname, scode, sname, sparent, sidpath, snamepath, 
     scodepath, version
     from sa_flowfolder
+  </select>
+  <select id="selectByParent" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select sid, sprocessid, sprocessname, scode, sname, sparent, sidpath, snamepath, 
+    scodepath, version
+    from sa_flowfolder
+     where sparent = #{sparent,jdbcType=VARCHAR}
   </select>
 </mapper>

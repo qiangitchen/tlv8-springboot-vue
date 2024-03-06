@@ -46,4 +46,9 @@ public class SaFlowdrawlgServiceImpl implements SaFlowdrawlgService {
 		return saFlowdrawlgMapper.seachProcessByPath("%" + path + "%");
 	}
 
+	@Override
+	public List<SaFlowdrawlg> selectByFolderID(String sfolderid) {
+		return saFlowdrawlgMapper.selectByFolderID(sfolderid);
+	}
+
 }

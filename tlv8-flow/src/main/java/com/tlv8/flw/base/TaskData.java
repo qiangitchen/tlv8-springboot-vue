@@ -381,7 +381,7 @@ public class TaskData {
 		String SPROCESS = null;
 		SaTask task = saTaskService.selectByPrimaryKey(taskID);
 		if (task != null) {
-			return task.getSprocess();
+			return task.getSflowid();
 		}
 		return SPROCESS;
 	}

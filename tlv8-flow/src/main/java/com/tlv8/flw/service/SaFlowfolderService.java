@@ -18,4 +18,6 @@ public interface SaFlowfolderService {
 	List<SaFlowfolder> selectAll();
 	
 	int updateByPrimaryKey(SaFlowfolder row);
+	
+	List<SaFlowfolder> selectByParent(String sparent);
 }

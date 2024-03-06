@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,7 @@ import com.alibaba.fastjson.JSON;
 @Controller
 @Scope("prototype")
 public class LoadAuditOpinionAction extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(LoadAuditOpinionAction.class);
 	private String fbillID;
 	private String fopviewID;
 
@@ -49,7 +52,7 @@ public class LoadAuditOpinionAction extends ActionSupport {
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -67,14 +70,14 @@ public class LoadAuditOpinionAction extends ActionSupport {
 			ps.setString(1, personid);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				InputStream ins =  rs.getBinaryStream(1);
+				InputStream ins = rs.getBinaryStream(1);
 				long size = ins.available();
 				if (size > 10) {
 					sid = personid;
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally {
 			DBUtils.closeConn(session, conn, ps, rs);
 		}

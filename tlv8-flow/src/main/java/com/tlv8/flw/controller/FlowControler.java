@@ -5,6 +5,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ import com.tlv8.system.utils.OrgUtils;
 @Controller
 @Scope("prototype")
 public class FlowControler extends FlowDataBean {
+	private static final Logger logger = LoggerFactory.getLogger(FlowControler.class);
 	private Data data = new Data();
 	private String srcPath;
 	private String afterActivity;
@@ -70,7 +73,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -82,15 +85,19 @@ public class FlowControler extends FlowDataBean {
 	@RequestMapping("/flowoutAction")
 	public Object out() {
 		try {
+			logger.info("flowID:" + flowID);
 			if ("".equals(flowID) || flowID == null || "undefined".equals(flowID)) {
 				start();
 			}
+			logger.info("taskID:" + taskID);
 			if ("".equals(taskID) || taskID == null || "undefined".equals(taskID)) {
 				return success(data);
 			}
 			if (processID == null || "".equals(processID)) {
 				processID = taskData.getCurrentProcessID(taskID);
 			}
+			logger.info("afterActivity:" + afterActivity);
+			logger.info("epersonids:" + epersonids);
 			// 如果前端已经指定执行环节 并且 已经选择执行人
 			if (!"".equals(afterActivity) && afterActivity != null && epersonids != null && !"".equals(epersonids)) {
 				List<FlowActivity> aftAList = new ArrayList<FlowActivity>();
@@ -105,19 +112,19 @@ public class FlowControler extends FlowDataBean {
 				data.setFlag("true");
 				data.setData(toJSONString());
 			} else {
-				System.out.println("taskID:" + taskID);
+				logger.debug("taskID:" + taskID);
 				data = flowBaseHelper.flowout(taskID);
-				System.out.println(data.getFlag());
+				logger.debug(data.getFlag());
 				if (!"select".equals(data.getFlag())) {
 					taskID = data.getData();
 					data.setData(toJSONString());
 				}
-				System.out.println(data.getData());
+				logger.debug(data.getData());
 			}
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -135,7 +142,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -169,7 +176,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -187,7 +194,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -205,7 +212,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -223,7 +230,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}
@@ -241,7 +248,7 @@ public class FlowControler extends FlowDataBean {
 		} catch (Exception e) {
 			data.setFlag("false");
 			data.setMessage(e.toString());
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return success(data);
 	}

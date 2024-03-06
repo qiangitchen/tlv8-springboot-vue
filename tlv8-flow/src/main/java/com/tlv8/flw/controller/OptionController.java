@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +21,7 @@ import com.tlv8.system.utils.ContextUtils;
 
 @Controller
 public class OptionController {
+	private static final Logger logger = LoggerFactory.getLogger(OptionController.class);
 
 	/**
 	 * 获取当前登录人指定环节意见
@@ -48,7 +51,7 @@ public class OptionController {
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return data;
 	}
@@ -74,7 +77,7 @@ public class OptionController {
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		return data;
 	}

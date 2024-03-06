@@ -3,6 +3,8 @@ package com.tlv8.flw.controller;
 import java.net.URLDecoder;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import com.tlv8.system.bean.ContextBean;
 @Scope("prototype")
 @SuppressWarnings({ "rawtypes" })
 public class FlowDrawControler extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(FlowDrawControler.class);
 	private String sprocessid;// SPROCESSID
 	private String sprocessname;// SPROCESSNAME
 	private String sdrawlg;// SDRAWLG
@@ -46,7 +49,7 @@ public class FlowDrawControler extends ActionSupport {
 			sdrawlg = (String) m.get("SDRAWLG");
 			sprocessacty = (String) m.get("SPROCESSACTY");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		JSONObject json = new JSONObject();
 		json.put("sprocessid", sprocessid);
@@ -64,7 +67,7 @@ public class FlowDrawControler extends ActionSupport {
 			ContextBean context = baseController.getContext();
 			flowFile.saveFlowDraw(getSprocessid(), getSprocessname(), getSdrawlg(), getSprocessacty(), context);// 保存流程图
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		JSONObject json = new JSONObject();
 		json.put("sprocessid", sprocessid);
