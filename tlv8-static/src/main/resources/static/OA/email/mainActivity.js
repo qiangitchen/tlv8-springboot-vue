@@ -1,6 +1,6 @@
 /*==数据源===此项为必须定义==*/
-var write_data;
-var data_info;
+var write_data = new tlv8.Data();
+var data_info = new tlv8.Data();
 var write_rowid = "";
 
 var checkedRow = new Map();
@@ -34,16 +34,16 @@ function init() {
 			}
 		});
 		if ($(this).attr("rel") == "templetList") {
-			loadTempletMail();// 加载草稿箱
+			loadTempletMail(); // 加载草稿箱
 		}
 		if ($(this).attr("rel") == "receiveList") {
-			loadRecvMail();// 加载收件
+			loadRecvMail(); // 加载收件
 		}
 		if ($(this).attr("rel") == "sendList") {
-			loadSendMail();// 加载发件
+			loadSendMail(); // 加载发件
 		}
 		if ($(this).attr("rel") == "collectList") {
-			loadCollectMail();// 加载发件
+			loadCollectMail(); // 加载发件
 		}
 	});
 	loadRecvMail();
@@ -64,10 +64,8 @@ function init() {
 };
 
 function initData() {
-	data_info = new tlv8.Data();
 	data_info.setDbkey("oa");
 	data_info.setFormId("mail_look");
-	write_data = new tlv8.Data();
 	write_data.setDbkey("oa");
 	write_data.setFormId("WRITE_DATA_FORM");
 	write_data.setTable("OA_EM_SENDEMAIL");
@@ -79,7 +77,8 @@ function initData() {
  */
 function writeMail(rowid, isnew) {
 	try {
-		$(".write_content").xheditor(false);// 清空编辑器，但由于没有初始化就会报错，因此增加try catch
+		$(".write_content").xheditor(false); // 清空编辑器，但由于没有初始化就会报错，因此增加try
+		// catch
 	} catch (e) {
 	}
 	if (rowid == "" || rowid == null) {
@@ -96,6 +95,7 @@ function writeMail(rowid, isnew) {
 		J$("WRITE_DATA_FORM").rowid = rowid;
 		J$("WRITE_DATA_FORM").setAttribute("rowid", rowid);
 		$("#WRITE_DATA_FORM").attr("rowid", rowid);
+		write_data.setRowId(rowid);
 		write_data.refreshData();
 	}
 	$(".lookViewer").hide();
@@ -138,11 +138,11 @@ function deleteCurrentMail() {
 		var re = tlv8.XMLHttpRequest("DeleteMailAction", param, "post");
 		if (re.data.flag == "true") {
 			if (type == "发件箱")
-				loadSendMail();// 加载发件
+				loadSendMail(); // 加载发件
 			else if (type == "草稿箱")
-				loadTempletMail();// 加载草稿箱
+				loadTempletMail(); // 加载草稿箱
 			else
-				loadRecvMail();// 加载收件
+				loadRecvMail(); // 加载收件
 			tlv8.showMessage("邮件删除成功");
 		} else {
 			$.messager.alert('警告', '删除邮件出错', 'warning');
@@ -152,20 +152,22 @@ function deleteCurrentMail() {
 
 // 保存到草稿箱
 function saveToTempletAction() {
+	var query = "fconsigneeid=" + $("#FCONSIGNEEID").val();
+	query += "&fconsignee=" + $("#FCONSIGNEE").val();
+	query += "&femailname=" + $("#FEMAILNAME").val();
+	query += "&ftext=" + $("#FTEXT").val();
+	query += "&fjinfo=" + $(".FJINFO").val();
+	query += "&actype=save";
+	query += "&rowid=" + write_rowid;
 	var param = new tlv8.RequestParam();
-	param.set("fconsigneeid", $("#FCONSIGNEEID").val());
-	param.set("fconsignee", $("#FCONSIGNEE").val());
-	param.set("femailname", $("#FEMAILNAME").val());
-	param.set("ftext", $("#FTEXT").val());
-	param.set("fjinfo", $(".FJINFO").val());
-	param.set("actype", "save");
-	param.set("rowid", write_rowid);
+	param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var re = tlv8.XMLHttpRequest("sendMailAction", param, "post", false);
 	if (re.data.flag == "true") {
 		write_rowid = re.data.rowid;
 		J$("WRITE_DATA_FORM").rowid = write_rowid;
 		J$("WRITE_DATA_FORM").setAttribute("rowid", write_rowid);
 		$("#WRITE_DATA_FORM").attr("rowid", write_rowid);
+		write_data.setRowId(rowid);
 		write_data.refreshData();
 		tlv8.showMessage("保存草稿成功");
 	} else {
@@ -191,15 +193,15 @@ function sendMail() {
 		$.messager.alert('警告', '请先选择收件人后再发送', 'warning');
 		return;
 	}
+	var query = "fconsigneeid=" + fconsigneeid;
+	query += "&fconsignee=" + $("#FCONSIGNEE").val();
+	query += "&femailname=" + $("#FEMAILNAME").val();
+	query += "&ftext=" + $("#FTEXT").val();
+	query += "&fjinfo=" + $(".FJINFO").val();
+	query += "&actype=send";
+	query += "&rowid=" + write_rowid;
 	var param = new tlv8.RequestParam();
-	param.set("fconsigneeid", fconsigneeid);
-	// param.set("fconsigneecode", "");
-	param.set("fconsignee", $("#FCONSIGNEE").val());
-	param.set("femailname", $("#FEMAILNAME").val());
-	param.set("ftext", $("#FTEXT").val());
-	param.set("fjinfo", $(".FJINFO").val());
-	param.set("actype", "send");
-	param.set("rowid", write_rowid);
+	param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
 	var re = tlv8.XMLHttpRequest("sendMailAction", param);
 	if (re.data.flag == "true") {
 		write_rowid = re.rowid;
@@ -319,7 +321,7 @@ function martAlltoRead() {
 	var param = new tlv8.RequestParam();
 	param.set("consigneeid", tlv8.Context.getCurrentPersonID());
 	tlv8.XMLHttpRequest("receiveEmail/martAlltoRead", param, "post", false);
-	loadRecvMail();// 加载收件
+	loadRecvMail(); // 加载收件
 }
 
 function selectReceivePsm() {

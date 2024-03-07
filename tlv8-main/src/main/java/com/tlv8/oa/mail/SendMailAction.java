@@ -147,7 +147,7 @@ public class SendMailAction extends ActionSupport {
 				ps1.close();
 				conn.commit();
 			}
-			data.setRowid(newid);
+			data.setRowid(cuID);
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
