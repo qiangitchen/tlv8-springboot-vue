@@ -190,8 +190,7 @@ tlv8.Doc = {
 		sendParam.set('urlPattern', urlPattern);
 		sendParam.set('isFormAction', isFormAction);
 		var res = null;
-		var r = tlv8.XMLHttpRequest("queryHostAction", sendParam, "POST",
-				false, null);
+		var r = tlv8.XMLHttpRequest("queryHostAction", sendParam, "POST", false, null).data;
 		if(typeof r == "string"){
 			r = window.eval("("+r+")");
 		}

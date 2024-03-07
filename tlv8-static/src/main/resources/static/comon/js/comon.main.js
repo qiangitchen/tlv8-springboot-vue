@@ -2869,9 +2869,10 @@ function setTab(n) {
 tlv8.Context = {
     userInfo: {},
     /**
-     * 获取当前用户角色列表
-     * @returns []
-     */
+	 * 获取当前用户角色列表
+	 * 
+	 * @returns []
+	 */
     getAllRoles : function() {
 		var result = justep.yn.XMLHttpRequest("system/Role/getAllRolesAction", null,
 				"post", false);
@@ -5360,12 +5361,13 @@ tlv8.fileComponent = function (div, data, cellname, docPath, canupload,
         var tablename = data.table;
         var rowid = data.rowid;
         var sID = (dbkey == "system" || !dbkey) ? "SID" : "fID";
+        var query = "dbkey="+dbkey;
+    	query += "&tablename="+tablename;
+    	query += "&cellname="+cellname;
+    	query += "&keyfield="+sID;
+    	query += "&rowid="+rowid;
         var param = new tlv8.RequestParam();
-        param.set("dbkey", dbkey);
-        param.set("tablename", tablename);
-        param.set("cellname", cellname);
-        param.set("keyfield", sID);
-        param.set("rowid", rowid);
+        param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
         var r = tlv8.XMLHttpRequest("loadAttachmentInformation", param, "POST", false);
         var dilelist = [];
         var transeJson = function (str) {
@@ -5378,8 +5380,8 @@ tlv8.fileComponent = function (div, data, cellname, docPath, canupload,
             return filelist;
         };
         try {
-            if (r.data != "") {
-                var datas = r.data;
+            if (r.data.data != "") {
+                var datas = r.data.data;
                 if ("null" == datas) {
                     datas = "";
                 }
