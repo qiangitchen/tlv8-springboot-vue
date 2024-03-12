@@ -87,4 +87,7 @@
 	<update id="logicRecoveryByPrimaryKey" parameterType="java.lang.String">
 		update SA_OpPermission set svalidstate=1 where sid = #{sid,jdbcType=VARCHAR}
 	</update>
+	<delete id="deleteByRoleMenu" parameterType="java.util.Map">
+		delete from SA_OpPermission where spermissionroleid = #{spermissionroleid,jdbcType=VARCHAR} and smenuid = #{smenuid,jdbcType=VARCHAR}
+	</delete>
 </mapper>

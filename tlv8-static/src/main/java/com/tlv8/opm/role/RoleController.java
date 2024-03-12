@@ -44,6 +44,7 @@ public class RoleController {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("SPROCESS", p.getSprocess());
 				map.put("SACTIVITY", p.getSactivity());
+				map.put("SMENUID", p.getSmenuid());
 				list.add(map);
 			}
 			m.put("flag", true);

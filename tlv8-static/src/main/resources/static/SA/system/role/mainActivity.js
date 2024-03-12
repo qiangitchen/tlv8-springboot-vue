@@ -13,12 +13,11 @@ function getData() {
 	var labelwidth = "40,200,100,150,120,100";
 	var datatype = "ro,string,string,string,string,number";
 	var dataAction = {
-		"queryAction" : "getGridAction",
-		"savAction" : "saveAction",
-		"deleteAction" : "deleteAction"
+		"queryAction": "getGridAction",
+		"savAction": "saveAction",
+		"deleteAction": "deleteAction"
 	};
-	maingrid = new tlv8.createGrid(d, labelid, labels, labelwidth, dataAction,
-			"100%", "100%", data, 20, "", "", "", datatype, false, true);
+	maingrid = new tlv8.createGrid(d, labelid, labels, labelwidth, dataAction, "100%", "100%", data, 20, "", "", "", datatype, false, true);
 	maingrid.grid.settoolbar(true, false, true, true);
 	maingrid.grid.seteditModel(false);
 	currentgrid = maingrid.grid;
@@ -30,16 +29,13 @@ function getData() {
 
 	// 重写新增事件
 	document.getElementById(d.id + "_insertItem").onclick = function() {
-		tlv8.portal.dailog.openDailog("新增角色",
-				"/SA/system/role/dialog/editRole.html", 600, 450, function() {
-					currentgrid.refreshData();// 刷新数据
-				});
+		tlv8.portal.dailog.openDailog("新增角色", "/SA/system/role/dialog/editRole.html", 600, 450,
+		function() {
+			currentgrid.refreshData(); // 刷新数据
+		});
 	};
 
-	currentgrid
-			.insertSelfBar(
-					"<i class=\"layui-icon layui-icon-edit\" style=\"font-size: 12px; color: blue;\"></i> 编辑",
-					70, "dbselrow()");
+	currentgrid.insertSelfBar("<i class=\"layui-icon layui-icon-edit\" style=\"font-size: 12px; color: blue;\"></i> 编辑", 70, "dbselrow()");
 }
 
 /**
@@ -48,11 +44,10 @@ function getData() {
  */
 function dbselrow(event) {
 	var rowid = currentgrid.getCurrentRowId();
-	tlv8.portal.dailog.openDailog("编辑角色",
-			"/SA/system/role/dialog/editRole.html?rowid=" + rowid, 600, 450,
-			function() {
-				currentgrid.refreshData();// 刷新数据
-			});
+	tlv8.portal.dailog.openDailog("编辑角色", "/SA/system/role/dialog/editRole.html?rowid=" + rowid, 600, 450,
+	function() {
+		currentgrid.refreshData(); // 刷新数据
+	});
 }
 
 var isnewDataFilter = "";
@@ -84,17 +79,15 @@ function initAuthGrid() {
 	var labelwidth = "20,40,150,280,100";
 	var datatype = "null,ro,ro,ro,ro";
 	var dataAction = {
-		"queryAction" : "getGridAction",
-		"savAction" : "savePermitionAction",
-		"deleteAction" : "deleteAction"
+		"queryAction": "getGridAction",
+		"savAction": "savePermitionAction",
+		"deleteAction": "deleteAction"
 	};
-	maingrid = new tlv8.createGrid(div, labelid, labels, labelwidth,
-			dataAction, "100%", "100%", aTdata, 20, "", "main-auther-form",
-			"SPERMISSIONROLEID", datatype, true, true);
+	maingrid = new tlv8.createGrid(div, labelid, labels, labelwidth, dataAction, "100%", "100%", aTdata, 20, "", "main-auther-form", "SPERMISSIONROLEID", datatype, true, true);
 	maingrid.grid.settoolbar(true, false, true, true);
 	maingrid.grid.seteditModel(false);
 	auTherGid = maingrid.grid;
-	auTherGid.setExcelexpBar(true);// 导出
+	auTherGid.setExcelexpBar(true); // 导出
 	document.getElementById("auth-grid-view_insertItem").onclick = function() {
 		allocatingFunc();
 	};
@@ -113,7 +106,7 @@ function readNameLabel(cgrid, rowObj) {
 
 // 联动刷新
 function mainGridselected(g) {
-	if (g.CurrentRowId == "systemManage") {// 禁止删除'系统管理‘角色
+	if (g.CurrentRowId == "systemManage") { // 禁止删除'系统管理‘角色
 		g.settoolbar(true, "readonly", true, false);
 	}
 	document.getElementById("main-auther-form").rowid = g.CurrentRowId;
@@ -125,9 +118,7 @@ function mainGridselected(g) {
 
 // 分配功能
 function allocatingFunc() {
-	tlv8.portal.dailog.openDailog("分配功能",
-			"/SA/system/role/dialog/func-tree-select.html", "300", "500",
-			cocationCallback, null);
+	tlv8.portal.dailog.openDailog("分配功能", "/SA/system/role/dialog/func-tree-select.html", "300", "500", cocationCallback, null);
 }
 
 function cocationCallback(data) {
@@ -149,11 +140,14 @@ function cocationCallback(data) {
 // 拖动分隔线事件
 function standardPartitionResize(event) {
 	$("#main-grid-view_grid_label").fixTable({
-		fixColumn : 0,// 固定列数
-		fixColumnBack : "#ccc",// 固定列数
-		width : $("#main-grid-view_body_layout").width(),// 显示宽度
-		height : $("#main-grid-view_body_layout").height()
-	// 显示高度
+		fixColumn: 0,
+		// 固定列数
+		fixColumnBack: "#ccc",
+		// 固定列数
+		width: $("#main-grid-view_body_layout").width(),
+		// 显示宽度
+		height: $("#main-grid-view_body_layout").height()
+		// 显示高度
 	});
 	// $("#auth-grid-view_grid_label").fixTable({
 	// fixColumn : 0,// 固定列数
@@ -165,17 +159,17 @@ function standardPartitionResize(event) {
 }
 
 function loadFunList() {
-	tlv8.XMLHttpRequest("getFunTableListAction", null, "post", false, function(
-			rdata) {
+	tlv8.XMLHttpRequest("getFunTableListAction", null, "post", false,
+	function(rdata) {
 		createMenuList(rdata.data);
 	});
 }
 
 function getRowspan(data) {
 	var r = data.children.length + 1;
-	for ( var n in data.children) {
+	for (var n in data.children) {
 		r += data.children[n].children.length;
-		for ( var m in data.children[n].children) {
+		for (var m in data.children[n].children) {
 			r += data.children[n].children[m].children.length;
 		}
 	}
@@ -185,7 +179,7 @@ function getRowspan(data) {
 var MenusData = new Map();
 
 function checkChild(obj, check) {
-//	$("input[pid='" + $(obj).attr("id") + "']").attr("checked", true);
+	//	$("input[pid='" + $(obj).attr("id") + "']").attr("checked", true);
 	$('input[pid="' + $(obj).attr("id") + '"]').prop('checked', check);
 }
 
@@ -196,11 +190,7 @@ function createMenuList(data) {
 		MenusData.put(data[i].id, data[i].pid);
 		tr.push("<tr>");
 		tr.push("<td rowspan='" + getRowspan(data[i]) + "'>");
-		tr.push('<input class="menucheck" id="' + data[i].id + '" lay-filter="'
-				+ data[i].id + '" pid="' + data[i].pid + '" process="'
-				+ data[i].process + '" activity="' + data[i].activity
-				+ '" type="checkbox" title="' + data[i].name
-				+ '" lay-skin="primary" disabled> ');
+		tr.push('<input class="menucheck" id="' + data[i].id + '" lay-filter="' + data[i].id + '" pid="' + data[i].pid + '" process="' + data[i].process + '" activity="' + data[i].activity + '" type="checkbox" title="' + data[i].name + '" lay-skin="primary" disabled> ');
 		tr.push("</td>");
 		tr.push("</tr>");
 		tr.push(createChildMenu(data[i].children));
@@ -212,12 +202,13 @@ function createMenuList(data) {
 function builderTable() {
 	$("#menulist").html(menuTrs.join(""));
 	layui.form.render("");
-	layui.form.on('checkbox', function(data) {
+	layui.form.on('checkbox',
+	function(data) {
 		// console.log(data.elem); // 得到checkbox原始DOM对象
 		// console.log(data.elem.checked); // 开关是否开启，true或者false
 		// console.log(data.value); // 开关value值，也可以通过data.elem.value得到
 		// console.log(data.othis); // 得到美化后的DOM对象
-		editDataAction(data.elem, data.elem.checked);// 记录编辑数据
+		editDataAction(data.elem, data.elem.checked); // 记录编辑数据
 		checkChiled($(data.elem).attr("id"), data.elem.checked);
 		layui.form.render("");
 	});
@@ -229,11 +220,7 @@ function createChildMenu(data) {
 		MenusData.put(data[i].id, data[i].pid);
 		tr.push("<tr>");
 		tr.push("<td rowspan='" + getRowspan(data[i]) + "'>");
-		tr.push('<input class="menucheck" id="' + data[i].id + '" lay-filter="'
-				+ data[i].id + '" pid="' + data[i].pid + '" process="'
-				+ data[i].process + '" activity="' + data[i].activity
-				+ '" type="checkbox" title="' + data[i].name
-				+ '" lay-skin="primary" disabled> ');
+		tr.push('<input class="menucheck" id="' + data[i].id + '" lay-filter="' + data[i].id + '" pid="' + data[i].pid + '" process="' + data[i].process + '" activity="' + data[i].activity + '" type="checkbox" title="' + data[i].name + '" lay-skin="primary" disabled> ');
 		tr.push("</td>");
 		tr.push("</tr>");
 		tr.push(createChildMenu(data[i].children));
@@ -246,20 +233,24 @@ function reloadPermission() {
 	var param = new tlv8.RequestParam();
 	param.set("roleid", currentgrid.getCurrentRowId());
 	tlv8.XMLHttpRequest("role/loadRolePermission", param, "post", true,
-			function(rdata) {
-				setCheckPermission(rdata.data);
-			});
+	function(rdata) {
+		setCheckPermission(rdata.data);
+	});
 }
 
 function setCheckPermission(data) {
 	for (var i = 0; i < data.length; i++) {
 		var fun = data[i];
-		$("input[process='" + fun.SPROCESS + "']").each(function() {
-			if ($(this).attr("activity") == fun.SACTIVITY) {
-//				$(this).attr("checked", true);
-				$(this).prop("checked", true);
-				checkParent($(this).attr("pid"), true);
-			}
+//		$("input[process='" + fun.SPROCESS + "']").each(function() {
+//			if ($(this).attr("activity") == fun.SACTIVITY) {
+//				//$(this).attr("checked", true);
+//				$(this).prop("checked", true);
+//				checkParent($(this).attr("pid"), true);
+//			}
+//		});
+		$("input[id='" + fun.SMENUID + "']").each(function() {
+			$(this).prop("checked", true);
+			checkParent($(this).attr("pid"), true);
 		});
 	}
 	layui.form.render("");
@@ -267,10 +258,10 @@ function setCheckPermission(data) {
 
 function checkParent(pid, checked) {
 	if (checked) {
-//		$("input[id='" + pid + "']").attr("checked", true);
+		//$("input[id='" + pid + "']").attr("checked", true);
 		$("input[id='" + pid + "']").prop("checked", true);
 	} else {
-//		$("input[id='" + pid + "']").attr("checked", false);
+		//$("input[id='" + pid + "']").attr("checked", false);
 		$("input[id='" + pid + "']").prop("checked", false);
 	}
 	var spid = $("input[id='" + pid + "']").attr("pid");
@@ -282,14 +273,14 @@ function checkParent(pid, checked) {
 function checkChiled(pid, checked) {
 	var ob = $("input[pid='" + pid + "']");
 	if (checked) {
-//		ob.attr("checked", true);
+		//ob.attr("checked", true);
 		ob.prop("checked", true);
 	} else {
-//		ob.attr("checked", false);
+		//ob.attr("checked", false);
 		ob.prop("checked", false);
 	}
 	ob.each(function() {
-		editDataAction(this, checked);// 记录编辑数据
+		editDataAction(this, checked); // 记录编辑数据
 	});
 	var cd = $("input[pid='" + ob.attr("id") + "']");
 	if (cd.length > 0) {
@@ -297,7 +288,7 @@ function checkChiled(pid, checked) {
 	}
 }
 
-var editPData = new Map();// 记录编辑的id
+var editPData = new Map(); // 记录编辑的id
 function setEdit(obj) {
 	$(".menucheck").removeAttr("disabled");
 	editPData = new Map();
@@ -314,13 +305,13 @@ function setEdit(obj) {
 function editDataAction(obj, checked) {
 	var process = $(obj).attr("process");
 	var activity = $(obj).attr("activity");
-	if (process && process != "" && activity && activity != "") {
-		if (checked) {
-			editPData.put($(obj).attr("id"), "add");
-		} else {
-			editPData.put($(obj).attr("id"), "rem");
-		}
+	//if (process && process != "" && activity && activity != "") {
+	if (checked) {
+		editPData.put($(obj).attr("id"), "add");
+	} else {
+		editPData.put($(obj).attr("id"), "rem");
 	}
+	//}
 }
 
 function setFinish(obj) {
@@ -352,8 +343,7 @@ function savePermission() {
 		perm[key] = editPData.get(key);
 	}
 	param.set("perm", JSON.stringify(perm));
-	var rdata = tlv8.XMLHttpRequest("role/saveRolePermission", param, "post",
-			false);
+	var rdata = tlv8.XMLHttpRequest("role/saveRolePermission", param, "post", false);
 	return rdata.flag;
 }
 
@@ -364,7 +354,8 @@ function cancelSet(obj) {
 	if (editPData.isEmpty()) {
 		doCancel(obj);
 	} else {
-		layui.layer.confirm("当前有修改的配置未保存，确认取消吗?", function(index) {
+		layui.layer.confirm("当前有修改的配置未保存，确认取消吗?",
+		function(index) {
 			layui.layer.close(index);
 			doCancel(obj);
 		});
@@ -373,7 +364,7 @@ function cancelSet(obj) {
 
 function doCancel(obj) {
 	editPData = new Map();
-	reloadPermission();// 重新加载权限
+	reloadPermission(); // 重新加载权限
 	$(obj).attr("disabled", true);
 	$(obj).addClass("layui-btn-disabled");
 	$("#finishbtn").attr("disabled", true);
