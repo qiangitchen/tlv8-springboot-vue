@@ -1,6 +1,5 @@
 package com.tlv8.common.data;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 
@@ -67,8 +66,8 @@ public class BaseDeleteAction extends ActionSupport {
 	public void setRowid(String rowid) {
 		try {
 			this.rowid = URLDecoder.decode(rowid, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.rowid = rowid;
 		}
 	}
 
@@ -80,8 +79,8 @@ public class BaseDeleteAction extends ActionSupport {
 		try {
 			if (dbkay != null && !"".equals(dbkay))
 				this.dbkay = URLDecoder.decode(dbkay, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.dbkay = dbkay;
 		}
 	}
 
@@ -92,8 +91,8 @@ public class BaseDeleteAction extends ActionSupport {
 	public void setTable(String table) {
 		try {
 			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.table = table;
 		}
 	}
 
@@ -104,8 +103,8 @@ public class BaseDeleteAction extends ActionSupport {
 	public void setCascade(String cascade) {
 		try {
 			this.cascade = URLDecoder.decode(cascade, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.cascade = cascade;
 		}
 	}
 

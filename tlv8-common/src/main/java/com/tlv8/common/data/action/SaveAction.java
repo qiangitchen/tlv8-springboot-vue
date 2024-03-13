@@ -17,10 +17,6 @@ import com.tlv8.common.data.BaseSaveAction;
 @Scope("prototype")
 public class SaveAction extends BaseSaveAction {
 
-	public SaveAction() {
-
-	}
-
 	public Data getData() {
 		return this.data;
 	}

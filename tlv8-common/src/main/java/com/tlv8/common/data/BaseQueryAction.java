@@ -1,6 +1,5 @@
 package com.tlv8.common.data;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -93,8 +92,8 @@ public class BaseQueryAction extends ActionSupport {
 	public void setSql(String sql) {
 		try {
 			this.sql = URLDecoder.decode(sql, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.sql = sql;
 		}
 	}
 
@@ -113,8 +112,8 @@ public class BaseQueryAction extends ActionSupport {
 	public void setGridID(String gridID) {
 		try {
 			this.gridID = URLDecoder.decode(gridID, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.gridID = gridID;
 		}
 	}
 
@@ -125,7 +124,7 @@ public class BaseQueryAction extends ActionSupport {
 	public void setTable(String table) {
 		try {
 			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			this.table = table;
 		}
 	}
@@ -137,8 +136,8 @@ public class BaseQueryAction extends ActionSupport {
 	public void setRelation(String relation) {
 		try {
 			this.relation = URLDecoder.decode(relation, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.relation = relation;
 		}
 	}
 
@@ -149,8 +148,8 @@ public class BaseQueryAction extends ActionSupport {
 	public void setOrderby(String orderby) {
 		try {
 			this.orderby = URLDecoder.decode(orderby, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.orderby = orderby;
 		}
 	}
 

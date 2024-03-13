@@ -1,6 +1,5 @@
 package com.tlv8.common.data;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,8 +63,8 @@ public class BaseSaveAction extends ActionSupport {
 	public void setCells(String cells) {
 		try {
 			this.cells = URLDecoder.decode(cells, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.cells = cells;
 		}
 	}
 
@@ -237,8 +236,8 @@ public class BaseSaveAction extends ActionSupport {
 	public void setWhere(String where) {
 		try {
 			this.where = URLDecoder.decode(where, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.where = where;
 		}
 	}
 
@@ -257,8 +256,8 @@ public class BaseSaveAction extends ActionSupport {
 	public void setRowid(String rowid) {
 		try {
 			this.rowid = URLDecoder.decode(rowid, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			this.rowid = rowid;
 		}
 	}
 
