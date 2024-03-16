@@ -12,6 +12,7 @@ public class SaMenu {
     private String name;
     private String type;
     private String icon;
+    private String layuiicon;
     private String title;
     private int sort;
     private String link;
@@ -131,5 +132,13 @@ public class SaMenu {
 
 	public void setActivity(String activity) {
 		this.activity = activity;
+	}
+
+	public String getLayuiicon() {
+		return layuiicon;
+	}
+
+	public void setLayuiicon(String layuiicon) {
+		this.layuiicon = layuiicon;
 	}
 }

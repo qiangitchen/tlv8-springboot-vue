@@ -57,7 +57,7 @@ public class InitController {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", samenu.getId());
 				map.put("title", samenu.getTitle());
-				map.put("icon", samenu.getIcon());
+				map.put("icon", samenu.getLayuiicon());
 				map.put("href", samenu.getLink());
 				map.put("pid", samenu.getParent());
 				map.put("child", getChildMenu(samenu.getId(), samenus));
@@ -74,7 +74,7 @@ public class InitController {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", samenu.getId());
 				map.put("title", samenu.getTitle());
-				map.put("icon", samenu.getIcon());
+				map.put("icon", samenu.getLayuiicon());
 				map.put("href", samenu.getLink());
 				map.put("pid", samenu.getParent());
 				map.put("child", getChildMenu(samenu.getId(), samenus));

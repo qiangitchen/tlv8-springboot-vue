@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -28,6 +29,22 @@ public class FileAndString {
 				fileText.append(fileStr + "\n");
 			}
 			fileiptstream.close();
+			fileStr = fileText.toString().trim();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return fileStr;
+	}
+
+	public static String FileToString(InputStream ins) {
+		String fileStr = "";
+		try {
+			BufferedReader Strreader = new BufferedReader(new InputStreamReader(ins, StandardCharsets.UTF_8));
+			StringBuffer fileText = new StringBuffer();
+			while ((fileStr = Strreader.readLine()) != null) {
+				fileText.append(fileStr + "\n");
+			}
+			ins.close();
 			fileStr = fileText.toString().trim();
 		} catch (Exception e1) {
 			e1.printStackTrace();

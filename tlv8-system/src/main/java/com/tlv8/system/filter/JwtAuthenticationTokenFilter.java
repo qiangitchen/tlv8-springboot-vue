@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tlv8.system.action.WriteLog;
+import com.tlv8.system.echat.EChatExecuteFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,8 +33,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		String patex = request.getRequestURI();
-		if (isLoginPage(patex) || isIgnore(patex) || isSource(patex)) {
+		if (isSource(patex)) {// 静态资源js、css等不拦截
+			chain.doFilter(request, response);
+			return;
+		}
+		if (EChatExecuteFilter.doFilter(req, res)) {
+			// return false; // 返回false就是不需要再做处理
+		} else if (isLoginPage(patex) || isIgnore(patex)) {
 			chain.doFilter(request, response);
 		} else {
 			// 判断是否已登录

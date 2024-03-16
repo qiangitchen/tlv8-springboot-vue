@@ -3,17 +3,17 @@
    <head>
        <meta charset="utf-8">
        <title>echarts</title>
-       <script type="text/javascript" src="/tlv8/common/jQuery/jquery.min.js"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/echarts.min.js"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/echarts-gl.min.js"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/ecStat.min.js"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/dataTool.min.js"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/china.js"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/world.js"></script>
+       <script type="text/javascript" src="/common/jQuery/jquery.min.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/echarts.min.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/ecStat.min.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/dataTool.min.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/china.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/world.js"></script>
        <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=S8xLfAZ3Exim2biZUXwv9AvDIXwQ5CzR"></script>
-       <script type="text/javascript" src="/tlv8/resources/echarts/js/bmap.min.js"></script>
-	   <script type="text/javascript" src="/tlv8/resources/echarts/js/dark.js"></script>
-	   <script type="text/javascript" src="/tlv8/common/js/json2.js"></script>
+       <script type="text/javascript" src="/resources/echarts/js/bmap.min.js"></script>
+	   <script type="text/javascript" src="/resources/echarts/js/dark.js"></script>
+	   <script type="text/javascript" src="/common/js/json2.js"></script>
    </head>
    <body style="height: 100%; margin: 0; padding:0px;" onload="initCharts()">
        <div id="container" style="width:100%; height: 100%; overflow:hidden;"></div>
