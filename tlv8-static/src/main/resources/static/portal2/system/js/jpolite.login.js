@@ -207,22 +207,17 @@ if (!$.jpolite.Login) $.jpolite.Login = {
 		var username = $.trim(this.items.usernameInput.val().toLowerCase());
 		var password = $.trim(this.items.passwordInput.val());
 		var language = this.items.languageInput.val();
-		
+		var uuid = $.jpolite.Login.uuid;
 		var captcha = this.items.captchaInput ? (this.items.captchaInput.val() || "") : "";
 		var agent = this.items.agentSelect ? (this.items.agentSelect.val() || "") : "";
 			
-		$.jpolite.Data.system.User.login(username, hex_md5(password), {captcha:captcha,agent:agent,language:language}, function(data){
+		$.jpolite.Data.system.User.login(username, hex_md5(password), {captcha:captcha,uuid:uuid,agent:agent,language:language}, function(data){
 			if(data && data.status){
 				$.cookie("jpolite_username", CryptoJS.AESEncrypt(username), {expires:7,path:'/'});
 				$.cookie("jpolite_password", CryptoJS.AESEncrypt(password), {expires:7,path:'/'});
 				$.cookie("jpolite_language", language);
-				$.cookie("Authorization", data.token, {expires:7,path:'/'});
+				//$.cookie("Authorization", data.token, {expires:7,path:'/'});
 				window.location.href = window.location.href.replace(/login.html.*/,"index.html?temp="+new Date().getTime());
-				//luoting 判断登录的portel的主题类型 
-				//var rebackFun=function(data){ 
-				//	window.location.href = window.location.href.replace(/login.html.*/,"index.html?temp="+new Date().getTime());
-				//};
-				//$.jpolite.Data.send('system/User/themeType',{},rebackFun,true);  
 			} else {
 				$.jpolite.Login.items.captchaImage && $.jpolite.Login.items.captchaImage.click();
 				$.jpolite.Login.items.loadingImage && $.jpolite.Login.items.loadingImage.hide();

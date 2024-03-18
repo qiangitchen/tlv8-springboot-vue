@@ -212,7 +212,6 @@ if (!$.jpolite.Login) $.jpolite.Login = {
 		var agent = this.items.agentSelect ? (this.items.agentSelect.val() || "") : "";
 			
 		$.jpolite.Data.system.User.login(username, hex_md5(password), {captcha:captcha,uuid:uuid,agent:agent,language:language}, function(data){
-			console.log(data);
 			if(data && data.status){
 				$.cookie("jpolite_username", CryptoJS.AESEncrypt(username), {expires:7,path:'/'});
 				$.cookie("jpolite_password", CryptoJS.AESEncrypt(password), {expires:7,path:'/'});
