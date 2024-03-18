@@ -72,19 +72,33 @@ function initData() {
 	write_data.saveData = saveToTempletAction;
 
 }
+
+//xheditor配置
+var htmlediterparam = {
+	html5Upload : false,
+	upImgUrl : "/xheditor/xhUploadImage",
+	upImgExt : "jpg,jpeg,gif,png",
+	upLinkUrl : "/xheditor/xhUploadFile",
+	upLinkExt : "zip,rar,txt,doc,docx,xls,xlsx,ppt,pptx,pdf",
+	upFlashUrl : "/xheditor/xhUploadFlash",
+	upMediaUrl : "/xheditor/xhUploadMedia"
+};
+
 /*
  * 写信
  */
 function writeMail(rowid, isnew) {
 	try {
-		$(".write_content").xheditor(false); // 清空编辑器，但由于没有初始化就会报错，因此增加try
-		// catch
+		// 清空编辑器
+		$(".write_content").xheditor(false); 
+		//由于没有初始化就会报错，因此增加try catch
 	} catch (e) {
 	}
-	if (rowid == "" || rowid == null) {
+	if (!rowid || rowid == "" || rowid == null) {
 		wirtedataInsert();
 		$("#FSENDPERNAME").text(tlv8.Context.getCurrentPersonName());
 		$("#fConsignee").val("");
+		write_data.setRowId("");
 	} else {
 		if (!isnew)
 			write_rowid = rowid;
@@ -110,9 +124,8 @@ function writeMail(rowid, isnew) {
 	new tlv8.fileComponent(document.getElementById("write_fj"), write_data,
 			"FFJID", "/root/邮箱/" + getCurentYearandMonth(), true, true, false,
 			false);
-	$(".write_content")
-			.xheditor(
-					"{tools:'full',﻿﻿﻿﻿upImgUrl:'xhUpload',upImgExt:'jpg,jpeg,gif,png'}");
+	$(".write_content").height($(document).height()-300);
+	$(".write_content").xheditor(htmlediterparam);
 }
 
 // 新增数据
