@@ -1,4 +1,4 @@
-package com.tlv8.comon;
+package com.tlv8.comon.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

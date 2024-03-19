@@ -1794,7 +1794,6 @@ tlv8.createGrid = function (div, labelid, labels, labelwidth, dataAction,
                     msessage.toString();
                 }
             } else {
-                console.log(r);
                 layui.layer.alert(r.message);
                 msessage = r.message;
                 grid.CurrentRowId = "";

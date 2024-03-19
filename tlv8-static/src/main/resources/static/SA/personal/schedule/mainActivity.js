@@ -673,7 +673,7 @@ function message_looks(obj) {
 					+ "&sstartdate=" + cstartdate + "&senddate=" + cenddate
 					+ "&scaption=" + ccaption + "&sstatus=" + cstatus
 					+ "&scontent=" + ccontent + "&spriority=" + cpriority, 600,
-			450, lookscallback, itemSetInit);
+			480, lookscallback, itemSetInit);
 	event.cancelBubble = true;// 阻止触发事件
 }
 
@@ -762,7 +762,7 @@ function cycleAffairs() {
 	var d = document.getElementById("divCycleAffairs");
 	var labelid = "master_check,No,SCAPTION,SSTARTDATE,SENDDATE,SPRIORITY,SCONTENT,SAFFAIRSTYPE";
 	var labels = "master_check,No.,标题,开始时间,结束时间,优先级别,内容,类型";
-	var labelwidth = "30,30,130,135,135,60,470,47";
+	var labelwidth = "60,60,130,135,135,100,470,80";
 	var datatype = "null,ro,string,datetime,datetime,number,string,number";// 设置字段类型
 
 	var dataAction = {
@@ -1056,7 +1056,7 @@ function convertPriority(num) {
 // 新建我的任务对话框
 function message_addmyTask() {
 	tlv8.portal.dailog.openDailog('新建我的任务',
-			'/SA/personal/schedule/dialog/message_addMyTask.html', 800, 400,
+			'/SA/personal/schedule/dialog/message_addMyTask.html', 800, 420,
 			addmyTask, null);
 }
 
@@ -1118,7 +1118,7 @@ function importExport() {
 	var d = document.getElementById("divImportExport");
 	var labelid = "master_check,No,SCAPTION,SSTARTDATE,SENDDATE,SPRIORITY,SCONTENT,SSTATUS,SAFFAIRSTYPE";
 	var labels = "master_check,No.,标题,开始时间,结束时间,优先级别,内容,状态,类型";
-	var labelwidth = "30,30,130,135,135,60,470,70,34";
+	var labelwidth = "60,60,130,135,135,100,470,100,80";
 	var datatype = "null,ro,string,datetime,datetime,number,string,string,number";// 设置字段类型
 	var dataAction = {
 		"queryAction" : "getGridAction",
@@ -1139,14 +1139,21 @@ function importExport() {
 
 // 查询数据-需传入3个值，字段名（列名）、表名和where条件，无where条件为""
 function selectData(coname, tbname, whe) {
-	var result = tlv8.sqlQueryActionforJson("system", " select " + coname
-			+ " from " + tbname + " " + whe);
+//	var result = tlv8.sqlQueryActionforJson("system", " select " + coname
+//			+ " from " + tbname + " " + whe);
+	var query = "dbkey=system";
+	query += "&coname="+coname;
+    query += "&tbname="+tbname;
+    query += "&whe="+whe;
+    var param = new tlv8.RequestParam();
+    param.set("query", CryptoJS.AESEncrypt(J_u_encode(query)));
+    var result = tlv8.XMLHttpRequest("dataBaseQueryAction", param, "post", false);
 	return result.data;
 }
 
 function openHelp() {
-	tlv8.portal.openWindow("日程安排使用帮助",
-			"/SA/personal/schedule/help.html");
+	tlv8.portal.dailog.openDailog("日程安排使用帮助",
+			"/SA/personal/schedule/help.html", 800, 600);
 }
 
 // tab选择事件
