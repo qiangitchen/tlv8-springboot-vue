@@ -1,8 +1,10 @@
 package com.tlv8.oa.mail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,17 +34,22 @@ public class GetReceiveMailCountAction extends ActionSupport {
 	@RequestMapping("/getReceiveMailCountAction")
 	@SuppressWarnings({ "rawtypes" })
 	public Object execute() throws Exception {
-		ContextBean context = ContextUtils.getContext();
-		String personid = context.getPersonID();
-		String sql = "SELECT count(1) COUNT FROM OA_EM_RECEIVEEMAIL WHERE FCONSIGNEEID = '" + personid
-				+ "' AND FQUREY = '未查看' ORDER BY FQUREY, FSENDTIME DESC";
-
 		try {
-			List yl = DBUtils.execQueryforList("oa", sql, true);
+			ContextBean context = ContextUtils.getContext();
+			String personid = context.getPersonID();
+			SQL sql = new SQL();
+			sql.SELECT("count(*) COUNT");
+			sql.FROM("OA_EM_RECEIVEEMAIL");
+			sql.WHERE("FCONSIGNEEID=? and FQUREY = '未查看'");
+			sql.ORDER_BY("FQUREY asc, FSENDTIME desc");
+			List<Object> param = new ArrayList<>();
+			param.add(personid);
+			List yl = DBUtils.selectList("oa", sql.toString(), param, true);
 			if (yl.size() > 0) {
 				Map m = (Map) yl.get(0);
 				count = String.valueOf(m.get("COUNT"));
 			}
+			data.setData(count);
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");

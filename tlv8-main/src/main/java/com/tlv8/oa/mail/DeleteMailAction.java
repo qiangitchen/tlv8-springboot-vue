@@ -3,6 +3,7 @@ package com.tlv8.oa.mail;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +24,15 @@ public class DeleteMailAction extends ActionSupport {
 	@RequestMapping("/DeleteMailAction")
 	@Override
 	public Object execute() throws Exception {
-		String sql = "";
+		SQL sql = new SQL();
 		if (type.equals("收件箱")) {
-			sql = "DELETE FROM OA_EM_RECEIVEEMAIL WHERE FID IN (" + rowid + ")";
+			sql.DELETE_FROM("oa_em_receiveemail");
 		} else {
-			sql = "DELETE FROM OA_EM_SENDEMAIL WHERE FID IN (" + rowid + ")";
+			sql.DELETE_FROM("oa_em_sendemail");
 		}
+		sql.WHERE("FID IN (" + rowid + ")");
 		try {
-			DBUtils.execdeleteQuery("oa", sql);
+			DBUtils.execdeleteQuery("oa", sql.toString());
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");

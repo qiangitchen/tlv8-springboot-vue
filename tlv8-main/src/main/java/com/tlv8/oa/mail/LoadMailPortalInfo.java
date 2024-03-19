@@ -3,6 +3,7 @@ package com.tlv8.oa.mail;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +25,14 @@ public class LoadMailPortalInfo extends ActionSupport {
 	@RequestMapping("/loadMailPortalInfo")
 	@Override
 	public Object execute() throws Exception {
-		String sqlStr = "SELECT FID,FQUREY,FEMAILNAME,FSENDPERNAME,FSENDTIME FROM OA_EM_RECEIVEEMAIL T  WHERE T.FCONSIGNEEID='"
-				+ ContextUtils.getContext().getCurrentPersonID() + "' AND FQUREY='未查看' ORDER BY FSENDTIME DESC";
+		SQL sql = new SQL();
+		sql.SELECT("FID,FQUREY,FEMAILNAME,FSENDPERNAME,FSENDTIME");
+		sql.FROM("OA_EM_RECEIVEEMAIL");
+		sql.WHERE("FCONSIGNEEID='" + ContextUtils.getContext().getCurrentPersonID() + "'");
+		sql.WHERE("FQUREY='未查看'");
+		sql.ORDER_BY("FSENDTIME DESC");
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("oa", sqlStr, true);
+			List<Map<String, String>> list = DBUtils.execQueryforList("oa", sql.toString(), true);
 			data.setData(JSON.toJSONString(list));
 			data.setFlag("true");
 		} catch (Exception e) {

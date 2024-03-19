@@ -1,9 +1,11 @@
 package com.tlv8.oa.mail;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.utils.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.utils.ContextUtils;
@@ -40,48 +43,87 @@ public class GetReceiveMailAction extends ActionSupport {
 	public Object execute() throws Exception {
 		ContextBean context = ContextUtils.getContext();
 		String personid = context.getPersonID();
-		if (filter == null) {
-			filter = "1=1";
-		} else {
-			filter = "e.FSENDPERNAME like '%" + filter + "%' or e.FEMAILNAME like '%" + filter + "%' or e.FTEXT like '%"
-					+ filter + "%'";
+		List<Object> param = new ArrayList<>();
+		SQL sql = new SQL();
+		sql.SELECT("FID as ID");
+		sql.SELECT("FQUREY as STATUS");
+		sql.SELECT("FEMAILNAME as TITLE");
+		sql.SELECT("FSENDPERNAME as NAME");
+		sql.SELECT("FSENDTIME as TIME");
+		sql.SELECT("e.FREPLYSTATE");
+		sql.SELECT("e.fsenddept as ORGNAME");
+		sql.FROM("OA_EM_ReceiveEmail e");
+		sql.WHERE("e.fConsigneeID=?");
+		param.add(personid);
+		if (StringUtils.isNotEmpty(filter)) {
+			sql.WHERE("(e.FSENDPERNAME like ? or e.FEMAILNAME like ? or e.FTEXT like ?)");
+			param.add("%" + filter + "%");
+			param.add("%" + filter + "%");
+			param.add("%" + filter + "%");
 		}
-		String sql = "select FID as ID,FQUREY as STATUS," + "FEMAILNAME as TITLE,FSENDPERNAME as NAME,"
-				+ "FSENDTIME as TIME, " + "e.FREPLYSTATE, e.fsenddept as ORGNAME "
-				+ "from OA_EM_ReceiveEmail  e where e.fConsigneeID = '" + personid + "' " + " and (" + filter + ")"
-				+ " order by  FQUREY, FSENDTIME desc";
+		sql.ORDER_BY("FQUREY asc, FSENDTIME desc");
 		try {
 			String yd = "";
-			List yl = DBUtils.execQueryforList("oa",
-					"select count(1) as COUNT from (" + sql + ")a where STATUS = '未查看'");
+			SQL scount = new SQL();
+			scount.SELECT("count(*) as COUNT");
+			scount.FROM("(" + sql.toString() + ")");
+			scount.WHERE("STATUS = '未查看'");
+			List yl = DBUtils.selectList("oa", scount.toString(), param, true);
 			if (yl.size() > 0) {
 				Map m = (Map) yl.get(0);
 				weichakan = String.valueOf(m.get("COUNT"));
 				yd = String.valueOf(m.get("COUNT")) + "未读";
 			}
-			List cl = DBUtils.execQueryforList("oa", "select count(1) as COUNT from (" + sql + ")c", true);
+			SQL ccount = new SQL();
+			ccount.SELECT("count(*) as COUNT");
+			ccount.FROM("(" + sql.toString() + ")");
+			List cl = DBUtils.selectList("oa", ccount.toString(), param, true);
 			if (cl.size() > 0) {
 				Map m = (Map) cl.get(0);
 				count = yd + "/共" + String.valueOf(m.get("COUNT"));
 			}
+			StringBuffer qsql = new StringBuffer();
+			qsql.append("select * from");
 			if (DBUtils.IsOracleDB("oa") || DBUtils.IsDMDB("oa")) {
 				if (limit != null && !"".equals(limit)) {
-					sql = "select * from (select rownum srownu,r.* from (" + sql + ")r where rownum<=" + limit
-							+ ")a where a.srownu >" + offerset;
+					qsql.append("(select rownum srownu,r.* from (");
+					qsql.append(sql.toString());
+					qsql.append(")r where rownum<=" + limit);
+					qsql.append(")a where a.srownu >" + offerset);
 				} else {
-					sql = "select * from(" + sql + ")a where rownum <=10";
+					qsql.append("(" + sql.toString() + ")");
+					qsql.append("a where rownum <=10");
 				}
 			} else if (DBUtils.IsMySQLDB("oa")) {
 				if (limit != null && !"".equals(limit)) {
-					sql = "select * from (" + sql + ")r limit " + offerset + "," + limit;
+					qsql.append("(" + sql.toString() + ")");
+					qsql.append("r limit " + offerset + "," + limit);
 				} else {
-					sql = "select * from(" + sql + ")a limit 0,10";
+					qsql.append("(" + sql.toString() + ")");
+					qsql.append("a limit 0,10");
 				}
 			} else {
-				sql = "select * from (" + sql + ") where ID in (select top " + limit + " ID from (" + sql
-						+ ") ) and ID not in (select top " + offerset + " ID from (" + sql + ") )";
+				qsql.append("(" + sql.toString() + ")");
+				qsql.append(" where ID in ");
+				qsql.append("(select top " + limit);
+				qsql.append(" ID from (" + sql.toString() + ")");
+				qsql.append(") and ID not in ");
+				qsql.append("(select top " + offerset);
+				qsql.append(" ID from (" + sql.toString() + ") )");
+				param.add(personid);
+				if (StringUtils.isNotEmpty(filter)) {
+					param.add("%" + filter + "%");
+					param.add("%" + filter + "%");
+					param.add("%" + filter + "%");
+				}
+				param.add(personid);
+				if (StringUtils.isNotEmpty(filter)) {
+					param.add("%" + filter + "%");
+					param.add("%" + filter + "%");
+					param.add("%" + filter + "%");
+				}
 			}
-			List list = DBUtils.execQueryforList("oa", sql, true);
+			List<Map<String, String>> list = DBUtils.selectStringList("oa", qsql.toString(), param, true);
 			data.setFlag("true");
 			data.setData(JSON.toJSONString(list));
 		} catch (Exception e) {

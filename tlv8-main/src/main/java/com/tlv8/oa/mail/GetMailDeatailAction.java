@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,17 +48,22 @@ public class GetMailDeatailAction extends ActionSupport {
 		} else {
 			filter = "e.FID = '" + rowid + "'";
 		}
-		String sql = "";
+		SQL sql = new SQL();
+		sql.SELECT("*");
 		if (type.equals("收件箱") || type.equals("receive")) {
-			sql = "SELECT * FROM OA_EM_RECEIVEEMAIL E WHERE " + filter;
-			String sql_update = "update OA_EM_RECEIVEEMAIL set FQUREY = '已查看' where FID ='" + rowid
-					+ "' and FQUREY != '已查看'";
-			DBUtils.execUpdateQuery("oa", sql_update);
+			sql.FROM("oa_em_receiveemail");
+			SQL upsql = new SQL();
+			upsql.UPDATE("oa_em_receiveemail");
+			upsql.SET("FQUREY = '已查看'");
+			upsql.WHERE("FID='" + rowid + "'");
+			upsql.WHERE("FQUREY != '已查看'");
+			DBUtils.execUpdateQuery("oa", upsql.toString());
 		} else {
-			sql = "SELECT * FROM OA_EM_SENDEMAIL E WHERE " + filter;
+			sql.FROM("oa_em_sendemail");
 		}
+		sql.WHERE(filter);
 		try {
-			List list = DBUtils.execQueryforList("oa", sql, true);
+			List list = DBUtils.execQueryforList("oa", sql.toString(), true);
 			data.setData(JSON.toJSONString(list));
 			data.setFlag("true");
 		} catch (Exception e) {

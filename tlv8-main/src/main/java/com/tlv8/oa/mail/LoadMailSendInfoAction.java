@@ -1,7 +1,10 @@
 package com.tlv8.oa.mail;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,16 +32,20 @@ public class LoadMailSendInfoAction extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/LoadMailSendInfoAction")
-	@SuppressWarnings("rawtypes")
 	public Object execute() throws Exception {
-		String sql = "select FID,FSENDPERID,FSENDPERCODE,FSENDPERNAME,FEMAILNAME,FTEXT" + " from OA_EM_ReceiveEmail  e "
-				+ " where FID = '" + rowid + "'";
+		SQL sql = new SQL();
 		if ("send".equals(type)) {
-			sql = "select FEMAILNAME,FCONSIGNEEID,FCONSIGNEECODE,FCONSIGNEE,FTEXT "
-					+ " from OA_EM_SendEmail where FID = '" + rowid + "'";
+			sql.SELECT("FEMAILNAME,FCONSIGNEEID,FCONSIGNEECODE,FCONSIGNEE,FTEXT");
+			sql.FROM("OA_EM_SendEmail");
+		} else {
+			sql.SELECT("FID,FSENDPERID,FSENDPERCODE,FSENDPERNAME,FEMAILNAME,FTEXT");
+			sql.FROM("OA_EM_ReceiveEmail");
 		}
+		sql.WHERE("FID=?");
 		try {
-			List list = DBUtils.execQueryforList("oa", sql, true);
+			List<Object> param = new ArrayList<>();
+			param.add(rowid);
+			List<Map<String, String>> list = DBUtils.selectStringList("oa", sql.toString(), param, true);
 			data.setData(JSON.toJSONString(list));
 			data.setFlag("true");
 		} catch (Exception e) {
