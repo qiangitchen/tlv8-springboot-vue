@@ -180,7 +180,7 @@ function saveToTempletAction() {
 		J$("WRITE_DATA_FORM").rowid = write_rowid;
 		J$("WRITE_DATA_FORM").setAttribute("rowid", write_rowid);
 		$("#WRITE_DATA_FORM").attr("rowid", write_rowid);
-		write_data.setRowId(rowid);
+		write_data.setRowId(write_rowid);
 		write_data.refreshData();
 		tlv8.showMessage("保存草稿成功");
 	} else {

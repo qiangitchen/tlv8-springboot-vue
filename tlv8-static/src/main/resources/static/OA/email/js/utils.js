@@ -621,7 +621,8 @@ function deleteCheckedRow(type) {
 	var ids = [];
 	if (keyset.length > 0) {
 		for (var i = 0; i < keyset.length; i++) {
-			ids.push("'" + keyset[i] + "'");
+			//ids.push("'" + keyset[i] + "'");
+			ids.push(keyset[i]);
 		}
 		ids.join(",");
 		if (confirm("删除后将不能再回复，确定删除吗?")) {
