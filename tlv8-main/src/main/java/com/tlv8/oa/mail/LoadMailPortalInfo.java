@@ -1,38 +1,39 @@
 package com.tlv8.oa.mail;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.jdbc.SQL;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
-import com.alibaba.fastjson.JSON;
+import com.tlv8.oa.pojo.OaEmReceiveemail;
+import com.tlv8.oa.service.OaEmReceiveemailService;
 import com.tlv8.system.utils.ContextUtils;
 
 @Controller
 @Scope("prototype")
 public class LoadMailPortalInfo extends ActionSupport {
-
-	private Data data = new Data();
+	@Autowired
+	OaEmReceiveemailService oaEmReceiveemailService;
 
 	@ResponseBody
 	@RequestMapping("/loadMailPortalInfo")
 	@Override
 	public Object execute() throws Exception {
-		SQL sql = new SQL();
-		sql.SELECT("FID,FQUREY,FEMAILNAME,FSENDPERNAME,FSENDTIME");
-		sql.FROM("OA_EM_RECEIVEEMAIL");
-		sql.WHERE("FCONSIGNEEID='" + ContextUtils.getContext().getCurrentPersonID() + "'");
-		sql.WHERE("FQUREY='未查看'");
-		sql.ORDER_BY("FSENDTIME DESC");
+		Data data = new Data();
+		LambdaQueryWrapper<OaEmReceiveemail> wrapper = Wrappers.lambdaQuery(OaEmReceiveemail.class);
+		wrapper.eq(OaEmReceiveemail::getFconsigneeid, ContextUtils.getContext().getCurrentPersonID());
+		wrapper.eq(OaEmReceiveemail::getFqurey, "未查看");
+		wrapper.orderByDesc(OaEmReceiveemail::getFsendtime);
 		try {
-			List<Map<String, String>> list = DBUtils.execQueryforList("oa", sql.toString(), true);
+			List<OaEmReceiveemail> list = oaEmReceiveemailService.list(wrapper);
 			data.setData(JSON.toJSONString(list));
 			data.setFlag("true");
 		} catch (Exception e) {
@@ -41,14 +42,6 @@ public class LoadMailPortalInfo extends ActionSupport {
 			e.printStackTrace();
 		}
 		return success(data);
-	}
-
-	public Data getData() {
-		return data;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
 	}
 
 }

@@ -3785,6 +3785,9 @@ tlv8.System.Date = {
 	 * @returns {Date}
 	 */
     strToDate: function (str) {
+    	if(typeof str == "number"){
+    		return new Date(str);
+    	}
         if (!str || str == "" || str.indexOf("-") < 0) {
             return;
         }

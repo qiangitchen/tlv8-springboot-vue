@@ -21,16 +21,16 @@ function init() {
 			if (n >= 5)
 				break;
 			var cells = re.data;
-			var time = translateTime(cells[n].FSENDTIME);
-			var title = cells[n].FEMAILNAME == "" ? "</span style=\"color:green;\">(无主题)</span>"
-					: cells[n].FEMAILNAME;
+			var time = translateTime(cells[n].fsendtime);
+			var title = cells[n].femailname == "" ? "</span style=\"color:green;\">(无主题)</span>"
+					: cells[n].femailname;
 			html += "<tr style='height:19px;'>";
 			html += "<td class='showTitle'>"
 					+ "<img src='symbol.png'> <a href='javascript:void(0);' title='"
-					+ cells[n].FEMAILNAME + "' onClick=\"openWin()\">" + title;
+					+ cells[n].femailname + "' onClick=\"openWin()\">" + title;
 			html += "</a></td>";
 			html += "<td width='40px;'/>";
-			html += "<td style='width:70px;'>" + cells[n].FSENDPERNAME;
+			html += "<td style='width:70px;'>" + cells[n].fsendpername;
 			html += "</td>";
 			html += "<td style='width:105px;'>" + time;
 			html += "</td>";

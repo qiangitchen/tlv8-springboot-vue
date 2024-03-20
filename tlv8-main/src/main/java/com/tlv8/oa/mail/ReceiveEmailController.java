@@ -1,21 +1,23 @@
 package com.tlv8.oa.mail;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tlv8.common.db.DBUtils;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tlv8.oa.pojo.OaEmReceiveemail;
+import com.tlv8.oa.service.OaEmReceiveemailService;
 
 @Controller
 @RequestMapping("/receiveEmail")
-@SuppressWarnings("deprecation")
 public class ReceiveEmailController {
+	@Autowired
+	OaEmReceiveemailService oaEmReceiveemailService;
 
 	/**
 	 * 标记邮件已查看
@@ -27,23 +29,16 @@ public class ReceiveEmailController {
 	@RequestMapping("/upQurey")
 	public Object upQurey(String rowid) {
 		Map<String, Object> res = new HashMap<String, Object>();
-		String sql = "update OA_EM_ReceiveEmail set FQUREY = '已查看' where FID = ?";
-		SqlSession session = DBUtils.getSession("oa");
-		Connection conn = null;
-		PreparedStatement ps = null;
 		try {
-			conn = session.getConnection();
-			ps = conn.prepareStatement(sql);
-			ps.setString(1, rowid);
-			ps.executeUpdate();
-			session.commit(true);
+			OaEmReceiveemail oaEmReceiveemail = oaEmReceiveemailService.getById(rowid);
+			if (oaEmReceiveemail != null) {
+				oaEmReceiveemail.setFqurey("已查看");
+				oaEmReceiveemailService.updateById(oaEmReceiveemail);
+			}
 			res.put("state", true);
 		} catch (Exception e) {
 			res.put("state", false);
-			session.rollback(true);
 			e.printStackTrace();
-		} finally {
-			DBUtils.closeConn(session, conn, ps, null);
 		}
 		return res;
 	}
@@ -51,30 +46,23 @@ public class ReceiveEmailController {
 	/**
 	 * 标记所有‘未查看’邮件已查看
 	 * 
-	 * @param rowid
+	 * @param consigneeid
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("/martAlltoRead")
 	public Object martAlltoRead(String consigneeid) {
 		Map<String, Object> res = new HashMap<String, Object>();
-		String sql = "update OA_EM_ReceiveEmail set FQUREY = '已查看' where fConsigneeID = ? and FQUREY = '未查看'";
-		SqlSession session = DBUtils.getSession("oa");
-		Connection conn = null;
-		PreparedStatement ps = null;
 		try {
-			conn = session.getConnection();
-			ps = conn.prepareStatement(sql);
-			ps.setString(1, consigneeid);
-			ps.executeUpdate();
-			session.commit(true);
+			LambdaUpdateWrapper<OaEmReceiveemail> wrapper = Wrappers.lambdaUpdate(OaEmReceiveemail.class);
+			wrapper.set(OaEmReceiveemail::getFqurey, "已查看");
+			wrapper.eq(OaEmReceiveemail::getFconsigneeid, consigneeid);
+			wrapper.eq(OaEmReceiveemail::getFqurey, "未查看");
+			oaEmReceiveemailService.update(wrapper);
 			res.put("state", true);
 		} catch (Exception e) {
 			res.put("state", false);
-			session.rollback(true);
 			e.printStackTrace();
-		} finally {
-			DBUtils.closeConn(session, conn, ps, null);
 		}
 		return res;
 	}
