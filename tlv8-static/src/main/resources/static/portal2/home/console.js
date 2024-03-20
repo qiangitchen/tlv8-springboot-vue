@@ -17,13 +17,10 @@ function loadTopTip() {
 		type : "post",
 		async : true,
 		dataType : "json",
-		url : "/getPortalNotesAction",//通知
+		url : "/getPortalNotesCount",//通知
 		success : function(result, textStatus) {
 			var news = result.data;
-			if (typeof news.data == "string") {
-				news.data = window.eval("(" + news.data + ")");
-			}
-			$("#notesCount").text(news.data.length);
+			$("#notesCount").text(news.data);
 			delete news;
 			delete result;
 		},
@@ -69,7 +66,7 @@ function loadTopTip() {
 	});
 	setTimeout(loadTopTip, 60 * 1000);
 }
-//loadTopTip();
+loadTopTip();
 
 //实时监控
 function refreshMonitorInfo(){
