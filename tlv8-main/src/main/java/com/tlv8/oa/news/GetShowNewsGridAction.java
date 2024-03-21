@@ -38,7 +38,7 @@ public class GetShowNewsGridAction extends BasegetGridAction {
 			sql.FROM("oa_news_release n");
 			sql.LEFT_OUTER_JOIN("oa_news_open o on o.fnewsid = n.fid");
 			sql.WHERE("n.FSTATE='已发布'");
-			sql.WHERE("(n.faccessories = '集体发布' or (n.faccessories = '限制发布' and o.fopenid = '"+userid+"') )");
+			sql.WHERE("(n.ftype = '集体发布' or (n.ftype = '限制发布' and o.fopenid = '"+userid+"') )");
 			insql = sql.toString();
 			r = createGridBySQL(page, row);
 			f = "true";
