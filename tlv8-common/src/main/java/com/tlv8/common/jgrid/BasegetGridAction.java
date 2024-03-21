@@ -15,8 +15,9 @@ import com.tlv8.common.utils.CodeUtils;
 import com.tlv8.common.utils.StringArray;
 
 /**
+ * grid基础动作
+ * 
  * @author 陈乾
- * @category grid基础动作
  */
 @SuppressWarnings({ "rawtypes", "deprecation" })
 public class BasegetGridAction extends ActionSupport {
@@ -245,7 +246,8 @@ public class BasegetGridAction extends ActionSupport {
 		} else {
 			sql = "select fID,Cucolumns from (select fID,selectcolumns from " + table
 					+ " where fID in (select top endrow fID from " + table + " where 1=1 "
-					+ " grid_query_param) and fID not in (select top startrow fID from " + table + " where 1=1 " + " grid_query_param)) a";
+					+ " grid_query_param) and fID not in (select top startrow fID from " + table + " where 1=1 "
+					+ " grid_query_param)) a";
 		}
 		String sql_count = "select count(*) ALLPAGE from " + table + " where 1=1 grid_query_param";
 //		if (DBUtils.IsMySQLDB(dbkay)) {
@@ -361,7 +363,7 @@ public class BasegetGridAction extends ActionSupport {
 		String sql = "";
 		if (dbkay == null || "".equals(dbkay))
 			dbkay = "system";
-		String inwhere = "where 1=1 ";
+		String inwhere = " where 1=1 ";
 		columns = columns.replace("No,", "");
 		columns = columns.replace("master_check,", "");
 		if (columns.toUpperCase().indexOf(",VERSION") < 0) {
@@ -380,18 +382,21 @@ public class BasegetGridAction extends ActionSupport {
 			lSQL = lSQL.substring(0, lSQL.toLowerCase().indexOf("where"));
 		}
 		if (DBUtils.IsOracleDB(dbkay) || DBUtils.IsDMDB(dbkay)) {
-			sql = "select fID," + columns + " from(select a.*,rownum my_num from(select *from (" + lSQL + inwhere + " "
-					+ rSQL + ") where 1=1 grid_query_param )a where rownum <= endrow ) t where t.my_num> startrow";
+			sql = "select fID," + columns + " from(select a.*,rownum my_num from(select * from (" + lSQL + inwhere + " "
+					+ rSQL + ")sa where 1=1 grid_query_param )a where rownum <= endrow ) t where t.my_num> startrow";
 		} else if (DBUtils.IsMySQLDB(dbkay)) {
 			sql = "select fID," + columns + " from(" + lSQL + inwhere + " " + rSQL
-					+ ") where fID is not null grid_query_param limit startrow,endrow";
+					+ ")sa where fID is not null grid_query_param limit startrow,endrow";
+		} else if (DBUtils.IsPostgreSQL(dbkay)) {
+			sql = "select fID," + columns + " from(" + lSQL + inwhere + " " + rSQL
+					+ ")sa where fID is not null grid_query_param limit endrow OFFSET startrow";
 		} else {
 			sql = "select fID," + columns + " from (select * from (" + lSQL + inwhere + " " + rSQL
-					+ ") where fID in (select top endrow fID from (" + lSQL + inwhere + " " + rSQL + ") where 1=1 "
+					+ ")sa where fID in (select top endrow fID from (" + lSQL + inwhere + " " + rSQL + ")sb where 1=1 "
 					+ " grid_query_param) and fID not in (select top startrow fID from (" + lSQL + inwhere + " " + rSQL
-					+ ") where 1=1 " + " grid_query_param)";
+					+ ")sc where 1=1 " + " grid_query_param)";
 		}
-		String sql_count = "select count(*) ALLPAGE from (" + insql + ") where 1 =1 grid_query_param";
+		String sql_count = "select count(*) ALLPAGE from (" + insql + ")a where 1 =1 grid_query_param";
 		int startrow = (page == 0) ? 0 : (page - 1) * row;
 		int endrow = (page == 0) ? (startrow + row) : (startrow + row);
 		if (DBUtils.IsMySQLDB(dbkay))
@@ -400,6 +405,7 @@ public class BasegetGridAction extends ActionSupport {
 		// System.out.println(filter);
 		String grid_query_param = (filter != null && !("").equals(filter)) ? " and (" + filter + ")" : "";
 		grid_query_param += (billid != null && !"".equals(billid)) ? "fbillid='" + billid + "'" : "";
+		String countparam = grid_query_param;
 		if (!"".equals(orderby) && orderby != null) {
 			grid_query_param += " order by " + orderby + ", fID asc";
 		} else {
@@ -408,7 +414,7 @@ public class BasegetGridAction extends ActionSupport {
 		// System.out.println(grid_query_param);
 		sql = sql.replace("grid_query_param", grid_query_param);
 		// System.out.println(sql);
-		sql_count = sql_count.replace("grid_query_param", grid_query_param);
+		sql_count = sql_count.replace("grid_query_param", countparam);
 		if ("system".equals(dbkay)) {
 			sql = sql.replaceAll("fID", "sID");
 			sql_count = sql_count.replaceAll("fID", "sID");
