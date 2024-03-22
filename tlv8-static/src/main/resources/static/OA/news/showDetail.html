@@ -1,0 +1,98 @@
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>浏览新闻详细</title> 
+  <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/layui/css/layui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css"> 
+  <script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script> 
+  <script type="text/javascript" src="../../comon/js/comon.main.js"></script> 
+  <script type="text/javascript" src="../../comon/My97DatePicker/WdatePicker.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/jquery.easyui.min.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script> 
+  <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
+  <script type="text/javascript" src="../../resources/layui/layui.js"></script> 
+  <script type="text/javascript" src="showDetail.js"></script> 
+ </head> 
+ <body style="overflow: hidden;" onload="initDocumentPage();"> 
+  <table border="0" cellpadding="0" cellspacing="0" style="width:100%; border-collapse: collapse;"> 
+   <tbody>
+    <tr align="center"> 
+     <td height="60px" align="center"> 
+      <div> 
+       <label id="NEWS_TITLE" style="font-size: 24px; color: #4169E1; font-weight: bold"></label> 
+      </div> </td> 
+    </tr> 
+    <tr> 
+     <td height="30px" align="right" style="font-size: 12pt; border-collapse: collapse; border-bottom: #dcdcdc 1px solid; line-height: 30px;"> 
+      <div>
+        浏览次数： <label style="min-width: 60px;"><a id="NEWS_NUMBER111" style="color: #4169E1;" href="javascript:readorList()"> </a></label> 
+        发布者： <label id="NEWS_PEOPLE" style="color: #4169E1; min-width: 60px;"> </label> 
+        发布时间： <label id="NEWS_FTIME" style="color: #4169E1; margin-right: 5px; min-width: 110px;"></label> 
+      </div> </td> 
+    </tr> 
+    <tr> 
+     <td align="center"> 
+      <div style="width: 95%; height: 100%; font-size: 13px; text-align: left;"> 
+       <div id="NEWS_RELEASECONNEXT"></div> 
+      </div> </td> 
+    </tr> 
+    <tr> 
+     <td> 
+      <div id="fileCompDiv"></div> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <div class="layui-fluid" style="display: none;"> 
+   <div class="layui-card"> 
+    <div class="layui-card-body"> 
+     <form id="MAIN_DATA_FORM" class="layui-form" afterRefresh="mainDataloaded"> 
+      <div class="layui-form-item"> 
+       <div class="layui-inline"> 
+        <label class="layui-form-label">新闻标题</label> 
+        <div class="layui-input-inline"> 
+         <input id="fnewstitle" name="fnewstitle" type="text" class="layui-input" readonly> 
+        </div> 
+       </div> 
+       <div class="layui-inline"> 
+        <label class="layui-form-label">发布部门</label> 
+        <div class="layui-input-inline"> 
+         <input id="freleasedepartment" name="freleasedepartment" type="text" class="layui-input" readonly> 
+        </div> 
+       </div> 
+       <div class="layui-inline"> 
+        <label class="layui-form-label">发布人</label> 
+        <div class="layui-input-inline"> 
+         <input id="fpeople" name="fpeople" type="text" class="layui-input" readonly> 
+        </div> 
+       </div> 
+       <div class="layui-inline"> 
+        <label class="layui-form-label">发布时间</label> 
+        <div class="layui-input-inline"> 
+         <input id="ftime" name="ftime" type="text" class="layui-input" readonly> 
+        </div> 
+       </div> 
+       <div class="layui-inline"> 
+        <label class="layui-form-label">新闻编号</label> 
+        <div class="layui-input-inline"> 
+         <input id="fnewsnumber" name="fnewsnumber" type="text" class="layui-input" readonly> 
+        </div> 
+       </div> 
+       <div class="layui-inline"> 
+        <label class="layui-form-label">新闻内容</label> 
+        <div class="layui-input-inline"> 
+         <textarea id="freleaseconnext" name="freleaseconnext" type="text" class="layui-input" readonly></textarea> 
+        </div> 
+       </div> 
+      </div> 
+      <div style="display: none;"> 
+       <button id="mainfsub" class="layui-btn" lay-submit lay-filter="mainform">立即提交</button> 
+       <button type="reset" class="layui-btn layui-btn-primary">重置</button> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>

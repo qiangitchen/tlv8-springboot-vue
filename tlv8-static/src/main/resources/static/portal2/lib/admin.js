@@ -1,14 +1,16 @@
+/**
 
-/*!
- * 界面核心模块   
+ @Name：layuiAdmin iframe版核心模块
+ @Author：贤心
+ @Site：http://www.layui.com/admin/
+ @License：LPPL
+    
  */
  
 layui.define('view', function(exports){
   var $ = layui.jquery
   ,laytpl = layui.laytpl
   ,element = layui.element
-  ,table = layui.table
-  ,upload = layui.upload
   ,setter = layui.setter
   ,view = layui.view
   ,device = layui.device()
@@ -25,7 +27,7 @@ layui.define('view', function(exports){
 
   //通用方法
   ,admin = {
-    v: '1.7.1 std'
+    v: '1.2.1 std'
     
     //数据的异步请求
     ,req: view.req
@@ -278,6 +280,13 @@ layui.define('view', function(exports){
         url: options.url
         ,text: options.text
       });
+      
+      //选中首页时刷新页面
+	  if(index==0){
+		  var iframe = admin.tabsBody(index).find('.layadmin-iframe');
+		  var homeTabIframe =  iframe[0].contentWindow;
+		  homeTabIframe.location.reload();
+	  }
     }
     
     //resize事件管理
@@ -369,18 +378,32 @@ layui.define('view', function(exports){
           var href = othis.attr('lay-action')
           ,text = othis.attr('lay-text') || '搜索';
           
-          href = href + this.value;
+          href = href + J_u_encode(this.value);
           text = text + ' <span style="color: #FF5722;">'+ admin.escape(this.value) +'</span>';
           
           //打开标签页
-          layui.index.openTabsPage(href, text);
+          var tid = hex_md5(href);
+          var hvwin = layui.index.getTabsPageWin(tid);
+          if(hvwin){
+        	//定位当前tabs
+        	layui.element.tabChange(FILTER_TAB_TBAS, tid);
+    	    admin.tabsBodyChange(admin.tabsPage.index, {
+    	      url: href
+    	      ,text: text
+    	    });
+        	hvwin.location.reload(); //刷新内容
+          }else{
+        	layui.index.openTabsPage(href, text, tid);
+          }
           
+          /*
           //如果搜索关键词已经打开，则刷新页面即可
           events.serach.keys || (events.serach.keys = {});
           events.serach.keys[admin.tabsPage.index] = this.value;
           if(this.value === events.serach.keys[admin.tabsPage.index]){
             events.refresh(othis);
           }
+           */
           
           //清空输入框
           this.value = '';
@@ -390,7 +413,7 @@ layui.define('view', function(exports){
     
     //点击消息
     ,message: function(othis){
-      othis.find('.layui-badge-dot').remove();
+      othis.find('.layui-badge-dot').hide();
     }
     
     //弹出主题面板
@@ -403,13 +426,13 @@ layui.define('view', function(exports){
       });
     }
     
-    //本地便签
+    //便签
     ,note: function(othis){
       var mobile = admin.screen() < 2
       ,note = layui.data(setter.tableName).note;
       
       events.note.index = admin.popup({
-        title: '本地便签'
+        title: '便签'
         ,shade: 0
         ,offset: [
           '41px'
@@ -598,7 +621,6 @@ layui.define('view', function(exports){
       admin.sideFlexible();
     }
     
-    
     //呼出IM 示例
     ,im: function(){
       admin.popup({
@@ -781,11 +803,10 @@ layui.define('view', function(exports){
 
     //执行跳转
     var topLayui = parent === self ? layui : top.layui;
-	if(othis.attr("path") && othis.attr("path")!="" && othis.attr("label")){
+    if(othis.attr("path") && othis.attr("path")!="" && othis.attr("label")){
     	var node = {
     			id : othis.attr("id"),
     			name : othis.attr("label"),
-    			title : othis.attr("label"),
     			url : othis.attr("path"),
     			process : othis.attr("process"),
     			activity : othis.attr("activity"),
@@ -793,16 +814,10 @@ layui.define('view', function(exports){
     			icon : othis.attr("icon"),
     			display : othis.attr("display")
     	};
-    	topLayui.$.X.runFunc(node);
+    	$.X.runFunc(node);
     }else{
-    	topLayui.$.X.runFunc({url:href, name:text || othis.text(), title:text || othis.text(), id:othis.parent().attr("id")});
-    }
-    //topLayui.index.openTabsPage(href, text || othis.text());
-    
-    //如果为当前页，则执行刷新
-    if(href === admin.tabsBody(admin.tabsPage.index).find('iframe').attr('src')){
-      admin.events.refresh();
-    }
+    	 topLayui.index.openTabsPage(href, text || othis.text(), othis.parent().attr("id"));
+     }
   });
   
   //点击事件
@@ -851,26 +866,6 @@ layui.define('view', function(exports){
   }
   $win.on('resize', layui.data.resizeSystem);
   
-  //设置组件全局 token
-  ;!function(){
-    var request = setter.request;
-    if(request.tokenName){
-      var obj = {};
-      obj[request.tokenName] = layui.data(setter.tableName)[request.tokenName] || ''
-      
-      //table
-      table.set({
-        headers: obj, //通过 request 头传递
-        where: obj //通过参数传递
-      });
-      //upload
-      upload.set({
-        headers: obj, //通过 request 头传递
-        data: obj //通过参数传递
-      });
-    }
-  }();
-
   //接口输出
   exports('admin', admin);
 });

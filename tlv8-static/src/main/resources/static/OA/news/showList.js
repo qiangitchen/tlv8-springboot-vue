@@ -11,7 +11,7 @@ function getData() {
 	var labelid = "No,fnewstitle,freleasedepartment,fpeople,ftime,fcount";//设置字段
 	var labels = "No.,新闻标题,发布部门,发布人,发布时间,浏览次数";//设置标题
 	var labelwidth = "40,480,180,100,150,100";//设置宽度
-	var datatype = "ro,string,string,string,datetime,number";//设置字段类型
+	var datatype = "ro,html:readTitle,string,string,datetime,number";//设置字段类型
 	var dataAction = {
 		"queryAction" : "getShowNewsGridAction",//查询动作
 		"savAction" : "saveAction",//保存动作
@@ -25,6 +25,22 @@ function getData() {
 	//设置是否可编辑
 	maingrid.grid.seteditModel(false);
 	currentgrid = maingrid.grid;
-	currentgrid.insertNum = true;//新增向下(默认新增在第一行)
 	currentgrid.refreshData();//刷新数据
+}
+
+function readTitle(event){
+	return '<a href="javascript:showNewsDetail(\''+event.rowid+'\')">'+event.value+'</a>';
+}
+
+/**
+@param {object} event 
+*/
+function cgridDbClicked(event){
+	var rowid = currentgrid.getCurrentRowId();
+	showNewsDetail(rowid);
+	
+}
+
+function showNewsDetail(rowid){
+	tlv8.portal.openWindow("新闻浏览", "/OA/news/showDetail.html?rowid="+rowid);
 }
