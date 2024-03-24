@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>新闻栏目</title>
+    <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css" /> 
+    <link type="text/css" rel="stylesheet" href="../../resources/layui/css/layui.css" />
+	<link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css" />
+	<link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css" />
+  	<script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script>
+  	<script type="text/javascript" src="../../comon/js/comon.main.js"></script>
+  	<script type="text/javascript" src="../../comon/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../resources/jquery-easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
+	<script type="text/javascript" src="../../resources/layui/layui.js"></script>
+  	<script type="text/javascript" src="newsColumnDetail.js"></script>
+  </head> 
+  <body style="overflow: hidden;" onload="initDocumentPage();">
+	<div class="easyui-layout" fit="true">
+		<div data-options="region:'north',split:false" style="height:40px; overflow: hidden; padding: 4px;">
+			<table>
+				<tr>
+					<td>
+						<div id="stander-bar" 
+							saveAction="dataSave()" refreshAction="dataRefresh()"
+							deleteAction="dataDeleted()" style="margin-left: 1px;">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div data-options="region:'center',border:false">
+			<div class="layui-fluid">
+				<div class="layui-card">
+				    <div class="layui-card-body">
+						<form id="MAIN_DATA_FORM" class="layui-form">
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">栏目编号<font color="red">*</font></label>
+									<div class="layui-input-inline">
+										<input id="fcolumncode" name="fcolumncode" type="text" class="layui-input" required  lay-verify="required"/>
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label">栏目状态</label>
+									<div class="layui-input-inline">
+										<select id="fcolumnstate" name="fcolumnstate">
+											<option value="已启用">
+												已启用
+											</option>
+											<option value="已关闭">
+												已关闭
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item">
+							    <label class="layui-form-label">栏目名称<font color="red">*</font></label>
+							    <div class="layui-input-block">
+							      <input id="fcolumnname" name="fcolumnname" type="text" class="layui-input" required  lay-verify="required"/>
+							    </div>
+						  	</div>
+							<div class="layui-form-item layui-form-text">
+							    <label class="layui-form-label">栏目描述</label>
+							    <div class="layui-input-block">
+							      <textarea id="fcolumndescribes" name="fcolumndescribes" placeholder="" class="layui-textarea"></textarea>
+							    </div>
+							</div>
+							<div style="display: none;">
+							    <button id="mainfsub" class="layui-btn" lay-submit lay-filter="mainform">立即提交</button> 
+					         	<button type="reset" class="layui-btn layui-btn-primary">重置</button> 
+					        </div> 
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  </body>
+</html>

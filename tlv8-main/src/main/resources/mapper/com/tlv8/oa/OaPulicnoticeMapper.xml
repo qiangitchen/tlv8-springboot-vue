@@ -102,9 +102,11 @@
     from oa_pulicnotice
   </select>
   <select id="selectPortalNotesCount" parameterType="java.lang.String" resultType="java.util.Map">
-    select count(*) cun 
-    from oa_pulicnotice n left join oa_notice_person p on p.fmainid = n.fid 
-    where n.fpushdatetime is not null 
-    	and (n.ftype = '集体发布' or (n.ftype = '限制发布' and p.fpersonid = #{fpersonid,jdbcType=VARCHAR}) )
+    select count(*) cun from(
+      	select distinct(n.fid) 
+    	from oa_pulicnotice n left join oa_notice_person p on p.fmainid = n.fid 
+    	where n.fpushdatetime is not null 
+    		and (n.ftype = '集体发布' or (n.ftype = '限制发布' and p.fpersonid = #{fpersonid,jdbcType=VARCHAR}) )
+    )a
   </select>
 </mapper>

@@ -97,10 +97,10 @@ function showSelectPersonInfo(rowid, isRead) {
 		}
 		if (Data.length > 0) {
 			if (isRead) {
-				personListtxt = "<table class=\"layui-table\" style=\"table-layout: fixed;cellSpacing:0;cellPadding:0; font-size:13px; text-align:left;\" ><tr style=\"height:22px;\">";
+				personListtxt = "<table class=\"layui-table\" style=\"table-layout: fixed;cellSpacing:0;cellPadding:0; font-size:12px; text-align:left;\" ><tr style=\"height:22px;\">";
 				personListtxt += "<th>姓名</th>";
-				personListtxt += "<th style=\"width:140px;\">是否已查看</th>";
-				personListtxt += "<th style=\"width:180px;\">查看时间</th>";
+				personListtxt += "<th style=\"width:120px;\">是否已查看</th>";
+				personListtxt += "<th style=\"width:200px;\">查看时间</th>";
 				personListtxt += "</tr>";
 				for (var i = 0; i < Data.length; i++) {
 					var name = Data[i].FPERSONNAME; // 人员名字
@@ -115,11 +115,11 @@ function showSelectPersonInfo(rowid, isRead) {
 				personListtxt += "</table>";
 				$("#personList").html(personListtxt);
 			} else {
-				personListtxt = "<table class=\"layui-table\" style=\"table-layout: fixed;cellSpacing:0;cellPadding:0; font-size:13px; text-align:left;\" ><tr style=\"height:22px;\">";
+				personListtxt = "<table class=\"layui-table\" style=\"table-layout: fixed;cellSpacing:0;cellPadding:0; font-size:12px; text-align:left;\" ><tr style=\"height:22px;\">";
 				personListtxt += "<th style=\"width:80px;\" ><span style=\"margin-left:10px;\">操作<span></th>";
 				personListtxt += "<th>姓名</th>";
-				personListtxt += "<th style=\"width:140px;\">是否已查看</th>";
-				personListtxt += "<th style=\"width:180px;\">查看时间</th>";
+				personListtxt += "<th style=\"width:120px;\">是否已查看</th>";
+				personListtxt += "<th style=\"width:200px;\">查看时间</th>";
 				personListtxt += "</tr>";
 				for (var i = 0; i < Data.length; i++) {
 					var name = Data[i].FPERSONNAME; // 人员名字
