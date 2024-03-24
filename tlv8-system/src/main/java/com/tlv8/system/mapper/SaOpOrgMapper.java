@@ -91,5 +91,5 @@ public interface SaOpOrgMapper {
 
     List<SaOpOrg> selectRecycleList();
     
-    SaOpOrg selectByParentIdPersonId(Map<String, String> param);
+    List<SaOpOrg> selectByParentIdPersonId(Map<String, String> param);
 }

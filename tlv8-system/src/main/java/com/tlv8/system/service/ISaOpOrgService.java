@@ -87,5 +87,5 @@ public interface ISaOpOrgService {
 
     List<SaOpOrg> selectAllByParentID(String parent);
     
-    SaOpOrg selectByParentIdPersonId(String parent, String personid);
+    List<SaOpOrg> selectByParentIdPersonId(String parent, String personid);
 }

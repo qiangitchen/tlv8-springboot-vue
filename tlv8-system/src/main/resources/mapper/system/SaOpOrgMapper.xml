@@ -44,6 +44,12 @@
         from SA_OpOrg
         where sparent = #{parent,jdbcType=VARCHAR} and svalidstate > -1 order by slevel,ssequence
     </select>
+    <select id="selectAllByParentID" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from SA_OpOrg
+        where sparent = #{parent,jdbcType=VARCHAR} order by slevel,ssequence
+    </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
@@ -125,10 +131,10 @@
         <include refid="Base_Column_List"/>
         from SA_OpOrg where svalidstate = -1 order by slevel,ssequence
     </select>
-    <select id="selectAllByParentID" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectByParentIdPersonId" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         <include refid="Base_Column_List"/>
         from SA_OpOrg
-        where sparent = #{parent,jdbcType=VARCHAR} order by slevel,ssequence
+        where sparent = #{parent,jdbcType=VARCHAR} and spersonid = #{personid,jdbcType=VARCHAR}
     </select>
 </mapper>
