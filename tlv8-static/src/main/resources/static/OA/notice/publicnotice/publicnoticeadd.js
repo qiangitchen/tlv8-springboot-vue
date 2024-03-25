@@ -87,7 +87,7 @@ function creatTextEditor() {
 		cssPath: cpath + '/comon/kindeditor/plugins/code/prettify.css',
 		uploadJson: cpath + '/kindeditor/kindEditorUpload',
 		fileManagerJson: cpath + '/kindeditor/file_manager_json',
-		allowFileManager: true,
+		allowFileManager: false,
 		afterCreate: function() {
 			var self = this;
 			KindEditor.ctrl(document, 13, function() {

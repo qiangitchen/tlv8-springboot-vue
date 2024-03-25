@@ -14,12 +14,14 @@ function initDocumentPage() {
 	if(rowid && rowid != ""){
 		datamian.setRowId(rowid);
 		datamian.refreshData();
-		
-		var param = new tlv8.RequestParam();
-		param.set("rowid", rowid);
-		tlv8.XMLHttpRequest("loadNewBrowsCount", param, "post", true, function(redata) {
-			$("#NEWS_NUMBER111").text(redata.data.data);
-		});
+		var isbrow = tlv8.RequestURLParam.getParam("isbrow");
+		if(!isbrow){
+			var param = new tlv8.RequestParam();
+			param.set("rowid", rowid);
+			tlv8.XMLHttpRequest("loadNewBrowsCount", param, "post", true, function(redata) {
+				$("#NEWS_NUMBER111").text(redata.data.data);
+			});
+		}
 	}
 	new tlv8.fileComponent(J$("fileCompDiv"), datamian, "FACCESSORIES", null, false, false);
 }

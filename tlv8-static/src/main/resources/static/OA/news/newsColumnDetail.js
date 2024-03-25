@@ -52,7 +52,7 @@ function dataDeleted(){
 
 //对话框确认事件
 function dailogEngin(){
-   ok = false;
+   ok = true;
    $("#mainfsub").click();
    return false;
 }

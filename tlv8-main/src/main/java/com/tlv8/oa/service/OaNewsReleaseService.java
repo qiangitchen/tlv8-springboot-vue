@@ -5,7 +5,7 @@ import com.tlv8.oa.pojo.OaNewsRelease;
 import java.util.List;
 
 /**
- * Created by TLv8 IDE on 2024/03/21.
+ * Created by TLv8 IDE on 2024/03/25.
  */
 public interface OaNewsReleaseService {
 

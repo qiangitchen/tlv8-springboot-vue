@@ -1,0 +1,175 @@
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>新闻发布</title> 
+  <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/layui/css/layui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css"> 
+  <link type="text/css" rel="stylesheet" href="../../comon/css/formDetail/formDetail.css"/>
+  <link type="text/css" rel="stylesheet" href="../../comon/kindeditor/themes/default/default.css" />
+  <link type="text/css" rel="stylesheet" href="../../comon/kindeditor/plugins/code/prettify.css" />
+  <script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script> 
+  <script type="text/javascript" src="../../comon/js/comon.main.js"></script> 
+  <script type="text/javascript" src="../../comon/My97DatePicker/WdatePicker.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/jquery.easyui.min.js"></script> 
+  <script type="text/javascript" src="../../resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script> 
+  <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
+  <script charset="utf-8" src="../../comon/kindeditor/kindeditor-all-min.js"></script>
+  <script charset="utf-8" src="../../comon/kindeditor/lang/zh-CN.js"></script>
+  <script charset="utf-8" src="../../comon/kindeditor/plugins/code/prettify.js"></script>
+  <script type="text/javascript" src="../../resources/layui/layui.js"></script> 
+  <script type="text/javascript" src="newsEdit.js"></script> 
+ </head> 
+ <body style="overflow: hidden;" onload="initDocumentPage();"> 
+  <div class="easyui-layout" fit="true"> 
+   <div data-options="region:'north',split:false" style="height:40px; overflow: hidden; padding: 4px;"> 
+   		<table style="table-layout: fixed; margin: auto;">
+			<tr>
+				<td align="center" width="90px">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="dataSave()">保存</a>
+				</td>
+				<td width="90px">
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="viewSurvey()">预览</a>
+				</td>
+				<td>
+					<a class="easyui-linkbutton" data-options="iconCls:'icon-tip'" onclick="publishServey()">发布</a>
+				</td>
+			</tr>
+		</table>
+   </div> 
+   <div data-options="region:'center',border:false"> 
+    <div class="layui-fluid"> 
+       <form id="MAIN_DATA_FORM" class="layui-form" afterrefresh="afterDatarefresh">
+       	<div class="layui-row" style="margin-bottom: 15px;">
+       		<div class="layui-col-sm7 layui-col-md9">
+		        <div class="layui-card"> 
+			      <div class="layui-card-header">
+			       基本信息
+			      </div> 
+			      <div class="layui-card-body"> 
+			        <div class="layui-form-item">
+					    <label class="layui-form-label">新闻标题<font color="red">*</font></label>
+					    <div class="layui-input-block">
+					      <input id="fnewstitle" name="fnewstitle" type="text" class="layui-input" required  lay-verify="required" placeholder="请输入标题">
+					    </div>
+				   </div>
+			       <div class="layui-form-item">
+			         <div class="layui-inline">
+			          <label class="layui-form-label">新闻编号<font color="red">*</font></label>
+			          <div class="layui-input-inline">
+			           <input id="fnewsnumber" name="fnewsnumber" type="text" class="layui-input" required  lay-verify="required">
+			          </div>
+			         </div>
+			         <div class="layui-inline">
+			          <label class="layui-form-label">栏目名称</label>
+			          <div class="layui-input-inline">
+			           <input id="fcolumnname" name="fcolumnname" type="text" class="layui-input DetailSelectInput" readonly onclick="selectColumn()">
+			          </div>
+			         </div>
+			        <div class="layui-inline">
+			          <label class="layui-form-label">发布类型</label>
+			          <div class="layui-input-inline">
+			           <select id="ftype" name="ftype">
+							<option value="限制发布">限制发布</option>
+							<option value="集体发布">集体发布</option>
+						</select>
+			          </div>
+			         </div>
+			       </div>
+			       <div class="layui-form-item">
+			         <div class="layui-inline">
+			          <label class="layui-form-label">发布部门</label>
+			          <div class="layui-input-inline">
+			           <input id="freleasedepartment" name="freleasedepartment" type="text" class="layui-input" readonly>
+			          </div>
+			         </div>
+			         <div class="layui-inline">
+			          <label class="layui-form-label">发布人</label>
+			          <div class="layui-input-inline">
+			           <input id="fpeople" name="fpeople" type="text" class="layui-input" readonly>
+			          </div>
+			         </div>
+			         <div class="layui-inline">
+			          <label class="layui-form-label">发布时间</label>
+			          <div class="layui-input-inline">
+			           <input id="ftime" name="ftime" type="text" class="layui-input Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" format="yyyy-MM-dd HH:mm:ss">
+			          </div>
+			         </div>
+			       </div>
+			     </div> 
+			   </div>
+			</div>
+			<div class="layui-col-sm5 layui-col-md3">
+				<div class="layui-card" style="margin-left: 10px;"> 
+			      <div class="layui-card-header">
+			       缩略图&nbsp;<font color="red">图片比率：4 x 3</font>
+			      </div> 
+			      <div class="layui-card-body"> 
+			      	<div id="picDemo" style="width:244px;height:183px;"></div>
+			      </div>
+			    </div>
+			</div>
+		</div>
+	    <div class="layui-card"> 
+	      <div class="layui-card-header">
+	       发布设置
+	      </div> 
+	      <div class="layui-card-body"> 
+	      	<div class="layui-form-item">
+	      		<div class="layui-inline">
+		          <label class="layui-form-label">是否置顶</label>
+		          <div class="layui-input-inline">
+		           <select id="fsettopwhether" name="fsettopwhether" type="text" class="layui-input">
+		           		<option>否</option>
+		           		<option>是</option>
+		           </select>
+		          </div>
+		         </div>
+		         <div class="layui-inline">
+		          <label class="layui-form-label" style="width:120px;">置顶开始时间</label>
+		          <div class="layui-input-inline">
+		           <input id="fsettoptime" name="fsettoptime" type="text" class="layui-input Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" format="yyyy-MM-dd HH:mm:ss">
+		          </div>
+		         </div>
+		         <div class="layui-inline">
+		          <label class="layui-form-label" style="width:120px;">置顶结束时间</label>
+		          <div class="layui-input-inline">
+		           <input id="fsetendtime" name="fsetendtime" type="text" class="layui-input Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" format="yyyy-MM-dd HH:mm:ss">
+		          </div>
+		         </div>
+		         <div class="layui-inline">
+		          <label class="layui-form-label">状态</label>
+		          <div class="layui-input-inline">
+		           <input id="fstate" name="fstate" type="text" class="layui-input" readonly>
+		          </div>
+		         </div>
+	      	</div>
+	      </div>
+	    </div>
+	    <div class="layui-card"> 
+	      <div class="layui-card-header">
+	       新闻内容
+	      </div> 
+	      <div class="layui-card-body"> 
+	      	<textarea name="freleaseconnext" id="freleaseconnext" style="height: 220px; width: 100%"></textarea>
+	      </div>
+	    </div>
+        <div style="display: none;"> 
+         <button id="mainfsub" class="layui-btn" lay-submit lay-filter="mainform">立即提交</button> 
+         <button type="reset" class="layui-btn layui-btn-primary">重置</button> 
+        </div> 
+       </form> 
+       <div class="layui-card"> 
+	      <div class="layui-card-header">
+	       附件
+	      </div> 
+	      <div class="layui-card-body" style="padding: 5px;"> 
+	      	<div id="fileCompDiv"></div> 
+	      </div>
+	   </div>
+    </div> 
+   </div> 
+  </div>  
+ </body>
+</html>
