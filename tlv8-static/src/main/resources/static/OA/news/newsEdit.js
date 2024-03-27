@@ -1,3 +1,4 @@
+var cllTabID;
 //数据配置
 var datamian;
 function initDocumentPage() {
@@ -8,6 +9,7 @@ function initDocumentPage() {
 	layui.form.on('submit(mainform)', function(data) {
 		//console.log(data.field);
 		datamian.saveData(data.field);
+		callBackFn();
 		return false;//阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
 	var rowid = tlv8.RequestURLParam.getParam("sData1"); // 获取url参数
@@ -20,6 +22,7 @@ function initDocumentPage() {
 	}
 	new tlv8.picComponent(J$("picDemo"), datamian, "sminipic", true, true);
 	new tlv8.fileComponent(document.getElementById("fileCompDiv"), datamian, "faccessories");
+	cllTabID = tlv8.RequestURLParam.getParam("tabID");
 }
 
 var kindEditor1;
@@ -28,7 +31,7 @@ function creatTextEditor() {
 		cssPath: cpath + '/comon/kindeditor/plugins/code/prettify.css',
 		uploadJson: cpath + '/kindeditor/kindEditorUpload',
 		fileManagerJson: cpath + '/kindeditor/file_manager_json',
-		allowFileManager: true,
+		allowFileManager: false,
 		afterCreate: function() {
 			var self = this;
 			KindEditor.ctrl(document, 13, function() {
@@ -52,6 +55,7 @@ function dataInsert(){
 
 //数据保存
 function dataSave() {
+	$("#freleaseconnext").val(kindEditor1.html());
 	$("#mainfsub").click();
 }
 
@@ -95,9 +99,14 @@ function viewSurvey(){
 
 // 新闻发布
 function publishServey() {
+	$("#freleaseconnext").val(kindEditor1.html());
 	var rowid = datamian.saveData();
 	if(rowid){
 		$("#fstate").val("已发布");
 		dataSave();
 	}
+}
+
+function callBackFn(){
+	tlv8.portal.callBack(cllTabID,"mycallBackFn","ok");
 }
