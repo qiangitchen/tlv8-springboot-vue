@@ -1,0 +1,1 @@
+重要说明：发布时此目录需要与运行的jar文件所在的目录平级，如发布目录为/app/tlv8server/tlv8-main.jar,则报表文件目录为/app/ureportfiles/。
