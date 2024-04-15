@@ -1,7 +1,8 @@
 package com.tlv8.common.utils;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,9 +13,21 @@ public class IPUtils {
 	public static String getIP() {
 		String IP = "127.0.0.1";
 		try {
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			while (networkInterfaces.hasMoreElements()) {
+				NetworkInterface networkInterface = networkInterfaces.nextElement();
+				Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+				while (inetAddresses.hasMoreElements()) {
+					InetAddress inetAddress = inetAddresses.nextElement();
+					if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress()
+							&& inetAddress.isSiteLocalAddress()) {
+						return inetAddress.getHostAddress();
+					}
+				}
+			}
 			InetAddress address = InetAddress.getLocalHost();
 			IP = address.getHostAddress();
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return IP;
