@@ -1,5 +1,7 @@
 package com.tlv8.common.jgrid.action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import com.tlv8.common.jgrid.BasegetGridAction;
 @Controller
 @Scope("prototype")
 public class GetGridAction extends BasegetGridAction {
+	private static final Logger logger = LoggerFactory.getLogger(GetGridAction.class);
 
 	public Data getData() {
 		return this.data;
@@ -40,7 +43,7 @@ public class GetGridAction extends BasegetGridAction {
 		} catch (Exception e) {
 			m = "操作失败：" + e.getMessage();
 			f = "false";
-			e.printStackTrace();
+			logger.error("操作失败", e);
 		}
 		data.setData(r);
 		data.setFlag(f);

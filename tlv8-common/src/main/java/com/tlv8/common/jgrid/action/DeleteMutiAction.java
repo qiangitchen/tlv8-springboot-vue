@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,8 @@ import com.tlv8.common.db.DBUtils;
 @Controller
 @Scope("prototype")
 public class DeleteMutiAction extends ActionSupport {
+	private static final Logger logger = LoggerFactory.getLogger(DeleteMutiAction.class);
+
 	protected Data data = new Data();
 	protected String dbkay = "system";// 默认值system
 	protected String table;
@@ -74,7 +78,7 @@ public class DeleteMutiAction extends ActionSupport {
 		} catch (Exception e) {
 			m = "操作失败：" + e.getMessage();
 			f = "false";
-			e.printStackTrace();
+			logger.error("操作失败", e);
 		}
 		data.setData(r);
 		data.setFlag(f);
