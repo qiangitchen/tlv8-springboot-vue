@@ -312,7 +312,8 @@ public class BasegetGridAction extends ActionSupport {
 				startrow = 0;
 			}
 			try {
-				sql = sql.replace("endrow", (DBUtils.IsMySQLDB(dbkay) ? rows : endrow) + "");
+				sql = sql.replace("endrow",
+						(DBUtils.IsMySQLDB(dbkay) || DBUtils.IsPostgreSQL(dbkay) ? rows : endrow) + "");
 				sql = sql.replace("startrow", startrow + "");
 			} catch (Exception e) {
 			}
@@ -433,7 +434,8 @@ public class BasegetGridAction extends ActionSupport {
 			}
 			try {
 				// sql = String.format(sql, endrow, startrow);
-				sql = sql.replace("endrow", (DBUtils.IsMySQLDB(dbkay) ? rows : endrow) + "");
+				sql = sql.replace("endrow",
+						(DBUtils.IsMySQLDB(dbkay) || DBUtils.IsPostgreSQL(dbkay) ? rows : endrow) + "");
 				sql = sql.replace("startrow", startrow + "");
 			} catch (Exception e) {
 			}
