@@ -42,8 +42,8 @@ public class DocDBHelper {
 		if ("/".equals(docPath)) {
 			docPath = "/root";
 		}
-		String pdirpath = "";
-		String pdirpathID = "";
+		String pdirpathID = "/root";
+		String pdirpath = "/文档中心";
 		String dirpathID = "/root";
 		String[] docDirs = docPath.split("/");
 		String dirID = "root";
@@ -51,6 +51,7 @@ public class DocDBHelper {
 		if (di.size() > 0) {
 			SaDocnode dc = di.get(0);
 			dirID = dc.getSid();
+			pdirpathID = dc.getSdocpath();
 			dirpathID = dc.getSdocpath();
 			pdirpath = dc.getSdocdisplaypath();
 		} else if (docDirs.length > 2) {
@@ -62,6 +63,8 @@ public class DocDBHelper {
 					SaDocnode dc = pdi.get(0);
 					dirID = dc.getSid();
 					pdirpathID = dc.getSdocpath();
+					dirpathID = dc.getSdocpath();
+					pdirpath = dc.getSdocdisplaypath();
 				} else {
 					dirID = IDUtils.getGUID();
 					pdirpathID += "/" + dirID;
@@ -73,14 +76,14 @@ public class DocDBHelper {
 						saDocnode.setSparentid(pdir.getSid());
 						saDocnode.setSdocname(dir);
 						saDocnode.setSkind("dir");
-						saDocnode.setSdocpath("/root" + pdirpathID);
-						saDocnode.setSdocdisplaypath("/文档中心" + pdirpath);
+						saDocnode.setSdocpath(pdirpathID);
+						saDocnode.setSdocdisplaypath(pdirpath);
 						saDocnode.setSflag(1);
 						saDocnode.setVersion(0);
 						saDocnodeService.insert(saDocnode);
+						dirpathID += "/" + dirID;
 					}
 				}
-				dirpathID += "/" + dirID;
 			}
 		}
 		ContextBean context = ContextUtils.getContext();

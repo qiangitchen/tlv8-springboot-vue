@@ -148,7 +148,8 @@
     sfileid, sdescription, sdocliveversionid, sclassification, skeywords, sdocserialnumber, 
     snamespace, scachename, srevisioncachename, sflag, version
     from sa_docnode
-    where sdocpath = #{docpath,jdbcType=VARCHAR} or sdocdisplaypath = #{docpath,jdbcType=VARCHAR}
+    where sdocpath = #{docpath,jdbcType=VARCHAR} or sdocdisplaypath = #{docpath,jdbcType=VARCHAR} 
+    	and skind='dir'
   </select>
   <select id="selectByDocDisplayPath" parameterType="java.lang.String" resultMap="BaseResultMap">
     select sid, sparentid, sdocname, ssequence, ssize, skind, sdocpath, sdocdisplaypath, 
@@ -157,7 +158,12 @@
     sfileid, sdescription, sdocliveversionid, sclassification, skeywords, sdocserialnumber, 
     snamespace, scachename, srevisioncachename, sflag, version
     from sa_docnode
-    where sdocpath = concat('/root', #{docpath,jdbcType=VARCHAR}) or sdocdisplaypath = concat('/文档中心', #{docpath,jdbcType=VARCHAR})
+    where ( sdocpath = concat('/root', #{docpath,jdbcType=VARCHAR}) 
+    		or sdocpath = #{docpath,jdbcType=VARCHAR}
+    		or sdocdisplaypath = concat('/文档中心', #{docpath,jdbcType=VARCHAR})
+    		or sdocdisplaypath = #{docpath,jdbcType=VARCHAR}
+    	  )
+    	and skind='dir'
   </select>
   <select id="selectByFileID" parameterType="java.lang.String" resultMap="BaseResultMap">
     select sid, sparentid, sdocname, ssequence, ssize, skind, sdocpath, sdocdisplaypath, 

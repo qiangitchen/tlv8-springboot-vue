@@ -51,7 +51,12 @@ public class DocClient {
 		Map<String, String> m = upLoadFiletoDaisy(docPath, fileName, file.getInputStream());
 		String contentType = file.getContentType();
 		if (contentType == null || "".equals(contentType)) {
+			// 没有识别文件类型时根据文件扩展名识别
 			contentType = MimeUtils.guessMimeTypeFromFileName(file.getOriginalFilename());
+		}
+		if (contentType == null || "".equals(contentType)) {
+			// 未知的文件类型统一定义为“file”
+			contentType = "file";
 		}
 		String docID = docDBHelper.addDocData(docPath, fileName, contentType, String.valueOf(m.get("Size")),
 				m.get("cacheName"));
