@@ -24,8 +24,10 @@ public class DocInitializingConfig implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		try {
-			File curfile = new File(System.getProperty("user.dir"));
-			ServerConfigInit.DOC_HOME = curfile.getParentFile().getParentFile().getParentFile().getCanonicalPath();
+			//File curfile = new File(System.getProperty("user.dir"));
+			//ServerConfigInit.DOC_HOME = curfile.getParentFile().getParentFile().getParentFile().getCanonicalPath();
+			File curfile = new File("");
+			ServerConfigInit.DOC_HOME = curfile.getCanonicalPath();
 			ServerConfigInit.init();// 初始化文件存储位置信息
 			LuceneService.start();// 启动索引服务
 		} catch (Throwable e) {

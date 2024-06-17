@@ -27,7 +27,9 @@ public class WPSFileEditHandler {
 	DocDocPathService docDocPathService;
 	@Autowired
 	DocDocumentService docDocumentService;
-	
+	@Autowired
+	DoupDoc doupDoc;
+
 	public String getPathPattern() {
 		return "/file/wpsedit/*/*";
 	}
@@ -41,14 +43,14 @@ public class WPSFileEditHandler {
 		try {
 			String bizAddress = paramHttpServletRequest.getParameter("bizAddress");
 			if (bizAddress != null) {
-				DoupDoc doc = new DoupDoc(fileID);
-				String docpath = doc.getDocPath();
+				doupDoc.setDocID(fileID);
+				String docpath = doupDoc.getDocPath();
 				if (docpath != null) {
 					FileIOContent rdoc = new FileIOContent();
 					if (paramHttpServletRequest.getContentLength() > 0) {
 						InputStream in = paramHttpServletRequest.getInputStream();
-						String nfileID = doc.getNewDocID();
-						String ndocPath = doc.getNewDocPath();
+						String nfileID = doupDoc.getNewDocID();
+						String ndocPath = doupDoc.getNewDocPath();
 						FileUploader.upload(in, nfileID, ndocPath);
 						rdoc.setFileID(nfileID);
 						rdoc.setFilePath(ndocPath);

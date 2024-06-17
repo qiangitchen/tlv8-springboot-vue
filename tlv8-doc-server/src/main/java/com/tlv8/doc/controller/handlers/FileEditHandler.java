@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tlv8.doc.controller.impl.DoupDoc;
@@ -27,6 +28,8 @@ public class FileEditHandler {
 	DocDocPathService docDocPathService;
 	@Autowired
 	DocDocumentService docDocumentService;
+	@Autowired
+	DoupDoc doupDoc;
 
 	public String getPathPattern() {
 		return "/file/edit/*/*";
@@ -37,7 +40,7 @@ public class FileEditHandler {
 	}
 
 	@RequestMapping("/file/edit/{fileID}/{user}/**")
-	public void handleRequest(MultipartFile file, HttpServletRequest paramHttpServletRequest,
+	public void handleRequest(@RequestParam("upload") MultipartFile file, HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse, @PathVariable("fileID") String fileID,
 			@PathVariable("user") String user) throws Exception {
 		if ("tourist".equals(user)) {
@@ -46,10 +49,10 @@ public class FileEditHandler {
 		try {
 			String bizAddress = paramHttpServletRequest.getParameter("bizAddress");
 			if (bizAddress != null) {
-				DoupDoc doc = new DoupDoc(fileID);
-				String docpath = doc.getDocPath();
+				doupDoc.setDocID(fileID);
+				String docpath = doupDoc.getDocPath();
 				if (docpath != null) {
-					FileIOContent rdoc = FileUploader.fileUpload(file, doc);// 保存文件
+					FileIOContent rdoc = FileUploader.fileUpload(file, doupDoc);// 保存文件
 					if (rdoc.getFileSize() > 0) {
 						FileUploader.ChangeFileID(fileID, rdoc.getFileID(), rdoc.getFilePath());
 						DocDocPath ddocpath = docDocPathService.getDocDocPathByFileID(fileID);
@@ -70,6 +73,7 @@ public class FileEditHandler {
 				paramHttpServletResponse.sendError(405);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			paramHttpServletResponse.sendError(500);
 		}
 	}

@@ -19,10 +19,7 @@ public class DoupDoc extends DocSupport {
 	 */
 	private String docID;
 
-	public DoupDoc() {
-	}
-
-	public DoupDoc(String docID) {
+	public void setDocID(String docID) {
 		this.docID = docID;
 	}
 

@@ -34,7 +34,7 @@
 			function colseWindow() {
 				TANGER_OCX_OBJ.FullScreenMode = false;
 				TANGER_OCX_OBJ.close();//关闭word 进程
-				if ("<%=option%>" != "view") {
+				if ("${option}" != "view") {
 					try {
 						def_callBackFun("");
 						tlv8.portal.closeWindow();
@@ -209,7 +209,7 @@
 									roles=rolesMatch[1];
 							    }
 							    if(roles.indexOf("send_confidential")<0 || rolesMatch==null){
-							    	if("${option}"!="view"){
+							    	if("${option}" != "view"){
 							      	 	SetCustomToolButtonStatus(0,false,false);
 							       		SetCustomToolButtonStatus(1,false,false);
 							    	}else{
@@ -484,18 +484,18 @@
 						 //添加自定义菜单子项
 						function AddMyMenuItems()
 						{
-							 var option = "<%=option%>";
+							 var option = "${option}";
 						 	try
 							{
 								//在自定义主菜单中增加菜单项目
 								if(option == "edit"){
-									// TANGER_OCX_OBJ.AddCustomToolButton("电子盖章",-1);
-									// TANGER_OCX_OBJ.AddCustomToolButton("全屏手写",-1);
+									TANGER_OCX_OBJ.AddCustomToolButton("电子盖章",-1);
+									TANGER_OCX_OBJ.AddCustomToolButton("全屏手写",-1);
 									TANGER_OCX_OBJ.AddCustomToolButton("显示痕迹",6);
 									TANGER_OCX_OBJ.AddCustomToolButton("隐藏痕迹",0);
 									TANGER_OCX_OBJ.AddCustomToolButton("另存为",4);
 									TANGER_OCX_OBJ.AddCustomToolButton("打印",9);
-									// TANGER_OCX_OBJ.AddCustomToolButton("套红",11);
+									TANGER_OCX_OBJ.AddCustomToolButton("套红",11);
 									TANGER_OCX_OBJ.AddCustomToolButton("保存服务器",5);
 								}
 								TANGER_OCX_OBJ.AddCustomToolButton("关闭",2);

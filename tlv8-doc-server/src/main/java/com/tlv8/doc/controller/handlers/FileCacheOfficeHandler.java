@@ -31,6 +31,8 @@ public class FileCacheOfficeHandler {
 	FileUploadData fileUploadData;
 	@Autowired
 	DocService docService;
+	@Autowired
+	DoupDoc doupDoc;
 
 	@SuppressWarnings({ "unused", "rawtypes" })
 	@RequestMapping("/file/cache/office/*")
@@ -44,7 +46,8 @@ public class FileCacheOfficeHandler {
 				String FileID = (String) localHashMap.get("FileID");
 				String VersionID = (String) localHashMap.get("VersionID");
 				String PartType = (String) localHashMap.get("PartType");
-				InputStream inputsteream = FileDownloader.download(new DoupDoc(FileID));
+				doupDoc.setDocID(FileID);
+				InputStream inputsteream = FileDownloader.download(doupDoc);
 				downloadStream(inputsteream, paramHttpServletResponse.getOutputStream());
 			} else if (localHashMap.get("trackdata") != null) {
 				String partType = (String) localHashMap.get("partType");

@@ -22,6 +22,7 @@ import com.itextpdf.text.Image;
  */
 public class PdfConverUtil {
 
+	@SuppressWarnings("resource")
 	public static boolean pptxToPdf(String pptPath, String pdfDir) {
 
 		if (StringUtils.isEmpty(pptPath)) {
@@ -120,6 +121,7 @@ public class PdfConverUtil {
 		return true;
 	}
 
+	@SuppressWarnings("resource")
 	public static boolean pptToPdf(String pptPath, String pdfDir) {
 
 		if (StringUtils.isEmpty(pptPath)) {

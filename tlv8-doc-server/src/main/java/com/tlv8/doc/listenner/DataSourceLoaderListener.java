@@ -62,7 +62,7 @@ public class DataSourceLoaderListener implements ServletContextListener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "resource" })
 	private void printWellcome(ServletContextEvent event) {
 		try {
 			String context = new BufferedReader(

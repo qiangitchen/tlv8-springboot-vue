@@ -54,38 +54,30 @@ public class FileDownloadHandler {
 			// 文本类型
 			paramHttpServletResponse.setCharacterEncoding("gb2312");
 		}
+		// 1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
+		paramHttpServletResponse.setContentType(DocType);
+		String formFileName = doc.getFDocName();
+		// 针对IE或者以IE为内核的浏览器：
+		if (userAgent != null && (userAgent.contains("MSIE") || userAgent.contains("Trident"))) {
+			formFileName = java.net.URLEncoder.encode(formFileName, "UTF-8");
+		} else {
+			// 非IE浏览器的处理：
+			formFileName = new String(formFileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+		}
+		// 2.设置文件头：最后一个参数是设置下载文件名
+		paramHttpServletResponse.setHeader("Content-Disposition", "attachment; filename=" + formFileName);
+		// 3.通过response获取ServletOutputStream对象(out)
+		ServletOutputStream out = paramHttpServletResponse.getOutputStream();
+		byte[] arrayOfByte = new byte[2048];
 		try {
-			// 1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
-			paramHttpServletResponse.setContentType(DocType);
-			String formFileName = doc.getFDocName();
-			// 针对IE或者以IE为内核的浏览器：
-			if (userAgent != null && (userAgent.contains("MSIE") || userAgent.contains("Trident"))) {
-				formFileName = java.net.URLEncoder.encode(formFileName, "UTF-8");
-			} else {
-				// 非IE浏览器的处理：
-				formFileName = new String(formFileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-			}
-			// 2.设置文件头：最后一个参数是设置下载文件名
-			paramHttpServletResponse.setHeader("Content-Disposition", "attachment; filename=" + formFileName);
-			// 3.通过response获取ServletOutputStream对象(out)
-			ServletOutputStream out = paramHttpServletResponse.getOutputStream();
-			byte[] arrayOfByte = new byte[2048];
-			try {
-				int i;
-				while ((i = inputStream.read(arrayOfByte)) != -1)
-					out.write(arrayOfByte, 0, i);
-			} catch (Exception we) {
-			} finally {
-				try {
-					out.close(); // 关闭输出流
-				} catch (Exception e) {
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			int i;
+			while ((i = inputStream.read(arrayOfByte)) != -1)
+				out.write(arrayOfByte, 0, i);
+		} catch (Exception we) {
 		} finally {
-			if (inputStream != null) {
-				inputStream.close(); // 关闭输入流
+			try {
+				out.close(); // 关闭输出流
+			} catch (Exception e) {
 			}
 		}
 	}

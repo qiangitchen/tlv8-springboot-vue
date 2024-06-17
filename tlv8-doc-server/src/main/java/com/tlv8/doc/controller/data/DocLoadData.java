@@ -43,6 +43,8 @@ public class DocLoadData {
 	DocService docService;
 	@Autowired
 	FileDeleter fileDeleter;
+	@Autowired
+	DoupDoc doupDoc;
 
 	/*
 	 * 
@@ -138,19 +140,19 @@ public class DocLoadData {
 		try {
 			client.executeMethod(httpGet);
 			InputStream in = httpGet.getResponseBodyAsStream();
-			DoupDoc doup = new DoupDoc(json.getString("SFILEID"));
+			doupDoc.setDocID(json.getString("SFILEID"));
 			try {
 				// 上传之前先删除fileID相同的文件
-				fileDeleter.delete(doup.getDocID());
+				fileDeleter.delete(doupDoc.getDocID());
 			} catch (Exception e) {
 			}
 
-			String docPath = doup.getNewDocPath();
-			FileUploader.upload(in, doup.getDocID(), docPath);
+			String docPath = doupDoc.getNewDocPath();
+			FileUploader.upload(in, doupDoc.getDocID(), docPath);
 			// 文档信息
 			DocDocument doc = new DocDocument();
 			doc.setFID(IDUtils.getGUID());
-			doc.setFDocID(doup.getDocID());
+			doc.setFDocID(doupDoc.getDocID());
 			doc.setFDocName(json.getString("SDOCNAME"));
 			doc.setFExtName(FileExtArray.getExtName(json.getString("SDOCNAME")));
 			doc.setFDocSize(json.getLong("SSIZE"));
