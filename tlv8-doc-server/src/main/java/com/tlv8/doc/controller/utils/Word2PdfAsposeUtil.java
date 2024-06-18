@@ -52,7 +52,7 @@ public class Word2PdfAsposeUtil {
 		}
 		try {
 			if (isLinux()) {
-				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts", true);
 			}
 			Document doc = new Document(in); // Address是将要被转化的word文档
 			doc.save(out, SaveFormat.PDF);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
@@ -72,7 +72,7 @@ public class Word2PdfAsposeUtil {
 			File file = new File(outPath); // 新建一个空白pdf文档
 			os = new FileOutputStream(file);
 			if (isLinux()) {
-				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts", true);
 			}
 			Document doc = new Document(inPath); // Address是将要被转化的word文档
 			doc.save(os, SaveFormat.PDF);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
@@ -92,16 +92,16 @@ public class Word2PdfAsposeUtil {
 		return true;
 	}
 
-	public static boolean doc2html(InputStream in, String tempath) {
+	public static boolean doc2html(InputStream in, OutputStream out) {
 		if (!getLicense()) { // 验证License 若不验证则转化出的pdf文档会有水印产生
 			return false;
 		}
 		try {
 			if (isLinux()) {
-				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts", true);
 			}
 			Document doc = new Document(in);
-			doc.save(tempath, SaveFormat.HTML);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
+			doc.save(out, SaveFormat.HTML);// 全面支持DOC, DOCX, OOXML, RTF HTML, OpenDocument, PDF,
 			// EPUB, XPS, SWF 相互转换
 		} catch (Exception e) {
 			return false;
@@ -109,16 +109,16 @@ public class Word2PdfAsposeUtil {
 		return true;
 	}
 
-	public static boolean pdf2html(InputStream in, String tempath) {
+	public static boolean pdf2html(InputStream in, OutputStream out) {
 		if (!getLicense()) { // 验证License 若不验证则转化出的pdf文档会有水印产生
 			return false;
 		}
 		try {
 			if (isLinux()) {
-				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts/chinese", true);
+				FontSettings.getDefaultInstance().setFontsFolder("/usr/share/fonts", true);
 			}
 			com.aspose.pdf.Document pdf = new com.aspose.pdf.Document(in);
-			pdf.save(tempath, com.aspose.pdf.SaveFormat.Html);
+			pdf.save(out, com.aspose.pdf.SaveFormat.Html);
 			pdf.close();
 		} catch (Exception e) {
 			return false;

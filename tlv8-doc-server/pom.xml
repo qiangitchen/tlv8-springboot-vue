@@ -15,14 +15,6 @@
         	文档服务
     </description>
 
-	<repositories>
-		<repository>
-			<id>com.e-iceblue</id>
-			<name>e-iceblue</name>
-			<url>https://repo.e-iceblue.cn/repository/maven-public/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<!-- spring-boot-devtools -->
 		<dependency>
@@ -38,10 +30,11 @@
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		
+		<!-- Excel转PDF -->
 		<dependency>
-			<groupId>e-iceblue</groupId>
-			<artifactId>spire.xls</artifactId>
-			<version>5.3.3</version>
+    		<groupId>e-iceblue</groupId>
+    		<artifactId>spire.xls.free</artifactId>
+    		<version>3.9.1</version>
 		</dependency>
 
 		<!--word文件读取 -->
@@ -129,6 +122,14 @@
 		</dependency>
 
 	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>com.e-iceblue</id>
+			<name>e-iceblue</name>
+			<url>https://repo.e-iceblue.cn/repository/maven-public/</url>
+		</repository>
+	</repositories>
 	
 	<build>
 		<plugins>

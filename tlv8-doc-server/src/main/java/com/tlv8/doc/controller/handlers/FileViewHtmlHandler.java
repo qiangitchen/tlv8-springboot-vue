@@ -27,7 +27,7 @@ import com.tlv8.doc.generator.service.DocDocPathService;
 import com.tlv8.doc.generator.service.DocDocumentService;
 
 /**
- * 以pdf格式查看文件
+ * 以HTML格式查看文件
  * 
  * @author qianp
  * 
@@ -39,10 +39,6 @@ public class FileViewHtmlHandler {
 	DocDocPathService docDocPathService;
 	@Autowired
 	DocDocumentService docDocumentService;
-
-	public String getPathPattern() {
-		return "/file/viewhtml/*/*/*";
-	}
 
 	@ResponseBody
 	@RequestMapping("/file/viewhtml/{fileID}/{fVersion}/*")
@@ -95,26 +91,25 @@ public class FileViewHtmlHandler {
 			paramHttpServletResponse.setHeader("Content-Disposition", "inline; filename=" + formFileName);
 
 			// 3.通过response获取ServletOutputStream对象(out)
+			ServletOutputStream out = paramHttpServletResponse.getOutputStream();
 			if (istr) {
 				ByteArrayOutputStream tout = new ByteArrayOutputStream();
-				String fileurl = "htmlcache/" + fileID + "/" + fileID + ".html";
-				String temppath = paramHttpServletRequest.getServletContext().getRealPath(fileurl);
 				if (".xls".equals(extnm) || ".xlsx".equals(extnm)) {
 					ExcelToPDFUtils.excel2pdf(inputStream, tout);
-					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), temppath);
+					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), out);
 				} else if (".doc".equals(extnm) || ".docx".equals(extnm)) {
-					Word2PdfAsposeUtil.doc2html(inputStream, temppath);
+					Word2PdfAsposeUtil.doc2html(inputStream, out);
 				} else if (".ppt".equals(extnm)) {
 					PdfConverUtil.ppt2pdf(inputStream, tout);
-					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), temppath);
+					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), out);
 				} else if (".pptx".equals(extnm)) {
 					PdfConverUtil.pptx2pdf(inputStream, tout);
-					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), temppath);
+					Word2PdfAsposeUtil.pdf2html(new ByteArrayInputStream(tout.toByteArray()), out);
 				} else if (".wps".equals(extnm) || ".dotm".equals(extnm) || ".dps".equals(extnm)
 						|| ".et".equals(extnm)) {
-					Word2PdfAsposeUtil.doc2html(inputStream, temppath);
+					Word2PdfAsposeUtil.doc2html(inputStream, out);
 				} else {
-					Word2PdfAsposeUtil.pdf2html(inputStream, temppath);
+					Word2PdfAsposeUtil.pdf2html(inputStream, out);
 				}
 				if (inputStream != null) {
 					inputStream.close(); // 关闭输入流
@@ -123,10 +118,8 @@ public class FileViewHtmlHandler {
 					Thread.sleep(100);// 跳转之前间歇一下
 				} catch (Exception e) {
 				}
-				paramHttpServletResponse.sendRedirect("/DocServer/" + fileurl);
 				return;
 			} else {
-				ServletOutputStream out = paramHttpServletResponse.getOutputStream();
 				byte[] arrayOfByte = new byte[2048];
 				try {
 					int i;
