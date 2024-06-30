@@ -21,7 +21,7 @@ textarea {
 }
 
 select {
-	width: 100%;
+	width: 100%
 }
 
 .flowBarTable {
@@ -37,7 +37,7 @@ select {
 .flowBarItem {
 	width: 60px;
 	margin-right: 10px;
-	borderColor: #A4DBF1;
+	border-color: #A4DBF1;
 	background: url(../../../comon/image/csbar/d_5.gif);
 	margin-right: 10px;
 	margin-left: 10px;
