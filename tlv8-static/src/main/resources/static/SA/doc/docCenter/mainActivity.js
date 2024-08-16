@@ -105,7 +105,11 @@ function createUploadElement() {
 			data : {
 				docPath : currenttreeSDOCPATHName
 			},
+			before: function (obj) {
+                layui.layer.load();
+            },
 			done : function(res) {
+				layui.layer.closeAll('loading');
 				if (res.code != '-1') {
 					currentgrid.refreshData();
 				} else {
@@ -113,6 +117,7 @@ function createUploadElement() {
 				}
 			},
 			error : function() {
+				layui.layer.closeAll('loading');
 				alert("上传失败！");
 			}
 		});
