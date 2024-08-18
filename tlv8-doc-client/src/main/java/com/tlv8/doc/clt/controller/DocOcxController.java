@@ -101,6 +101,7 @@ public class DocOcxController {
 			} catch (Exception e) {
 			}
 		}
+		ContextBean contextbean = ContextUtils.getContext();
 		VelocityContext context = new VelocityContext();
 		context.put("contextPath", request.getContextPath());
 		context.put("fileID", fileID);
@@ -109,10 +110,10 @@ public class DocOcxController {
 		context.put("tablename", billid);
 		context.put("cellname", cellname);
 		context.put("callerName", callerName);
+		context.put("username", contextbean.getPersonName());
 		context.put("option", option);
 		String docHost = docDBHelper.queryDocHost();
 		context.put("docHost", docHost);
-		ContextBean contextbean = ContextUtils.getContext();
 		String comiturl = docHost + "/repository/file/edit/" + fileID + "/" + contextbean.getPersonID() + "?"
 				+ DocUtils.getBizSecureParams();
 		context.put("comiturl", comiturl);
@@ -136,17 +137,17 @@ public class DocOcxController {
 	 */
 	@ResponseBody
 	@RequestMapping("/pspdfview")
-	public void pspdfview(HttpServletRequest request, HttpServletResponse response, String fileid, String fileName,
+	public void pspdfview(HttpServletRequest request, HttpServletResponse response, String fileID, String fileName,
 			String option) throws Exception {
 		String host = docDBHelper.queryDocHost();
-		String url = host + "/repository/file/viewpdf/" + fileid + "/last/content";
-		String durl = host + "/repository/file/view/" + fileid + "/last/content";
+		String url = host + "/repository/file/viewpdf/" + fileID + "/last/content";
+		String durl = host + "/repository/file/view/" + fileID + "/last/content";
 		if (fileName == null) {
 			fileName = "文件查看";
 		}
 		VelocityContext context = new VelocityContext();
 		context.put("contextPath", request.getContextPath());
-		context.put("fileid", fileid);
+		context.put("fileid", fileID);
 		context.put("url", url);
 		context.put("durl", durl);
 		context.put("fileName", URLDecoder.decode(fileName, "utf-8"));
@@ -187,6 +188,7 @@ public class DocOcxController {
 		}
 		context.put("fileName", fileName);
 		context.put("titleName", titleName);
+		context.put("username", contextbean.getPersonName());
 		context.put("option", option);
 		String loadurl = docHost + "/repository/file/download/" + fileID + "/" + contextbean.getPersonID() + "?"
 				+ DocUtils.getBizSecureParams();
@@ -231,6 +233,7 @@ public class DocOcxController {
 		}
 		context.put("fileName", fileName);
 		context.put("titleName", titleName);
+		context.put("username", contextbean.getPersonName());
 		context.put("option", option);
 		String loadurl = docHost + "/repository/file/download/" + fileID + "/" + contextbean.getPersonID() + "?"
 				+ DocUtils.getBizSecureParams();
@@ -275,6 +278,7 @@ public class DocOcxController {
 		}
 		context.put("fileName", fileName);
 		context.put("titleName", titleName);
+		context.put("username", contextbean.getPersonName());
 		context.put("option", option);
 		String loadurl = docHost + "/repository/file/download/" + fileID + "/" + contextbean.getPersonID() + "?"
 				+ DocUtils.getBizSecureParams();

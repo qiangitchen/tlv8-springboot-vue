@@ -39,9 +39,9 @@ function InitFrame() {
                     createDocument();
                 }
                 if (!app) {
-                	var fileid = tlv8.RequestURLParam.getParam("fileid");
+                	var fileID = tlv8.RequestURLParam.getParam("fileID");
                 	var fileName = tlv8.RequestURLParam.getParam("fileName");
-                	window.location.href = "../tangerOffice/pspdfview.jsp?fileid="+fileid+"&fileName="+fileName;
+                	window.location.href = cpath + "/doc_ocx/pspdfview?fileID="+fileID+"&fileName="+fileName;
                 }
             }, 500);
     } else {
@@ -380,9 +380,8 @@ function cursorToDocumentField5() {
 }
 var _cursorToDocumentField5 = new CreateFunction("光标选中指定公文域", cursorToDocumentField5, []);
 
-function insertText() {
-	var aa = app.insertText("kingsoft");
-	alert(aa);	
+function insertText(txt) {
+	app.insertText(txt);
 }
 var _insertText = new CreateFunction("光标位置插入文本", insertText, []);
 

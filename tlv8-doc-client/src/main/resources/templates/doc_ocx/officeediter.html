@@ -200,7 +200,7 @@
 					<script language="JScript" for=TANGER_OCX
 							event="OnDocumentOpened(TANGER_OCX_str,TANGER_OCX_obj)">
 								TANGER_OCX_OnDocumentOpened(TANGER_OCX_str,TANGER_OCX_obj)
-								TANGER_OCX_SetDocUser('<%=java.net.URLDecoder.decode(loginName,"UTF-8")%>');
+								TANGER_OCX_SetDocUser("${username}");
 								//没有发文机要文书权限的人，隐藏盖章按钮
 								var strURL=window.location.href; 
 							    var rolesMatch=strURL.match(/roles=(.[^&]+)/);
