@@ -15,6 +15,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.tlv8.common.redis.RedisCache;
 import com.tlv8.common.utils.ServletUtils;
@@ -33,7 +34,9 @@ import cn.dev33.satoken.stp.StpUtil;
 /**
  * @author ChenQian
  * @category 2011-2-12
+ * @update 2024-10-18
  */
+@Component
 public class BaseController {
 	@Autowired
 	protected HttpServletRequest request;
@@ -41,7 +44,6 @@ public class BaseController {
 	protected HttpServletResponse response;
 	@Autowired
 	private GetSysParams sysParams;
-
 	@Autowired
 	protected RedisCache redisCache;
 
