@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.tlv8.common.domain.AjaxResult;
+import com.tlv8.common.utils.AesEncryptUtil;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.pojo.SaMenuTree;
 import com.tlv8.system.pojo.SaOpPermission;
@@ -65,7 +66,12 @@ public class RolesController {
 			for (int i = 0; i < list.size(); i++) {
 				rolelist.add(list.get(i).getScode());
 			}
-			data.setData(JSON.toJSONString(rolelist));
+			String endata = JSON.toJSONString(rolelist);
+			try {
+				endata = AesEncryptUtil.encrypt(endata);
+			} catch (Exception e) {
+			}
+			data.setData(endata);
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
