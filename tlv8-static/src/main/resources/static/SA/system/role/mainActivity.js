@@ -202,14 +202,17 @@ function createMenuList(data) {
 function builderTable() {
 	$("#menulist").html(menuTrs.join(""));
 	layui.form.render("");
-	layui.form.on('checkbox',
-	function(data) {
+	layui.form.on('checkbox', function(data) {
 		// console.log(data.elem); // 得到checkbox原始DOM对象
 		// console.log(data.elem.checked); // 开关是否开启，true或者false
 		// console.log(data.value); // 开关value值，也可以通过data.elem.value得到
 		// console.log(data.othis); // 得到美化后的DOM对象
 		editDataAction(data.elem, data.elem.checked); // 记录编辑数据
-		checkChiled($(data.elem).attr("id"), data.elem.checked);
+		checkChiled($(data.elem).attr("id"), data.elem.checked);//级联选择子项
+//		var spid = $(data.elem).attr("pid");
+//		if (spid && spid != "" && spid != "null") {
+//			checkParent(spid, data.elem.checked);
+//		}
 		layui.form.render("");
 	});
 }
@@ -280,12 +283,13 @@ function checkChiled(pid, checked) {
 		ob.prop("checked", false);
 	}
 	ob.each(function() {
-		editDataAction(this, checked); // 记录编辑数据
+		var cobj = this;
+		editDataAction(cobj, checked); // 记录编辑数据
+		var cd = $("input[pid='" + $(cobj).attr("id") + "']");
+		if (cd.length > 0) {
+			checkChiled($(cobj).attr("id"), checked);
+		}
 	});
-	var cd = $("input[pid='" + ob.attr("id") + "']");
-	if (cd.length > 0) {
-		checkChiled(ob.attr("id"), checked);
-	}
 }
 
 var editPData = new Map(); // 记录编辑的id
