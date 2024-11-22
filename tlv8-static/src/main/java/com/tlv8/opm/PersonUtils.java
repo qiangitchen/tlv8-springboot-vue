@@ -1,5 +1,6 @@
 package com.tlv8.opm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,9 +11,11 @@ public class PersonUtils {
 	@SuppressWarnings("rawtypes")
 	public static String getPersonMemerFID(String personid) {
 		String result = "";
-		String sql = "select t.SFID from sa_oporg t where t.SPERSONID = '" + personid + "'";
+		String sql = "select t.SFID from sa_oporg t where t.SPERSONID = ?";
 		try {
-			List list = DBUtils.execQueryforList("system", sql);
+			List<Object> param = new ArrayList<>();
+			param.add(personid);
+			List list = DBUtils.execQueryforList(sql, param);
 			if (list.size() > 0) {
 				result = (String) ((Map) list.get(0)).get("SFID");
 			}

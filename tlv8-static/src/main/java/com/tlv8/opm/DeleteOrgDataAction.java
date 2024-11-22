@@ -1,12 +1,12 @@
 package com.tlv8.opm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +25,6 @@ import com.tlv8.system.utils.ContextUtils;
  * 
  * @author 陈乾
  * 
- * @update 2021-04-01
  */
 @Controller
 @Scope("prototype")

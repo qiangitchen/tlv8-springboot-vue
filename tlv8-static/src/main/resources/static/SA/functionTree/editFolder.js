@@ -66,3 +66,8 @@ function dailogEngin() {
 	$("#mainfsub").click();
 	return false;
 }
+
+function afRefresh(event){
+	var icon = datamian.getValueByName("layuiIcon");
+	layui.iconPickerFa.checkIcon('iconPicker', icon);
+}

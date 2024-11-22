@@ -14,7 +14,7 @@ import com.tlv8.common.db.DBUtils;
 
 @Controller
 @Scope("prototype")
-public class CheckPersonMobilePhone extends ActionSupport {
+public class CheckPersonMobilePhone extends ActionSupport{
 	private int count;
 	private String value;
 	private String id;

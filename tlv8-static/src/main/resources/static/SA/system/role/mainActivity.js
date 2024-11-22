@@ -80,7 +80,7 @@ function initAuthGrid() {
 	var datatype = "null,ro,ro,ro,ro";
 	var dataAction = {
 		"queryAction": "getGridAction",
-		"savAction": "savePermitionAction",
+		"savAction": "",
 		"deleteAction": "deleteAction"
 	};
 	maingrid = new tlv8.createGrid(div, labelid, labels, labelwidth, dataAction, "100%", "100%", aTdata, 20, "", "main-auther-form", "SPERMISSIONROLEID", datatype, true, true);

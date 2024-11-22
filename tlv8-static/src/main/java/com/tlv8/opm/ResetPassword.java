@@ -1,8 +1,6 @@
 package com.tlv8.opm;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.utils.MD5Util;
+import com.tlv8.system.pojo.SaOpPerson;
+import com.tlv8.system.service.ISaOpPersonService;
 
 /**
  * 重置用户密码
@@ -21,38 +21,24 @@ import com.tlv8.common.db.DBUtils;
 @Controller
 @Scope("prototype")
 public class ResetPassword extends ActionSupport {
-	private Data data;
 	private String rowid;
 
-	public void setRowid(String rowid) {
-		this.rowid = rowid;
-	}
+	@Autowired
+	ISaOpPersonService saOpPersonService;
 
-	public String getRowid() {
-		return rowid;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	public Data getData() {
-		return data;
-	}
-
-	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping(value = "/ResetPassword", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public Object execute() throws Exception {
-		data = new Data();
+		Data data = new Data();
 		String r = "";
 		String m = "success";
 		String f = "";
-		String sql = "update sa_opperson set SPASSWORD = 'E10ADC3949BA59ABBE56E057F20F883E' where sID = ?";
 		try {
-			List<String> paramli = new ArrayList<String>();
-			paramli.add(rowid);
-			r = DBUtils.execUpdate("system", sql, paramli);
+			SaOpPerson person = saOpPersonService.selectByPrimaryKey(rowid);
+			if (person != null) {
+				person.setSpassword(MD5Util.encode("123456"));
+				saOpPersonService.updateData(person);
+			}
 			f = "true";
 		} catch (Exception e) {
 			m = "操作失败：" + e.getMessage();
@@ -64,4 +50,13 @@ public class ResetPassword extends ActionSupport {
 		data.setMessage(m);
 		return success(data);
 	}
+
+	public void setRowid(String rowid) {
+		this.rowid = rowid;
+	}
+
+	public String getRowid() {
+		return rowid;
+	}
+
 }

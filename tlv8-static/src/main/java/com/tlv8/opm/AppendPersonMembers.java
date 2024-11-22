@@ -2,15 +2,10 @@ package com.tlv8.opm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.pojo.SaOpPerson;
+import com.tlv8.system.service.ISaOpOrgService;
+import com.tlv8.system.service.ISaOpPersonService;
 
 /**
  * 分配人员
@@ -31,88 +29,62 @@ public class AppendPersonMembers extends ActionSupport {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	private String personIds;
 	private String orgId;
-	private Data data;
 
-	@SuppressWarnings("deprecation")
+	@Autowired
+	ISaOpOrgService saOpOrgService;
+	@Autowired
+	ISaOpPersonService saOpPersonService;
+
 	@ResponseBody
 	@RequestMapping(value = "/appendPersonMembers", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		data = new Data();
-		String querySql = "select SVALIDSTATE,SPERSONID,SCODE,SNAME,SSEQUENCE from SA_OPORG where SID = ?";
-		String checkSql = "select SID from SA_OPORG where SID = ?";
-		String addSql = "insert into SA_OPORG(SID,SCODE,SNAME,SPARENT,SFID,SFCODE,SFNAME,SORGKINDID,SVALIDSTATE,SPERSONID,SNODEKIND,SLEVEL,SSEQUENCE,VERSION)"
-				+ "values(?,?,?,?,?,?,?,'psm',?,?,?,?,?,1)";
-		SqlSession session = DBUtils.getSession("system");
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+		Data data = new Data();
 		try {
-			conn = session.getConnection();
-			conn.setAutoCommit(true);
-			String[] persons = personIds.split(",");
-			String fid = "";
-			String fcode = "";
-			String fname = "";
-			int level = 1;
-			try {
-				Statement stm = conn.createStatement();
-				String qsql = "select SFID,SFCODE,SFNAME,SLEVEL from SA_OPORG where SID = '" + orgId + "'";
-				logger.debug(qsql);
-				ResultSet qs = stm.executeQuery(qsql);
-				if (qs.next()) {
-					fid = qs.getString("SFID");
-					fcode = qs.getString("SFCODE");
-					fname = qs.getString("SFNAME");
-					level = qs.getInt("SLEVEL") + 1;
-				}
-				qs.close();
-				stm.close();
-			} catch (Exception e) {
-			}
-			for (int i = 0; i < persons.length; i++) {
-				ps = conn.prepareStatement(querySql);
-				ps.setString(1, persons[i]);
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					int state = rs.getInt("SVALIDSTATE");
-					String personid = rs.getString("SPERSONID");
-					String scode = rs.getString("SCODE");
-					String sname = rs.getString("SNAME");
-					String newpsmid = personid + "@" + orgId;
-					int sequence = rs.getInt("SSEQUENCE");
-					PreparedStatement ps1 = conn.prepareStatement(checkSql);
-					ps1.setString(1, newpsmid);
-					ResultSet rs1 = ps1.executeQuery();
-					if (rs1.next()) {
-						data.setFlag("false");
-						data.setMessage("[" + sname + "]已经在当前部门，不需要分配!");
-					} else {
-						PreparedStatement ps2 = conn.prepareStatement(addSql);
-						ps2.setString(1, newpsmid);
-						ps2.setString(2, scode);
-						ps2.setString(3, sname);
-						ps2.setString(4, orgId);
-						ps2.setString(5, fid + "/" + newpsmid);
-						ps2.setString(6, fcode + "/" + scode);
-						ps2.setString(7, fname + "/" + sname);
-						ps2.setInt(8, state);
-						ps2.setString(9, personid);
-						ps2.setString(10, "nkLimb");
-						ps2.setInt(11, level);
-						ps2.setInt(12, sequence);
-						ps2.executeUpdate();
-						DBUtils.closeConn(null, null, ps2, null);
+			SaOpOrg org = saOpOrgService.selectByPrimaryKey(orgId);
+			if (org != null) {
+				String fid = org.getSid();
+				String fcode = org.getScode();
+				String fname = org.getSname();
+				int level = org.getSlevel() + 1;
+				String[] persons = personIds.split(",");
+				for (int i = 0; i < persons.length; i++) {
+					SaOpOrg personOrg = saOpOrgService.selectByPrimaryKey(persons[i]);
+					if (personOrg != null) {
+						int state = personOrg.getSvalidstate();
+						String personid = personOrg.getSpersonid();
+						String scode = personOrg.getScode();
+						String sname = personOrg.getSname();
+						String newpsmid = personid + "@" + orgId;
+						int sequence = personOrg.getSsequence();
+						SaOpPerson hp = saOpPersonService.selectByPrimaryKey(newpsmid);
+						if (hp != null) {
+							data.setFlag("false");
+							data.setMessage("[" + sname + "]已经在当前部门，不需要分配!");
+						} else {
+							SaOpOrg addOrg = new SaOpOrg();
+							addOrg.setSid(newpsmid);
+							addOrg.setScode(scode);
+							addOrg.setSname(sname);
+							addOrg.setSparent(orgId);
+							addOrg.setSfid(fid + "/" + newpsmid);
+							addOrg.setSfcode(fcode + "/" + scode);
+							addOrg.setSfname(fname + "/" + sname);
+							addOrg.setSorgkindid("psm");
+							addOrg.setSvalidstate(state);
+							addOrg.setSpersonid(personid);
+							addOrg.setSnodekind("nkLimb");
+							addOrg.setSlevel(level);
+							addOrg.setSsequence(sequence);
+							addOrg.setVersion(0);
+							saOpOrgService.insertData(addOrg);
+						}
 					}
-					DBUtils.closeConn(null, null, ps1, rs1);
 				}
 			}
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");
-			logger.error(e.toString());
-			e.printStackTrace();
-		} finally {
-			DBUtils.closeConn(session, conn, ps, rs);
+			logger.error("分配人员异常", e);
 		}
 		return success(data);
 	}
@@ -139,14 +111,6 @@ public class AppendPersonMembers extends ActionSupport {
 
 	public String getOrgId() {
 		return orgId;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	public Data getData() {
-		return data;
 	}
 
 }

@@ -72,7 +72,7 @@
             cols: [[
                 {type: 'numbers',title:"序号"},
                 //{field: 'sorts', width: 50, align: 'center', title: '序号'},
-                {field: 'label', minWidth: 180, title: '名称'},
+                {field: 'label', minWidth: 300, title: '名称'},
                 {
                     field: 'isMenu', width: 80, align: 'center', templet: function (d) {
                         if (d.isMenu) {
@@ -112,9 +112,7 @@
         //监听工具条
         table.on('tool(munu-table)', function (obj) {
             var data = obj.data;
-            console.log(data);
             var layEvent = obj.event;
-
             if (layEvent === 'add') {
                 add(data.id);
             }else if (layEvent === 'addFun') {
@@ -170,7 +168,7 @@
 				});
 		*/
 		tlv8.portal.dailog.openDailog("添加功能", "/SA/functionTree/editInfo.html?pid="
-			+ id, 640, 768, load);
+			+ id, 700, 800, load);
 	}
 	function del(id) {
 		data.setRowId(id);
@@ -182,7 +180,7 @@
 	}
 	function update(id) {
 		tlv8.portal.dailog.openDailog("编辑", "/SA/functionTree/editInfo.html?rowid="
-			+ id, 640, 768, load);
+			+ id, 700, 800, load);
 	}
 </script>
 </body>

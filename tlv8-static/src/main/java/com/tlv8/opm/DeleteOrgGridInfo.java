@@ -81,8 +81,8 @@ public class DeleteOrgGridInfo extends ActionSupport {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String kiSQL = "select SORGKINDID,SID,SFID,SPERSONID from SA_OPOrg where SID = ?";
-		String sql = "update SA_OPOrg o set o.SVALIDSTATE = -1 where (o.SID = ?";
-		String pSQL = "update SA_OPPerson p set p.SVALIDSTATE = -1 where p.SID <> 'PSN01' and p.SID =?";
+		String sql = "update SA_OPOrg set SVALIDSTATE = -1 where (SID = ?";
+		String pSQL = "update SA_OPPerson set SVALIDSTATE = -1 where SID <> 'PSN01' and SID =?";
 		String cSQL = "select SID from SA_OPOrg o where o.SID <> ? and o.SPERSONID = ?";
 		try {
 			conn = session.getConnection();
@@ -104,7 +104,7 @@ public class DeleteOrgGridInfo extends ActionSupport {
 					}
 					DBUtils.closeConn(null, null, ps0, rs0);
 				}
-				sql += " or SFID like '" + rs.getString(3) + "%') and o.SID <> 'ORG01' and o.SID <> 'PSN01@ORG01'";
+				sql += " or SFID like '" + rs.getString(3) + "%') and SID <> 'ORG01' and SID <> 'PSN01@ORG01'";
 			}
 			PreparedStatement ps2 = conn.prepareStatement(sql);
 			ps2.setString(1, getRowid());

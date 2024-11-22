@@ -29,7 +29,7 @@ import com.tlv8.system.utils.ContextUtils;
  */
 @Controller
 @Scope("prototype")
-public class WriteGradeManagement extends ActionSupport {
+public class WriteGradeManagement extends ActionSupport{
 	private String orgid;
 	private String orgids;
 	private Data data = new Data();

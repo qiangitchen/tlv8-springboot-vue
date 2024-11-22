@@ -3,6 +3,7 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
   <link type="text/css" rel="stylesheet" href="../../resources/bootstrap/css/bootstrap.min.css"> 
   <link type="text/css" rel="stylesheet" href="../../resources/layui/css/layui.css"> 
+  <link type="text/css" rel="stylesheet" href="../../resources/layui-lib/font-awesome-4.7.0/css/font-awesome.min.css"> 
   <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/default/easyui.css"> 
   <link type="text/css" rel="stylesheet" href="../../resources/jquery-easyui/themes/icon.css"> 
   <script type="text/javascript" src="../../comon/js/jquery/jquery.min.js"></script> 
@@ -13,6 +14,11 @@
   <script type="text/javascript" src="../../resources/bootstrap/js/bootstrap.min.js"></script> 
   <script type="text/javascript" src="../../resources/layui/layui.js"></script> 
   <script type="text/javascript" src="editInfo.js"></script> 
+  <style type="text/css">
+  	.layui-iconpicker-icon-item i{
+  		margin-top: 12px;
+  	}
+  </style>
  </head> 
  <body style="overflow: hidden;" onload="initDocumentPage();"> 
   <div class="easyui-layout" fit="true"> 
@@ -31,7 +37,7 @@
     <div class="layui-fluid"> 
      <div class="layui-card"> 
       <div class="layui-card-body"> 
-       <form id="MAIN_DATA_FORM" class="layui-form"> 
+       <form id="MAIN_DATA_FORM" class="layui-form" afterRefresh="afRefresh"> 
         	<div class="layui-form-item">
 			    <label class="layui-form-label">名称<font color="red">*</font></label>
 			    <div class="layui-input-block">
@@ -50,10 +56,13 @@
 			      <input type="text" id="icon" name="icon" class="layui-input">
 			    </div>
 		  </div>
-	      <div class="layui-form-item">
+		  <div class="layui-form-item">
 			    <label class="layui-form-label">样式图标</label>
-			    <div class="layui-input-block">
-			      <input type="text" id="layuiIcon" name="layuiIcon" class="layui-input">
+			    <div class="layui-input-inline">
+			      <input type="text" id="layuiIcon" name="layuiIcon" class="layui-input" value="layui-icon layui-icon-app">
+			    </div>
+			    <div class="layui-input-inline">
+			    	<button type="button" id="layuiIconPick" lay-filter="iconPicker"></button>
 			    </div>
 		  </div>
 	      <div class="layui-form-item">
@@ -112,5 +121,37 @@
     </div> 
    </div> 
   </div>  
+  <script src="../../resources/layui-lib/lay-config.js" charset="utf-8"></script>
+  <script type="text/javascript">
+  	layui.use(['iconPickerFa'], function () {
+  		var iconPickerFa = layui.iconPickerFa;
+  		
+  		iconPickerFa.render({
+            // 选择器，推荐使用input
+            elem: '#layuiIconPick',
+            // fa 图标接口
+            url: "../../resources/layui-lib/font-awesome-4.7.0/less/variables.less",
+            // 是否开启搜索：true/false，默认true
+            search: true,
+            // 是否开启分页：true/false，默认true
+            page: true,
+            // 每页显示数量，默认12
+            limit: 12,
+            // 每个图标格子的宽度：'43px'或'20%'
+            cellWidth: '43px',
+            // 点击回调
+            click: function (data) {
+                //console.log(data);
+                $("#layuiIcon").val("fa " + data.icon);
+            },
+            // 渲染成功后的回调
+            success: function(d) {
+               	// console.log(d);
+        		iconPickerFa.checkIcon('iconPicker', 'layui-icon layui-icon-app');
+            }
+        });
+        
+   });
+  </script>
  </body>
 </html>
