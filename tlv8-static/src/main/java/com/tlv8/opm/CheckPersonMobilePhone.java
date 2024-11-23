@@ -1,33 +1,37 @@
 package com.tlv8.opm;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
-import com.tlv8.common.db.DBUtils;
+import com.tlv8.system.pojo.SaOpPerson;
+import com.tlv8.system.service.ISaOpPersonService;
 
 @Controller
 @Scope("prototype")
-public class CheckPersonMobilePhone extends ActionSupport{
+public class CheckPersonMobilePhone extends ActionSupport {
 	private int count;
 	private String value;
 	private String id;
 
+	@Autowired
+	ISaOpPersonService saOpPersonService;
+
 	@ResponseBody
 	@RequestMapping("/checkPersonMobilePhone")
 	public Object execute() throws Exception {
-		String sql = "SELECT p.SCODE FROM SA_OPPerson p WHERE p.SMOBILEPHONE = ? and p.SID != ?";
-		List<Object> params = new ArrayList<Object>();
-		params.add(value);
-		params.add(id);
-		List<Map<String, String>> li = DBUtils.selectStringList("system", sql, params, true);
-		count = li.size();
+		count = 0;
+		List<SaOpPerson> list = saOpPersonService.selectByMobilephone(value);
+		for (SaOpPerson person : list) {
+			if (!person.getSid().equals(id)) {
+				count++;
+			}
+		}
 		return this;
 	}
 

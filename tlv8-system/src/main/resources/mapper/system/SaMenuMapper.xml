@@ -8,7 +8,6 @@
         <result column="sname" property="name" jdbcType="VARCHAR"/>
         <result column="stype" property="type" jdbcType="VARCHAR"/>
         <result column="sicon" property="icon" jdbcType="VARCHAR"/>
-        <result column="layuiicon" property="layuiicon" jdbcType="VARCHAR"/>
         <result column="stitle" property="title" jdbcType="VARCHAR"/>
         <result column="ssort" property="sort" jdbcType="INTEGER"/>
         <result column="slink" property="link" jdbcType="VARCHAR"/>
@@ -24,8 +23,7 @@
                m.url                                                              as spath,
                m.code                                                             as sname,
                case when (m.url is null or m.url = '') then 'dir' else 'menu' end as stype,
-               m.icon                                                        	  as sicon,
-               m.layuiicon                                                        as layuiicon,
+               m.layuiicon                                                        as sicon,
                m.label                                                            as stitle,
                m.sorts                                                            as ssort,
                m.url                                                              as slink,

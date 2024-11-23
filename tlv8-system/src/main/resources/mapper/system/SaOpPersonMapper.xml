@@ -64,6 +64,18 @@
         from SA_OpPerson
         where scode = #{scode,jdbcType=VARCHAR}
     </select>
+    <select id="selectByCodeIgnoreCase" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from SA_OpPerson
+        where upper(scode) = upper(#{scode,jdbcType=VARCHAR})
+    </select>
+    <select id="selectByMobilephone" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from SA_OpPerson
+        where smobilephone = #{smobilephone,jdbcType=VARCHAR}
+    </select>
     <insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpPerson">
         insert into
         SA_OpPerson(<include refid="Base_Column_List"/>)

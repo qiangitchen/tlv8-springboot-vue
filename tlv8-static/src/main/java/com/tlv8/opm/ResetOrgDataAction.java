@@ -2,6 +2,7 @@ package com.tlv8.opm;
 
 import java.net.URLDecoder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,8 +10,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
-import com.tlv8.common.utils.StringArray;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.pojo.SaOpPerson;
+import com.tlv8.system.service.ISaOpOrgService;
+import com.tlv8.system.service.ISaOpPersonService;
 
 /**
  * 还原已删除的数据
@@ -20,32 +23,32 @@ import com.tlv8.common.utils.StringArray;
 @Controller
 @Scope("prototype")
 public class ResetOrgDataAction extends ActionSupport {
-	private Data data;
 	private String rowid;
 
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	public Data getData() {
-		return data;
-	}
+	@Autowired
+	ISaOpOrgService saOpOrgService;
+	@Autowired
+	ISaOpPersonService saOpPersonService;
 
 	@ResponseBody
 	@RequestMapping(value = "/resetOrgDataAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		data = new Data();
-		StringArray IDS = new StringArray();
-		String[] rowids = rowid.split(",");
-		for (int i = 0; i < rowids.length; i++) {
-			IDS.push("'" + rowids[i] + "'");
-		}
-		String sqlo = "update SA_OPorg o set o.SVALIDSTATE = 1 where sID in (" + IDS.join(",") + ")";
-		String sqlp = "update SA_OPPerson o set o.SVALIDSTATE = 1 where sID in (select SPERSONID from SA_OPorg where SID in ("
-				+ IDS.join(",") + "))";
+		Data data = new Data();
 		try {
-			DBUtils.execUpdateQuery("system", sqlo);
-			DBUtils.execUpdateQuery("system", sqlp);
+			String[] rowids = rowid.split(",");
+			for (int i = 0; i < rowids.length; i++) {
+				String id = rowids[i];
+				SaOpOrg saorg = saOpOrgService.selectByPrimaryKey(id);
+				if (saorg != null) {
+					saorg.setSvalidstate(1);
+					saOpOrgService.updateData(saorg);
+					SaOpPerson saperson = saOpPersonService.selectByPrimaryKey(saorg.getSpersonid());
+					if (saperson != null) {
+						saperson.setSvalidstate(1);
+						saOpPersonService.updateData(saperson);
+					}
+				}
+			}
 			data.setFlag("true");
 		} catch (Exception e) {
 			data.setFlag("false");

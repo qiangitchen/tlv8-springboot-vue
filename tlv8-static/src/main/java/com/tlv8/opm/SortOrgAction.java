@@ -3,20 +3,21 @@ package com.tlv8.opm;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.db.DBUtils;
 
 /**
- * @d 组织排序
+ * 组织排序
+ * 
  * @author 陈乾
  */
 @Controller
@@ -27,30 +28,30 @@ public class SortOrgAction extends ActionSupport {
 
 	@SuppressWarnings("deprecation")
 	@ResponseBody
-	@RequestMapping(value = "/sortOrgAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@PostMapping(value = "/sortOrgAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		String[] array = idlist.split(",");
-		SqlSession session = DBUtils.getSession("system");
+		SqlSession session = null;
 		Connection conn = null;
-		Statement stm = null;
+		PreparedStatement ps = null;
 		try {
+			session = DBUtils.getSession("system");
 			conn = session.getConnection();
-			stm = conn.createStatement();
+			SQL sqls = new SQL();
+			sqls.UPDATE(orgkind);
+			sqls.SET("SSEQUENCE=?");
+			sqls.WHERE("SID=?");
+			String sql = sqls.toString();
+			String[] array = idlist.split(",");
 			for (int i = 0; i < array.length; i++) {
-				if (i < 9) {
-					String sql = "update " + orgkind + " set SSEQUENCE = '0" + (i + 1) + "' where SID = '" + array[i]
-							+ "'";
-					stm.executeUpdate(sql);
-				} else {
-					String sql = "update " + orgkind + " set SSEQUENCE = '" + (i + 1) + "' where SID = '" + array[i]
-							+ "'";
-					stm.executeUpdate(sql);
-				}
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, i + 1);
+				ps.setString(2, array[i]);
+				ps.executeUpdate();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DBUtils.closeConn(session, conn, stm, null);
+			DBUtils.closeConn(session, conn, ps, null);
 		}
 		return this;
 	}

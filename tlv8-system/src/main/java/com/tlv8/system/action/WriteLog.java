@@ -35,6 +35,7 @@ public class WriteLog {
 	 * @param request
 	 */
 	public void writeLog(HttpServletRequest request) {
+		boolean ispage = false;
 		String sIP = IPUtils.getRemoteAddr(request);
 //        String returnPath = getRefererPath(request);
 		String action = request.getParameter("action");
@@ -64,6 +65,7 @@ public class WriteLog {
 			}
 			log.setStypename("功能页面");
 			log.setSactionname("打开页面");
+			ispage = true;
 		} else {
 			String srcPath = request.getRequestURI();
 			if (srcPath.indexOf("/mobileUI/") > 0) {
@@ -83,6 +85,7 @@ public class WriteLog {
 				}
 				log.setStypename("功能页面");
 				log.setSactionname("打开页面");
+				ispage = true;
 			} else {
 				log.setSprocessname("后端请求");
 				log.setSactivityname(action);
@@ -91,7 +94,7 @@ public class WriteLog {
 		}
 		log.setScreatetime(new Date());
 		ContextBean contextBean = userController.getContext();
-		if (contextBean.isLogin() && StringUtils.isNotEmpty(log.getSactivityname())) {
+		if (ispage && contextBean.isLogin() && StringUtils.isNotEmpty(log.getSactivityname())) {
 			log.setScreatorognid(contextBean.getCurrentOgnID());
 			log.setScreatorognname(contextBean.getCurrentOgnName());
 			log.setScreatordeptid(contextBean.getCurrentDeptID());

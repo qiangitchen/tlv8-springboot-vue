@@ -33,6 +33,12 @@
         from SA_OpManagement
         where sorgid = #{orgid,jdbcType=VARCHAR}
     </select>
+    <select id="selectByOrgIdManageorgId" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from SA_OpManagement
+        where sorgid = #{orgid,jdbcType=VARCHAR} and smanageorgid = #{manageorgid,jdbcType=VARCHAR}
+    </select>
     <insert id="insertData" parameterType="com.tlv8.system.pojo.SaOpManagement">
         insert into
         SA_OpManagement(<include refid="Base_Column_List"/>)

@@ -37,7 +37,6 @@ public class OrganizationController {
         List<Map<String, Object>> res = new ArrayList<>();
         List<SaOpOrg> root_list = new ArrayList<>();
         String pid = param.get("pid");
-        System.out.println(pid);
         if (pid == null || "root".equals(pid)) {
             root_list = saOpOrgService.selectRootList();
         } else {

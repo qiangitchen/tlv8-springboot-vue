@@ -1,18 +1,18 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : dev.tlv8.com
+ Source Server         : PostgreSQL-local
  Source Server Type    : PostgreSQL
- Source Server Version : 120020
- Source Host           : dev.tlv8.com:5432
+ Source Server Version : 100017
+ Source Host           : localhost:5432
  Source Catalog        : tlv8-vue
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 120020
+ Target Server Version : 100017
  File Encoding         : 65001
 
- Date: 18/10/2024 15:08:12
+ Date: 23/11/2024 21:19:23
 */
 
 
@@ -210,6 +210,10 @@ CREATE TABLE "public"."doc_document" (
 ;
 
 -- ----------------------------
+-- Records of doc_document
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for doc_index
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."doc_index";
@@ -284,6 +288,107 @@ CREATE TABLE "public"."doc_user" (
 
 -- ----------------------------
 -- Records of doc_user
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for im_fileinfo
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."im_fileinfo";
+CREATE TABLE "public"."im_fileinfo" (
+  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "name" varchar(1000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "savetype" int4,
+  "saveinfo" varchar(2048) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "fsize" text COLLATE "pg_catalog"."default",
+  "folderid" varchar(32) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+)
+;
+
+-- ----------------------------
+-- Records of im_fileinfo
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for im_group
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."im_group";
+CREATE TABLE "public"."im_group" (
+  "id" varchar(65) COLLATE "pg_catalog"."default" NOT NULL,
+  "name" varchar(1000) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "head" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "creator" varchar(125) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+)
+;
+
+-- ----------------------------
+-- Records of im_group
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for im_group_memli
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."im_group_memli";
+CREATE TABLE "public"."im_group_memli" (
+  "id" varchar(65) COLLATE "pg_catalog"."default" NOT NULL,
+  "groupid" varchar(65) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "userid" varchar(65) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+)
+;
+
+-- ----------------------------
+-- Records of im_group_memli
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for im_header
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."im_header";
+CREATE TABLE "public"."im_header" (
+  "userid" varchar(65) COLLATE "pg_catalog"."default" NOT NULL,
+  "head" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying
+)
+;
+
+-- ----------------------------
+-- Records of im_header
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for im_message
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."im_message";
+CREATE TABLE "public"."im_message" (
+  "mid" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "mcontenttype" varchar(100) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "mcontent" text COLLATE "pg_catalog"."default",
+  "mfrom" varchar(65) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "mto" varchar(65) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
+  "mstate" int4 DEFAULT 0,
+  "isgroup" int4 DEFAULT 0,
+  "msendtime" timestamp(6)
+)
+;
+
+-- ----------------------------
+-- Records of im_message
+-- ----------------------------
+INSERT INTO "public"."im_message" VALUES ('FF229591BE254B708B97463699D33088', 'content', '[{"text":"11"}]', 'PSN01', 'DC349D31F5FE4113ABA2BBC06B1E42D7', 1, 0, '2024-11-21 22:41:48.384');
+INSERT INTO "public"."im_message" VALUES ('C47C108FEC7F49C29D991D3454D03E4B', 'content', '[{"text":"22"}]', 'DC349D31F5FE4113ABA2BBC06B1E42D7', 'PSN01', 0, 0, '2024-11-21 22:44:30.624');
+
+-- ----------------------------
+-- Table structure for im_message_memli
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."im_message_memli";
+CREATE TABLE "public"."im_message_memli" (
+  "sid" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "mid" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "tid" varchar(65) COLLATE "pg_catalog"."default" NOT NULL,
+  "state" int4 NOT NULL DEFAULT 0
+)
+;
+
+-- ----------------------------
+-- Records of im_message_memli
 -- ----------------------------
 
 -- ----------------------------
@@ -387,6 +492,10 @@ COMMENT ON COLUMN "public"."oa_em_receiveemail"."fcollect" IS 'COLLECT';
 COMMENT ON TABLE "public"."oa_em_receiveemail" IS '收件箱';
 
 -- ----------------------------
+-- Records of oa_em_receiveemail
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for oa_em_sendemail
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."oa_em_sendemail";
@@ -426,6 +535,10 @@ COMMENT ON COLUMN "public"."oa_em_sendemail"."fsendogn" IS '发送机构';
 COMMENT ON COLUMN "public"."oa_em_sendemail"."fsenddept" IS '发送部门';
 COMMENT ON COLUMN "public"."oa_em_sendemail"."fcollect" IS 'COLLECT';
 COMMENT ON TABLE "public"."oa_em_sendemail" IS '发件箱';
+
+-- ----------------------------
+-- Records of oa_em_sendemail
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for oa_flowconclusion
@@ -1069,6 +1182,13 @@ COMMENT ON COLUMN "public"."sa_log"."soperatingsystem" IS '操作系统';
 COMMENT ON COLUMN "public"."sa_log"."version" IS '版本号';
 COMMENT ON TABLE "public"."sa_log" IS '系统日志';
 
+-- ----------------------------
+-- Records of sa_log
+-- ----------------------------
+INSERT INTO "public"."sa_log" VALUES ('72FAE5362617400286776AECEE12200A', '功能页面', '{"language":["zh_CN"],"process":["/doc/docSettingProcess"],"activity":["/doc/docSettingProcess"],"tabId":["383DFCD37CF142F8A22EE5BC517A3A1D"]}', '/doc/docSettingProcess', '文档管理', '/doc/docSettingProcess', '文档配置', '/docManage/docSetting', '打开页面', NULL, '2024-11-23 21:09:55.201', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', 'PSN01', 'system', '', '', '', '', 'ORG01', '管理员', '127.0.0.1', 'PC', NULL, 0);
+INSERT INTO "public"."sa_log" VALUES ('A3A5FF505C8F47F5A3A72DA5464F07AA', '功能页面', '{"language":["zh_CN"],"process":["/doc/docCenter/process"],"activity":["/doc/docCenter/process"],"tabId":["0B5307D27B7E41AA9D9D7552F4E97D61"]}', '/doc/docCenter/process', '文档管理', '/doc/docCenter/process', '文档中心', '/docManage/docCenter', '打开页面', NULL, '2024-11-23 21:09:56.255', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', 'PSN01', 'system', '', '', '', '', 'ORG01', '管理员', '127.0.0.1', 'PC', NULL, 0);
+INSERT INTO "public"."sa_log" VALUES ('B3A2EF197A7242BE94E758BF21977B57', '功能页面', '{"language":["zh_CN"],"process":["/SA/functionTree/process"],"activity":["/SA/functionTree/process"],"tabId":["sysmenus"]}', '/SA/functionTree/process', '系统管理', '/SA/functionTree/process', '菜单设置', '/system/sysMenu', '打开页面', NULL, '2024-11-23 21:10:04.741', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', 'PSN01', 'system', '', '', '', '', 'ORG01', '管理员', '127.0.0.1', 'PC', NULL, 0);
+INSERT INTO "public"."sa_log" VALUES ('0BA37DA16343453582F8328DC2E71A06', '功能页面', '{"language":["zh_CN"],"tabId":["7667776866354B469085E9BD7A1146C2"]}', NULL, '系统管理', NULL, '菜单设置', '/system/sysMenu', '打开页面', NULL, '2024-11-23 21:11:26.344', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', 'PSN01', 'system', '', '', '', '', 'ORG01', '管理员', '127.0.0.1', 'PC', NULL, 0);
 
 -- ----------------------------
 -- Table structure for sa_loginlog
@@ -1098,6 +1218,11 @@ COMMENT ON COLUMN "public"."sa_loginlog"."sday" IS '星期几';
 COMMENT ON COLUMN "public"."sa_loginlog"."sdaynum" IS '周几';
 COMMENT ON COLUMN "public"."sa_loginlog"."version" IS '版本号';
 COMMENT ON TABLE "public"."sa_loginlog" IS '登录日志';
+
+-- ----------------------------
+-- Records of sa_loginlog
+-- ----------------------------
+INSERT INTO "public"."sa_loginlog" VALUES ('9C58B2FC216E4FD9ACFFE722B791F30D', 'PSN01', 'system', '127.0.0.1', '2024-11-23 21:09:47.494', '·! @¹#y$¤%^¦&«*µ¸q¢«¥¤°¹{¥¬´ª²­m¨¬µ', '192.168.119.1', '星期六', 7, 0);
 
 -- ----------------------------
 -- Table structure for sa_mailset
@@ -1190,7 +1315,7 @@ COMMENT ON TABLE "public"."sa_onlineinfo" IS '在线用户';
 -- ----------------------------
 -- Records of sa_onlineinfo
 -- ----------------------------
-INSERT INTO "public"."sa_onlineinfo" VALUES ('4F905ACECC8F40F3899DD6D406A61FAA', 'PSN01', 'system', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', '127.0.0.1', '2024-10-18 14:58:54.888', 'bccbd4b9-4805-4305-ba16-df47a7ad533a', '192.168.119.1', '06D3C72DFBB4490B878CA394CDB9F8CD', 0);
+INSERT INTO "public"."sa_onlineinfo" VALUES ('A517EC6DA22048379FBD43DEE323B167', 'PSN01', 'system', '/ORG01.ogn/PSN01@ORG01.psm', '/管理员/system', '127.0.0.1', '2024-11-23 21:09:47.398', '65fe1f70-253b-4f85-aa53-be16f7133aa7', '192.168.119.1', '06D3C72DFBB4490B878CA394CDB9F8CD', 0);
 
 -- ----------------------------
 -- Table structure for sa_opagent
@@ -1432,6 +1557,7 @@ INSERT INTO "public"."sa_opmenutree" VALUES ('27BD1F45508B49F4B11918F91E14E316',
 INSERT INTO "public"."sa_opmenutree" VALUES ('5316BC0BC6374BAD9E50E164C0D4192A', '系统日志', 'DatabaseOutlined', 'layui-icon layui-icon-log', '/SA/system/syslog/mainActivity.html', '/SA/sysLogProcess', 'mainActivity', NULL, NULL, NULL, 'sysfun', 6, 'sysLog', 'sysLog', 1);
 INSERT INTO "public"."sa_opmenutree" VALUES ('B7C66B18C7B14A7AB20E928867F0636A', '手写签名', 'DatabaseOutlined', 'fa fa-pencil-square-o', '/SA/handwrittenSignature/mainActivity.html', '/SA/handwrittenSignature', 'mainActivity', NULL, NULL, NULL, 'sysfun', 7, 'handwrittenSignature', NULL, 2);
 INSERT INTO "public"."sa_opmenutree" VALUES ('8EC0FF9DB10549B0898B8F7CD4E6C6F2', '回收站', 'DatabaseOutlined', 'layui-icon layui-icon-delete', '/system/recycle', '/SA/recycleProcess', 'mainActivity', NULL, NULL, NULL, 'sysfun', 9, 'recycle', 'recycle', 0);
+INSERT INTO "public"."sa_opmenutree" VALUES ('AF66D9A7835145319EC0C358A9CDD5D9', '报表设计器', NULL, 'layui-icon layui-icon-app', '/reportManager/ureportDesigner', '/ureportDesigner/process', 'mainActivity', NULL, NULL, NULL, '5004DBF28EF840438B55BEF5294C7C01', 3, 'ureportDesigner', NULL, 3);
 
 -- ----------------------------
 -- Table structure for sa_oporg
@@ -1572,6 +1698,7 @@ INSERT INTO "public"."sa_oppermission" VALUES ('46C80A03E26B4179BDDCDE81AD33BFDC
 INSERT INTO "public"."sa_oppermission" VALUES ('CBA1667533DC4C5E8B96C0BAA71732F9', 'RL01', '64103C00B8AF45778B6F0B3FA022A17A', '/OA/forum/process', '讨论区管理', 'BO_blogManage', NULL, NULL, NULL, 0, NULL, 1, 1, 0);
 INSERT INTO "public"."sa_oppermission" VALUES ('4CA03F30040B42BC840BF1C6B11B28D9', 'RL01', '0EAC50F0A3DF40A8AA949D1F1A9BEE81', '/OA/forum/process', '发帖', 'BO_talkl', NULL, NULL, NULL, 0, NULL, 1, 1, 0);
 INSERT INTO "public"."sa_oppermission" VALUES ('F487368123EA4C109350ED04EC3D0B98', 'RL01', '11C28B381745478282E0E391D61E2A53', '/OA/forum/process', '分类设置', 'Bo_category', NULL, NULL, NULL, 0, NULL, 1, 1, 0);
+INSERT INTO "public"."sa_oppermission" VALUES ('B903B34C093F4AB9B84F7C20AFF58D64', 'RL01', 'AF66D9A7835145319EC0C358A9CDD5D9', '/ureportDesigner/process', '报表设计器', 'mainActivity', NULL, NULL, NULL, 0, NULL, 1, 1, 0);
 
 -- ----------------------------
 -- Table structure for sa_opperson
@@ -1738,6 +1865,48 @@ COMMENT ON TABLE "public"."sa_oprole" IS '角色信息';
 INSERT INTO "public"."sa_oprole" VALUES ('RL01', '超级管理员', 'opm', '勿删-系统应用', 'fun', '', '', 1, 1, 4);
 INSERT INTO "public"."sa_oprole" VALUES ('RL02', '任务', 'task', '系统管理', 'fun', '', '', 2, 1, 2);
 INSERT INTO "public"."sa_oprole" VALUES ('RL02-doc', '文档', 'doc', '系统管理', 'fun', '', '', 3, 1, 2);
+
+-- ----------------------------
+-- Table structure for sa_oprolemanage
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."sa_oprolemanage";
+CREATE TABLE "public"."sa_oprolemanage" (
+  "sid" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+  "sorgid" varchar(36) COLLATE "pg_catalog"."default",
+  "sorgfid" varchar(360) COLLATE "pg_catalog"."default",
+  "spersonid" varchar(36) COLLATE "pg_catalog"."default",
+  "sroleid" varchar(36) COLLATE "pg_catalog"."default",
+  "screatorid" varchar(36) COLLATE "pg_catalog"."default",
+  "screatetime" timestamp(6),
+  "version" int4
+)
+;
+
+-- ----------------------------
+-- Records of sa_oprolemanage
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sa_oprolemanagement
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."sa_oprolemanagement";
+CREATE TABLE "public"."sa_oprolemanagement" (
+  "sid" varchar(35) COLLATE "pg_catalog"."default" NOT NULL,
+  "sorgid" varchar(80) COLLATE "pg_catalog"."default" NOT NULL,
+  "sorgname" varchar(255) COLLATE "pg_catalog"."default",
+  "sorgfid" varchar(2048) COLLATE "pg_catalog"."default" NOT NULL,
+  "sorgfname" varchar(2048) COLLATE "pg_catalog"."default",
+  "sroleid" varchar(35) COLLATE "pg_catalog"."default" NOT NULL,
+  "screatorfid" varchar(2048) COLLATE "pg_catalog"."default",
+  "screatorfname" varchar(2048) COLLATE "pg_catalog"."default",
+  "screatetime" timestamp(6),
+  "version" int4 NOT NULL
+)
+;
+
+-- ----------------------------
+-- Records of sa_oprolemanagement
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sa_psnmytask
@@ -2158,6 +2327,76 @@ ALTER TABLE "public"."doc_log" ADD CONSTRAINT "doc_log_pkey" PRIMARY KEY ("fid")
 ALTER TABLE "public"."doc_user" ADD CONSTRAINT "doc_user_pkey" PRIMARY KEY ("fid");
 
 -- ----------------------------
+-- Primary Key structure for table im_fileinfo
+-- ----------------------------
+ALTER TABLE "public"."im_fileinfo" ADD CONSTRAINT "im_fileinfo_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table im_group
+-- ----------------------------
+CREATE INDEX "im_group_creator" ON "public"."im_group" USING btree (
+  "creator" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table im_group
+-- ----------------------------
+ALTER TABLE "public"."im_group" ADD CONSTRAINT "im_group_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table im_group_memli
+-- ----------------------------
+CREATE INDEX "im_group_memli_userid" ON "public"."im_group_memli" USING btree (
+  "userid" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "im_groupm_groupid" ON "public"."im_group_memli" USING btree (
+  "groupid" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table im_group_memli
+-- ----------------------------
+ALTER TABLE "public"."im_group_memli" ADD CONSTRAINT "im_group_memli_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table im_header
+-- ----------------------------
+ALTER TABLE "public"."im_header" ADD CONSTRAINT "im_header_pkey" PRIMARY KEY ("userid");
+
+-- ----------------------------
+-- Indexes structure for table im_message
+-- ----------------------------
+CREATE INDEX "im_message_from" ON "public"."im_message" USING btree (
+  "mfrom" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "im_message_state" ON "public"."im_message" USING btree (
+  "mstate" "pg_catalog"."int4_ops" ASC NULLS LAST
+);
+CREATE INDEX "im_message_to" ON "public"."im_message" USING btree (
+  "mto" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table im_message
+-- ----------------------------
+ALTER TABLE "public"."im_message" ADD CONSTRAINT "im_message_pkey" PRIMARY KEY ("mid");
+
+-- ----------------------------
+-- Indexes structure for table im_message_memli
+-- ----------------------------
+CREATE INDEX "im_message_memli_mid" ON "public"."im_message_memli" USING btree (
+  "mid" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+CREATE INDEX "im_message_memli_tid" ON "public"."im_message_memli" USING btree (
+  "tid" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+
+-- ----------------------------
+-- Primary Key structure for table im_message_memli
+-- ----------------------------
+ALTER TABLE "public"."im_message_memli" ADD CONSTRAINT "im_message_memli_pkey" PRIMARY KEY ("sid");
+
+-- ----------------------------
 -- Indexes structure for table oa_adm_mygroupfrom
 -- ----------------------------
 CREATE INDEX "oa_mygroupde_foutkey" ON "public"."oa_adm_mygroupfrom" USING btree (
@@ -2470,6 +2709,16 @@ CREATE INDEX "idx_oprole_code" ON "public"."sa_oprole" USING btree (
 -- Primary Key structure for table sa_oprole
 -- ----------------------------
 ALTER TABLE "public"."sa_oprole" ADD CONSTRAINT "sa_oprole_pkey" PRIMARY KEY ("sid");
+
+-- ----------------------------
+-- Primary Key structure for table sa_oprolemanage
+-- ----------------------------
+ALTER TABLE "public"."sa_oprolemanage" ADD CONSTRAINT "sa_oprolemanage_pkey" PRIMARY KEY ("sid");
+
+-- ----------------------------
+-- Primary Key structure for table sa_oprolemanagement
+-- ----------------------------
+ALTER TABLE "public"."sa_oprolemanagement" ADD CONSTRAINT "sa_oprolemanagement_pkey" PRIMARY KEY ("sid");
 
 -- ----------------------------
 -- Indexes structure for table sa_psnmytask

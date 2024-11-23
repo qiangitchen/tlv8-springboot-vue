@@ -2,14 +2,10 @@ package com.tlv8.opm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.bean.ContextBean;
+import com.tlv8.system.pojo.SaOpManagement;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.service.ISaOpManagementService;
+import com.tlv8.system.service.ISaOpOrgService;
 import com.tlv8.system.utils.ContextUtils;
 
 /**
@@ -29,69 +28,71 @@ import com.tlv8.system.utils.ContextUtils;
  */
 @Controller
 @Scope("prototype")
-public class WriteGradeManagement extends ActionSupport{
+public class WriteGradeManagement extends ActionSupport {
 	private String orgid;
 	private String orgids;
-	private Data data = new Data();
 
-	@SuppressWarnings("deprecation")
+	@Autowired
+	ISaOpManagementService saOpManagementService;
+	@Autowired
+	ISaOpOrgService saOpOrgService;
+
 	@ResponseBody
 	@RequestMapping("/writeGradeManagement")
 	public Object execute() throws Exception {
+		Data data = new Data();
 		ContextBean context = ContextUtils.getContext();
 		if (context.getPersonID() == null || "".equals(context.getPersonID())) {
 			data.setFlag("false");
 			data.setMessage("未登录或登录已超时，不允许操作!");
 			return SUCCESS;
 		}
-		SqlSession session = DBUtils.getSession("system");
-		Connection conn = null;
 		try {
-			String[] selorg = orgids.split(",");
-			OPMOrgUtils org = new OPMOrgUtils(orgid);
-			String sql = "insert into SA_OPManagement"
-					+ "(SID,SORGID,SORGNAME,SORGFID,SORGFNAME,SMANAGEORGID,SMANAGEORGNAME,SMANAGEORGFID,SMANAGEORGFNAME,SMANAGETYPEID,SCREATORFID,SCREATORFNAME,SCREATETIME,VERSION)"
-					+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			conn = session.getConnection();
-			for (int i = 0; i < selorg.length; i++) {
-				String sorgid = selorg[i];
-				String query = "select SID from SA_OPManagement where SORGID = '" + orgid + "' and SMANAGEORGID='"
-						+ sorgid + "'";
-				Statement stm = conn.createStatement();
-				ResultSet rs = conn.createStatement().executeQuery(query);
-				if (rs.next()) {
-					DBUtils.closeConn(null, null, stm, rs);
-					continue;
+			SaOpOrg saorg = saOpOrgService.selectByPrimaryKey(orgid);
+			if (saorg != null) {
+				String[] selorg = orgids.split(",");
+				for (int i = 0; i < selorg.length; i++) {
+					String sorgid = selorg[i];
+					SaOpOrg morg = saOpOrgService.selectByPrimaryKey(sorgid);
+					if (morg != null) {
+						List<SaOpManagement> mlist = saOpManagementService.selectByOrgIdManageorgId(orgid, sorgid);
+						SaOpManagement saOpManagement = new SaOpManagement();
+						boolean isnew = false;
+						if (mlist.size() > 0 && "systemManagement".equals(mlist.get(0).getSmanagetypeid())) {
+							saOpManagement = mlist.get(0);
+						} else {
+							saOpManagement.setSid(IDUtils.getGUID());
+							saOpManagement.setVersion(0);
+							isnew = true;
+						}
+						saOpManagement.setSorgid(saorg.getSid());
+						saOpManagement.setSorgname(saorg.getSname());
+						saOpManagement.setSorgfid(saorg.getSfid());
+						saOpManagement.setSorgfname(saorg.getSfname());
+						saOpManagement.setSmanageorgid(morg.getSid());
+						saOpManagement.setSmanageorgname(morg.getSname());
+						saOpManagement.setSmanageorgfid(morg.getSfid());
+						saOpManagement.setSmanageorgfname(morg.getSfname());
+						saOpManagement.setSmanagetypeid("systemManagement");
+						saOpManagement.setScreatorfid(context.getCurrentPersonFullID());
+						saOpManagement.setScreatorfname(context.getCurrentPersonFullName());
+						saOpManagement.setScreatetime(new Date());
+						if (isnew) {
+							saOpManagementService.insertData(saOpManagement);
+						} else {
+							saOpManagementService.updateData(saOpManagement);
+						}
+					}
 				}
-				DBUtils.closeConn(null, null, stm, rs);
-				OPMOrgUtils morg = new OPMOrgUtils(sorgid);
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ps.setString(1, IDUtils.getGUID());
-				ps.setString(2, org.getOrgid());
-				ps.setString(3, org.getOgnname());
-				ps.setString(4, org.getOrgfid());
-				ps.setString(5, org.getOrgfname());
-				ps.setString(6, sorgid);
-				ps.setString(7, morg.getOgnname());
-				ps.setString(8, morg.getOrgfid());
-				ps.setString(9, morg.getOrgfname());
-				ps.setString(10, "systemManagement");
-				ps.setString(11, context.getCurrentPersonFullID());
-				ps.setString(12, context.getCurrentPersonFullName());
-				ps.setTimestamp(13, new Timestamp(new Date().getTime()));
-				ps.setInt(14, 0);
-				ps.executeUpdate();
-				DBUtils.closeConn(null, null, ps, null);
+				data.setFlag("true");
+			} else {
+				data.setFlag("false");
+				data.setMessage("需要授权的机构id无效~");
 			}
-			session.commit(true);
-			data.setFlag("true");
 		} catch (Exception e) {
-			session.rollback(true);
 			data.setFlag("false");
 			data.setMessage(e.getMessage());
 			e.printStackTrace();
-		} finally {
-			DBUtils.closeConn(session, conn, null, null);
 		}
 		return success(data);
 	}
@@ -106,14 +107,6 @@ public class WriteGradeManagement extends ActionSupport{
 
 	public String getOrgid() {
 		return orgid;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	public Data getData() {
-		return data;
 	}
 
 	public String getOrgids() {

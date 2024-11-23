@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,21 +29,22 @@ import com.tlv8.common.db.DBUtils;
 @Scope("prototype")
 public class SetMemberOrgAction extends ActionSupport {
 	private String rowid;
-	private Data data;
 
 	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping(value = "/setMemberOrgAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public Object execute() throws Exception {
-		data = new Data();
+		Data data = new Data();
 		SqlSession session = DBUtils.getSession("system");
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			conn = session.getConnection();
-			List<Map<String, String>> list = DBUtils.selectStringList(session,
-					"select SPERSONID,SPARENT from SA_OPOrg where SID = '" + rowid + "' and SORGKINDID = 'psm'", true);
+			List<Object> params = new ArrayList<>();
+			params.add(rowid);
+			String sql = "select SPERSONID,SPARENT from SA_OPOrg where SID = ? and SORGKINDID = 'psm'";
+			List<Map<String, String>> list = DBUtils.selectStringList(session, sql, params, true);
 			if (list.size() > 0) {
 				String personid = list.get(0).get("SPERSONID");
 				String orgID = list.get(0).get("SPARENT");
@@ -112,11 +114,4 @@ public class SetMemberOrgAction extends ActionSupport {
 		}
 	}
 
-	public Data getData() {
-		return data;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
-	}
 }

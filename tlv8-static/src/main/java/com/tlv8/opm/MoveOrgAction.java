@@ -24,28 +24,18 @@ import com.tlv8.system.service.ISaOpPersonService;
 @Controller
 @Scope("prototype")
 public class MoveOrgAction extends ActionSupport {
+	private String rowid;
+	private String orgID;
 
 	@Autowired
 	ISaOpOrgService saOpOrgService;
 	@Autowired
 	ISaOpPersonService saOpPersonService;
 
-	private Data data;
-	private String rowid;
-	private String orgID;
-
-	public Data getdata() {
-		return this.data;
-	}
-
-	public void setdata(Data data) {
-		this.data = data;
-	}
-
 	@ResponseBody
 	@RequestMapping(value = "/moveOrgAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		data = new Data();
+		Data data = new Data();
 		String r = "true";
 		String m = "success";
 		String f = "";

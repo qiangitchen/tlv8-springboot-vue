@@ -40,7 +40,7 @@ public class InitController {
 		hmap.put("href", "home/console.html");
 		res.put("homeInfo", hmap);
 		Map<String, Object> logmap = new HashMap<String, Object>();
-		logmap.put("title", "智慧监居");
+		logmap.put("title", "TLv8平台");
 		logmap.put("image", "images/logo.png");
 		logmap.put("href", "");
 		res.put("logoInfo", logmap);

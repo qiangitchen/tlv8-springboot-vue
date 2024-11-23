@@ -3,13 +3,11 @@ package com.tlv8.opm;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +18,10 @@ import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.bean.ContextBean;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.pojo.SaOprolemanagement;
+import com.tlv8.system.service.ISaOpOrgService;
+import com.tlv8.system.service.SaOprolemanagementService;
 import com.tlv8.system.utils.ContextUtils;
 
 /**
@@ -32,12 +34,17 @@ import com.tlv8.system.utils.ContextUtils;
 public class WriteGradeRoleManagement extends ActionSupport {
 	private String orgid;
 	private String roleids;
-	private Data data = new Data();
+
+	@Autowired
+	SaOprolemanagementService saOprolemanagementService;
+	@Autowired
+	ISaOpOrgService saOpOrgService;
 
 	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping("/writeGradeRoleManagement")
 	public Object execute() throws Exception {
+		Data data = new Data();
 		ContextBean context = ContextUtils.getContext();
 		if (context.getPersonID() == null || "".equals(context.getPersonID())) {
 			data.setFlag("false");
@@ -47,39 +54,40 @@ public class WriteGradeRoleManagement extends ActionSupport {
 		SqlSession session = DBUtils.getSession("system");
 		Connection conn = null;
 		try {
-			String[] role = roleids.split(",");
-			OPMOrgUtils org = new OPMOrgUtils(orgid);
-			String sql = "insert into SA_OPRoleManagement"
-					+ "(SID,SROLEID,SORGID,SORGNAME,SORGFID,SORGFNAME,SCREATORFID,SCREATORFNAME,SCREATETIME,VERSION)"
-					+ "values(?,?,?,?,?,?,?,?,?,?)";
-			conn = session.getConnection();
-			for (int i = 0; i < role.length; i++) {
-				String roleid = role[i];
-				String query = "select SID from SA_OPRoleManagement where SORGID = '" + orgid + "' and SROLEID='"
-						+ roleid + "'";
-				Statement stm = conn.createStatement();
-				ResultSet rs = stm.executeQuery(query);
-				if (rs.next()) {
-					DBUtils.closeConn(null, null, stm, rs);
-					continue;
+			SaOpOrg saorg = saOpOrgService.selectByPrimaryKey(orgid);
+			if (saorg != null) {
+				String[] role = roleids.split(",");
+				for (int i = 0; i < role.length; i++) {
+					String roleid = role[i];
+					List<SaOprolemanagement> rlist = saOprolemanagementService.selectByOrgIdRoleId(orgid, roleid);
+					SaOprolemanagement rolem = new SaOprolemanagement();
+					boolean isnew = false;
+					if (rlist.size() > 0) {
+						rolem = rlist.get(0);
+					} else {
+						rolem.setSid(IDUtils.getGUID());
+						rolem.setVersion(0);
+						isnew = true;
+					}
+					rolem.setSroleid(roleid);
+					rolem.setSorgid(saorg.getSid());
+					rolem.setSorgname(saorg.getSname());
+					rolem.setSorgfid(saorg.getSfid());
+					rolem.setSorgfname(saorg.getSfname());
+					rolem.setScreatorfid(context.getCurrentPersonFullID());
+					rolem.setScreatorfname(context.getCurrentPersonFullName());
+					rolem.setScreatetime(new Date());
+					if (isnew) {
+						saOprolemanagementService.insert(rolem);
+					} else {
+						saOprolemanagementService.updateByPrimaryKey(rolem);
+					}
 				}
-				DBUtils.closeConn(null, null, stm, rs);
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ps.setString(1, IDUtils.getGUID());
-				ps.setString(2, roleid);
-				ps.setString(3, org.getOrgid());
-				ps.setString(4, org.getOgnname());
-				ps.setString(5, org.getOrgfid());
-				ps.setString(6, org.getOrgfname());
-				ps.setString(7, context.getCurrentPersonFullID());
-				ps.setString(8, context.getCurrentPersonFullName());
-				ps.setTimestamp(9, new Timestamp(new Date().getTime()));
-				ps.setInt(10, 0);
-				ps.executeUpdate();
-				DBUtils.closeConn(null, null, ps, null);
+				data.setFlag("true");
+			} else {
+				data.setFlag("false");
+				data.setMessage("指定的组织id无效~");
 			}
-			session.commit(true);
-			data.setFlag("true");
 		} catch (Exception e) {
 			session.rollback(true);
 			data.setFlag("false");
@@ -113,14 +121,6 @@ public class WriteGradeRoleManagement extends ActionSupport {
 
 	public String getRoleids() {
 		return roleids;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	public Data getData() {
-		return data;
 	}
 
 }
