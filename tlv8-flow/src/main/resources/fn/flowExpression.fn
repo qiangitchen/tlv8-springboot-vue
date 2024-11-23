@@ -74,9 +74,4 @@
     <function pId="busiExp" id="trim" name="字符串去空格" param="value" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.trim" helper="说明： 字符串去空格"></function>  
     <function pId="busiExp" id="isContain" name="是否包含" param="str1,str2" paramvalue="" javacode="com.tlv8.flw.expression.CommonalityFunction.isContain" helper="说明： 判断字符串str1中是否包含str2"></function> 
   </item>  
-  <item id="others" isParent="true" name="其他"> 
-    <function pId="others" id="getSupplieridActivity" name="获取供应商对应的采购员" param="supplycede" paramvalue="" javacode="com.tlv8.flw.other.getActivitySupplyId.getSupplyerActivity" helper="根据当前供应商获取对应的采购员 "></function>  
-    <function pId="others" id="judgeIsNotSypplyerActivity" name="判断是否是采购员" param="" paramvalue="" javacode="com.tlv8.flw.other.judgeIsNotSypplyer.judgeIsNotSypplyerActivity" helper="根据当前登录者判断是否是采购员 "></function>  
-    <function pId="others" id="locateCustomerOperator" name="获取当前客户的业务员" param="customid" paramvalue="" javacode="com.tlv8.flw.other.locateCustomerOperatorname.locateCustomerOperator" helper="说明：根据当前客户的ID获得其业务员 &lt;br/&gt;参数说明：&lt;br/&gt;customid【必填】：客户的ID"></function> 
-  </item> 
 </root>
