@@ -74,11 +74,15 @@ public class SaOpOrgServiceImpl implements ISaOpOrgService {
 	}
 
 	@Override
-	public List<SaOpOrg> selectByParentIdPersonId(String parent, String personid) {
+	public SaOpOrg selectByParentIdPersonId(String parent, String personid) {
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("parent", parent);
 		param.put("personid", personid);
-		return sSaOpOrgMapper.selectByParentIdPersonId(param);
+		List<SaOpOrg> list = sSaOpOrgMapper.selectByParentIdPersonId(param);
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 }
