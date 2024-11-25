@@ -1,24 +1,22 @@
 package com.tlv8.opm;
 
+import java.net.URLDecoder;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
-import com.tlv8.system.utils.ContextUtils;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.pojo.SaOpPerson;
+import com.tlv8.system.service.ISaOpOrgService;
+import com.tlv8.system.service.ISaOpPersonService;
 
 /**
  * 彻底删除组织数据
@@ -30,62 +28,53 @@ import com.tlv8.system.utils.ContextUtils;
 @Scope("prototype")
 public class DeleteOrgDataAction extends ActionSupport {
 	Logger log = LoggerFactory.getLogger(getClass());
-	private Data data;
 	private String rowid;
 
-	public void setData(Data data) {
-		this.data = data;
-	}
+	@Autowired
+	ISaOpOrgService saOpOrgService;
+	@Autowired
+	ISaOpPersonService saOpPersonService;
 
-	public Data getData() {
-		return data;
-	}
-
-	@SuppressWarnings("deprecation")
 	@ResponseBody
-	@RequestMapping(value = "/deleteOrgDataAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@PostMapping(value = "/deleteOrgDataAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		data = new Data();
-		String userfname = ContextUtils.getContext().getCurrentPersonFullName();
-		String[] rowids = rowid.split(",");
-		String sqlo = "delete from SA_OPorg where SID = ? and SID != 'ORG01' and SID != 'PSN01@ORG01'";
-		String sqlp = "delete from SA_OPPerson where SID != 'PSN01' and SID = ?";
-		String qsql = "select SPERSONID from SA_OPorg o where o.SID = ? and o.SORGKINDID = 'psm' and (o.SNODEKIND !='nkLimb' or o.SNODEKIND is null)";
-		SqlSession session = DBUtils.getSession("system");
-		Connection conn = null;
+		Data data = new Data();
 		try {
-			conn = session.getConnection();
-			for (int i = 0; i < rowids.length; i++) {
-				PreparedStatement ps1 = conn.prepareStatement(qsql);
-				ps1.setString(1, rowids[i]);
-				ResultSet rs = ps1.executeQuery();
-				if (rs.next()) {
-					PreparedStatement ps2 = conn.prepareStatement(sqlp);
-					ps2.setString(1, rs.getString(1));
-					ps2.executeUpdate();
-					DBUtils.closeConn(null, null, ps2, null);
+			String[] rowids = rowid.split(",");
+			for (String orgid : rowids) {
+				SaOpOrg org = saOpOrgService.selectByPrimaryKey(orgid);
+				if (org != null) {
+					clearChild(org.getSid());
+					if ("psm".equalsIgnoreCase(org.getSorgkindid())) {
+						SaOpPerson person = saOpPersonService.selectByPrimaryKey(org.getSpersonid());
+						if (person != null) {
+							saOpPersonService.deleteData(person);
+						}
+					}
+					saOpOrgService.deleteData(org);
 				}
-				DBUtils.closeConn(null, null, ps1, rs);
-				PreparedStatement ps3 = conn.prepareStatement(sqlo);
-				ps3.setString(1, rowids[i]);
-				ps3.executeUpdate();
-				DBUtils.closeConn(null, null, ps3, null);
 			}
-			session.commit(true);
 			data.setFlag("true");
-			log.error(userfname + "-删除组织数据：" + rowid + "-成功！");
-			log.error(userfname + "-删除人员数据：" + rowid + "-成功！");
 		} catch (Exception e) {
-			session.rollback(true);
 			data.setFlag("false");
 			data.setMessage(e.getMessage());
-			log.error(userfname + "-删除组织数据：" + rowid + "-失败！");
-			log.error(userfname + "-删除人员数据：" + rowid + "-失败！");
 			e.printStackTrace();
-		} finally {
-			DBUtils.closeConn(session, conn, null, null);
 		}
 		return success(data);
+	}
+
+	private void clearChild(String pid) {
+		List<SaOpOrg> orgs = saOpOrgService.selectAllByParentID(pid);
+		for (SaOpOrg org : orgs) {
+			clearChild(org.getSid());
+			if ("psm".equalsIgnoreCase(org.getSorgkindid())) {
+				SaOpPerson person = saOpPersonService.selectByPrimaryKey(org.getSpersonid());
+				if (person != null) {
+					saOpPersonService.deleteData(person);
+				}
+			}
+			saOpOrgService.deleteData(org);
+		}
 	}
 
 	public void setRowid(String rowid) {

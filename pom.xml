@@ -234,6 +234,13 @@
 				<artifactId>sa-token-dao-redis</artifactId>
 				<version>${sa-token.version}</version>
 			</dependency>
+			
+			<!-- org.json -->
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>20230227</version>
+			</dependency>
 
 			<!-- 阿里JSON解析器 -->
 			<dependency>

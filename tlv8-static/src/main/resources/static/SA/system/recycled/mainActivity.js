@@ -2,7 +2,7 @@
 var currentgrid;
 var data = new tlv8.Data();
 data.setDbkey("system");// 指定使用数据库连接
-data.setTable("sa_oporg_view");// 指定grid对应的表
+data.setTable("sa_oporg");// 指定grid对应的表
 
 /* ==== */
 var currentgrid;

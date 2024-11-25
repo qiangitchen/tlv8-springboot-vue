@@ -1,22 +1,26 @@
 package com.tlv8.opm.menu;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.jdbc.SQL;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.StringUtils;
+import com.tlv8.system.pojo.SaMenuTree;
+import com.tlv8.system.service.ISaMenuTreeService;
 
 @Controller
 @RequestMapping("/menu")
 public class FunctionTreeController {
+
+	@Autowired
+	ISaMenuTreeService saMenuTreeService;
 
 	/**
 	 * 加载菜单配置-树形列表数据
@@ -27,33 +31,31 @@ public class FunctionTreeController {
 	@RequestMapping("/loadFunctionTree")
 	public Object loadFunctionTree() {
 		Map<String, Object> m = new HashMap<>();
-		SQL sql = new SQL();
-		sql.SELECT("*");
-		sql.FROM("sa_opmenutree").ORDER_BY("sorts asc");
 		try {
-			List<Map<String, Object>> list = DBUtils.selectForList("system", sql.toString());
+			List<SaMenuTree> list = saMenuTreeService.selectList();
 			List<Map<String, Object>> data = new ArrayList<>();
-			for (Map<String, Object> map : list) {
-				Map<String, Object> d = new HashMap<>();
-				for (String k : map.keySet()) {
-					d.put(k.toLowerCase(), map.get(k));
+			for (SaMenuTree menu : list) {
+				Map<String, Object> mn = new HashMap<>();
+				JSONObject d = new JSONObject(menu);
+				for (String key : d.keySet()) {
+					mn.put(key, d.get(key));
 				}
-				if (map.get("pid") == null) {
-					d.put("pid", "");
+				if (StringUtils.isNull(mn.get("pid"))) {
+					mn.put("pid", "");
 				}
-				if (!StringUtils.isEmpty(map.get("process")) && !StringUtils.isEmpty(map.get("activity"))) {
-					d.put("isMenu", true);
+				if (!StringUtils.isEmpty(mn.get("process")) && !StringUtils.isEmpty(mn.get("activity"))) {
+					mn.put("isMenu", true);
 				}
-				data.add(d);
+				data.add(mn);
 			}
 			m.put("count", data.size());
 			m.put("data", data);
 			m.put("code", "0");
 			m.put("msg", "");
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
 			m.put("code", "-1");
 			m.put("msg", "加载异常：" + e.getMessage());
+			e.printStackTrace();
 		}
 		return m;
 	}

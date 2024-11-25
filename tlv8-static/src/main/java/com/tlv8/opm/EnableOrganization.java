@@ -1,19 +1,18 @@
 package com.tlv8.opm;
 
 import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.service.ISaOpOrgService;
 
 /**
  * 启用组织
@@ -25,51 +24,54 @@ import com.tlv8.common.db.DBUtils;
 @Scope("prototype")
 public class EnableOrganization extends ActionSupport {
 	private String rowid;
-	private Data data;
 
-	public void setData(Data data) {
-		this.data = data;
-	}
+	@Autowired
+	ISaOpOrgService saOpOrgService;
 
-	public Data getData() {
-		return data;
-	}
-
-	@SuppressWarnings("deprecation")
 	@ResponseBody
-	@RequestMapping(value = "/enableOrganization", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@PostMapping(value = "/enableOrganization", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		data = new Data();
+		Data data = new Data();
 		String r = "";
 		String m = "success";
 		String f = "false";
-		String sql = "update SA_OPOrg  set SVALIDSTATE='1' where SID = ? or SPARENT = ? or SFID like ?";
-		SqlSession session = DBUtils.getSession("system");
-		Connection conn = null;
-		PreparedStatement ps = null;
 		try {
 			if (rowid != null && !"".equals(rowid) && !"%".equals(rowid)) {
-				conn = session.getConnection();
-				ps = conn.prepareStatement(sql);
-				ps.setString(1, rowid);
-				ps.setString(2, rowid);
-				ps.setString(3, "%" + rowid + "%");
-				ps.executeUpdate();
-				session.commit(true);
+				SaOpOrg org = saOpOrgService.selectByPrimaryKey(rowid);
+				if (org != null) {
+					org.setSvalidstate(1);
+					saOpOrgService.updateData(org);
+					changeChildSate(org.getSid(), 1);
+					f = "true";
+				} else {
+					f = "false";
+					m = "操作失败：指定的rowid无效~";
+				}
+			} else {
+				f = "false";
+				m = "操作失败：未正确指定rowid.";
 			}
-			f = "true";
 		} catch (Exception e) {
 			m = "操作失败：" + e.getMessage();
 			f = "false";
-			session.rollback(true);
 			e.printStackTrace();
-		} finally {
-			DBUtils.closeConn(session, conn, ps, null);
 		}
 		data.setData(r);
 		data.setFlag(f);
 		data.setMessage(m);
 		return success(data);
+	}
+
+	private void changeChildSate(String pid, int state) {
+		List<SaOpOrg> orgList = saOpOrgService.selectListByParentID(pid);
+		for (SaOpOrg org : orgList) {
+			if (state < 1 && (org.getSid().equalsIgnoreCase("ORG01") || org.getSid().equalsIgnoreCase("PSN01@ORG01"))) {
+				continue;
+			}
+			org.setSvalidstate(state);
+			saOpOrgService.updateData(org);
+			changeChildSate(org.getSid(), state);
+		}
 	}
 
 	public void setRowid(String rowid) {

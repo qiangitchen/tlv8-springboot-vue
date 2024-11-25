@@ -2,52 +2,41 @@ package com.tlv8.opm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.naming.NamingException;
-
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
-import com.tlv8.common.db.DBUtils;
+import com.tlv8.system.pojo.SaOpOrg;
+import com.tlv8.system.service.ISaOpOrgService;
 import com.tlv8.system.utils.ContextUtils;
 
 /**
+ * 逻辑删除组织机构信息
+ * 
  * @author ChenQian
  */
 @Controller
 @Scope("prototype")
 public class DeleteOrgGridInfo extends ActionSupport {
 	Logger log = LoggerFactory.getLogger(getClass());
-	private Data data;
 	private String rowid;
 
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	public Data getData() {
-		return data;
-	}
+	@Autowired
+	ISaOpOrgService saOpOrgService;
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteOrgGridInfo", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@PostMapping(value = "/deleteOrgGridInfo", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
-		data = new Data();
+		Data data = new Data();
 		String userfname = ContextUtils.getContext().getCurrentPersonFullName();
-		String r = "";
 		String m = "success";
 		String f = "";
 		try {
@@ -55,70 +44,46 @@ public class DeleteOrgGridInfo extends ActionSupport {
 				f = "false";
 				m = "操作失败：超管信息不可以删除!";
 			} else if (rowid != null && !"".equals(rowid)) {
-				r = deleteData();
-				f = "true";
+				SaOpOrg org = saOpOrgService.selectByPrimaryKey(rowid);
+				if (org != null) {
+					if (rowid.equalsIgnoreCase("ORG01") || rowid.equalsIgnoreCase("PSN01@ORG01")) {
+						f = "false";
+						m = "超管用户不能删除和禁用";
+					} else {
+						org.setSvalidstate(-1);
+						saOpOrgService.updateData(org);
+						changeChildSate(org.getSid(), -1);
+						f = "true";
+					}
+				} else {
+					f = "false";
+					m = "操作失败：指定的rowid无效~";
+				}
 			} else {
 				f = "false";
-				m = "操作失败：未正确指定需要删除的ID.";
+				m = "操作失败：未正确指定需要删除的rowid.";
 			}
 		} catch (Exception e) {
 			m = "操作失败：" + e.getMessage();
 			f = "false";
 			e.printStackTrace();
 		}
-		log.error(userfname + "-删除组织数据：" + rowid + "！");
-		data.setData(r);
+		log.error(userfname + "-逻辑删除组织数据：" + rowid + "！");
 		data.setFlag(f);
 		data.setMessage(m);
 		return success(data);
 	}
 
-	@SuppressWarnings("deprecation")
-	public String deleteData() throws SQLException, NamingException {
-		String result = "";
-		SqlSession session = DBUtils.getSession("system");
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String kiSQL = "select SORGKINDID,SID,SFID,SPERSONID from SA_OPOrg where SID = ?";
-		String sql = "update SA_OPOrg set SVALIDSTATE = -1 where (SID = ?";
-		String pSQL = "update SA_OPPerson set SVALIDSTATE = -1 where SID <> 'PSN01' and SID =?";
-		String cSQL = "select SID from SA_OPOrg o where o.SID <> ? and o.SPERSONID = ?";
-		try {
-			conn = session.getConnection();
-			ps = conn.prepareStatement(kiSQL);
-			ps.setString(1, getRowid());
-			rs = ps.executeQuery();
-			if (rs.next()) {
-				String sordkind = rs.getString(1);
-				if ("psm".equals(sordkind.toLowerCase())) {
-					PreparedStatement ps0 = conn.prepareStatement(cSQL);
-					ps0.setString(1, getRowid());
-					ps0.setString(2, rs.getString(4));
-					ResultSet rs0 = ps0.executeQuery();
-					if (!rs0.next()) {
-						PreparedStatement ps1 = conn.prepareStatement(pSQL);
-						ps1.setString(1, rs.getString(4));
-						ps1.executeUpdate();
-						DBUtils.closeConn(null, null, ps1, null);
-					}
-					DBUtils.closeConn(null, null, ps0, rs0);
-				}
-				sql += " or SFID like '" + rs.getString(3) + "%') and SID <> 'ORG01' and SID <> 'PSN01@ORG01'";
+	private void changeChildSate(String pid, int state) {
+		List<SaOpOrg> orgList = saOpOrgService.selectListByParentID(pid);
+		for (SaOpOrg org : orgList) {
+			if (state < 1 && (org.getSid().equalsIgnoreCase("ORG01") || org.getSid().equalsIgnoreCase("PSN01@ORG01"))) {
+				continue;
 			}
-			PreparedStatement ps2 = conn.prepareStatement(sql);
-			ps2.setString(1, getRowid());
-			ps2.executeUpdate();
-			DBUtils.closeConn(null, null, ps2, null);
-			session.commit(true);
-		} catch (SQLException e) {
-			session.rollback(true);
-			log.error(e.toString());
-			throw new SQLException(e);
-		} finally {
-			DBUtils.closeConn(session, conn, ps, rs);
+			org.setSvalidstate(state);
+			saOpOrgService.updateData(org);
+			changeChildSate(org.getSid(), state);
 		}
-		return result;
 	}
 
 	public void setRowid(String rowid) {
