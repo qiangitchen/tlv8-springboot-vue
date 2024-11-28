@@ -47,9 +47,8 @@ function initPage() {
 			+ "<option value='tesCanceled'>已取消</option>"
 			+ "<option value='tesAborted'>已终止</option>" + "</select>"
 			+ "</form>";// 嵌入自定义工具条内容
-	layui.form.render("select");
 	layui.form.on('select(status_select1)', function(data){
-	  selectFilter(data.elem);
+		selectFilter(data.elem);
 	});
 	var init_filter = "";
 	var opation = tlv8.RequestURLParam.getParam("opation");
@@ -62,6 +61,7 @@ function initPage() {
 		init_filter = "SSTATUSID='tesFinished' and SEPERSONID='"
 				+ currentPersonID + "'";
 	}
+	layui.form.render("select");
 	currentgrid.setStaticFilter(init_filter);
 	currentgrid.refreshData();
 }
