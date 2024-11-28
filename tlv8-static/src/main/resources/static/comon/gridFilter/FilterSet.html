@@ -22,7 +22,7 @@
 	  <div class="easyui-layout" fit="true" border="false">
 	  	<div data-options="region:'center',border:false" style="padding-left: 2px;">
 			<div class="easyui-layout" fit="true" border="false">
-			  	<div data-options="region:'north',border:false" style="padding-left: 2px; overflow: hidden; height: 40px;">
+			  	<div data-options="region:'north',border:false" style="padding-left: 2px; overflow: hidden; height: 45px;">
 			  		<table width="100%" class="layui-table" lay-skin="nob">
 						<thead>
 							<tr>
@@ -77,36 +77,20 @@
 		<div data-options="region:'east',split:true,border:false" style="width: 102px; text-align: center; border-left: 1px solid #ddd;">
 			<br/>
 			<p>
-				<button id="addItem" class="buttonitem" style="width: 80px;"
-					onclick="addLine()"
-					onmouseover="this.style.background='url(image/d_5_h.gif)';this.style.borderColor='#baceeb'"
-					onmouseout="this.style.background='url(image/d_5.gif)';this.style.borderColor='#A4DBF1'"
-					title="增加">增加</button>
+				<button id="addItem" type="button" class="btn btn-success" style="width: 80px;" onclick="addLine()" title="增加">增加</button>
 			</p>
 			<br />
 			<p>
-				<button id="removeItem" class="buttonitem" style="width: 80px;"
-					onclick="removeLine()"
-					onmouseover="this.style.background='url(image/d_5_h.gif)';this.style.borderColor='#baceeb'"
-					onmouseout="this.style.background='url(image/d_5.gif)';this.style.borderColor='#A4DBF1'"
-					title="删除">删除</button>
+				<button id="removeItem" type="button" class="btn btn-danger" style="width: 80px;" onclick="removeLine()" title="删除">删除</button>
 			</p>
 			<br />
 			<br />
 			<p>
-				<button id="clearItem" class="buttonitem" style="width: 80px;"
-					onclick="clearFilter()"
-					onmouseover="this.style.background='url(image/d_5_h.gif)';this.style.borderColor='#baceeb'"
-					onmouseout="this.style.background='url(image/d_5.gif)';this.style.borderColor='#A4DBF1'"
-					title="清空">清空</button>
+				<button id="clearItem" type="button" class="btn btn-warning" style="width: 80px;" onclick="clearFilter()" title="清空">清空</button>
 			</p>
 			<br />
 			<p>
-				<button id="resetItem" class="buttonitem" style="width: 80px;"
-					onclick="filter_reset()"
-					onmouseover="this.style.background='url(image/d_5_h.gif)';this.style.borderColor='#baceeb'"
-					onmouseout="this.style.background='url(image/d_5.gif)';this.style.borderColor='#A4DBF1'"
-					title="重置">重置</button>
+				<button id="resetItem" type="button" class="btn btn-info" style="width: 80px;" onclick="filter_reset()" title="重置">重置</button>
 			</p>
 		</div>
 	</div>
