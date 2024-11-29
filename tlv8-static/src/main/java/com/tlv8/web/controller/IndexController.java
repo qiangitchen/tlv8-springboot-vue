@@ -24,9 +24,9 @@ public class IndexController {
 	public void index(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		ContextBean contextbean = ContextUtils.getContext();
 		if (contextbean != null && contextbean.isLogin()) {
-			response.sendRedirect("portal2/login.html");
+			response.sendRedirect("portal/login.html");
 		} else {
-			response.sendRedirect("portal2/index.html");
+			response.sendRedirect("portal/index.html");
 		}
 	}
 
