@@ -1,7 +1,5 @@
 package com.tlv8.flw.action;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
@@ -9,21 +7,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.db.DBUtils;
+import com.tlv8.common.utils.CodeUtils;
 import com.tlv8.common.utils.IDUtils;
+import com.tlv8.common.utils.StringUtils;
 import com.tlv8.flw.base.FlowActivity;
 import com.tlv8.flw.base.TaskData;
+import com.tlv8.flw.pojo.SaTask;
+import com.tlv8.flw.service.SaTaskService;
 import com.tlv8.system.bean.ContextBean;
 import com.tlv8.system.help.SessionHelper;
 import com.tlv8.system.utils.ContextUtils;
@@ -61,9 +64,11 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 
 	@Autowired
 	TaskData taskData;
+	@Autowired
+	SaTaskService taskService;
 
 	@ResponseBody
-	@RequestMapping("/SaveAuditOpinionSignAction")
+	@PostMapping("/SaveAuditOpinionSignAction")
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	public Object execute() throws Exception {
 		SqlSession session = DBUtils.getSession(this.dbkey);
@@ -88,8 +93,11 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 				if (this.sign == null || "".equals(this.sign)) {
 					String padid = SessionHelper.getPadId(request);
 					if (padid != null && !"".equals(padid)) {
-						List<Map<String, String>> sli = DBUtils.execQueryforList("oa",
-								"select SIGN from oa_person_casn where casn='" + padid + "'");
+						SQL ssql = new SQL();
+						ssql.SELECT("SIGN");
+						ssql.FROM("oa_person_casn");
+						ssql.WHERE("casn='" + padid + "'");
+						List<Map<String, String>> sli = DBUtils.execQueryforList("oa", ssql.toString(), true);
 						if (sli.size() > 0) {
 							this.sign = sli.get(0).get("SIGN");
 							this.remark = "移动版签批";
@@ -98,26 +106,34 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 				}
 			} catch (Exception e) {
 			}
-			String tsSql = "select SEPERSONID,SEPERSONNAME from SA_TASK where SID = '" + this.taskID
-					+ "' and SEPERSONID is not null";
-			List tslist = DBUtils.execQueryforList("system", tsSql);
-			if (tslist.size() > 0) {
-				excutorid = (String) ((Map) tslist.get(0)).get("SEPERSONID");
-				excutorname = (String) ((Map) tslist.get(0)).get("SEPERSONNAME");
+			SaTask saTask = taskService.selectByPrimaryKey(taskID);
+			if (saTask != null && StringUtils.isNotEmpty(saTask.getSepersonid())) {
+				excutorid = saTask.getSepersonid();
+				excutorname = saTask.getSepersonname();
 			}
 			if ((excutorid != null) && (!"".equals(excutorid)) && (!excutorid.equals(currentpsnid))) {
 				currentpsnname = excutorname + "(" + currentpsnname + "代)";
 			}
-			String sql = "select FID from " + this.audittable + " where " + this.billidRe + " = " + "'" + this.sdata1
-					+ "' and FCREATEPERID='" + currentpsnid + "' and FOPVIEWID='" + this.opviewID + "' and FTASKID = '"
-					+ this.taskID + "'";
-			List list = DBUtils.execQueryforList(this.dbkey, sql);
+			SQL query = new SQL();
+			query.SELECT("FID");
+			query.FROM(audittable);
+			query.WHERE(billidRe + "='" + sdata1 + "'");
+			query.WHERE("FCREATEPERID='" + currentpsnid + "'");
+			query.WHERE("FOPVIEWID='" + opviewID + "'");
+			query.WHERE("FTASKID='" + taskID + "'");
+			List list = DBUtils.execQueryforList(this.dbkey, query.toString(), true);
 			conn = session.getConnection();
 			if (list.size() > 0) {
 				Map m = (Map) list.get(0);
-				sql = "update " + this.audittable + " set " + this.agreettextRe
-						+ "=?, FCREATETIME = ?,FOPVIEWID=?,FSIGN=?,fremark=? where fID=?";
-				PreparedStatement ps = conn.prepareStatement(sql);
+				SQL sql = new SQL();
+				sql.UPDATE(audittable);
+				sql.SET(agreettextRe + "=?");
+				sql.SET("FCREATETIME=?");
+				sql.SET("FOPVIEWID=?");
+				sql.SET("FSIGN=?");
+				sql.SET("fremark=?");
+				sql.WHERE("fID=?");
+				PreparedStatement ps = conn.prepareStatement(sql.toString());
 				ps.setString(1, this.opinion);
 				ps.setTimestamp(2, new Timestamp(new Date().getTime()));
 				ps.setString(3, this.opviewID);
@@ -127,27 +143,46 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 				ps.executeUpdate();
 			} else {
 				String opid = IDUtils.getGUID();
+				SQL add = new SQL();
+				add.INSERT_INTO(audittable);
+				add.VALUES("FID", "?");
+				add.VALUES("FTASKID", "?");
+				add.VALUES("FFLOWID", "?");
+				add.VALUES(agreettextRe, "?");
+				add.VALUES(billidRe, "?");
+				add.VALUES("FCREATEDEPTID", "?");
+				add.VALUES("FCREATEDEPTNAME", "?");
+				add.VALUES("FCREATEPERID", "?");
+				add.VALUES("FCREATEPERNAME", "?");
+				add.VALUES("FCREATETIME", "?");
+				add.VALUES("FNODEID", "?");
+				add.VALUES("FNODENAME", "?");
+				add.VALUES("FOPVIEWID", "?");
+				add.VALUES("FSIGN", "?");
+				add.VALUES("fremark", "?");
+				add.VALUES("version", "?");
+				PreparedStatement ps = conn.prepareStatement(add.toString());
+				ps.setString(1, opid);
+				ps.setString(2, this.taskID);
+				ps.setString(3, this.flowid);
+				ps.setString(4, this.opinion);
+				ps.setString(5, this.sdata1);
+				ps.setString(6, context.getCurrentDeptID());
+				ps.setString(7, context.getCurrentDeptName());
+				ps.setString(8, currentpsnid);
+				ps.setString(9, currentpsnname);
+				ps.setTimestamp(10, new Timestamp(new Date().getTime()));
 				if (this.opviewID.equals("chuanyue")) {
-					sql = "insert into " + this.audittable + "(FID,FTASKID,FFLOWID," + this.agreettextRe + ","
-							+ this.billidRe + ",FCREATEDEPTID,FCREATEDEPTNAME,FCREATEPERID,FCREATEPERNAME,FCREATETIME"
-							+ ",FNODEID,FNODENAME,FOPVIEWID,FSIGN,fremark,version)values('" + opid + "','" + this.taskID
-							+ "','" + this.flowid + "',?,'" + this.sdata1 + "','" + context.getCurrentDeptID() + "','"
-							+ context.getCurrentDeptName() + "','" + context.getCurrentPersonID() + "','"
-							+ context.getCurrentPersonName() + "',?,'" + FNODEID + "','" + FNODENAME + "',?,?,?,0)";
+					ps.setString(11, context.getCurrentPersonID());
+					ps.setString(12, context.getCurrentPersonName());
 				} else {
-					sql = "insert into " + this.audittable + "(FID,FTASKID,FFLOWID," + this.agreettextRe + ","
-							+ this.billidRe + ",FCREATEDEPTID,FCREATEDEPTNAME,FCREATEPERID,FCREATEPERNAME,FCREATETIME"
-							+ ",FNODEID,FNODENAME,FOPVIEWID,FSIGN,fremark,version)values('" + opid + "','" + this.taskID
-							+ "','" + this.flowid + "',?,'" + this.sdata1 + "','" + context.getCurrentDeptID() + "','"
-							+ context.getCurrentDeptName() + "','" + currentpsnid + "','" + currentpsnname + "',?,'"
-							+ FNODEID + "','" + FNODENAME + "',?,?,?,0)";
+					ps.setString(11, FNODEID);
+					ps.setString(12, FNODENAME);
 				}
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ps.setString(1, this.opinion);
-				ps.setTimestamp(2, new Timestamp(new Date().getTime()));
-				ps.setString(3, this.opviewID);
-				ps.setString(4, this.sign);
-				ps.setString(5, this.remark);
+				ps.setString(13, this.opviewID);
+				ps.setString(14, this.sign);
+				ps.setString(15, this.remark);
+				ps.setInt(16, 0);
 				ps.executeUpdate();
 			}
 			session.commit(true);
@@ -180,11 +215,7 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 	}
 
 	public void setOpinion(String opinion) {
-		try {
-			this.opinion = URLDecoder.decode(opinion, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.opinion = CodeUtils.decodeSpechars(opinion);
 	}
 
 	public String getOpinion() {
@@ -224,11 +255,7 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 	}
 
 	public void setOpviewID(String opviewID) {
-		try {
-			this.opviewID = URLDecoder.decode(opviewID, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.opviewID = opviewID;
 	}
 
 	public String getOpviewID() {
@@ -248,11 +275,7 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 	}
 
 	public void setSign(String sign) {
-		try {
-			this.sign = URLDecoder.decode(sign, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.sign = sign;
-		}
+		this.sign = sign;
 	}
 
 	public String getRemark() {
@@ -260,10 +283,6 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 	}
 
 	public void setRemark(String remark) {
-		try {
-			this.remark = URLDecoder.decode(remark, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.remark = remark;
-		}
+		this.remark = remark;
 	}
 }

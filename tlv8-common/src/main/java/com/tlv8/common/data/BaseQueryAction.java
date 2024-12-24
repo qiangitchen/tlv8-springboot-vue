@@ -1,6 +1,5 @@
 package com.tlv8.common.data;
 
-import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +79,7 @@ public class BaseQueryAction extends ActionSupport {
 	}
 
 	public void setWhere(String where) {
-		this.where = CodeUtils.getDoubleDecode(where);
+		this.where = CodeUtils.getDecode(where);
 		this.where = AesEncryptUtil.desEncrypt(this.where);
 		this.where = CodeUtils.getDoubleDecode(this.where);
 	}
@@ -90,11 +89,7 @@ public class BaseQueryAction extends ActionSupport {
 	}
 
 	public void setSql(String sql) {
-		try {
-			this.sql = URLDecoder.decode(sql, "UTF-8");
-		} catch (Exception e) {
-			this.sql = sql;
-		}
+		this.sql = sql;
 	}
 
 	public String getSql() {
@@ -110,11 +105,7 @@ public class BaseQueryAction extends ActionSupport {
 	}
 
 	public void setGridID(String gridID) {
-		try {
-			this.gridID = URLDecoder.decode(gridID, "UTF-8");
-		} catch (Exception e) {
-			this.gridID = gridID;
-		}
+		this.gridID = gridID;
 	}
 
 	public String getGridID() {
@@ -122,11 +113,7 @@ public class BaseQueryAction extends ActionSupport {
 	}
 
 	public void setTable(String table) {
-		try {
-			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (Exception e) {
-			this.table = table;
-		}
+		this.table = table;
 	}
 
 	public String getTable() {
@@ -134,11 +121,7 @@ public class BaseQueryAction extends ActionSupport {
 	}
 
 	public void setRelation(String relation) {
-		try {
-			this.relation = URLDecoder.decode(relation, "UTF-8");
-		} catch (Exception e) {
-			this.relation = relation;
-		}
+		this.relation = relation;
 	}
 
 	public String getRelation() {
@@ -146,11 +129,7 @@ public class BaseQueryAction extends ActionSupport {
 	}
 
 	public void setOrderby(String orderby) {
-		try {
-			this.orderby = URLDecoder.decode(orderby, "UTF-8");
-		} catch (Exception e) {
-			this.orderby = orderby;
-		}
+		this.orderby = orderby;
 	}
 
 	public String getOrderby() {

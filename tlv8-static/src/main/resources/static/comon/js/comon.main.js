@@ -205,7 +205,7 @@ tlv8.XMLHttpRequest = function (actionName, param, post, ayn, callBack,
             	hideModelState();
                 rs = result;
                 try {
-                    rs = window.eval("(" + rs + ")");
+                    rs = JSON.parse(rs);
                 } catch (e) {
                 }
                 try {
@@ -220,7 +220,7 @@ tlv8.XMLHttpRequest = function (actionName, param, post, ayn, callBack,
                 }catch (e) {
 				}
                 try{
-                	rs.data = window.eval("(" + rs.data + ")");
+                	rs.data = JSON.parse(rs.data);
                 }catch (e) {
 				}
                 if (callBack && typeof callBack == "function") {
@@ -635,6 +635,40 @@ var displayActionMessage = function () {
 };
 
 /**
+ * 特殊字符编码（自定义编码）
+ * @param {} value
+ * @returns {} 
+ */
+tlv8.encodeSpechars = function(value){
+	try {
+        value = value.replaceAll("<", "#lt;");
+        value = value.replaceAll(">", "#gt;");
+        value = value.replaceAll("&nbsp;", "#160;");
+        value = value.replaceAll("'", "#apos;");
+        value = value.replaceAll("&", "#amp;");
+    } catch (e) {
+    }
+    return value;
+};
+
+/**
+ * 特殊字符解码（针对自定义编码）
+ * @param {} value
+ * @returns {} 
+ */
+tlv8.decodeSpechars = function(value){
+	try {
+		value = value.replaceAll("#160;", "&nbsp;");
+	    value = value.replaceAll("#lt;", "<");
+	    value = value.replaceAll("#gt;", ">");
+	    value = value.replaceAll("#apos;", "'");
+	    value = value.replaceAll("#amp;", "&");
+    } catch (e) {
+    }
+    return value;
+};
+
+/**
  * @class tlv8.Data
  * @description 公用对象用于构建提交数据
  */
@@ -968,15 +1002,7 @@ tlv8.Data = function () {
             var keys = cell.keySet();
             for (i in keys) {
                 var key = keys[i];
-                var value = cell.get(key);
-                try {
-                    value = value.replaceAll("<", "#lt;");
-                    value = value.replaceAll(">", "#gt;");
-                    value = value.replaceAll("&nbsp;", "#160;");
-                    value = value.replaceAll("'", "#apos;");
-                    value = value.replaceAll("&", "#amp;");
-                } catch (e) {
-                }
+                var value = tlv8.encodeSpechars(cell.get(key));
                 this.cells += "<" + key + "><![CDATA[" + value + "]]></" + key
                     + ">";
             }
@@ -1416,11 +1442,7 @@ tlv8.Data = function () {
                                 }
                             }
                         } else {
-                            $dval = $dval.replaceAll("#160;", "&nbsp;");
-                            $dval = $dval.replaceAll("#lt;", "<");
-                            $dval = $dval.replaceAll("#gt;", ">");
-                            $dval = $dval.replaceAll("#apos;", "'");
-                            $dval = $dval.replaceAll("#amp;", "&");
+                            $dval = tlv8.decodeSpechars($dval);
                         }
                         sedata.cells[relations[i]] = $dval;
                         if ("LABEL" == revalueEl.tagName) {
@@ -2888,7 +2910,7 @@ tlv8.Context = {
 		} else {
 			var data = result.data;
 			if (typeof data == "string") {
-				data = window.eval("(" + data + ")");
+				data = JSON.parse(data);
 			}
 			return data;
 		}
@@ -3218,7 +3240,7 @@ tlv8.Context = {
         if (!result)
             return;
         if (typeof result == "string") {
-            result = window.eval("(" + result + ")");
+            result = JSON.parse(result);
         }
         this.userInfo = result;// window["eval"]("(" + result[0].data + ")");
     },
@@ -3792,9 +3814,6 @@ tlv8.System.Date = {
 	 * @returns {Date}
 	 */
     strToDate: function (str) {
-    	if(typeof str == "number"){
-    		return new Date(str);
-    	}
         if (!str || str == "" || str.indexOf("-") < 0) {
             return;
         }
@@ -4094,7 +4113,7 @@ tlv8.GridSelect = function (div, dbkey, sql, master, caninput) {
     param.set("sql", sql);
     var r = tlv8.XMLHttpRequest("getGridSelectDataAction",
         param, "post", false);
-    var datares = window.eval("(" + r.data.data + ")");
+    var datares = JSON.parse(r.data.data);
     if (!master && !caninput) {
         var option = "<option value=''></option>";
         for (var i = 0; i < datares.length; i++) {
@@ -5521,7 +5540,8 @@ tlv8.trangereditfile = function (fileID, fileName, docPath, dbkey,
         + "&cellname=" + cellname + "&callerName="
         + tlv8.portal.currentTabId() + "&option=edit";
     // tlv8.portal.openWindow("文件" + fileName + "编辑",edurl);
-    window.open(cpath + edurl);
+    var w = window.open(cpath + edurl);
+    w.focus();
 };
 tlv8.changeLog = {
     items: [],
@@ -5723,11 +5743,21 @@ tlv8.picComponent = function (div, data, cellname, canEdit, save2doc, isPhotogra
 					dbkay:data.dbkay,
 					rowid:rowid,
 					tablename:tablename,
-					cellname:cellname
+					cellname:cellname,
+					camerainfo:camerainfo||''
 			    };
         		var spa = JSON.stringify(jpa);
         		console.log(spa);
-        		window.top.photograph(spa, camerainfo||"");
+        		window.top.photograph({
+					request: spa,
+					persistent: false,
+					onSuccess:function(res){
+						console.log(res);
+					},
+					onFailure: function(error_code, error_message) {
+						layui.layer.alert("拍照失败:"+error_message);
+					}
+				});
         		lookPIC();
         	}catch (e) {
         		layui.layer.alert("请用客户端操作~");
@@ -6171,51 +6201,6 @@ tlv8.isIE = function () { // ie?
         return false;
 }
 
-if (!JSON)
-    var JSON = {};
-JSON.parse = function (jsonStr) {
-    try {
-        return eval("(" + jsonStr + ")");
-    } catch (e) {
-    	// layui.layer.alert("JSON.parse: " + e);
-    	console.error("JSON.parse: " + e);
-    }
-};
-String.prototype.toJSON = function () {
-    try {
-        return eval("(" + this + ")");
-    } catch (e) {
-    	// layui.layer.alert("toJSON: " + e);
-    	console.error("JSON.parse: " + e);
-    }
-};
-JSON.toString = function (jsonObj) {
-    if (jsonObj.toString().indexOf(",") < 0) {
-        var str = "{";
-        for (var k in jsonObj) {
-            str += ",\"" + k + "\":\"" + jsonObj[k] + "\"";
-        }
-        str += "}";
-        str = str.replace(",", "");
-        return str;
-    } else {
-        var str = "[";
-        for (var i = 0; i < jsonObj.length; i++) {
-            if (i > 0)
-                str += ",";
-            var ostr = "{";
-            for (var k in jsonObj[i]) {
-                ostr += ",\"" + k + "\":\"" + jsonObj[i][k] + "\"";
-            }
-            ostr += "}";
-            ostr = ostr.replace(",", "");
-            str += ostr;
-        }
-        str += "]";
-        return str;
-    }
-};
-
 /**
  * @des 显示loading信息 模式
  * @param state[true/false]
@@ -6437,7 +6422,7 @@ tlv8.loadOption = function (viewID, sData1) {
     var re = tlv8.XMLHttpRequest("LoadAuditOpinionAction", param, "POST", false);
     var redata = re.data.data;
     try {
-        redata = window.eval("(" + redata + ")");
+        redata = JSON.parse(redata);
     } catch (e) {
     }
     var viewHTml = "<ul style='width:100%;font-size:14px;display: block;overflow:hidden;'>";
@@ -6644,6 +6629,9 @@ try {
     }
     if (!checkPathisHave($rp + "comon/css/common.css")) {
         createStyleSheet($rp + "comon/css/common.css");
+    }
+    if (!checkPathisHave($rp + "comon/js/json2.js")) {
+        createJSSheet($rp + "comon/js/json2.js");
     }
 } catch (e) {
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +40,16 @@ public class LoadAuditOpinionAction extends ActionSupport {
 	@ResponseBody
 	@RequestMapping("/LoadAuditOpinionAction")
 	public Object execute() throws Exception {
-		String sql = "select t.FAGREETEXT,FCREATETIME,FCREATEPERID,FCREATEPERNAME,FSIGN from OA_FLOWRECORD t where  FBILLID=? and t.FOPVIEWID = ? order by FCREATETIME asc";
+		SQL sql = new SQL();
+		sql.SELECT("FAGREETEXT,FCREATETIME,FCREATEPERID,FCREATEPERNAME,FSIGN");
+		sql.FROM("OA_FLOWRECORD");
+		sql.WHERE("FBILLID=? and t.FOPVIEWID = ?");
+		sql.ORDER_BY("FCREATETIME asc");
 		try {
 			List<Object> params = new ArrayList<Object>();
 			params.add(fbillID);
 			params.add(fopviewID);
-			List<Map<String, String>> res = DBUtils.selectStringList("oa", sql, params, true);
+			List<Map<String, String>> res = DBUtils.selectStringList("oa", sql.toString(), params, true);
 			for (Map<String, String> map : res) {
 				map.put("SID", getSignID(map.get("FCREATEPERID")));
 			}

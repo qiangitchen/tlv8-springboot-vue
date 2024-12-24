@@ -1,6 +1,5 @@
 package com.tlv8.common.data;
 
-import java.net.URLDecoder;
 import java.sql.SQLException;
 
 import javax.naming.NamingException;
@@ -64,11 +63,7 @@ public class BaseDeleteAction extends ActionSupport {
 	}
 
 	public void setRowid(String rowid) {
-		try {
-			this.rowid = URLDecoder.decode(rowid, "UTF-8");
-		} catch (Exception e) {
-			this.rowid = rowid;
-		}
+		this.rowid = rowid;
 	}
 
 	public String getRowid() {
@@ -76,12 +71,7 @@ public class BaseDeleteAction extends ActionSupport {
 	}
 
 	public void setDbkay(String dbkay) {
-		try {
-			if (dbkay != null && !"".equals(dbkay))
-				this.dbkay = URLDecoder.decode(dbkay, "UTF-8");
-		} catch (Exception e) {
-			this.dbkay = dbkay;
-		}
+		this.dbkay = dbkay;
 	}
 
 	public String getDbkay() {
@@ -89,11 +79,7 @@ public class BaseDeleteAction extends ActionSupport {
 	}
 
 	public void setTable(String table) {
-		try {
-			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (Exception e) {
-			this.table = table;
-		}
+		this.table = table;
 	}
 
 	public String getTable() {
@@ -101,11 +87,7 @@ public class BaseDeleteAction extends ActionSupport {
 	}
 
 	public void setCascade(String cascade) {
-		try {
-			this.cascade = URLDecoder.decode(cascade, "UTF-8");
-		} catch (Exception e) {
-			this.cascade = cascade;
-		}
+		this.cascade = cascade;
 	}
 
 	public String getCascade() {

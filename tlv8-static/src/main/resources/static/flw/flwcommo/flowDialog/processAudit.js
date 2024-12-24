@@ -101,7 +101,7 @@ function saveAuditOpinion() {
 	query += "&audittable=OA_FLOWRECORD";
 	query += "&billidRe=FBILLID";
 	query += "&agreettextRe=FAGREETEXT";
-	query += "&opinion=" + $("#opinionData").val();
+	query += "&opinion=" + tlv8.encodeSpechars($("#opinionData").val());
 	query += "&flowid=" + flowID;
 	query += "&taskID=" + taskID;
 	query += "&sdata1=" + sData1;

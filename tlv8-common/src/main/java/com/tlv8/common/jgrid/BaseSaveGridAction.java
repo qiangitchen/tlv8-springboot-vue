@@ -1,8 +1,6 @@
 package com.tlv8.common.jgrid;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -208,11 +206,7 @@ public class BaseSaveGridAction extends ActionSupport {
 	}
 
 	public void setDbkay(String dbkay) {
-		try {
-			this.dbkay = URLDecoder.decode(dbkay, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.dbkay = dbkay;
 	}
 
 	public String getDbkay() {
@@ -220,11 +214,7 @@ public class BaseSaveGridAction extends ActionSupport {
 	}
 
 	public void setTable(String table) {
-		try {
-			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.table = table;
 	}
 
 	public String getTable() {
@@ -232,11 +222,7 @@ public class BaseSaveGridAction extends ActionSupport {
 	}
 
 	public void setCells(String cells) {
-		try {
-			this.cells = URLDecoder.decode(cells, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.cells = cells;
 	}
 
 	public String getCells() {
@@ -244,11 +230,7 @@ public class BaseSaveGridAction extends ActionSupport {
 	}
 
 	public void setBillid(String billid) {
-		try {
-			this.billid = URLDecoder.decode(billid, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.billid = billid;
 	}
 
 	public String getBillid() {

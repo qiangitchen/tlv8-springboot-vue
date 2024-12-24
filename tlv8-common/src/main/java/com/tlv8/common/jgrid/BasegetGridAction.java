@@ -1,7 +1,5 @@
 package com.tlv8.common.jgrid;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -55,7 +53,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setWhere(String where) {
-		this.where = CodeUtils.getDoubleDecode(where);
+		this.where = CodeUtils.getDecode(where);
 		this.where = AesEncryptUtil.desEncrypt(this.where);
 		this.where = CodeUtils.getDoubleDecode(this.where);
 	}
@@ -73,11 +71,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setBillid(String billid) {
-		try {
-			this.billid = URLDecoder.decode(billid, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.billid = billid;
 	}
 
 	public String getBillid() {
@@ -85,11 +79,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setColumns(String columns) {
-		try {
-			this.columns = URLDecoder.decode(columns, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.columns = columns;
 	}
 
 	public String getColumns() {
@@ -97,11 +87,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setColumnstype(String columnstype) {
-		try {
-			this.columnstype = URLDecoder.decode(columnstype, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.columnstype = columnstype;
 	}
 
 	public String getColumnstype() {
@@ -133,11 +119,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setTable(String table) {
-		try {
-			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.table = table;
-		}
+		this.table = table;
 	}
 
 	public String getTable() {
@@ -145,11 +127,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setGridid(String gridid) {
-		try {
-			this.gridid = URLDecoder.decode(gridid, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.gridid = gridid;
 	}
 
 	public String getGridid() {
@@ -157,11 +135,7 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setOrderby(String orderby) {
-		try {
-			this.orderby = URLDecoder.decode(orderby, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.orderby = orderby;
 	}
 
 	public String getOrderby() {
@@ -169,12 +143,9 @@ public class BasegetGridAction extends ActionSupport {
 	}
 
 	public void setInsql(String insql) {
-		try {
-			this.insql = URLDecoder.decode(insql, "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.insql = CodeUtils.getDecode(insql);
 		this.insql = AesEncryptUtil.desEncrypt(this.insql);
+		this.insql = CodeUtils.getDoubleDecode(this.insql);
 	}
 
 //	public String getInsql() {

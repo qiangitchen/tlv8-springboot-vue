@@ -1,6 +1,5 @@
 package com.tlv8.common.data;
 
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -61,11 +60,7 @@ public class BaseSaveAction extends ActionSupport {
 	}
 
 	public void setCells(String cells) {
-		try {
-			this.cells = URLDecoder.decode(cells, "UTF-8");
-		} catch (Exception e) {
-			this.cells = cells;
-		}
+		this.cells = cells;
 	}
 
 	public String getCells() {
@@ -234,11 +229,7 @@ public class BaseSaveAction extends ActionSupport {
 	}
 
 	public void setWhere(String where) {
-		try {
-			this.where = URLDecoder.decode(where, "UTF-8");
-		} catch (Exception e) {
-			this.where = where;
-		}
+		this.where = where;
 	}
 
 	public String getWhere() {
@@ -254,11 +245,7 @@ public class BaseSaveAction extends ActionSupport {
 	}
 
 	public void setRowid(String rowid) {
-		try {
-			this.rowid = URLDecoder.decode(rowid, "UTF-8");
-		} catch (Exception e) {
-			this.rowid = rowid;
-		}
+		this.rowid = rowid;
 	}
 
 	public String getRowid() {
