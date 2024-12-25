@@ -49,12 +49,11 @@ public class DataBaseSQLParse {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public static List execQueryforList(String key, String sql, Parameters parameter) throws SQLException {
 		ResultSet rs = null;
 		ResultSetMetaData rsmd = null;
 		List li = new ArrayList();
-		Connection aConn = DBUtils.getSession(key).getConnection();
+		Connection aConn = DBUtils.getAppConn(key);
 		List<String> paramlist = new ArrayList<String>();
 		Map<String, String> parameters = new HashMap<String, String>();
 		if (parameter.getParamsMap().containsKey(sql)) {

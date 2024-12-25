@@ -22,7 +22,6 @@ import com.alibaba.fastjson.JSON;
  */
 @Controller
 @Scope("prototype")
-@SuppressWarnings("deprecation")
 public class GetProcessByBillIDAction extends ActionSupport {
 	private static final Logger logger = LoggerFactory.getLogger(GetProcessByBillIDAction.class);
 	private String sdata1;

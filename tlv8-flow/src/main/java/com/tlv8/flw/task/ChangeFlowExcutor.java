@@ -24,7 +24,6 @@ import com.tlv8.system.utils.OrgUtils;
  */
 @Controller
 @Scope("prototype")
-@SuppressWarnings("deprecation")
 public class ChangeFlowExcutor extends FlowDataBean {
 	private Data data = new Data();
 
@@ -41,7 +40,7 @@ public class ChangeFlowExcutor extends FlowDataBean {
 	public Object execute() throws Exception {
 		Sys.printMsg("修改执行人...");
 		if (epersonids != null && taskID != null) {
-			SqlSession session = DBUtils.getSession("system");
+			SqlSession session = DBUtils.getSqlSession();
 			Connection conn = session.getConnection();
 			boolean autocommit = conn.getAutoCommit();
 			conn.setAutoCommit(false);

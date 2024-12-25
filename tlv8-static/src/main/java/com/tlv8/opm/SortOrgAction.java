@@ -26,7 +26,6 @@ public class SortOrgAction extends ActionSupport {
 	private String idlist;
 	private String orgkind;
 
-	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@PostMapping(value = "/sortOrgAction", produces = "application/json;charset=UTF-8")
 	public Object execute() throws Exception {
@@ -34,7 +33,7 @@ public class SortOrgAction extends ActionSupport {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
-			session = DBUtils.getSession("system");
+			session = DBUtils.getSqlSession();
 			conn = session.getConnection();
 			SQL sqls = new SQL();
 			sqls.UPDATE(orgkind);

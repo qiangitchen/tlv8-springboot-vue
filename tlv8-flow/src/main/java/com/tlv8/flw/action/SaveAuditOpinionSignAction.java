@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,9 +68,8 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 
 	@ResponseBody
 	@PostMapping("/SaveAuditOpinionSignAction")
-	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings({ "rawtypes" })
 	public Object execute() throws Exception {
-		SqlSession session = DBUtils.getSession(this.dbkey);
 		Connection conn = null;
 		try {
 			String FNODEID = "";
@@ -122,7 +120,7 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 			query.WHERE("FOPVIEWID='" + opviewID + "'");
 			query.WHERE("FTASKID='" + taskID + "'");
 			List list = DBUtils.execQueryforList(this.dbkey, query.toString(), true);
-			conn = session.getConnection();
+			conn = DBUtils.getAppConn(this.dbkey);
 			if (list.size() > 0) {
 				Map m = (Map) list.get(0);
 				SQL sql = new SQL();
@@ -185,15 +183,13 @@ public class SaveAuditOpinionSignAction extends ActionSupport {
 				ps.setInt(16, 0);
 				ps.executeUpdate();
 			}
-			session.commit(true);
 			this.data.setFlag("true");
 		} catch (Exception e) {
 			this.data.setFlag("false");
 			this.data.setMessage(e.toString());
-			session.rollback(true);
 			logger.error(e.toString());
 		} finally {
-			DBUtils.closeConn(session, conn, null, null);
+			DBUtils.closeConn(null, conn, null, null);
 		}
 		return success(data);
 	}

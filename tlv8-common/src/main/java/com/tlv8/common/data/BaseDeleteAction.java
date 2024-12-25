@@ -1,10 +1,9 @@
 package com.tlv8.common.data;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.naming.NamingException;
-
-import org.apache.ibatis.session.SqlSession;
 
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
@@ -28,7 +27,6 @@ public class BaseDeleteAction extends ActionSupport {
 		this.data = data;
 	}
 
-	@SuppressWarnings("deprecation")
 	public String deleteData() throws SQLException, NamingException, Exception {
 		String result = "";
 		if (table == null || "".equals(table)) {
@@ -37,9 +35,13 @@ public class BaseDeleteAction extends ActionSupport {
 		String sql = "delete from " + table + " where fID = '" + getRowid() + "'";
 		if ("system".equals(dbkay))
 			sql = sql.replace("fID", "sID");
-		SqlSession session = DBUtils.getSession(dbkay);
+		Connection conn = null;
+		boolean autocommit = true;
 		try {
-			DBUtils.excuteDelete(session, sql);
+			conn = DBUtils.getAppConn(dbkay);
+			autocommit = conn.getAutoCommit();
+			conn.setAutoCommit(false);
+			DBUtils.excuteDelete(conn, sql);
 			String billTable = "";
 			String BillID = "";
 			if (!"".equals(cascade) && cascade != null) {
@@ -48,16 +50,16 @@ public class BaseDeleteAction extends ActionSupport {
 					billTable = cas[n].split(":")[0];
 					BillID = cas[n].split(":")[1];
 					String dsql = "delete from " + billTable + " where " + BillID + " = '" + getRowid() + "'";
-					DBUtils.excuteDelete(session, dsql);// 级联删除
+					DBUtils.excuteDelete(conn, dsql);// 级联删除
 				}
 			}
-			session.commit();
+			conn.commit();
 		} catch (Exception e) {
-			session.rollback();
-			session.close();
+			conn.rollback();
 			throw new SQLException(e);
 		} finally {
-			session.close();
+			conn.setAutoCommit(autocommit);
+			DBUtils.closeConn(conn, null, null);
 		}
 		return result;
 	}

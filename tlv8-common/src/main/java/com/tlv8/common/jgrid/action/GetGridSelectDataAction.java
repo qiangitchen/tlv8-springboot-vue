@@ -1,7 +1,5 @@
 package com.tlv8.common.jgrid.action;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -62,7 +60,6 @@ public class GetGridSelectDataAction extends ActionSupport {
 		return success(data);
 	}
 
-	@SuppressWarnings("deprecation")
 	private String exeQueryAction() throws SQLException, NamingException {
 		String result = "";
 		Connection conn = null;
@@ -152,11 +149,7 @@ public class GetGridSelectDataAction extends ActionSupport {
 	}
 
 	public void setDbkey(String dbkey) {
-		try {
-			this.dbkey = URLDecoder.decode(dbkey, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.dbkey = dbkey;
 	}
 
 	public String getSql() {
@@ -164,11 +157,7 @@ public class GetGridSelectDataAction extends ActionSupport {
 	}
 
 	public void setSql(String sql) {
-		try {
-			this.sql = URLDecoder.decode(sql, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		this.sql = sql;
 	}
 
 }

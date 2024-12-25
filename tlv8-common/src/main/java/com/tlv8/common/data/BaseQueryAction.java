@@ -31,7 +31,7 @@ public class BaseQueryAction extends ActionSupport {
 		this.data = data;
 	}
 
-	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings({ "rawtypes" })
 	public String getInfo(String sql) throws Exception {
 		if (relation == null || "".equals(relation)) {
 			throw new Exception("查询的列不能为空!");

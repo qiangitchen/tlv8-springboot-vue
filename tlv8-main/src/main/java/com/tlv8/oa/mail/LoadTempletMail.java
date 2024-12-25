@@ -29,7 +29,7 @@ public class LoadTempletMail extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/LoadTempletMailAction")
-	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object execute() throws Exception {
 		String result = "";
 

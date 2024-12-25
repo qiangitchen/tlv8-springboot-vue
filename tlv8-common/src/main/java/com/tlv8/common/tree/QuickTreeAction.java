@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +48,7 @@ public class QuickTreeAction extends ActionSupport {
 		return json;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String exeQuickAction() {
 		String[] pamms = this.quicktext.split(",");
 		String id = pamms[0].toString();
@@ -62,12 +61,11 @@ public class QuickTreeAction extends ActionSupport {
 		String rootFilter = pamms[7].toString();
 		String filter = pamms[8].toString();
 		String rootpath = "";
-		SqlSession session = DBUtils.getSession(databaseName);
 		Connection conn = null;
 		Statement stm = null;
 		ResultSet rs = null;
 		try {
-			conn = session.getConnection();
+			conn = DBUtils.getAppConn(databaseName);
 			SQL queryRootSql = new SQL();
 			queryRootSql.SELECT(path);
 			queryRootSql.FROM(tableName);
@@ -141,7 +139,7 @@ public class QuickTreeAction extends ActionSupport {
 			logger.error(e.toString());
 			e.printStackTrace();
 		} finally {
-			DBUtils.closeConn(session, conn, stm, rs);
+			DBUtils.closeConn(null, conn, stm, rs);
 		}
 		return this.jsonResult;
 	}

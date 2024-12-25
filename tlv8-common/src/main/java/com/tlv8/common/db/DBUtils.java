@@ -2,11 +2,8 @@ package com.tlv8.common.db;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -25,20 +22,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tlv8.common.utils.spring.SpringUtils;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.tlv8.common.base.Sys;
 import com.tlv8.common.db.dao.UtilsDao;
+import com.tlv8.common.utils.spring.SpringUtils;
 
 /**
  * 数据库操作基础类
@@ -47,69 +41,30 @@ import com.tlv8.common.db.dao.UtilsDao;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DBUtils {
-	public static String cfgext = ".mybatis.xml";
-
-	private static final Map<String, SqlSessionFactory> dbsource = new HashMap<String, SqlSessionFactory>();
-
-	private static final Map<String, Map<String, String>> dbconfig = new HashMap<String, Map<String, String>>();
-
-	private static final Map<Connection, SqlSession> openedconn = new HashMap<Connection, SqlSession>();
-
 	private static final Logger logger = LoggerFactory.getLogger(DBUtils.class);
 
-	static {
-		try {
-			String path = DBUtils.class.getClassLoader().getResource("").getFile();
-			File folder = new File(path);
-			String[] cfgname = folder.list(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					return name.endsWith(cfgext);
-				}
-			});
-			for (int i = 0; i < cfgname.length; i++) {
-				try {
-					String key = cfgname[i].replace(cfgext, "");
-					Reader reader = Resources.getResourceAsReader(cfgname[i]);
-					SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader);
-					dbsource.put(key, sessionFactory);
-					SAXReader saxreader = new SAXReader();
-					Document document = saxreader.read(Resources.getResourceAsReader(cfgname[i]));
-					List<Element> pps = document.getRootElement().element("environments").element("environment")
-							.element("dataSource").elements("property");
-					Map<String, String> prpt = new HashMap<String, String>();
-					for (int p = 0; p < pps.size(); p++) {
-						Element pel = pps.get(p);
-						prpt.put(pel.attributeValue("name"), pel.attributeValue("value"));
-					}
-					dbconfig.put(key, prpt);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-
-	public static Map<String, Map<String, String>> getDBConfig() {
-		return dbconfig;
+	/**
+	 * 获取数据库连接 DataSource
+	 * 
+	 * @param dbkey
+	 * @return DataSource
+	 */
+	public static DataSource getDataSource(String dbkey) {
+		logger.debug(dbkey);
+		DynamicRoutingDataSource dynamicRoutingDataSource = SpringUtils.getBean(DynamicRoutingDataSource.class);
+		// 获取数据源对象
+		DataSource dataSource = dynamicRoutingDataSource.getDataSource(dbkey);
+		return dataSource;
 	}
 
 	/**
-	 * 获取数据库连接 Session
+	 * 获取数据源集合
 	 * 
-	 * @deprecated 数据源统一用spring管理，不再建议使用静态加载方式
-	 * @param dbkey
-	 * @return SqlSession
-	 * @see org.apache.ibatis.session.SqlSession
+	 * @return Map
 	 */
-	@Deprecated
-	public static SqlSession getSession(String dbkey) {
-		logger.debug(dbkey);
-		if (dbsource.containsKey(dbkey)) {
-			return dbsource.get(dbkey).openSession();
-		}
-		return SpringUtils.getBean(SqlSessionFactory.class).openSession();
+	public static Map<String, DataSource> getDBConfig() {
+		DynamicRoutingDataSource dynamicRoutingDataSource = SpringUtils.getBean(DynamicRoutingDataSource.class);
+		return dynamicRoutingDataSource.getDataSources();
 	}
 
 	public static SqlSession getSqlSession() {
@@ -122,15 +77,17 @@ public class DBUtils {
 	 * @param key
 	 * @return boolean
 	 */
-	@Deprecated
 	public static boolean IsPostgreSQL(String key) {
 		boolean res = false;
-		Map<String, String> m = dbconfig.get(key);
-		if (m != null) {
-			String url = m.get("url");
+		DataSource dataSource = getDataSource(key);
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			String url = conn.getMetaData().getURL();
 			res = url.toUpperCase().indexOf((":postgresql:").toUpperCase()) > 0;
-		} else {
-			res = IsPostgreSQL();
+		} catch (Exception e) {
+		} finally {
+			closeConn(null, conn, null, null);
 		}
 		return res;
 	}
@@ -161,15 +118,17 @@ public class DBUtils {
 	 * @param key
 	 * @return boolean
 	 */
-	@Deprecated
 	public static boolean IsDMDB(String key) {
 		boolean res = false;
-		Map<String, String> m = dbconfig.get(key);
-		if (m != null) {
-			String url = m.get("url");
+		DataSource dataSource = getDataSource(key);
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			String url = conn.getMetaData().getURL();
 			res = url.toUpperCase().indexOf((":dm:").toUpperCase()) > 0;
-		} else {
-			res = IsDMDB();
+		} catch (Exception e) {
+		} finally {
+			closeConn(null, conn, null, null);
 		}
 		return res;
 	}
@@ -200,15 +159,17 @@ public class DBUtils {
 	 * @param key
 	 * @return boolean
 	 */
-	@Deprecated
 	public static boolean IsKingDB(String key) {
 		boolean res = false;
-		Map<String, String> m = dbconfig.get(key);
-		if (m != null) {
-			String url = m.get("url");
+		DataSource dataSource = getDataSource(key);
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			String url = conn.getMetaData().getURL();
 			res = url.toUpperCase().indexOf(("kingbase").toUpperCase()) > 0;
-		} else {
-			res = IsKingDB();
+		} catch (Exception e) {
+		} finally {
+			closeConn(null, conn, null, null);
 		}
 		return res;
 	}
@@ -239,15 +200,17 @@ public class DBUtils {
 	 * @param key
 	 * @return boolean
 	 */
-	@Deprecated
 	public static boolean IsOracleDB(String key) {
 		boolean res = false;
-		Map<String, String> m = dbconfig.get(key);
-		if (m != null) {
-			String url = m.get("url");
+		DataSource dataSource = getDataSource(key);
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			String url = conn.getMetaData().getURL();
 			res = url.toUpperCase().indexOf(("oracle").toUpperCase()) > 0;
-		} else {
-			res = IsOracleDB();
+		} catch (Exception e) {
+		} finally {
+			closeConn(null, conn, null, null);
 		}
 		return res;
 	}
@@ -278,15 +241,17 @@ public class DBUtils {
 	 * @param key
 	 * @return boolean
 	 */
-	@Deprecated
 	public static boolean IsMySQLDB(String key) {
 		boolean res = false;
-		Map<String, String> m = dbconfig.get(key);
-		if (m != null) {
-			String url = m.get("url");
+		DataSource dataSource = getDataSource(key);
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			String url = conn.getMetaData().getURL();
 			res = url.toUpperCase().indexOf(("mysql").toUpperCase()) > 0;
-		} else {
-			res = IsMySQLDB();
+		} catch (Exception e) {
+		} finally {
+			closeConn(null, conn, null, null);
 		}
 		return res;
 	}
@@ -317,15 +282,17 @@ public class DBUtils {
 	 * @param key
 	 * @return boolean
 	 */
-	@Deprecated
 	public static boolean IsMSSQLDB(String key) {
 		boolean res = false;
-		Map<String, String> m = dbconfig.get(key);
-		if (m != null) {
-			String url = m.get("url");
+		DataSource dataSource = getDataSource(key);
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			String url = conn.getMetaData().getURL();
 			res = url.toUpperCase().indexOf(("jtds").toUpperCase()) > 0;
-		} else {
-			res = IsMSSQLDB();
+		} catch (Exception e) {
+		} finally {
+			closeConn(null, conn, null, null);
 		}
 		return res;
 	}
@@ -358,12 +325,10 @@ public class DBUtils {
 	 * @throws SQLException
 	 * @see java.sql.Connection
 	 */
-	@Deprecated
 	public static Connection getAppConn(String key) throws SQLException {
-		SqlSession session = getSession(key);
-		Connection conn = session.getConnection();
+		DataSource dataSource = getDataSource(key);
+		Connection conn = dataSource.getConnection();
 		conn.setAutoCommit(true);
-		openedconn.put(conn, session);
 		return conn;
 	}
 
@@ -395,8 +360,7 @@ public class DBUtils {
 		ResultSet rs = null;
 		ResultSetMetaData rsmd = null;
 		List li = new ArrayList();
-		SqlSession session = getSession(key);
-		Connection aConn = session.getConnection();
+		Connection aConn = getAppConn(key);
 		Statement qry = aConn.createStatement(1004, 1007);
 		try {
 			rs = qry.executeQuery(sql);
@@ -468,10 +432,9 @@ public class DBUtils {
 			}
 		} catch (SQLException e) {
 			Sys.printMsg(e.toString());
-			session.close();
 			throw new SQLException(e + ">>\n sql:" + sql);
 		} finally {
-			closeConn(session, aConn, qry, rs);
+			closeConn(null, aConn, qry, rs);
 		}
 		return li;
 	}
@@ -612,17 +575,28 @@ public class DBUtils {
 	 * @see java.util.List
 	 */
 	public static List<Map<String, Object>> selectForList(String key, String sql) throws SQLException {
-		SqlSession session = getSession(key);
-		List li = new ArrayList();
+		List<Map<String, Object>> rlist = new ArrayList<Map<String, Object>>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			li = session.selectList(UtilsDao.select, sql);
+			conn = getAppConn(key);
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int cns = rsmd.getColumnCount();
+			while (rs.next()) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				for (int n = 1; n <= cns; n++) {
+					map.put(rsmd.getColumnLabel(n), rs.getObject(n));
+				}
+				rlist.add(map);
+			}
 		} catch (Exception e) {
-			Sys.printErr(e);
-			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
-		} finally {
-			session.close();
+			logger.error(e.toString());
+			throw e;
 		}
-		return li;
+		return rlist;
 	}
 
 	/**
@@ -637,12 +611,11 @@ public class DBUtils {
 	public static List<Map<String, String>> execQueryList(String dbkey, String sql, List<String> listStr,
 			List<String> listprms, List<String> listprms1) {
 		List result = new ArrayList<Map<String, String>>();
-		SqlSession session = getSession(dbkey);
 		Connection connection = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			connection = session.getConnection();
+			connection = getAppConn(dbkey);
 			if (connection != null) {
 				ps = connection.prepareStatement(sql);
 				if (listprms != null && listprms.size() > 0) {
@@ -676,7 +649,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			closeConn(session, connection, ps, rs);
+			closeConn(null, connection, ps, rs);
 		}
 		return result;
 	}
@@ -690,7 +663,6 @@ public class DBUtils {
 	 * @throws SQLException
 	 * @see java.sql.ResultSet
 	 */
-	@Deprecated
 	public static ResultSet execQuery(Connection aConn, String aSQL) throws SQLException {
 		ResultSet result = null;
 		Statement qry = aConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -712,15 +684,17 @@ public class DBUtils {
 	 */
 	public static String execUpdateQuery(String dbkey, String sql) throws SQLException {
 		String result = "success";
-		SqlSession session = getSession(dbkey);
+		Connection connection = null;
+		PreparedStatement ps = null;
 		try {
-			session.update(UtilsDao.update, sql);
-			session.commit();
+			connection = getAppConn(dbkey);
+			ps = connection.prepareStatement(sql);
+			ps.executeUpdate();
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			session.close();
+			closeConn(null, connection, ps, null);
 		}
 		return result;
 	}
@@ -734,14 +708,12 @@ public class DBUtils {
 	 * @return String
 	 * @throws SQLException
 	 */
-	@Deprecated
 	public static String execUpdate(String dbkey, String sql, List<String> list) throws SQLException {
-		SqlSession session = getSession(dbkey);
 		Connection connection = null;
 		PreparedStatement ps = null;
 		String result = "false";
 		try {
-			connection = session.getConnection();
+			connection = getAppConn(dbkey);
 			if (connection != null) {
 				ps = connection.prepareStatement(sql);
 				for (int i = 0; i < list.size(); i++) {
@@ -754,7 +726,7 @@ public class DBUtils {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			closeConn(session, connection, ps, null);
+			closeConn(null, connection, ps, null);
 		}
 		return result;
 	}
@@ -800,15 +772,17 @@ public class DBUtils {
 	 */
 	public static String execInsertQuery(String dbkey, String sql) throws SQLException {
 		String result = "success";
-		SqlSession session = getSession(dbkey);
+		Connection connection = null;
+		PreparedStatement ps = null;
 		try {
-			session.insert(UtilsDao.insert, sql);
-			session.commit();
+			connection = getAppConn(dbkey);
+			ps = connection.prepareStatement(sql);
+			ps.executeUpdate();
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			closeConn(session, null, null, null);
+			closeConn(null, connection, ps, null);
 		}
 		return result;
 	}
@@ -823,15 +797,17 @@ public class DBUtils {
 	 */
 	public static String execdeleteQuery(String dbkey, String sql) throws SQLException {
 		String result = "success";
-		SqlSession session = getSession(dbkey);
+		Connection connection = null;
+		PreparedStatement ps = null;
 		try {
-			session.delete(UtilsDao.delete, sql);
-			session.commit();
+			connection = getAppConn(dbkey);
+			ps = connection.prepareStatement(sql);
+			ps.executeUpdate();
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			session.close();
+			closeConn(null, connection, ps, null);
 		}
 		return result;
 	}
@@ -925,8 +901,7 @@ public class DBUtils {
 
 		String[] values = aParamValues.split(";");
 		try {
-			SqlSession session = getSession(dbkey);
-			Connection conn = session.getConnection();
+			Connection conn = getAppConn(dbkey);
 			CallableStatement proc = null;
 			try {
 				String s1 = "";
@@ -945,7 +920,7 @@ public class DBUtils {
 				result += "->" + proc.getString(3);
 				logger.debug(result);
 			} finally {
-				closeConn(session, conn, proc, null);
+				closeConn(null, conn, proc, null);
 			}
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -1071,15 +1046,37 @@ public class DBUtils {
 	 */
 	public static List<Map<String, String>> selectStringList(String dbname, String sql, List<Object> params,
 			boolean upperColumnName) throws Exception {
-		SqlSession session = getSession(dbname);
 		List<Map<String, String>> rlist = new ArrayList<Map<String, String>>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			rlist = selectStringList(session, sql, params, upperColumnName);
+			conn = getAppConn(dbname);
+			ps = conn.prepareStatement(sql);
+			if (params != null) {
+				for (int i = 0; i < params.size(); i++) {
+					ps.setObject(i + 1, params.get(i));
+				}
+			}
+			rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int cns = rsmd.getColumnCount();
+			while (rs.next()) {
+				Map<String, String> map = new HashMap<String, String>();
+				for (int n = 1; n <= cns; n++) {
+					String colname = rsmd.getColumnLabel(n);
+					if (upperColumnName) {
+						colname = colname.toUpperCase();
+					}
+					map.put(colname, rs.getString(n));
+				}
+				rlist.add(map);
+			}
 		} catch (Exception e) {
 			logger.error(e.toString());
 			throw e;
 		} finally {
-			closeConn(session, null, null, null);
+			closeConn(null, conn, ps, rs);
 		}
 		return rlist;
 	}
@@ -1138,13 +1135,12 @@ public class DBUtils {
 	 */
 	public static List<Map<String, Object>> selectList(String dbname, String sql, List<Object> params,
 			boolean upperColumnName) {
-		SqlSession session = getSession(dbname);
 		List<Map<String, Object>> rlist = new ArrayList<Map<String, Object>>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			conn = session.getConnection();
+			conn = getAppConn(dbname);
 			ps = conn.prepareStatement(sql);
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i + 1, params.get(i));
@@ -1167,7 +1163,7 @@ public class DBUtils {
 			logger.error(e.toString());
 			e.printStackTrace();
 		} finally {
-			closeConn(session, conn, ps, rs);
+			closeConn(null, conn, ps, rs);
 		}
 		return rlist;
 	}
@@ -1180,16 +1176,18 @@ public class DBUtils {
 	 * @return int
 	 */
 	public static int excuteInsert(String dbname, String sql) throws Exception {
-		SqlSession session = getSession(dbname);
 		int r = 0;
+		Connection connection = null;
+		PreparedStatement ps = null;
 		try {
-			r = session.update(UtilsDao.insert, sql);
-			session.commit();
+			connection = getAppConn(dbname);
+			ps = connection.prepareStatement(sql);
+			r = ps.executeUpdate();
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			closeConn(session, null, null, null);
+			closeConn(null, connection, ps, null);
 		}
 		return r;
 	}
@@ -1231,16 +1229,18 @@ public class DBUtils {
 	 * @return int
 	 */
 	public static int excuteDelete(String dbname, String sql) throws Exception {
-		SqlSession session = getSession(dbname);
 		int r = 0;
+		Connection connection = null;
+		PreparedStatement ps = null;
 		try {
-			r = session.update(UtilsDao.update, sql);
-			session.commit();
+			connection = getAppConn(dbname);
+			ps = connection.prepareStatement(sql);
+			r = ps.executeUpdate();
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			closeConn(session, null, null, null);
+			closeConn(null, connection, ps, null);
 		}
 		return r;
 	}
@@ -1270,16 +1270,18 @@ public class DBUtils {
 	 * @return int
 	 */
 	public static int excuteUpdate(String dbname, String sql) throws Exception {
-		SqlSession session = getSession(dbname);
 		int r = 0;
+		Connection connection = null;
+		PreparedStatement ps = null;
 		try {
-			r = session.update(UtilsDao.update, sql);
-			session.commit();
+			connection = getAppConn(dbname);
+			ps = connection.prepareStatement(sql);
+			r = ps.executeUpdate();
 		} catch (Exception e) {
 			Sys.printErr(e);
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			session.close();
+			closeConn(null, connection, ps, null);
 		}
 		return r;
 	}
@@ -1310,14 +1312,13 @@ public class DBUtils {
 	 * @return int
 	 */
 	public static int excuteUpdate(String dbname, String sql, List<Object> params) throws Exception {
-		SqlSession session = getSession(dbname);
 		int r = -1;
 		Connection conn = null;
 		PreparedStatement ps = null;
 		boolean aucommit = false;
 		try {
 			logger.debug(dbname);
-			conn = session.getConnection();
+			conn = getAppConn(dbname);
 			aucommit = conn.getAutoCommit();
 			conn.setAutoCommit(false);
 			logger.debug(sql);
@@ -1332,7 +1333,7 @@ public class DBUtils {
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
 			conn.setAutoCommit(aucommit);
-			closeConn(session, conn, ps, null);
+			closeConn(null, conn, ps, null);
 		}
 		return r;
 	}
@@ -1374,10 +1375,9 @@ public class DBUtils {
 	public static String executeCommand(String dbkey, String sql) throws Exception {
 		String result;
 		result = "执行命令";
-		logger.debug(String.format("com.tlv8.base.db.DBUtils.executeCommand(dbkey:%s, sql:%s)", dbkey, sql));
+		logger.debug(String.format("dbkey:%s, sql:%s", dbkey, sql));
 		try {
-			SqlSession session = getSession(dbkey);
-			Connection conn = session.getConnection();
+			Connection conn = getAppConn(dbkey);
 			CallableStatement proc = null;
 			try {
 				proc = conn.prepareCall(sql);
@@ -1386,12 +1386,22 @@ public class DBUtils {
 				result += "->" + proc.getString(3);
 				logger.debug(result);
 			} finally {
-				closeConn(session, conn, proc, null);
+				closeConn(null, conn, proc, null);
 			}
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
 		return result;
+	}
+
+	public static void excuteDelete(Connection conn, String sql) throws Exception {
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
+		} finally {
+			closeConn(null, ps, null);
+		}
 	}
 
 }

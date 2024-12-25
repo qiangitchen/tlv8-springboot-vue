@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.tlv8.common.db.DBUtils;
 
-@SuppressWarnings("deprecation")
 public class Utils {
 	@SuppressWarnings("rawtypes")
 	public static String getCount(String db, String sql) {

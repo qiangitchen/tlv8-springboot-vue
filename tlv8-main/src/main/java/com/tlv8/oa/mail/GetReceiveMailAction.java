@@ -39,7 +39,7 @@ public class GetReceiveMailAction extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/getReceiveMailAction")
-	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings({ "rawtypes" })
 	public Object execute() throws Exception {
 		ContextBean context = ContextUtils.getContext();
 		String personid = context.getPersonID();

@@ -237,7 +237,6 @@ public class Utils implements ApplicationContextAware {
 					}
 
 					@Override
-					@SuppressWarnings("deprecation")
 					public Connection getConnection() {
 						try {
 							return DBUtils.getAppConn(k);
@@ -251,7 +250,7 @@ public class Utils implements ApplicationContextAware {
 			}
 		} catch (Exception e) {
 		}
-		//spring 数据源
+		// spring 数据源
 		SqlSessionFactory sqlSessionFactory = SpringUtils.getBean(SqlSessionFactory.class);
 		if (sqlSessionFactory != null) {
 			buildinDatasources.add(new BuildinDatasource() {

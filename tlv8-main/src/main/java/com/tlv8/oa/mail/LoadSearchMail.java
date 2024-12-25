@@ -45,7 +45,7 @@ public class LoadSearchMail extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/LoadSearchMailAction")
-	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object execute() throws Exception {
 
 		String result = "";

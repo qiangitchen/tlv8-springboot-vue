@@ -23,7 +23,6 @@ public class FlowBotXBean {
 	public FlowBotXBean() {
 	}
 
-	@SuppressWarnings("deprecation")
 	public FlowBotXBean(String flowID) throws Exception {
 		String sql = null;
 		if (DBUtils.IsOracleDB("system") || DBUtils.IsDMDB("system") || DBUtils.IsPostgreSQL("system")) {

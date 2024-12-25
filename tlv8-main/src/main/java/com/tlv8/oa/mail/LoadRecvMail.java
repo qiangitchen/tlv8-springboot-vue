@@ -29,7 +29,7 @@ public class LoadRecvMail extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/LoadRecvMailAction")
-	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object execute() throws Exception {
 
 		String result = "";

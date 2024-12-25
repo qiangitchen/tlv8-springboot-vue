@@ -209,7 +209,6 @@ public class OrgUtils {
 			+ "o.sFID agentOrgPath,o.SFCODE,o.SFNAME " + " from  SA_OPOrg o left join SA_OPOrg f on o.SPARENT = f.SID")
 			.toUpperCase();
 
-	@SuppressWarnings({ "deprecation", "resource" })
 	private void init(String sID) {
 		String sqls = sql + " where (upper(o.SPERSONID) = upper('" + sID + "') or upper(o.SFID) = upper('" + sID
 				+ "') or upper(o.SID) = upper('" + sID + "')) and upper(o.SORGKINDID) = 'psm'";

@@ -17,7 +17,7 @@ import com.tlv8.common.utils.StringArray;
  * 
  * @author 陈乾
  */
-@SuppressWarnings({ "rawtypes", "deprecation" })
+@SuppressWarnings({ "rawtypes" })
 public class BasegetGridAction extends ActionSupport {
 	protected Data data = new Data();
 	protected String gridid = "";// 列表ID（必须）

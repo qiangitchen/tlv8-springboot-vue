@@ -22,7 +22,6 @@ import com.tlv8.common.domain.AjaxResult;
  */
 @Controller
 @Scope("prototype")
-@SuppressWarnings("deprecation")
 public class Update_Flowbillinfo extends ActionSupport {
 	private String tablename;
 	private String fid;

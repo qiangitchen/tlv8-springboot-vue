@@ -20,7 +20,6 @@ public class Page {
 	 * 
 	 * @u 计算页数
 	 */
-	@SuppressWarnings("deprecation")
 	public static int getCount(String dbkey, String sql, int rows) throws SQLException, NamingException {
 		int p = 0;
 		Connection conn = null;

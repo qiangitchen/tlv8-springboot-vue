@@ -35,7 +35,7 @@ public class GetSendMailAction extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/getSendMailAction")
-	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@SuppressWarnings({ "rawtypes" })
 	public Object execute() throws Exception {
 		ContextBean context = ContextUtils.getContext();
 		String personid = context.getPersonID();

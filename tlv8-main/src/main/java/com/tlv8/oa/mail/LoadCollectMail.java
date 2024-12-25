@@ -45,7 +45,7 @@ public class LoadCollectMail extends ActionSupport {
 
 	@ResponseBody
 	@RequestMapping("/LoadCollectMailAction")
-	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object execute() throws Exception {
 		String result = "";
 

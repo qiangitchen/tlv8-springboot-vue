@@ -226,7 +226,6 @@ public class Grid {
 	 * 
 	 * @参数：dbkey：数据连接，sql：查询语句，master：grid是否多选，showindex：是否显示序号，startrow：开始行数
 	 */
-	@SuppressWarnings("deprecation")
 	public static String createGridBysql(String dbkey, String sql, boolean master, boolean showindex, int startrow,
 			String gridID) throws SQLException, NamingException {
 		String result = "";
@@ -234,7 +233,7 @@ public class Grid {
 		Statement stm = null;
 		ResultSet rs = null;
 		try {
-			conn = DBUtils.getSession(dbkey).getConnection();
+			conn = DBUtils.getAppConn(dbkey);
 			stm = conn.createStatement();
 			rs = stm.executeQuery(sql);
 			result = createGrid(rs, master, showindex, startrow, gridID);

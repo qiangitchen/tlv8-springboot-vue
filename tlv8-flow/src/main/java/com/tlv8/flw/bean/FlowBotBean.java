@@ -20,7 +20,6 @@ public class FlowBotBean {
 	protected String activity;// 环节标识
 	private List botdata = new ArrayList();
 
-	@SuppressWarnings("deprecation")
 	public FlowBotBean(String flowID) throws Exception {
 		String sql = null;
 		if (DBUtils.IsOracleDB("system") || DBUtils.IsDMDB("system") || DBUtils.IsPostgreSQL("system")) {

@@ -28,8 +28,17 @@ spring:
   messages:
     # 国际化资源文件路径
     basename: i18n/messages
-  profiles: 
-    active: druid
+  #profiles: 
+  #  active: druid
+  datasource:
+    dynamic:
+      primary: doc
+      datasource:
+        doc:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/v8doc?characterEncoding=utf8&useUnicode=true&useSSL=false
+        username: root
+        password: TLv8MySQL
   # 文件上传
   servlet:
      multipart:

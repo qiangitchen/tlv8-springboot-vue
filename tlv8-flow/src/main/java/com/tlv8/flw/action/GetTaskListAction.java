@@ -36,7 +36,6 @@ public class GetTaskListAction extends ActionSupport {
 		return data;
 	}
 
-	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping("/GetTaskListAction")
 	public Object execute(@RequestParam(name = "limit", defaultValue = "5") Integer limit) throws Exception {

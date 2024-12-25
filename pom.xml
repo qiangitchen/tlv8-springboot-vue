@@ -28,6 +28,7 @@
 		<mysql-connector.version>8.0.33</mysql-connector.version>
 		<postgresql-connector.version>42.5.4</postgresql-connector.version>
 		<mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+		<dynamic.version>4.2.0</dynamic.version>
 		<servlet.version>4.0.1</servlet.version>
 		<commons.io.version>2.11.0</commons.io.version>
 		<commons.fileupload.version>1.4</commons.fileupload.version>
@@ -90,6 +91,13 @@
 				<groupId>com.baomidou</groupId>
 				<artifactId>mybatis-plus-boot-starter</artifactId>
 				<version>${mybatis-plus.version}</version>
+			</dependency>
+			
+			<!-- 动态数据源切换 -->
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+				<version>${dynamic.version}</version>
 			</dependency>
 
 			<!-- Lombok 简化pojo代码 可以省略 get和set方法-->

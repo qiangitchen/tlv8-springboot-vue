@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.tlv8.system.pojo.SaOpPerson;
 
+@DS("system")
 @Mapper
 public interface SaOpPersonMapper {
 	/**

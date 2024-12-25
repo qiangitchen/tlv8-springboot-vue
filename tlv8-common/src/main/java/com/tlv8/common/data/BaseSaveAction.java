@@ -17,8 +17,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.ibatis.session.SqlSession;
-
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.base.Data;
 import com.tlv8.common.base.Sys;
@@ -67,7 +65,6 @@ public class BaseSaveAction extends ActionSupport {
 		return cells;
 	}
 
-	@SuppressWarnings("deprecation")
 	public String saveData() throws Exception {
 		log.info("保存数据...");
 		String result = "success";
@@ -82,11 +79,10 @@ public class BaseSaveAction extends ActionSupport {
 		}
 		boolean isNew = true;
 		String perkey = ("system".equals(db)) ? "SID" : "FID";
-		SqlSession session = DBUtils.getSession(db);
 		if (cell.containsKey("ROWID")) {
 			String fID = cell.get("ROWID");
 			String SreachSql = "select VERSION from " + getTable() + " where " + perkey + " = '" + fID + "'";
-			List<Map<String, String>> list = DBUtils.selectStringList(session, SreachSql, true);
+			List<Map<String, String>> list = DBUtils.selectStringList(db, SreachSql, true);
 			if (list.size() > 0) {
 				isNew = false;
 				String version = list.get(0).get("VERSION");
@@ -96,7 +92,6 @@ public class BaseSaveAction extends ActionSupport {
 				int dcv = Integer.parseInt(version);
 				int ncv = Integer.parseInt(cell.get("VERSION"));
 				if (ncv <= dcv) {
-					session.close();
 					throw new Exception("数据已被修改，请刷新数据再操作!");
 				}
 			}
@@ -105,7 +100,7 @@ public class BaseSaveAction extends ActionSupport {
 		if (cell.containsKey("ROWID") && !"newrowid".equals(cell.get("ROWID"))
 				&& !cell.get("ROWID").endsWith("newrowid") && isNew == false) {
 			fID = cell.get("ROWID");
-			List<Map<String, Object>> chl = DBUtils.selectList(session,
+			List<Map<String, String>> chl = DBUtils.selectStringList(db,
 					"select " + perkey + " from " + getTable() + " where " + perkey + "='" + fID + "'");
 			if (chl.size() > 0) {
 				isnewData = false;
@@ -146,6 +141,7 @@ public class BaseSaveAction extends ActionSupport {
 		}
 		cl.push(kayperm);
 		acl.push("?");
+		boolean autocommit = true;
 		Connection conn = null;
 		PreparedStatement ps = null;
 		String sql = "";
@@ -155,7 +151,9 @@ public class BaseSaveAction extends ActionSupport {
 			} else {
 				sql = "update " + getTable() + " set " + setacl.join(",") + " where " + kayperm + " = ?";
 			}
-			conn = session.getConnection();
+			conn = DBUtils.getAppConn(db);
+			autocommit = conn.getAutoCommit();
+			conn.setAutoCommit(false);
 			ps = conn.prepareStatement(sql);
 			for (int i = 0; i < celllist.size(); i++) {
 				String dataType = DataTypeHelper.getColumnDataType(conn, getTable(), celllist.get(i));
@@ -195,19 +193,16 @@ public class BaseSaveAction extends ActionSupport {
 			}
 			ps.setString(celllist.size() + 1, fID);
 			ps.executeUpdate();
-			session.commit(true);
+			conn.commit();
 		} catch (SQLException e) {
-			session.rollback(true);
+			conn.rollback();
 			result = "false";
 			log.error("保存数据失败!sql:" + sql + " " + e.getMessage());
 			System.err.println("SQL:" + sql);
-			session.close();
 			throw new SQLException(RegexUtil.getSubOraex(e.getMessage()));
 		} finally {
-			try {
-				DBUtils.closeConn(session, conn, ps, null);
-			} catch (Exception e) {
-			}
+			conn.setAutoCommit(autocommit);
+			DBUtils.closeConn(conn, ps, null);
 		}
 		return result;
 	}

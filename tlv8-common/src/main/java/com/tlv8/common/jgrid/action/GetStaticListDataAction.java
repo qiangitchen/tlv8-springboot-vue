@@ -1,7 +1,5 @@
 package com.tlv8.common.jgrid.action;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,7 +30,6 @@ public class GetStaticListDataAction extends ActionSupport {
 
 	@ResponseBody
 	@PostMapping(value = "/getStaticListDataAction", produces = "application/json;charset=UTF-8")
-	@SuppressWarnings("deprecation")
 	public Object execute() throws Exception {
 		String sql = "select " + relations + " from " + table;
 		if (filter != null && !"".equals(filter)) {
@@ -77,11 +74,7 @@ public class GetStaticListDataAction extends ActionSupport {
 	}
 
 	public void setDbkey(String dbkey) {
-		try {
-			this.dbkey = URLDecoder.decode(dbkey, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.dbkey = dbkey;
-		}
+		this.dbkey = dbkey;
 	}
 
 	public String getTable() {
@@ -89,11 +82,7 @@ public class GetStaticListDataAction extends ActionSupport {
 	}
 
 	public void setTable(String table) {
-		try {
-			this.table = URLDecoder.decode(table, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.table = table;
-		}
+		this.table = table;
 	}
 
 	public String getRelations() {
@@ -101,11 +90,7 @@ public class GetStaticListDataAction extends ActionSupport {
 	}
 
 	public void setRelations(String relations) {
-		try {
-			this.relations = URLDecoder.decode(relations, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.relations = relations;
-		}
+		this.relations = relations;
 	}
 
 	public String getFilter() {
@@ -113,11 +98,7 @@ public class GetStaticListDataAction extends ActionSupport {
 	}
 
 	public void setFilter(String filter) {
-		try {
-			this.filter = URLDecoder.decode(filter, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.filter = filter;
-		}
+		this.filter = filter;
 	}
 
 	public String getJsondata() {
@@ -133,11 +114,7 @@ public class GetStaticListDataAction extends ActionSupport {
 	}
 
 	public void setOrderby(String orderby) {
-		try {
-			this.orderby = URLDecoder.decode(orderby, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			this.orderby = orderby;
-		}
+		this.orderby = orderby;
 	}
 
 }

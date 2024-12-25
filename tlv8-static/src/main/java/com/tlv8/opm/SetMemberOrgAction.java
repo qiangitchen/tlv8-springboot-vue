@@ -30,12 +30,11 @@ import com.tlv8.common.db.DBUtils;
 public class SetMemberOrgAction extends ActionSupport {
 	private String rowid;
 
-	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping(value = "/setMemberOrgAction", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public Object execute() throws Exception {
 		Data data = new Data();
-		SqlSession session = DBUtils.getSession("system");
+		SqlSession session = DBUtils.getSqlSession();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;

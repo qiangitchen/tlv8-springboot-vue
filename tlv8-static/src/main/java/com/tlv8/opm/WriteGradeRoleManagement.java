@@ -40,7 +40,6 @@ public class WriteGradeRoleManagement extends ActionSupport {
 	@Autowired
 	ISaOpOrgService saOpOrgService;
 
-	@SuppressWarnings("deprecation")
 	@ResponseBody
 	@RequestMapping("/writeGradeRoleManagement")
 	public Object execute() throws Exception {
@@ -51,7 +50,7 @@ public class WriteGradeRoleManagement extends ActionSupport {
 			data.setMessage("未登录或登录已超时，不允许操作!");
 			return SUCCESS;
 		}
-		SqlSession session = DBUtils.getSession("system");
+		SqlSession session = DBUtils.getSqlSession();
 		Connection conn = null;
 		try {
 			SaOpOrg saorg = saOpOrgService.selectByPrimaryKey(orgid);

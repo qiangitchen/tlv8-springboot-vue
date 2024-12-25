@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import javax.naming.NamingException;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +59,7 @@ public class TreeSelectAction extends ActionSupport {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String exeCreateTreeAction() throws SQLException, NamingException {
 		String id = null;
 		String name = null;
@@ -130,13 +129,12 @@ public class TreeSelectAction extends ActionSupport {
 			if ((this.orderby != null) && (!"".equals(this.orderby))) {
 				sql.ORDER_BY(orderby);
 			}
-			SqlSession session = DBUtils.getSession(databaseName);
 			Connection conn = null;
 			Statement stm = null;
 			ResultSet rs = null;
 			JSONArray jsonArray = new JSONArray();
 			try {
-				conn = session.getConnection();
+				conn = DBUtils.getAppConn(databaseName);
 				stm = conn.createStatement();
 				rs = stm.executeQuery(sql.toString());
 				while (rs.next()) {
@@ -169,7 +167,7 @@ public class TreeSelectAction extends ActionSupport {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				DBUtils.closeConn(session, conn, stm, rs);
+				DBUtils.closeConn(null, conn, stm, rs);
 			}
 			this.jsonResult = jsonArray.toString();
 		} catch (Exception e) {

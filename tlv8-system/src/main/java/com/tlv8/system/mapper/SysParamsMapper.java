@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.tlv8.system.pojo.SaOpRole;
 import com.tlv8.system.pojo.SysParams;
 
+@DS("system")
 @Mapper
 public interface SysParamsMapper {
 	/**

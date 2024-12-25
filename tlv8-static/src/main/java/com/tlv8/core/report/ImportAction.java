@@ -17,11 +17,7 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tlv8.common.action.RequestParams;
@@ -40,7 +36,7 @@ public class ImportAction {
 	private static final Logger logger = LoggerFactory.getLogger(ImportAction.class);
 
 	@ResponseBody
-	@RequestMapping(value = "/importAction", method = RequestMethod.POST)
+	@PostMapping("/importAction")
 	public Object upload(HttpServletRequest request, @RequestParam("upload") MultipartFile file,
 			@RequestHeader("User-Agent") String userAgent) throws Exception {
 		Map<String, Object> res = new HashMap<>();
@@ -109,7 +105,6 @@ public class ImportAction {
 	}
 
 	// 写数据操作
-	@SuppressWarnings("deprecation")
 	private Map<String, Integer> WriteData(String[][] condata, String dbkey, String table, String relation,
 			String useNormal, Element config) throws Exception {
 		Map<String, Integer> res = new HashMap<>();
@@ -252,7 +247,6 @@ public class ImportAction {
 	}
 
 	// 提交数据
-	@SuppressWarnings("deprecation")
 	private void subMitData(String dbkey, String sql) throws SQLException, NamingException {
 		Connection conn = null;
 		Statement stm = null;

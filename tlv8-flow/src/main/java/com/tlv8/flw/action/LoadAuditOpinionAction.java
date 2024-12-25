@@ -43,7 +43,7 @@ public class LoadAuditOpinionAction extends ActionSupport {
 		SQL sql = new SQL();
 		sql.SELECT("FAGREETEXT,FCREATETIME,FCREATEPERID,FCREATEPERNAME,FSIGN");
 		sql.FROM("OA_FLOWRECORD");
-		sql.WHERE("FBILLID=? and t.FOPVIEWID = ?");
+		sql.WHERE("FBILLID=? and FOPVIEWID = ?");
 		sql.ORDER_BY("FCREATETIME asc");
 		try {
 			List<Object> params = new ArrayList<Object>();
@@ -62,9 +62,8 @@ public class LoadAuditOpinionAction extends ActionSupport {
 		return success(data);
 	}
 
-	@SuppressWarnings("deprecation")
 	private String getSignID(String personid) {
-		SqlSession session = DBUtils.getSession("system");
+		SqlSession session = DBUtils.getSqlSession();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
