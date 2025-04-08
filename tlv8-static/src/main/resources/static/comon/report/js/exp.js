@@ -99,13 +99,6 @@ function checkCell(obj, cell) {
 
 // 开始导出
 function expinit() {
-	var query = "dbkey="+$("#dbkey").val();
-    query += "&table="+$("#table").val();
-    query += "&relation="+$("#relation").val();
-    query += "&labels="+$("#labels").val();
-    query += "&where="+$("#where").val();
-    query += "&orderby="+$("#orderby").val();
-    $("#query").val(CryptoJS.AESEncrypt(J_u_encode(query)));
 	document.getElementById("impstatesetting").style.display = "";
 	document.getElementById("impMainview").style.display = "none";
 	document.getElementById("submitItem").click();
@@ -115,9 +108,9 @@ function expinit() {
 }
 
 function ReadyStateChange(event) {
-	tlv8.portal.dailog.dailogEngin();
+	justep.yn.portal.dailog.dailogEngin();
 }
 
 function cancell() {
-	tlv8.portal.dailog.dailogCancel();
+	justep.yn.portal.dailog.dailogCancel();
 }

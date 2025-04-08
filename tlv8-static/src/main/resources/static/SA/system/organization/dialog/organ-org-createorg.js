@@ -8,15 +8,16 @@ function saveDatafn(formfield) {
 		$("#org_create_form").attr("rowid", rowid);
 		$("#SFID").val(sfid + "/" + rowid+"."+type);
 		formfield.SFID = $("#SFID").val();
-		maindata.saveData(formfield);
+		return maindata.saveData(formfield);
 	} else {
-		maindata.saveData(formfield);
+		var nrowid = maindata.saveData(formfield);
 		var param = new tlv8.RequestParam();
 		param.set("rowid", gridrowid);
 		param.set("sparent", $("#SPARENT").val());
 		param.set("scode", $("#SCODE").val());
 		param.set("sname", $("#SNAME").val());
 		tlv8.XMLHttpRequest("updateOrgPathAction", param, "post", false);
+		return nrowid;
 	}
 }
 
@@ -76,9 +77,9 @@ function initDialog() {
 	
 	layui.form.on('submit(mainform)', function(data) {
 		//console.log(JSON.stringify(data.field));
-		var nCode = $("#SCODE").val();
-		saveDatafn(data.field);
-		tlv8.portal.dailog.dailogEngin(nCode);
+		//var nCode = $("#SCODE").val();
+		var nrowid = saveDatafn(data.field);
+		tlv8.portal.dailog.dailogEngin(nrowid);
 		return false;
 	});
 }

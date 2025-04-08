@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.AesEncryptUtil;
+import com.tlv8.common.utils.CodeUtils;
 
 /**
  * jtree数据加载通用接口
@@ -229,11 +230,7 @@ public class TreeSelectAction extends ActionSupport {
 	}
 
 	public void setCurrenid(String currenid) {
-		try {
-			this.currenid = URLDecoder.decode(currenid, "UTF-8");
-		} catch (Exception e) {
-			this.currenid = currenid;
-		}
+		this.currenid = CodeUtils.getDoubleDecode(currenid);
 	}
 
 	public String getQuicktext() {
@@ -241,11 +238,7 @@ public class TreeSelectAction extends ActionSupport {
 	}
 
 	public void setQuicktext(String quicktext) {
-		try {
-			this.quicktext = URLDecoder.decode(quicktext, "UTF-8");
-		} catch (Exception e) {
-			this.quicktext = quicktext;
-		}
+		this.quicktext = CodeUtils.getDoubleDecode(quicktext);
 	}
 
 	public String getParams() {
@@ -253,11 +246,7 @@ public class TreeSelectAction extends ActionSupport {
 	}
 
 	public void setParams(String params) {
-		try {
-			this.params = URLDecoder.decode(params, "UTF-8");
-		} catch (Exception e) {
-			this.params = params;
-		}
+		this.params = CodeUtils.getDoubleDecode(params);
 	}
 
 	public String getOrderby() {
@@ -265,11 +254,7 @@ public class TreeSelectAction extends ActionSupport {
 	}
 
 	public void setOrderby(String orderby) {
-		try {
-			this.orderby = URLDecoder.decode(orderby, "UTF-8");
-		} catch (Exception e) {
-			this.orderby = orderby;
-		}
+		this.orderby = CodeUtils.getDoubleDecode(orderby);
 	}
 
 }

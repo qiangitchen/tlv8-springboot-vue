@@ -5,25 +5,67 @@ $(function() {
 	$.jpolite.Data.system.User.check(function(data) {
 		if (data && !data.status) {
 			alert("连接中断，请重新登录.");
-			window.location.href = cpath+"/";
+			try{
+				window.top.doLogOut({
+					request:'',
+					persistent: false,
+					onSuccess:function(res){
+					},
+	            	onFailure: function(error_code, error_message) {
+	            		throw new Error(error_message);
+	            	}
+				});
+			}catch(e){
+				window.location.href = cpath+"/";
+			}
 			return false;
 		}
 	});
+	
+	$.backHome = function(){
+		window.location.href = "/index.html";
+	};
 
 	/*
 	 * 注销函数
 	 */
 	$.logout = function() {
-		$.jpolite.Data.system.User.logout(function() {
-			var loginPage = "login.html?temp="
-					+ new Date().getTime();
+		$.jpolite.Data.system.User.logout();
+		try{
+			window.top.doLogOut({
+				request:'',
+				persistent: false,
+				onSuccess:function(res){
+				},
+            	onFailure: function(error_code, error_message) {
+            		throw new Error(error_message);
+            	}
+			});
+		}catch(e){
+			var loginPage = "/portal/login.html?temp=" + new Date().getTime();
 			window.location.href = loginPage;
-		});
+		}
 	};
 
 	// 初始化登录人员信息
 	$.jpolite.clientInfo.init();
 	$.jpolite.clientInfo.initClientInfo();
+	
+	/*
+	 * 初始化功能树信息
+	 */
+	$.initFunctionTree = function() {
+		$.ajax({
+			type : "post",
+			async : false,
+			url : "/portal/loadMyFunctionMenu",
+			dataType: "json",
+			success : function(funs) {
+				initFunctionNav(funs);
+			}
+		});
+	};
+	$.initFunctionTree();
 
 	$(".layui-badge-dot").oneTime("1s", function() {
 		function getSysRemindCount(source) {
@@ -117,6 +159,13 @@ $(function() {
 
 function selecthome() {
 	//$('#mainTabs').tabs('select', "t001");
+}
+
+var myMenus = [];
+function initFunctionNav(data) {
+	for ( var i in data) {
+		myMenus.push(data[i].link);
+	}
 }
 
 tlv8.portal = {};
@@ -332,4 +381,16 @@ var J_u_decode = function(str) {
 	} catch (e) {
 		return str;
 	}
+};
+
+/*
+ * 修改密码
+ */
+$.changePass = function() {
+	layui.layer.open({
+		type : 2,
+		area: ['520px', '340px'],
+		title: '修改密码',
+		content : "dialog/changePassword.html"
+	});
 };

@@ -117,20 +117,21 @@ DROP TABLE IF EXISTS `bo_entry`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bo_entry` (
   `fID` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `TITLE` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `CONTENT` longtext COLLATE utf8mb4_unicode_ci,
-  `CATEGORY_ID` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `CATEGORY_NAME` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `COMMENT_HIT` int(11) DEFAULT NULL,
-  `ALLOW_COMMENT` int(11) DEFAULT NULL,
-  `STATUS` int(11) DEFAULT '0',
-  `CREATED_TIME` datetime DEFAULT NULL,
-  `UPDATED_TIME` datetime DEFAULT NULL,
-  `HITS` int(11) DEFAULT NULL,
-  `BO_BLOGID` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ACCESSORIES` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `FEXTEND01` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ONESELF` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
+  `category_id` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `comment_hit` int(11) DEFAULT NULL,
+  `allow_comment` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT '0',
+  `created_time` datetime DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `hits` int(11) DEFAULT NULL,
+  `bo_blogid` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `accessories` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fextend01` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `oneself` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `creatorid` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `version` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`fID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -690,6 +691,59 @@ LOCK TABLES `oa_leave` WRITE;
 INSERT INTO `oa_leave` VALUES ('2FBBE01A305A4714B60531FB62377171','system','PSN01','/ORG01.ogn/PSN01@ORG01.psm','/管理员/system','2022-05-01 16:39:13',NULL,NULL,NULL,'事假',NULL,'对方的豆腐干大师傅公司的发的方式给对手犯规十公分的身高岁的法国《《M，。第三方。，的生命，。 >dsmkfhjsdh<a>sdfjsdhfjk</a>','9'),('419170A47D834F688C61F87DA5B743A7',NULL,'1111',NULL,NULL,NULL,NULL,NULL,1,'1',NULL,'1','1');
 /*!40000 ALTER TABLE `oa_leave` ENABLE KEYS */;
 UNLOCK TABLES;
+
+-- ----------------------------
+-- Table structure for oa_news_column
+-- ----------------------------
+DROP TABLE IF EXISTS `oa_news_column`;
+CREATE TABLE `oa_news_column`  (
+  `fid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fcolumncode` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `fcolumnname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `fcolumndescribes` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `fcolumnstate` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `version` int(11) NULL DEFAULT 0,
+  PRIMARY KEY (`fid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for oa_news_open
+-- ----------------------------
+DROP TABLE IF EXISTS `oa_news_open`;
+CREATE TABLE `oa_news_open`  (
+  `fid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fopenid` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `fopenname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `fnewsid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `version` int(11) NULL DEFAULT 0,
+  PRIMARY KEY (`fid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for oa_news_release
+-- ----------------------------
+DROP TABLE IF EXISTS `oa_news_release`;
+CREATE TABLE `oa_news_release`  (
+  `fid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fnewstitle` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '新闻标题',
+  `freleasedepartment` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发布部门',
+  `fpeople` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发布人',
+  `ftime` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
+  `fnewsnumber` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '新闻编号',
+  `freleaseconnext` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '新闻内容',
+  `fstate` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '状态',
+  `fsettopwhether` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '置顶',
+  `fsettoptime` datetime(0) NULL DEFAULT NULL COMMENT '置顶开始时间',
+  `fsetendtime` datetime(0) NULL DEFAULT NULL COMMENT '置顶结束时间',
+  `faccessories` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '权限',
+  `fcolumnname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '栏目名称',
+  `sminipic` blob NULL COMMENT '缩略图',
+  `ftype` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '发布类型',
+  `version` int(11) NULL DEFAULT 0,
+  PRIMARY KEY (`fid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
 
 --
 -- Table structure for table `oa_notice_person`

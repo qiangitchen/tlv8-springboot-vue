@@ -37,9 +37,13 @@ tlv8.HtmlPrint = {
 				})
 				.filter(
 						function() {
-							var media = $(this).attr("media");
-							return (media.toLowerCase() == "" || media
-									.toLowerCase() == "print")
+							try{
+								var media = $(this).attr("media");
+								return (media.toLowerCase() == "" || media
+										.toLowerCase() == "print");
+							}catch(e){
+							}
+							return true;
 						})
 				.each(
 						function() {
@@ -150,7 +154,7 @@ tlv8.HtmlPrint = {
 			popX : 200,
 			popY : 200,
 			popTitle : '',
-			popClose : false
+			popClose : true
 		};
 		var settings = {};
 		$.extend(settings, defaults, options);
@@ -184,12 +188,17 @@ tlv8.HtmlPrint = {
 		//"+ ((justep.Browser.IE&&isPreview)?"onload='window.parent.frames['print_html_frame'].wb.ExecWB(7,1);'":"") + "
 
 		printWindow.focus();
-		printWindow.print();
-
-		if (settings.mode == modes.popup && settings.popClose)
-			printWindow.close();
-
-		//this.openPreviewWindow(html, appendHtml, false, closeWin, preview);
+		
+		setTimeout(function(){
+		
+			printWindow.print();
+	
+			if (settings.mode == modes.popup && settings.popClose)
+				printWindow.close();
+	
+			//this.openPreviewWindow(html, appendHtml, false, closeWin, preview);
+			
+		}, 600);
 	},
 
 	Iframe : function() {
@@ -377,7 +386,10 @@ tlv8.HtmlPrint = {
 		});
 
 		$(node).find("button").each(function() {
-			this.parentNode.innerHTML = "&nbsp;";
+			try{
+				this.parentNode.innerHTML = "&nbsp;";
+			}catch(e){
+			}
 		});
 	},
 

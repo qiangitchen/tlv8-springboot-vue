@@ -6684,3 +6684,30 @@ tlv8.autosetCode = autosetCode;
  */
 var justep = {};
 justep.yn = tlv8;
+
+/**
+ * 判断浏览器是否支持vlc插件
+ * @returns {} 
+ */
+tlv8.detectVlcSupport = function() {
+    const userAgent = navigator.userAgent;
+    // IE 浏览器检测
+    if (userAgent.indexOf('MSIE') > -1 || userAgent.indexOf('Trident') > -1) {
+        try {
+            new ActiveXObject('VideoLAN.VLCPlugin.2');
+            return true;
+        } catch (e) {
+            return false;
+        }
+    } 
+    // 非 IE 浏览器检测
+    else {
+        const plugins = navigator.plugins;
+        if (plugins) {
+            return Array.from(plugins).some(plugin => 
+                plugin.name.toLowerCase().includes('vlc')
+            );
+        }
+        return false;
+    }
+}

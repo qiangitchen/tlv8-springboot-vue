@@ -31,10 +31,11 @@ $(document).ready(function() {
 	var gridrowid = tlv8.RequestURLParam.getParam("gridrowid");
 	var SPERSONID = tlv8.RequestURLParam.getParam("SPERSONID");
 	if (SPERSONID && SPERSONID != "") {
-		document.getElementById("psm_create_form").rowid = SPERSONID;
+		J$("psm_create_form").rowid = SPERSONID;
+		J$("psm_create_form").setAttribute("rowid", SPERSONID);
 		$("#psm_create_form").attr("rowid", SPERSONID);
 		maindata.rowid = SPERSONID;
-		maindata.setFilter("SID='" + SPERSONID + "'");
+		maindata.setFilter("");
 		maindata.refreshData();
 		tlv8.picComponent(PICDiv, maindata, "SPHOTO", true, true);
 		return;
@@ -108,8 +109,7 @@ function dailogEngin() {
 		alert("帐号不能为空!");
 		return false;// TODO:暂停返回对话框
 	}
-	saveDatafn();
-	return name;
+	return saveDatafn();
 }
 
 function check_mobile(obj){

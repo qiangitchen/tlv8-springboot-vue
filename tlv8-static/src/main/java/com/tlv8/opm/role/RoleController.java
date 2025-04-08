@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -35,7 +36,7 @@ public class RoleController {
 	 */
 	@ResponseBody
 	@RequestMapping("/loadRolePermission")
-	public Object loadRolePermission(String roleid) {
+	public Object loadRolePermission(@RequestParam("roleid") String roleid) {
 		Map<String, Object> m = new HashMap<>();
 		try {
 			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
@@ -65,7 +66,7 @@ public class RoleController {
 	 */
 	@ResponseBody
 	@RequestMapping("/saveRolePermission")
-	public Object saveRolePermission(String roleid, String perm) {
+	public Object saveRolePermission(@RequestParam("roleid") String roleid, @RequestParam("perm") String perm) {
 		Map<String, Object> m = new HashMap<>();
 		try {
 			perm = URLDecoder.decode(perm, "UTF-8");

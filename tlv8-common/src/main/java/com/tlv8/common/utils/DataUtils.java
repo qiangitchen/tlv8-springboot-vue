@@ -32,6 +32,16 @@ public class DataUtils {
 		return dis.readInt();
 	}
 
+	public static short byteArrayToShort(byte[] bytes) {
+		if (bytes.length != 2) {
+			throw new IllegalArgumentException("Byte array length must be 2");
+		}
+		ByteBuffer buffer = ByteBuffer.allocate(2);
+		buffer.put(bytes);
+		buffer.flip();
+		return buffer.getShort();
+	}
+
 	/**
 	 * byte[]转int
 	 * 
@@ -49,6 +59,11 @@ public class DataUtils {
 		int targets = (res[0] & 0xff) | ((res[1] << 8) & 0xff00) // | 表示安位或
 				| ((res[2] << 24) >>> 8) | (res[3] << 24);
 		return targets;
+	}
+
+	public static long byteArrayToLong(byte[] bytes) {
+		ByteBuffer buffer = ByteBuffer.wrap(bytes);
+		return buffer.getLong();
 	}
 
 	/**
@@ -238,6 +253,19 @@ public class DataUtils {
 	public static float byteArrayToFloat(byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		return buffer.getFloat();
+	}
+
+	public static int sumByte(byte[] data, int ln) {
+		int s = 0;
+		for (int i = 0; i < ln; i++) {
+			s += data[i];
+		}
+		return s;
+	}
+	
+	public static byte[] sumBytea(byte[] data, int ln) {
+		int s = sumByte(data, ln);
+		return int2bytes(s);
 	}
 
 }

@@ -414,10 +414,12 @@
 			var now = new Date();
 			var h = now.getHours();
 			var m = now.getMinutes();
-			var ampm = h >= 12 ? 'PM' : 'AM';
-			h = h % 12;
+//			var ampm = h >= 12 ? 'PM' : 'AM';
+//			if(h > 12){
+//				h = h % 12;
+//			}
 			m = m < 10 ? '0'+m : m;
-			return (h+':'+m+' '+ampm);
+			return (now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate()+ " " + h+':'+m);//+' '+ampm
 		}
 	};
 })(jQuery);

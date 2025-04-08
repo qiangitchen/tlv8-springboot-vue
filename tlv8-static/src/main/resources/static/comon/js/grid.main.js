@@ -314,7 +314,6 @@ tlv8.createGrid = function (div, labelid, labels, labelwidth, dataAction,
                     return;
                 grid.toPage(page);
             }
-            ;
         },
         allpage: 1,
         getPages: function () {
@@ -1794,6 +1793,7 @@ tlv8.createGrid = function (div, labelid, labels, labelwidth, dataAction,
                     msessage.toString();
                 }
             } else {
+                console.log(r);
                 layui.layer.alert(r.message);
                 msessage = r.message;
                 grid.CurrentRowId = "";
@@ -2048,8 +2048,8 @@ tlv8.createGrid = function (div, labelid, labels, labelwidth, dataAction,
             var labelids = labelid.split(",");
             var datatypes = datatype.split(",");
             for (var i = 0; i < labelids.length; i++) {
-                if (labelids[i] != "No" && labelids[i] != "master_check"
-                    && datatypes[i] != "date" && datatypes[i] != "datetime") {
+                if (labelids[i] != "No" && labelids[i] != "master_check" && datatypes[i].indexOf("html:") < 0 
+                    && datatypes[i] != "date" && datatypes[i] != "datetime" && datatypes[i] != "number") {
                     sfilter += "or upper(" + labelids[i] + ") like upper('%"
                         + text + "%') ";
                 }

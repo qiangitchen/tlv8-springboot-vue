@@ -362,36 +362,39 @@ Jtree.prototype.quickPosition = function(text) {
 			alert("未找到[" + text + "]对应的内容!");
 			return;
 		}
-		var node = qNode[0];
-
-		var myparentsID = node[path].split("/");
-
-		if (myparentsID.length < 1)
-			return;
-		if (myparentsID.length == 1) {
-			if (node.id != "") {
-				var snode = this.tree.getNodeByTId(node.id);
-				if (snode && !snode.open)
-					this.tree.expandNode(snode);
-				node = snode;
-			}
-		} else {
-			for (var i = 0; i < myparentsID.length; i++) {
-				try {
-					var nodeid = myparentsID[i].indexOf(".") > 0 ? myparentsID[i]
-							.substring(0, myparentsID[i].indexOf("."))
-							: myparentsID[i];
-					if (nodeid != "") {
-						var snode = this.tree.getNodeByTId(nodeid);
-						if (!snode.open && i < myparentsID.length - 1)// 不展开最后一个节点
-							this.tree.expandNode(snode);
-						node = snode;
+		
+		for(var n = 0; n < qNode.length; n++){
+			var node = qNode[n];
+	
+			var myparentsID = node[path].split("/");
+	
+			if (myparentsID.length < 1)
+				return;
+			if (myparentsID.length == 1) {
+				if (node.id != "") {
+					var snode = this.tree.getNodeByTId(node.id);
+					if (snode && !snode.open)
+						this.tree.expandNode(snode);
+					node = snode;
+				}
+			} else {
+				for (var i = 0; i < myparentsID.length; i++) {
+					try {
+						var nodeid = myparentsID[i].indexOf(".") > 0 ? myparentsID[i]
+								.substring(0, myparentsID[i].indexOf("."))
+								: myparentsID[i];
+						if (nodeid != "") {
+							var snode = this.tree.getNodeByTId(nodeid);
+							if (!snode.open && i < myparentsID.length - 1)// 不展开最后一个节点
+								this.tree.expandNode(snode);
+							node = snode;
+						}
+					} catch (e) {
 					}
-				} catch (e) {
 				}
 			}
+			this.tree.selectNode(node);
 		}
-		this.tree.selectNode(node);
 	} catch (e) {
 		alert("未找到[" + text + "]对应的内容!");
 	}

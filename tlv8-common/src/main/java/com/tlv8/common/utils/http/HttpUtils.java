@@ -1,11 +1,13 @@
 package com.tlv8.common.utils.http;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -214,5 +216,56 @@ public class HttpUtils {
 		public boolean verify(String hostname, SSLSession session) {
 			return true;
 		}
+	}
+
+	/**
+	 * 发送POST请求返回字符串
+	 * 
+	 * @param url
+	 * @param params
+	 * @return String
+	 */
+	public static String httpPostJSON(String url, String params) {
+		String content = null;
+		try {
+			URL mURL = new URL(url);
+			HttpURLConnection http = (HttpURLConnection) mURL.openConnection();
+			http.setConnectTimeout(30000);// 30秒请求超时
+			http.addRequestProperty("Accept-Charset", "UTF-8;");
+			http.addRequestProperty("Content-Type", "application/json");
+			http.setRequestMethod("POST");
+			http.setReadTimeout(15000);
+			http.setDoOutput(true);
+			http.getOutputStream().write(params.getBytes());// 输入参数
+			int resCode = http.getResponseCode();
+			http.connect();
+			if (resCode == 200) {
+				content = readData(http.getInputStream(), "UTF-8");
+			}
+		} catch (Exception e) {
+			log.error("发送POST请求异常", e);
+		}
+		return content;
+	}
+
+	/**
+	 * 输入流转字符串
+	 * 
+	 * @param inSream
+	 * @param charsetName
+	 * @return
+	 * @throws Exception
+	 */
+	public static String readData(InputStream inSream, String charsetName) throws Exception {
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int len = -1;
+		while ((len = inSream.read(buffer)) != -1) {
+			outStream.write(buffer, 0, len);
+		}
+		byte[] data = outStream.toByteArray();
+		outStream.close();
+		inSream.close();
+		return new String(data, charsetName);
 	}
 }

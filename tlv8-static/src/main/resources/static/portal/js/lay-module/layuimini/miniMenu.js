@@ -54,16 +54,16 @@ layui.define(["element","laytpl" ,"jquery"], function (exports) {
          * 渲染一级菜单
          */
         compileMenu: function(menu,isSub){
-            var menuHtml = '<li {{#if( d.menu){ }}  data-menu="{{d.menu}}" {{#}}} class="layui-nav-item menu-li {{d.childOpenClass}} {{d.className}}"  {{#if( d.id){ }}  id="{{d.id}}" {{#}}}> <a {{#if( d.href){ }} layuimini-href="{{d.href}}" process="{{d.process}}" activity="{{d.activity}}" {{#}}} {{#if( d.target){ }}  target="{{d.target}}" {{#}}} href="javascript:;">{{#if( d.icon){ }}  <i class="{{d.icon}}"></i> {{#}}} <span class="layui-left-nav">{{d.title}}</span></a>  {{# if(d.children){}} {{- d.children}} {{#}}} </li>' ;
+            var menuHtml = '<li {{#if( d.menu){ }}  data-menu="{{d.menu}}" {{#}}} class="layui-nav-item menu-li {{d.childOpenClass}} {{d.className}}"  {{#if( d.id){ }}  id="{{d.id}}" {{#}}}> <a {{#if( d.href){ }} layuimini-href="{{d.href}}" process="{{d.process}}" activity="{{d.activity}}" {{#}}} {{#if( d.target){ }}  target="{{d.target}}" {{#}}} href="javascript:;">{{#if( d.layuiicon||d.icon){ }}  <i class="{{d.layuiicon||d.icon}}"></i> {{#}}} <span class="layui-left-nav">{{d.title}}</span></a>  {{# if(d.children){}} {{d.children}} {{#}}} </li>' ;
             if(isSub){
-                menuHtml = '<dd class="menu-dd {{d.childOpenClass}} {{ d.className }}"> <a href="javascript:;"  {{#if( d.menu){ }}  data-menu="{{d.menu}}" {{#}}} {{#if( d.id){ }}  id="{{d.id}}" {{#}}} {{#if(( !d.child || !d.child.length ) && d.href){ }} layuimini-href="{{d.href}}" process="{{d.process}}" activity="{{d.activity}}" {{#}}} {{#if( d.target){ }}  target="{{d.target}}" {{#}}}> {{#if( d.icon){ }}  <i class="{{d.icon}}"></i> {{#}}} <span class="layui-left-nav"> {{d.title}}</span></a> {{# if(d.children){}} {{- d.children}} {{#}}}</dd>'
+                menuHtml = '<dd class="menu-dd {{d.childOpenClass}} {{ d.className }}"> <a href="javascript:;"  {{#if( d.menu){ }}  data-menu="{{d.menu}}" {{#}}} {{#if( d.id){ }}  id="{{d.id}}" {{#}}} {{#if(( !d.child || !d.child.length ) && d.href){ }} layuimini-href="{{d.href}}" process="{{d.process}}" activity="{{d.activity}}" {{#}}} {{#if( d.target){ }}  target="{{d.target}}" {{#}}}> {{#if( d.layuiicon||d.icon){ }}  <i class="{{d.layuiicon||d.icon}}"></i> {{#}}} <span class="layui-left-nav"> {{d.title}}</span></a> {{# if(d.children){}} {{d.children}} {{#}}}</dd>'
             }
             return laytpl(menuHtml).render(menu);
         },
         compileMenuContainer :function(menu,isSub){
-            var wrapperHtml = '<ul class="layui-nav layui-nav-tree layui-left-nav-tree {{d.className}}" id="{{d.id}}">{{- d.children}}</ul>' ;
+            var wrapperHtml = '<ul class="layui-nav layui-nav-tree layui-left-nav-tree {{d.className}}" id="{{d.id}}">{{d.children}}</ul>' ;
             if(isSub){
-                wrapperHtml = '<dl class="layui-nav-child ">{{- d.children}}</dl>' ;
+                wrapperHtml = '<dl class="layui-nav-child ">{{d.children}}</dl>' ;
             }
             if(!menu.children){
                 return "";
@@ -101,9 +101,12 @@ layui.define(["element","laytpl" ,"jquery"], function (exports) {
                     target: leftMenu.target,
                     childOpenClass: options.childOpenClass,
                     icon: leftMenu.icon,
+                    layuiicon: leftMenu.layuiicon,
                     title: leftMenu.title,
                     children: children,
                     className: '',
+                    process: leftMenu.process,
+                    activity: leftMenu.activity
                 });
                 return leftMenuHtml ;
             }).join("");
@@ -138,7 +141,9 @@ layui.define(["element","laytpl" ,"jquery"], function (exports) {
                     title:val.title,
                     href:"",
                     target:"",
-                    children:""
+                    children:"",
+                    process: val.process,
+                    activity: val.activity
                 });
                 leftMenuHtml+=me.renderLeftMenu(val.child,{
                     parentMenuId:menu,

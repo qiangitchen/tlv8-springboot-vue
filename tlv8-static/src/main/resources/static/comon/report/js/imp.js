@@ -1,12 +1,12 @@
 //页面初始化
 function initIMP() {// 接入参数
-	var srcPath = tlv8.RequestURLParam.getParam("srcPath");
-	var dbkey = tlv8.RequestURLParam.getParam("dbkey");
-	var table = tlv8.RequestURLParam.getParam("table");
-	var relation = tlv8.RequestURLParam.getParam("relation");
-	var confirmXmlName = tlv8.RequestURLParam.getParam("confirmXmlName");
+	var srcPath = justep.yn.RequestURLParam.getParam("srcPath");
+	var dbkey = justep.yn.RequestURLParam.getParam("dbkey");
+	var table = justep.yn.RequestURLParam.getParam("table");
+	var relation = justep.yn.RequestURLParam.getParam("relation");
+	var confirmXmlName = justep.yn.RequestURLParam.getParam("confirmXmlName");
 	try {
-		var personID = tlv8.Context.getCurrentPersonID();
+		var personID = justep.yn.Context.getCurrentPersonID();
 		document.getElementById("personID").value = personID;
 	} catch (e) {
 	}
@@ -38,5 +38,5 @@ function impinit() {
 }
 
 function cancell() {
-	tlv8.portal.dailog.dailogCancel();// 关闭对话框
+	justep.yn.portal.dailog.dailogCancel();// 关闭对话框
 }

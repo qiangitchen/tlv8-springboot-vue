@@ -1,6 +1,5 @@
 package com.tlv8.common.tree;
 
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -22,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tlv8.common.action.ActionSupport;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.AesEncryptUtil;
+import com.tlv8.common.utils.CodeUtils;
 import com.tlv8.common.utils.StringArray;
 
 /**
@@ -61,6 +61,17 @@ public class QuickTreeAction extends ActionSupport {
 		String rootFilter = pamms[7].toString();
 		String filter = pamms[8].toString();
 		String rootpath = "";
+		StringArray owhere = new StringArray();
+		owhere.push("upper(" + name + ") like upper('%" + text + "%')");
+		owhere.push(id + " = '" + text + "'");
+		if (quickCells != null && !"".equals(quickCells)) {
+			String[] filcell = quickCells.split(",");
+			for (int i = 0; i < filcell.length; i++) {
+				if (!filcell[i].toUpperCase().equals(id.toUpperCase())) {
+					owhere.push("upper(" + filcell[i] + ") like upper('%" + text + "%')");
+				}
+			}
+		}
 		Connection conn = null;
 		Statement stm = null;
 		ResultSet rs = null;
@@ -73,6 +84,7 @@ public class QuickTreeAction extends ActionSupport {
 			if (filter != null && !"".equals(filter.trim())) {
 				queryRootSql.WHERE(filter);
 			}
+			queryRootSql.WHERE("(" + owhere.join(" or ") + ")");
 			stm = conn.createStatement();
 			rs = stm.executeQuery(queryRootSql.toString());
 			int i = 0;
@@ -97,17 +109,6 @@ public class QuickTreeAction extends ActionSupport {
 			sql.SELECT(path);
 		}
 		sql.FROM(tableName);
-		StringArray owhere = new StringArray();
-		owhere.push("upper(" + name + ") like upper('%" + text + "%')");
-		owhere.push(id + " = '" + text + "'");
-		if (quickCells != null && !"".equals(quickCells)) {
-			String[] filcell = quickCells.split(",");
-			for (int i = 0; i < filcell.length; i++) {
-				if (!filcell[i].toUpperCase().equals(id.toUpperCase())) {
-					owhere.push("upper(" + filcell[i] + ") like upper('%" + text + "%')");
-				}
-			}
-		}
 		sql.WHERE("(" + owhere.join(" or ") + ")");
 		if (!"".equals(rootpath)) {
 			sql.WHERE(rootpath);
@@ -149,11 +150,7 @@ public class QuickTreeAction extends ActionSupport {
 	}
 
 	public void setQuicktext(String quicktext) {
-		try {
-			this.quicktext = URLDecoder.decode(quicktext, "UTF-8");
-		} catch (Exception e) {
-			this.quicktext = quicktext;
-		}
+		this.quicktext = CodeUtils.getDoubleDecode(quicktext);
 	}
 
 	public String getCloums() {
@@ -161,11 +158,7 @@ public class QuickTreeAction extends ActionSupport {
 	}
 
 	public void setCloums(String cloums) {
-		try {
-			this.cloums = URLDecoder.decode(cloums, "UTF-8");
-		} catch (Exception e) {
-			this.cloums = cloums;
-		}
+		this.cloums = CodeUtils.getDoubleDecode(cloums);
 	}
 
 	public String getQuickCells() {
@@ -173,10 +166,6 @@ public class QuickTreeAction extends ActionSupport {
 	}
 
 	public void setQuickCells(String quickCells) {
-		try {
-			this.quickCells = URLDecoder.decode(quickCells, "UTF-8");
-		} catch (Exception e) {
-			this.quickCells = quickCells;
-		}
+		this.quickCells = CodeUtils.getDoubleDecode(quickCells);
 	}
 }
