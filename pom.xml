@@ -27,7 +27,7 @@
 		<swagger.version>3.0.0</swagger.version>
 		<mysql-connector.version>8.0.33</mysql-connector.version>
 		<postgresql-connector.version>42.5.4</postgresql-connector.version>
-		<mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+		<mybatis-plus.version>3.5.11</mybatis-plus.version>
 		<dynamic.version>4.2.0</dynamic.version>
 		<servlet.version>4.0.1</servlet.version>
 		<commons.io.version>2.11.0</commons.io.version>
