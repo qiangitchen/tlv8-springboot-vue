@@ -350,7 +350,7 @@ public class UserController extends BaseController {
 		Sys.printMsg("用户：" + contextBean.getPersonName() + " 退出系统.");
 		contextBean.initLogoutContext(this.request);
 		redisCache.deleteObject(StpUtil.getTokenValue());
-		StpUtil.logout(contextBean.getPersonID());
+		StpUtil.logout();
 		renderData(Boolean.valueOf(true));
 	}
 
@@ -361,7 +361,7 @@ public class UserController extends BaseController {
 		Sys.printMsg("用户：" + contextBean.getPersonName() + " 退出系统.");
 		contextBean.initLogoutContext(this.request);
 		redisCache.deleteObject(StpUtil.getTokenValue());
-		StpUtil.logout(contextBean.getPersonID());
+		StpUtil.logout();
 		renderData(Boolean.valueOf(true));
 	}
 
