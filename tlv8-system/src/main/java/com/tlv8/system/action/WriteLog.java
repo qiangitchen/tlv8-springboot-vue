@@ -1,6 +1,7 @@
 package com.tlv8.system.action;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
+
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.common.utils.IPUtils;
 import com.tlv8.common.utils.StringUtils;
@@ -10,6 +11,7 @@ import com.tlv8.system.pojo.SaLog;
 import com.tlv8.system.pojo.SaMenuTree;
 import com.tlv8.system.service.ISaLogService;
 import com.tlv8.system.service.ISaMenuTreeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UrlPathHelper;

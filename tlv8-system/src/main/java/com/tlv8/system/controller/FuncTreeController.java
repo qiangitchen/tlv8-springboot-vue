@@ -14,8 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+
 import com.tlv8.common.utils.StringUtils;
 import com.tlv8.system.base.BaseController;
 import com.tlv8.system.bean.ContextBean;
@@ -57,7 +57,7 @@ public class FuncTreeController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/FuncTree3")
 	public void index3() throws HttpException, IOException, DocumentException {
-		JSONObject json = new JSONObject();
+		JSONArray json = new JSONArray();
 		try {
 			ContextBean context = ContextUtils.getContext();
 			List<SaMenu> samenus = saMenuService.selectList(context.getCurrentPersonID(),
@@ -170,7 +170,7 @@ public class FuncTreeController extends BaseController {
 		return false;
 	}
 
-	protected JSONObject readElement3(List<SaMenu> samenus) throws Exception {
+	protected JSONArray readElement3(List<SaMenu> samenus) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
 		for (SaMenu samenu : samenus) {
 			if (StringUtils.isEmpty(samenu.getParent()) && !samenu.isHidden()) {
@@ -194,7 +194,7 @@ public class FuncTreeController extends BaseController {
 				list.add(map);
 			}
 		}
-		return JSONArray.parseObject(JSONArray.toJSONString(list));
+		return JSONArray.parseArray(JSONArray.toJSONString(list));
 	}
 
 	protected List<Map<String, Object>> getChildMenu3(String id, List<SaMenu> samenus) {

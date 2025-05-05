@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+
 import com.tlv8.common.base.Sys;
 import com.tlv8.common.constant.CacheConstants;
 import com.tlv8.common.constant.HttpStatus;
@@ -256,7 +257,7 @@ public class UserController extends BaseController {
 		res.put("result", contextBean);
 		return res;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping({ "/CALogin" })
 	public Object calogin(@RequestBody Map<String, String> rqparams) {
@@ -294,13 +295,14 @@ public class UserController extends BaseController {
 			clearHttpClient();
 			contextBean.initLogoutContext(this.request);
 		}
-		//renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) + "\",\"token\":\"" + token + "\"}");
+		// renderData(Boolean.valueOf(success), "{\"msg\":\"" + r(msg) +
+		// "\",\"token\":\"" + token + "\"}");
 		res.put("code", HttpStatus.SUCCESS);
 		res.put("state", success);
 		res.put("message", r(msg));
 		res.put("tokenName", StpUtil.getTokenName());
 		res.put("tokenValue", StpUtil.getTokenValue());
-		//res.put("result", contextBean);
+		// res.put("result", contextBean);
 		return res;
 	}
 
@@ -349,8 +351,11 @@ public class UserController extends BaseController {
 		ContextBean contextBean = getContext();
 		Sys.printMsg("用户：" + contextBean.getPersonName() + " 退出系统.");
 		contextBean.initLogoutContext(this.request);
-		redisCache.deleteObject(StpUtil.getTokenValue());
 		StpUtil.logout();
+		try {
+			redisCache.deleteObject(StpUtil.getTokenValue());
+		} catch (Exception e) {
+		}
 		renderData(Boolean.valueOf(true));
 	}
 
@@ -360,8 +365,11 @@ public class UserController extends BaseController {
 		ContextBean contextBean = getContext();
 		Sys.printMsg("用户：" + contextBean.getPersonName() + " 退出系统.");
 		contextBean.initLogoutContext(this.request);
-		redisCache.deleteObject(StpUtil.getTokenValue());
 		StpUtil.logout();
+		try {
+			redisCache.deleteObject(StpUtil.getTokenValue());
+		} catch (Exception e) {
+		}
 		renderData(Boolean.valueOf(true));
 	}
 

@@ -12,13 +12,13 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.doc.controller.impl.DoupDoc;
 import com.tlv8.doc.controller.impl.FileDeleter;

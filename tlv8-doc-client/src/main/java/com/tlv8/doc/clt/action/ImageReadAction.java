@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.utils.doc.DocSvrUtils;
 import com.tlv8.system.utils.ContextUtils;

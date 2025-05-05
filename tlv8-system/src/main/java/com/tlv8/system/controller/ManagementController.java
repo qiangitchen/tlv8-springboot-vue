@@ -1,7 +1,9 @@
 package com.tlv8.system.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+
 import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.system.bean.ContextBean;
@@ -45,7 +47,7 @@ public class ManagementController {
 		JSONArray jsona = new JSONArray();
 		List<SaOpManagement> dataList = saOpManagementService.selectByOrgID(orgid);
 		for (SaOpManagement management : dataList) {
-			JSONObject json = (JSONObject) JSONObject.toJSON(management);
+			JSONObject json = (JSONObject) JSON.toJSON(management);
 			json.put("id", management.getSid());
 			json.put("key", management.getSid());
 			json.put("createtime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(management.getScreatetime()));
@@ -105,7 +107,7 @@ public class ManagementController {
 		JSONArray jsona = new JSONArray();
 		List<SaOpManagetype> dataList = saOpManagetypeService.selectAll();
 		for (SaOpManagetype managementtype : dataList) {
-			JSONObject json = (JSONObject) JSONObject.toJSON(managementtype);
+			JSONObject json = (JSONObject) JSON.toJSON(managementtype);
 			json.put("id", managementtype.getSid());
 			json.put("code", managementtype.getScode());
 			json.put("text", managementtype.getSname());

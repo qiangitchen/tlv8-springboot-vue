@@ -1,7 +1,7 @@
 package com.tlv8.common.db.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.tlv8.common.db.DBUtils;
 import com.tlv8.common.db.pojo.DataListParam;
 import com.tlv8.common.db.pojo.DataParam;

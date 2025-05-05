@@ -1,9 +1,9 @@
 package com.tlv8.common.utils;
 
-import com.alibaba.fastjson.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.alibaba.fastjson2.JSONArray;
 
 /**
  * 字符数组操作 类似JS数组

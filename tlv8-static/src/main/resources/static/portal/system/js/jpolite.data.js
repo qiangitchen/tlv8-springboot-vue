@@ -21,11 +21,15 @@ if (!$.jpolite.Data)
 						bdata = JSON.parse(bdata);
 					}
 					bdata.status = rdata.status;
-					callback(bdata);
+					if(callback && typeof callback == "function"){
+						callback(bdata);
+					}
 				},
 				bean : bean,
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
-					callback({status:false,msg:"请求异常!"});
+					if(callback && typeof callback == "function"){
+						callback({status:false,msg:"请求异常!"});
+					}
 				}
 			});
 		}

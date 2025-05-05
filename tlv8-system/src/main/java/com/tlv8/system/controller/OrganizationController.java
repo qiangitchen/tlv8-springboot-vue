@@ -1,8 +1,9 @@
 package com.tlv8.system.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+
 import com.tlv8.common.domain.AjaxResult;
 import com.tlv8.common.utils.IDUtils;
 import com.tlv8.common.utils.MD5Util;
@@ -11,6 +12,7 @@ import com.tlv8.system.pojo.SaOpOrg;
 import com.tlv8.system.pojo.SaOpPerson;
 import com.tlv8.system.service.ISaOpOrgService;
 import com.tlv8.system.service.ISaOpPersonService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;

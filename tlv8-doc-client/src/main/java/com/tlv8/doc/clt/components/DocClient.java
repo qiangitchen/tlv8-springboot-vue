@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.tlv8.common.utils.doc.MimeUtils;
 import com.tlv8.doc.clt.doc.AbstractDoc;
 import com.tlv8.doc.clt.doc.Doc;

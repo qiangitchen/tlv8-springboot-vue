@@ -1,6 +1,6 @@
 package com.tlv8.doc.clt.obj;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.tlv8.doc.clt.doc.Doc;
 
 public class DocUploadRes {

@@ -1,6 +1,6 @@
 package com.tlv8.flw.bean;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 
 public class ExpressionBean {
 	private String nodeName;

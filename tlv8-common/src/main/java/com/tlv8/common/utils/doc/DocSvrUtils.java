@@ -16,9 +16,8 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.tlv8.common.db.DBUtils;
 
 public class DocSvrUtils {
@@ -32,10 +31,10 @@ public class DocSvrUtils {
 	public static JSONArray transeInfo(String celltext) {
 		JSONArray json = null;
 		try {
-			json = JSON.parseArray(celltext);
+			json = JSONArray.parseArray(celltext);
 		} catch (Exception e) {
 			try {
-				json = JSON.parseArray(transeJson(celltext));
+				json = JSONArray.parseArray(transeJson(celltext));
 			} catch (Exception e1) {
 			}
 		}

@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
+
 import com.tlv8.common.base.Data;
 import com.tlv8.common.redis.RedisCache;
 import com.tlv8.system.bean.ContextBean;
