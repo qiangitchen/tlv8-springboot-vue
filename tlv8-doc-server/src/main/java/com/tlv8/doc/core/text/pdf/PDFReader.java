@@ -3,6 +3,7 @@ package com.tlv8.doc.core.text.pdf;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -20,7 +21,10 @@ public class PDFReader extends TextReader {
 		FileInputStream is = null;
 		PDDocument document = null;
 		try {
-			document = PDDocument.load(file);
+			// version 2.0
+			// document = PDDocument.load(file);
+			// version 3.0
+			document = Loader.loadPDF(file);
 			PDFTextStripper textStripper = new PDFTextStripper();
 			result = textStripper.getText(document);
 		} catch (Exception e) {

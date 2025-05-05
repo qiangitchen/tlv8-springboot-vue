@@ -13,7 +13,8 @@ import org.dom4j.Element;
 
 public class WeiXinReturnTanse {
 
-    public static Map<String, String> pase(InputStream input, String charset) {
+    @SuppressWarnings("unchecked")
+	public static Map<String, String> pase(InputStream input, String charset) {
         Map<String, String> map = new HashMap<String, String>();
         try {
             String res = HttpClientUtil.readData(input, charset);

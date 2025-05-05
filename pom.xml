@@ -23,42 +23,38 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
-		<druid.version>1.2.18</druid.version>
+		<druid.version>1.2.24</druid.version>
 		<swagger.version>3.0.0</swagger.version>
 		<mysql-connector.version>8.0.33</mysql-connector.version>
-		<postgresql-connector.version>42.5.4</postgresql-connector.version>
-		<mybatis-plus.version>3.5.11</mybatis-plus.version>
-		<dynamic.version>4.2.0</dynamic.version>
+		<postgresql-connector.version>42.7.5</postgresql-connector.version>
+		<mybatis-plus.version>3.5.12</mybatis-plus.version>
+		<dynamic.version>4.3.1</dynamic.version>
 		<servlet.version>4.0.1</servlet.version>
-		<commons.io.version>2.11.0</commons.io.version>
-		<commons.fileupload.version>1.4</commons.fileupload.version>
+		<commons.io.version>2.19.0</commons.io.version>
+		<commons.fileupload.version>1.5</commons.fileupload.version>
 		<commons.collections.version>3.2.2</commons.collections.version>
 		<commons.httpclient.version>3.1</commons.httpclient.version>
-		<commons.beanutils.version>1.8.3</commons.beanutils.version>
-		<commons.codec.version>1.11</commons.codec.version>
-		<commons.lang.version>2.5</commons.lang.version>
-		<commons.lang3.version>3.4</commons.lang3.version>
+		<commons.beanutils.version>1.10.1</commons.beanutils.version>
 		<velocity.version>1.7</velocity.version>
-		<poi.version>5.2.3</poi.version>
-		<pdfbox.version>2.0.24</pdfbox.version>
+		<poi.version>5.4.1</poi.version>
+		<pdfbox.version>3.0.5</pdfbox.version>
 		<jcifs.version>1.3.17</jcifs.version>
-		<jwt.version>0.9.1</jwt.version>
-		<sa-token.version>1.34.0</sa-token.version>
-		<fastjson.version>2.0.49</fastjson.version>
-		<ojson.version>20150729</ojson.version>
+		<sa-token.version>1.42.0</sa-token.version>
+		<fastjson.version>2.0.57</fastjson.version>
 		<log4j.version>1.2.17</log4j.version>
-		<dom4j.version>2.1.1</dom4j.version>
+		<dom4j.version>2.1.4</dom4j.version>
 		<lucene.version>3.6.0</lucene.version>
-		<oshi.version>6.4.2</oshi.version>
-		<weixin.version>3.8.0</weixin.version>
+		<oshi.version>6.8.1</oshi.version>
+		<weixin.version>4.7.4.B</weixin.version>
 		<orika.version>1.5.4</orika.version>
-		<alipay.version>4.8.103.ALL</alipay.version>
-		<aliyun.version>2.0.5</aliyun.version>
-		<tencentcloud.version>3.1.270</tencentcloud.version>
-		<zxing.version>3.0.0</zxing.version>
-		<codehaus.version>1.9.1</codehaus.version>
-		<antlr.version>4.5.3</antlr.version>
-		<hutool.version>4.6.4</hutool.version>
+		<alipay.version>4.40.186.ALL</alipay.version>
+		<aliyun.version>4.1.0</aliyun.version>
+		<tencentcloud.version>3.1.1254</tencentcloud.version>
+		<zxing.version>3.5.3</zxing.version>
+		<codehaus.version>1.9.13</codehaus.version>
+		<antlr.version>4.13.2</antlr.version>
+		<hutool.version>5.8.37</hutool.version>
+		<org.json.version>20250107</org.json.version>
 	</properties>
 
 	<!-- 依赖声明 -->
@@ -154,10 +150,11 @@
 				<artifactId>commons-beanutils</artifactId>
 				<version>${commons.beanutils.version}</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils-core</artifactId>
-				<version>${commons.beanutils.version}</version>
+				<version>1.8.3</version>
 			</dependency>
 
 			<dependency>
@@ -239,14 +236,14 @@
 			<dependency>
 				<groupId>cn.dev33</groupId>
 				<artifactId>sa-token-dao-redis</artifactId>
-				<version>${sa-token.version}</version>
+				<version>1.34.0</version>
 			</dependency>
 			
 			<!-- org.json -->
 			<dependency>
 				<groupId>org.json</groupId>
 				<artifactId>json</artifactId>
-				<version>20230227</version>
+				<version>${org.json.version}</version>
 			</dependency>
 
 			<!-- 阿里JSON解析器 -->
